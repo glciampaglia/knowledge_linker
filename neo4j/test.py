@@ -12,7 +12,8 @@ def truthiness(entity, predicate, object):
     """
     
     result = gremlin.execute(script, g)
-    print result
+
+    return result
 
 if __name__ == "__main__":
     entity = "http://dbpedia.org/resource/Barack_Obama"
