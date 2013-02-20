@@ -17,6 +17,6 @@ def truthiness(entity, predicate, object):
 if __name__ == "__main__":
     entity = "http://dbpedia.org/resource/Barack_Obama"
     pred = "rdf:type"
-    object =  "http://dbpedia.org/resource/President_of_the_United_States"
-    result = truthiness(entity, pred, object)
+    o =  "http://dbpedia.org/resource/President_of_the_United_States"
+    result = truthiness(entity, pred, o)
     print result
