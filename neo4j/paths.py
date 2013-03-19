@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--output', help='output file',
             type=FileType('w'))
     parser.add_argument('-d', '--debug', help='print the paths to console',
-            type=bool)
+            action='store_true')
     
     ns = parser.parse_args()
     iteratepathlen(ns)
