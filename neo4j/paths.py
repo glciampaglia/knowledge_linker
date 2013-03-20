@@ -15,7 +15,7 @@ def paths(source, target, predicate=None, maxlen=1):
     script = """
     v = g.idx('vertices')[[value:'U %s']]
     y = []
-    v.as('x').outE.inV.loop('x'){it.loops == %d}.filter{it.value == 'U %s'}.paths{it.value}{it.p}
+    v.as('x').outE.inV.loop('x'){it.loops <= %d}.filter{it.value == 'U %s'}.paths{it.value}{it.p}
     """
 
     result = gremlin.execute(script % (source, maxlen, target), g)
