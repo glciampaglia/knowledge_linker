@@ -2,7 +2,7 @@
 
 STATEMENTS=statements.txt
 SCRIPT=paths.py
-MAXLEN=20
+MAXLEN=3
 PREF=http://dbpedia.org/resource/
 
 exec 3<$STATEMENTS
@@ -12,8 +12,7 @@ while `true` ; do
     if [[ $? != 0 ]] ; then
         break
     fi
-    echo "# ---------------------------------------------------" | tee /dev/stderr
-    echo "# ${source##$PREF} -> ${target##$PREF}" | tee /dev/stderr
-    echo "# ---------------------------------------------------" | tee /dev/stderr
+    echo "## ${source##$PREF} -> ${target##$PREF}"
+    echo "## ${source##$PREF} -> ${target##$PREF}" 1>&2
     python $SCRIPT -l $MAXLEN --debug -s $source -t $target 
 done
