@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 from argparse import ArgumentParser, FileType
 from py2neo import neo4j, gremlin
@@ -14,7 +15,7 @@ def paths(source, target, predicate=None, maxlen=1):
     script = """
     v = g.idx('vertices')[[value:'U %s']]
     y = []
-    v.as('x').outE.inV.loop('x'){it.loops < %d}.filter{it.value == 'U %s'}.paths{it.value}{it.p}
+    v.as('x').outE.inV.loop('x'){it.loops == %d}.filter{it.value == 'U %s'}.paths{it.value}{it.p}
     """
 
     result = gremlin.execute(script % (source, maxlen, target), g)
@@ -32,8 +33,6 @@ def iteratepathlen(ns):
         # paths from source to target following out-edges
         start_time = datetime.now()
         result = paths(ns.source, ns.target, maxlen=l)
-        if ns.debug:
-            pprint(result)
         stop_time = datetime.now()
         print >> ns.output, stop_time - start_time,
 
@@ -41,8 +40,6 @@ def iteratepathlen(ns):
         # -> target following in-edges)
         start_time = datetime.now()
         result2 = paths(ns.target, ns.source, maxlen=l)
-        if ns.debug:
-            pprint(result2)
         stop_time = datetime.now()
         print >> ns.output, stop_time - start_time,
         
@@ -54,6 +51,11 @@ def iteratepathlen(ns):
         print >> ns.output, len(result2),
         print >> ns.output, "NA"
 
+        if ns.debug:
+            print >> sys.stderr, "# len = %d" % l
+            pprint(result, stream=sys.stderr)
+            pprint(result2, stream=sys.stderr)
+            print >> sys.stderr, ""
 
 if __name__ == "__main__":
     def_source = "http://dbpedia.org/resource/Barack_Obama"
