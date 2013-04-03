@@ -20,4 +20,3 @@ EOF
 }
 
 seq -f '%1.f' 700000 6875246 | xargs -n 100 -P10 --interactive runquery 
-
