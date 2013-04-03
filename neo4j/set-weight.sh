@@ -1,10 +1,23 @@
 #!/bin/bash
-NEO4JSHELL=$HOME/neo4j/bin/neo4j-shell
-SCRIPTFILE=./weight.cypher
-SCRIPT=`< $SCRIPTFILE`
-DBPATH=$HOME/neo4j/dbpedia4neo/db
 
-$NEO4JSHELL -path $DBPATH -c "$SCRIPT"
+URL="http://lenny.cs.indiana.edu:7475/db/data/cypher"
 
-# URI='U http://dbpedia.org/resource/Barack_Obama'
-# $NEO4JSHELL -path $DBPATH -c "start m = node:vertices(value='$URI') match n-[r]->m return r.degweight;"
+function runquery {
+    ID="$@"
+    ID=$(echo $ID | sed -e 's/ /,/g')
+    CYPHERQUERY="START m = node($ID) MATCH n-[r]->m WITH m, count(r) as cnt SET m.indegree = cnt WITH m MATCH n-[r]->m SET r.indegweight = (1.0/m.indegree);"
+
+    POSTQUERY=$(cat <<EOF
+{
+    "query" : "$CYPHERQUERY"
+}
+EOF
+)
+
+    curl -X POST $URL -d "$POSTQUERY" \
+        -H "Accept: application/json"\
+        -H "Content-Type: application/json"
+}
+
+seq -f '%1.f' 700000 6875246 | xargs -n 100 -P10 --interactive runquery 
+
