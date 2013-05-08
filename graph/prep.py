@@ -14,7 +14,6 @@ from operator import itemgetter
 from time import time
 from datetime import timedelta
 from codecs import EncodedFile
-from urllib import unquote_plus
 
 namespaces = {}
 
@@ -142,7 +141,7 @@ def _first_pass(path, properties=False):
     vertexmap = OrderedDict(( (entity, i) for i, entity in
         enumerate(sorted(vertices)) ))
     for k, v in vertexmap.iteritems():
-        print _node.format(v, unquote_plus(k))
+        print _node.format(v, k)
     return vertexmap, triple_no + 1
 
 def _second_pass(path, vertexmap, properties):
