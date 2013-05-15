@@ -187,5 +187,5 @@ if __name__ == '__main__':
     except IOError, e:
         if e.errno == errno.EPIPE: # broken pipe
             sys.exit(0)
-
+        raise
 
