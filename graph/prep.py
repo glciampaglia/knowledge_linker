@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
-''' Converts data from N-triple format to GML '''
+''' Converts data from N-triple format to binary format. See docstrings in the
+module. '''
 
 from __future__ import division
 import re
 import sys
 import errno
+import numpy as np
+from StringIO import StringIO
 from argparse import ArgumentParser
-from contextlib import closing
+from contextlib import closing, nested
 from collections import deque, OrderedDict
 from itertools import groupby
 from operator import itemgetter
@@ -28,7 +31,7 @@ def arrayfile(data_file, shape, descr, fortran=False):
     descr - any argument that numpy.dtype() can take
     fortran - if True, the array uses Fortran data order, otherwise C order
     '''
-    from numpy.lib.io import format
+    from numpy.lib import format
     header = { 
         'descr' : descr, 
         'fortran_order' : fortran, 
@@ -41,8 +44,8 @@ def arrayfile(data_file, shape, descr, fortran=False):
     format.write_array_header_1_0(data_file, header) # write header
     cio.seek(0) 
     offset = len(preamble) + len(cio.readline()) # get offset 
-    return np.memmap(data_file, dtype=np.dtype(descr), mode='w+', shape=shape,
-            offset=offset)
+    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
+            shape=shape, offset=offset)
 
 def itertriples(path):
     ''' 
@@ -132,16 +135,13 @@ def _readns(path):
             namespaces[ns] = code
     return namespaces
 
-_node = '{} {}\n'
-
-_edge = '{} {} {}\n'
-
 def _first_pass(path, properties=False):
     '''
     Returns an ordered mapping (see `collections.OrderedDict`) of abbreviated
-    entity URIs to vertex IDs
+    entity URIs to vertex IDs, and writes them to file `nodes.txt`.
     '''
     global namespaces
+    _node = '{} {}\n'
     vertices = set()
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
     num_triples = 0
@@ -159,18 +159,41 @@ def _first_pass(path, properties=False):
 
 def _second_pass(path, vertexmap, num_triples, properties):
     '''
-    Prints the edges list, with predicates as attributes, and collapsing all
-    parallel arcs (the attribute is a comma-separated list of all predicates)
+    Prints the edges list to file `edges.txt` and the coordinate list of the
+    adjacency matrix to file `adjacency.npy`. 
+    
+    The adjacency matrix is written in coordinate format, e.g.: 
+    
+        adj[k] = i, j where e_k = (v_i, v_j). 
+        
+    This is format is suitable for opening the file as a sparse matrix (see
+    `scipy.sparse`).
+
+    The edges list has the form: 
+
+        k, predicate-list
+
+    where k is the corresponding index in the adjacency matrix, and
+    Predicates are written as attributes, collapsing all parallel arcs (the
+    attribute is a
+    comma-separated list of all predicates). Also writes the adjacency matrix in COO format to a NPY file to disk.
     '''
+    _edge = '{} {}\n'
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
-    with closing(open('edges.txt', 'w')) as edgesfile:
+    edgesfile = open('edges.txt', 'w')
+    arrfile = open('adjacency.npy', 'w+')
+    with nested(closing(edgesfile), closing(arrfile)):
+        adjarr = arrayfile(arrfile, (num_triples, 2), '<i4')
+        i = 0 
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
             out_entity, in_entity = key
             predicates = [ p for (oe, p, ie) in subiter ]
             out_vertex = vertexmap[out_entity]
             in_vertex = vertexmap[in_entity]
             attributes = ','.join(predicates)
-            edgesfile.write(_edge.format(out_vertex, in_vertex, attributes))
+            edgesfile.write(_edge.format(i, attributes))
+            adjarr[i,:] = int(out_vertex), int(in_vertex)
+            i += 1
 
 if __name__ == '__main__':
 
@@ -188,7 +211,7 @@ if __name__ == '__main__':
         tic = time()
 
         vertexmap, num_triples = _first_pass(args.nt_file, args.properties)
-        _second_pass(args.nt_file, vertexmap, args.properties)
+        _second_pass(args.nt_file, vertexmap, num_triples, args.properties)
 
         toc = time()
 
