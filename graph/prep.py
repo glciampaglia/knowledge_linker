@@ -105,25 +105,9 @@ def _readns(path):
             namespaces[ns] = code
     return namespaces
 
-_preamble = '''graph [
+_node = '{} {}\n'
 
-    directed 1
-    label "DBPedia"'''
-
-_epilog = ']'
-
-_node = '''
-    node [
-        id {}
-        label "{}"
-    ]'''
-
-_edge = '''
-    edge [
-        source {}
-        target {}
-        label "{}"
-    ]'''
+_edge = '{} {} {}\n'
 
 def _first_pass(path, properties=False):
     '''
@@ -133,30 +117,33 @@ def _first_pass(path, properties=False):
     global namespaces
     vertices = set()
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
-    triple_no = 0
-    for triple_no, triple in enumerate(triplesiter):
+    num_triples = 0
+    for triple in triplesiter:
         out_entity, predicate, in_entity = triple
         vertices.add(out_entity)
         vertices.add(in_entity)
+        num_triples += 1
     vertexmap = OrderedDict(( (entity, i) for i, entity in
         enumerate(sorted(vertices)) ))
-    for k, v in vertexmap.iteritems():
-        print _node.format(v, k)
-    return vertexmap, triple_no + 1
+    with closing(open('nodes.txt', 'w')) as nodesfile:
+        for k, v in vertexmap.iteritems():
+            nodesfile.write(_node.format(v, k))
+    return vertexmap, num_triples
 
-def _second_pass(path, vertexmap, properties):
+def _second_pass(path, vertexmap, num_triples, properties):
     '''
     Prints the edges list, with predicates as attributes, and collapsing all
     parallel arcs (the attribute is a comma-separated list of all predicates)
     '''
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
-    for key, subiter in groupby(triplesiter, itemgetter(0,2)):
-        out_entity, in_entity = key
-        predicates = [ p for (oe, p, ie) in subiter ]
-        out_vertex = vertexmap[out_entity]
-        in_vertex = vertexmap[in_entity]
-        attributes = ','.join(predicates)
-        print _edge.format(out_vertex, in_vertex, attributes)
+    with closing(open('edges.txt', 'w')) as edgesfile:
+        for key, subiter in groupby(triplesiter, itemgetter(0,2)):
+            out_entity, in_entity = key
+            predicates = [ p for (oe, p, ie) in subiter ]
+            out_vertex = vertexmap[out_entity]
+            in_vertex = vertexmap[in_entity]
+            attributes = ','.join(predicates)
+            edgesfile.write(_edge.format(out_vertex, in_vertex, attributes))
 
 if __name__ == '__main__':
 
@@ -173,10 +160,8 @@ if __name__ == '__main__':
     try:
         tic = time()
 
-        print _preamble
         vertexmap, num_triples = _first_pass(args.nt_file, args.properties)
         _second_pass(args.nt_file, vertexmap, args.properties)
-        print _epilog
 
         toc = time()
 
