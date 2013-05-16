@@ -8,6 +8,7 @@ import re
 import sys
 import errno
 import numpy as np
+from gzip import GzipFile
 from StringIO import StringIO
 from argparse import ArgumentParser
 from contextlib import closing, nested
@@ -55,7 +56,12 @@ def itertriples(path):
     ----------
     path - path to N-triples file
     '''
-    with closing(EncodedFile(open(path), 'utf-8')) as ntfile:
+    if path.endswith('.gz'):
+        ntfile = GzipFile(path)
+    else:
+        ntfile = open(path)
+    ntfile = EncodedFile(ntfile, 'utf-8')
+    with closing(ntfile):
         for line_no, line in enumerate(ntfile):
             if line.startswith('#'):
                 continue
@@ -164,7 +170,7 @@ def _second_pass(path, vertexmap, num_triples, properties):
     
     The adjacency matrix is written in coordinate format, e.g.: 
     
-        adj[k] = i, j where e_k = (v_i, v_j). 
+        adj[k] = i, j, 1    where e_k = (v_i, v_j)
         
     This is format is suitable for opening the file as a sparse matrix (see
     `scipy.sparse`).
@@ -183,7 +189,7 @@ def _second_pass(path, vertexmap, num_triples, properties):
     edgesfile = open('edges.txt', 'w')
     arrfile = open('adjacency.npy', 'w+')
     with nested(closing(edgesfile), closing(arrfile)):
-        adjarr = arrayfile(arrfile, (num_triples, 2), '<i4')
+        adjarr = arrayfile(arrfile, (num_triples, 3), '<i4')
         i = 0 
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
             out_entity, in_entity = key
@@ -192,7 +198,8 @@ def _second_pass(path, vertexmap, num_triples, properties):
             in_vertex = vertexmap[in_entity]
             attributes = ','.join(predicates)
             edgesfile.write(_edge.format(i, attributes))
-            adjarr[i,:] = int(out_vertex), int(in_vertex)
+            # default weight is 1
+            adjarr[i,:] = int(out_vertex), int(in_vertex), 1 
             i += 1
 
 if __name__ == '__main__':
