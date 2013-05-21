@@ -187,9 +187,9 @@ def _second_pass(path, vertexmap, num_triples, properties):
     _edge = '{} {}\n'
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
     edgesfile = open('edges.txt', 'w')
-    arrfile = open('adjacency.npy', 'w+')
-    with nested(closing(edgesfile), closing(arrfile)):
-        adjarr = arrayfile(arrfile, (num_triples, 3), '<i4')
+    data = []
+    rectype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
+    with closing(edgesfile):
         i = 0 
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
             out_entity, in_entity = key
@@ -199,8 +199,9 @@ def _second_pass(path, vertexmap, num_triples, properties):
             attributes = ','.join(predicates)
             edgesfile.write(_edge.format(i, attributes))
             # default weight is 1
-            adjarr[i,:] = int(out_vertex), int(in_vertex), 1 
+            data.append((int(out_vertex), int(in_vertex), 1.0))
             i += 1
+    np.save('adjacency.npy', np.asarray(data, dtype=rectype))
 
 if __name__ == '__main__':
 
