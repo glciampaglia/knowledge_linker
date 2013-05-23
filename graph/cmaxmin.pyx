@@ -39,7 +39,7 @@ def c_maxmin_sparse(object A):
     sparse CSR matrix (see `scipy.sparse.csr_matrix`).
     '''
     cdef:
-        cnp.ndarray[cnp.int_t, ndim=1] A_indptr, A_indices, At_indptr, At_indices
+        cnp.ndarray[int, ndim=1] A_indptr, A_indices, At_indptr, At_indices
         cnp.ndarray[cnp.double_t, ndim=1] A_data, At_data
         object AP_data, AP_indptr, AP_indices
         int N, M, i, j, ii, jj, ik, kj, iimax, jjmax, innz, iptr
