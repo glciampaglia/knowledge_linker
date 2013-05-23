@@ -1,1 +1,11 @@
 .*.swp
+
+*.c
+
+*.so
+*.pyc
+
+*.npy
+*.npz
+
+build/
