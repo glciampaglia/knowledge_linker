@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
 
-from _maxmin import _maxmin_naive
+from _maxmin import _maxmin_naive, _maxmin_sparse
 
 def maxmin_naive(A):
     '''
