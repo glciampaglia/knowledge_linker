@@ -1,9 +1,11 @@
 import numpy as np
 import scipy.sparse as sp
 
+# Frontend function. 
+
 def maxmin(A, sparse=False):
     '''
-    Compute max-min product on A:
+    Compute the max-min product of A with itself:
 
     [ AP ]_ij = max_k min ( A_ik, A_kj )
 
@@ -107,8 +109,8 @@ def _maxmin_sparse(A):
     # return in CSR format
     return AP.tocsr()
 
-# try import fast C implementations, otherwise use the Python versions provided
-# in this module as a fallback
+# try importing the fast C implementations first, otherwise use the Python
+# versions provided in this module as a fallback
 try:
     from cmaxmin import c_maxmin_naive as maxmin_naive,\
             c_maxmin_sparse as maxmin_sparse
