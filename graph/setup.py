@@ -6,7 +6,7 @@ from numpy import get_include
 _incl = [ get_include() ]
 
 ext_modules = [
-        Extension("_maxmin", ["_maxmin.pyx"], include_dirs=_incl)
+        Extension("cmaxmin", ["cmaxmin.pyx"], include_dirs=_incl)
         ]
 
 setup(

@@ -4,7 +4,7 @@ from nose.tools import raises
 
 # local imports
 from maxmin import _maxmin_naive, _maxmin_sparse
-from _maxmin import c_maxmin_naive, c_maxmin_sparse
+from cmaxmin import c_maxmin_naive, c_maxmin_sparse
 
 def test_naive():
     A = np.random.rand(5, 5)

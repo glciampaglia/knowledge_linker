@@ -110,7 +110,7 @@ def _maxmin_sparse(A):
 # try import fast C implementations, otherwise use the Python versions provided
 # in this module as a fallback
 try:
-    from _maxmin import c_maxmin_naive as maxmin_naive,\
+    from cmaxmin import c_maxmin_naive as maxmin_naive,\
             c_maxmin_sparse as maxmin_sparse
 except ImportError:
     import warnings
