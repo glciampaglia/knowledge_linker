@@ -11,6 +11,9 @@ def _to_similarity(x):
     return (x + 1) ** -1
 
 def _indegree_weights(adj):
+    '''
+    in-degree weights
+    '''
     icol = adj.col
     adj = adj.tocsc()
     indegree = adj.sum(axis=0)
@@ -24,35 +27,29 @@ def weights(adj, kind='indegree'):
 
     Parameters
     ----------
-    adj     - a sparse matrix
+    adj     - a sparse matrix in COO format
     kind    - the type of weights definition. Right now only `indegree' is
               available
 
-    Returns the similarity 
+    Returns the similarity weights in the same order as the `data` attribute of
+    the `adj` argument.
     '''
     if kind == 'indegree':
         return _indegree_weights(adj)
     else:
         raise ValueError('unknonw weight kind: {}'.format(kind))
 
-def main(args):
-    # load coordinates from file. 
-    # coords is a recarray with records (row, col, weights)
-    coords = np.load(args.data_path)
-    
-    # create sparse matrix
+def make_spmatrix(coords, nodes):
+    '''
+    create a COO sparse matrix for a records array with 'row', 'col', and
+    'weight' records.
+    '''
     irow = coords['row']
     icol = coords['col']
     w = coords['weight']
-    shp = (args.nodes,) * 2
-    adj = sp.coo_matrix((w, (irow, icol)), shp)
+    shp = (nodes,) * 2
+    return sp.coo_matrix((w, (irow, icol)), shp) 
 
-    # compute weights
-    weights = weights(adj)
-
-    # recreate sparse matrix with weights and convert to CSR format
-    adj = sp.coo_matrix((weights, (irow, icol)), shp)
-    adj = adj.tocsr()
 
 if __name__ == '__main__':
 
@@ -61,4 +58,18 @@ if __name__ == '__main__':
     parser.add_argument('nodes', type=int, help='number of nodes')
 
     args = parser.parse_args()
+
+    # load coordinates from file. 
+    # coords is a recarray with records (row, col, weights)
+    coords = np.load(args.data_path)
+    
+    # create sparse adjacency matrix
+    adj = make_spmatrix(coords, nodes)
+
+    # compute weights
+    weights = weights(adj)
+
+    # recreate sparse matrix with weights and convert to CSR format
+    adj = sp.coo_matrix((weights, (irow, icol)), shp)
+    adj = adj.tocsr()
 
