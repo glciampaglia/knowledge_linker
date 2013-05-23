@@ -4,12 +4,9 @@ import scipy.sparse as sp
 cimport numpy as cnp
 cimport cython
 
-cdef extern from "math.h":
-    double INFINITY
-
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def _maxmin_naive(object A):
+def c_maxmin_naive(object A):
     '''
     See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse
     matrices (`scipy.sparse.csr_matrix`).
@@ -24,7 +21,7 @@ def _maxmin_naive(object A):
     M = A.shape[1]
     for i in xrange(N):
         for j in xrange(M):
-            max_ij = - INFINITY
+            max_ij = 0.
             for k in xrange(N):
                 aik = _A[i,k]
                 akj = _A[k,j]
@@ -36,7 +33,7 @@ def _maxmin_naive(object A):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def _maxmin_sparse(object A):
+def c_maxmin_sparse(object A):
     '''
     See `maxmin.maxmin_sparse`. Cythonized version. Will convert argument to
     sparse CSR matrix (see `scipy.sparse.csr_matrix`).
@@ -49,14 +46,17 @@ def _maxmin_sparse(object A):
         double max_ij, min_k
 
     if not sp.isspmatrix_csr(A):
-        A = sp.csr_matrix(A)
+        raise ValueError('expecting a sparse CSR matrix')
+
     N = A.shape[0] 
     M = A.shape[1]
-    # output array
+
+    # 
     AP_indptr = [0]
     AP_indices = []
     AP_data = []
     iptr = 0
+
     At = A.transpose().tocsr() # transpose of A in CSR format
     A_indptr = A.indptr
     A_indices = A.indices
@@ -67,6 +67,7 @@ def _maxmin_sparse(object A):
 
     for i in xrange(N):
     
+        # number of non-zero elements on the i-th row
         innz = 0
 
         for j in xrange(M):
@@ -109,13 +110,15 @@ def _maxmin_sparse(object A):
                     ii += 1
 
             if max_ij:
+                # add value and column index to data/indices lists, increment
+                # number non-zero elements. Python list appends are fast!
                 AP_data.append(max_ij)
                 AP_indices.append(j)
                 innz += 1
 
+        # update indptr list
         iptr += innz
         AP_indptr.append(iptr)
-
 
     # return in CSR format
     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (N, N))

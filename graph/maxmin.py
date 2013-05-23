@@ -1,23 +1,45 @@
 import numpy as np
 import scipy.sparse as sp
 
-from _maxmin import _maxmin_naive, _maxmin_sparse
-
-def maxmin_naive(A):
+def maxmin(A, sparse=False):
     '''
     Compute max-min product on A:
 
     [ AP ]_ij = max_k min ( A_ik, A_kj )
+
+    Parameters
+    ----------
+    A       - A 2D ndarray, matrix or sparse (CSR) matrix (see `scipy.sparse`).
+              The sparse implementation will be used automatically for sparse
+              matrices.
+    sparse  - if True, transforms A to CSR matrix format and use the sparse
+              implementation.
+
+    Return
+    ------
+    A CSR sparse matrix if the sparse implementation is used, otherwise a numpy
+    matrix.
+    '''
+    if A.ndim != 2:
+        raise ValueError('expecting 2D array or matrix')
+    if sp.isspmatrix(A) or sparse:
+        if not sp.isspmatrix_csr(A):
+            A = sp.csr_matrix(A)
+        return maxmin_sparse(A)
+    else:
+        return np.matrix(maxmin_naive(A))
     
-    This is the naive algorithm that runs in O(n^3). It should be used only
-    for testing with small matrices. Works both on dense and CSR sparse
-    matrices.
+def _maxmin_naive(A):
+    '''
+    See `maxmin`. This is the naive algorithm that runs in O(n^3). It should be
+    used only for testing with small matrices. Works both on dense and CSR
+    sparse matrices.
     '''
     N, M = A.shape
     AP = np.zeros(A.shape, A.dtype)
     for i in xrange(N):
         for j in xrange(M):
-            max_ij = - np.inf
+            max_ij = 0.
             for k in xrange(N):
                 aik = A[i,k]
                 akj = A[k,j]
@@ -27,13 +49,13 @@ def maxmin_naive(A):
             AP[i, j] = max_ij
     return AP
 
-def maxmin_sparse(A):
+def _maxmin_sparse(A):
     '''
     Implementation for CSR sparse matrix (see `scipy.sparse.csr_matrix`)
     '''
-    # TODO: move following two lines to future `maxmin` function
     if not sp.isspmatrix_csr(A):
-        A = sp.csr_matrix(A)
+        raise ValueError('expecting a sparse CSR matrix')
+
     N, M = A.shape
     AP = sp.dok_matrix(A.shape, A.dtype)
     At = A.transpose().tocsr() # transpose of A in CSR format
@@ -85,6 +107,14 @@ def maxmin_sparse(A):
     # return in CSR format
     return AP.tocsr()
 
-
-
+# try import fast C implementations, otherwise use the Python versions provided
+# in this module as a fallback
+try:
+    from _maxmin import c_maxmin_naive as maxmin_naive,\
+            c_maxmin_sparse as maxmin_sparse
+except ImportError:
+    import warnings
+    warnings.warn('Could not import fast C implementation!')
+    maxmin_naive = _maxmin_naive
+    maxmin_sparse = _maxmin_sparse
 
