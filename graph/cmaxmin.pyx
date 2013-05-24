@@ -6,7 +6,7 @@ cimport cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_naive(object A, int a=0, int b=-1):
+def c_maxmin_naive(object A, object a=None, object b=None):
     '''
     See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse
     matrices (`scipy.sparse.csr_matrix`).
@@ -18,12 +18,14 @@ def c_maxmin_naive(object A, int a=0, int b=-1):
         int i,j,ih
         cnp.double_t max_ij, aik, akj, min_k
     N = A.shape[0]
-    if b == -1:
+    if a is None:
+        a = 0
+    if b is None:
         b = N
-    Nout = b - a
+    Nout = <int>(b - a)
     AP = np.zeros((Nout, N), A.dtype)
     for i in xrange(Nout):
-        ih = a + i
+        ih = <int>a + i
         for j in xrange(N):
             max_ij = 0.
             for k in xrange(N):
@@ -37,9 +39,9 @@ def c_maxmin_naive(object A, int a=0, int b=-1):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_sparse(object A, int a=0, int b=-1):
+def c_maxmin_sparse(object A, object a=None, object b=None):
     '''
-    See `maxmin.maxmin_sparse`. Cythonized version. Will convert argument to
+    See `maxmin.maxmin_sparse`. Cythonized version. Requires as argument a
     sparse CSR matrix (see `scipy.sparse.csr_matrix`).
     '''
     cdef:
@@ -53,9 +55,11 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
         raise ValueError('expecting a sparse CSR matrix')
 
     N = A.shape[0] 
-    if b == -1:
+    if a is None:
+        a = 0
+    if b is None:
         b = N
-    Nout = b - a
+    Nout = <int>(b - a)
 
     # build output matrix directly in compressed sparse row format. These are
     # the index pointers, indices, and data lists for the output matrix
@@ -78,7 +82,7 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
         # innz keeps track of the number of non-zero elements on the i-th output row in
         # this iteration; ih is the index corresponding to i in the input matrix
         innz = 0
-        ih = a + i
+        ih = <int>a + i
 
         for j in xrange(N):
             
