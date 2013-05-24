@@ -3,6 +3,9 @@ import scipy.sparse as sp
 from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 
+# TODO understand why sometimes _init_worker raises a warning complaining that
+# the indices array has dtype float64. This happens intermittently.
+
 # Global variables each worker needs
 
 _indptr = None
