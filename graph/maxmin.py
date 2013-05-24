@@ -1,5 +1,79 @@
 import numpy as np
 import scipy.sparse as sp
+from multiprocessing import Pool, Array, cpu_count
+from ctypes import c_int, c_double
+
+# Global variables each worker needs
+
+_indptr = None
+_indices = None
+_data = None
+_A = None
+
+# Each worker process is initialized with this function
+
+def _init_worker(indptr, indices, data, shape):
+    '''
+    See `pmaxmin`. This is the worker initialization function.
+    '''
+    global _indptr, _indices, _data, _A
+    _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
+    _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
+    _data = np.frombuffer(data.get_obj())
+    _A = sp.csr_matrix((_data, _indices, _indptr), shape)
+
+def _maxmin_worker(a_b):
+    '''
+    See `pmaxmin`. This is the map function each worker executes
+    '''
+    global _A
+    a, b = a_b
+    # return also the first index to help re-arrange the result
+    return a, maxmin(_A, a, b)
+
+# Parallel version
+
+def pmaxmin(A, splits=None, nprocs=None):
+    '''
+    See `maxmin`. Parallel version. Splits the rows of A in even intervals and
+    distribute them to a pool of workers. 
+
+    Parameter
+    ---------
+    A       - a 2D array, matrix, or CSR matrix
+    splits  - integer; split the rows of A in equal intervals. If not provided, each
+              worker will be assigned exactly an interval. If `split` is not
+              a divisor of the number of rows of A, the last interval will be
+              equal to the remainder of the division. 
+    nprocs  - integer; number of workers to spawn.
+    '''
+    if nprocs is None:
+        nprocs = cpu_count()
+    if splits is None:
+        splits = nprocs
+    if not isinstance(splits, int):
+        raise TypeError('expecting an integer number of splits')
+    N = A.shape[0]
+    if not sp.isspmatrix_csr(A):
+        A = sp.csr_matrix(A)
+    chunk_size = N / splits
+    breaks = [(i, i + chunk_size) for i in xrange(0, N, chunk_size)]
+    if splits % N != 0:
+        a, b = breaks[-1]
+        breaks[-1] = (a, N)
+
+    # Wrap the indptr/indices and data arrays of the CSR matrix into shared
+    # memory arrays and pass them to the initialization function of the workers
+    indptr = Array(c_int, A.indptr)
+    indices = Array(c_int, A.indices)
+    data = Array(c_double, A.data)
+    initargs = (indptr, indices, data, A.shape)
+
+    # create the pool, call map, reassemble result
+    pool = Pool(processes=nprocs, initializer=_init_worker, initargs=initargs)
+    result = pool.map(_maxmin_worker, breaks)
+    chunks = zip(*sorted(result, key=lambda k : k[0]))[1]
+    return sp.vstack(chunks).tocsr()
 
 # Frontend function. 
 
@@ -44,6 +118,7 @@ def maxmin(A, a=None, b=None, sparse=False):
         return maxmin_sparse(A, a, b)
     else:
         return np.matrix(maxmin_naive(A, a, b))
+
 
 # These functions don't perform checks on the argument, so don't use these
 # functions directly. Use the frontend instead.
@@ -153,3 +228,19 @@ except ImportError:
     maxmin_naive = _maxmin_naive
     maxmin_sparse = _maxmin_sparse
 
+if __name__ == '__main__':
+    from time import time
+    np.random.seed(10)
+    B = sp.rand(8000, 8000, 1e-4, 'csr')
+    print 'Testing maxmin on a matrix of shape %s with nnz = %d:' % (B.shape,
+            B.getnnz())
+
+    tic = time()
+    C = pmaxmin(B, 10, 10)
+    toc = time()
+    print '* parallel version executed in %.2e seconds' % (toc - tic)
+
+    tic = time()
+    D = maxmin(B)
+    toc = time()
+    print '* serial version executed in %.2e seconds' % (toc - tic)
