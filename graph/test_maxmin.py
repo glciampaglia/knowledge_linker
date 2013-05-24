@@ -12,6 +12,14 @@ def test_naive():
     AP2 = c_maxmin_naive(A) 
     assert np.array_equal(AP, AP2)
 
+def test_naive_subset():
+    a = 1
+    b = 3
+    A = np.random.rand(5, 5)
+    AP = _maxmin_naive(A, a, b)
+    AP2 = c_maxmin_naive(A, a, b) 
+    assert np.array_equal(AP, AP2)
+
 @raises(ValueError)
 def test_naive_sparse():
     A = sp.rand(5, 5, .2, 'csr')
@@ -28,3 +36,13 @@ def test_sparse():
     AP3 = c_maxmin_sparse(A)
     assert np.array_equal(AP, AP3.todense())
 
+def test_sparse_subset():
+    a = 1
+    b = 3
+    A = sp.rand(5, 5, .2, 'csr')
+    AP = _maxmin_naive(A, a, b)
+    AP2 = _maxmin_sparse(A, a, b)
+    assert np.array_equal(AP, AP2.todense())
+
+    AP3 = c_maxmin_sparse(A, a, b)
+    assert np.array_equal(AP, AP3.todense())

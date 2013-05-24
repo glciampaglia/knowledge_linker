@@ -6,24 +6,28 @@ cimport cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_naive(object A):
+def c_maxmin_naive(object A, int a=0, int b=-1):
     '''
     See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse
     matrices (`scipy.sparse.csr_matrix`).
     '''
     cdef:
-        int N, M
+        int N
         cnp.ndarray[cnp.double_t, ndim=2] _A = np.asarray(A)
-        cnp.ndarray[cnp.double_t, ndim=2] AP = np.zeros(A.shape, A.dtype)
-        int i,j
+        cnp.ndarray[cnp.double_t, ndim=2] AP
+        int i,j,ih
         cnp.double_t max_ij, aik, akj, min_k
     N = A.shape[0]
-    M = A.shape[1]
-    for i in xrange(N):
-        for j in xrange(M):
+    if b == -1:
+        b = N
+    Nout = b - a
+    AP = np.zeros((Nout, N), A.dtype)
+    for i in xrange(Nout):
+        ih = a + i
+        for j in xrange(N):
             max_ij = 0.
             for k in xrange(N):
-                aik = _A[i,k]
+                aik = _A[ih,k]
                 akj = _A[k,j]
                 min_k = min(aik, akj)
                 if min_k > max_ij:
@@ -33,7 +37,7 @@ def c_maxmin_naive(object A):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_sparse(object A):
+def c_maxmin_sparse(object A, int a=0, int b=-1):
     '''
     See `maxmin.maxmin_sparse`. Cythonized version. Will convert argument to
     sparse CSR matrix (see `scipy.sparse.csr_matrix`).
@@ -42,22 +46,26 @@ def c_maxmin_sparse(object A):
         cnp.ndarray[int, ndim=1] A_indptr, A_indices, At_indptr, At_indices
         cnp.ndarray[cnp.double_t, ndim=1] A_data, At_data
         object AP_data, AP_indptr, AP_indices
-        int N, M, i, j, ii, jj, ik, kj, iimax, jjmax, innz, iptr
+        int N, Nout, i, ih, j, ii, jj, ik, kj, iimax, jjmax, innz, iptr
         double max_ij, min_k
 
     if not sp.isspmatrix_csr(A):
         raise ValueError('expecting a sparse CSR matrix')
 
     N = A.shape[0] 
-    M = A.shape[1]
+    if b == -1:
+        b = N
+    Nout = b - a
 
-    # 
+    # build output matrix directly in compressed sparse row format. These are
+    # the index pointers, indices, and data lists for the output matrix
     AP_indptr = [0]
     AP_indices = []
     AP_data = []
     iptr = 0
 
-    At = A.transpose().tocsr() # transpose of A in CSR format
+    # At is A in compressed sparse column format
+    At = A.tocsc() 
     A_indptr = A.indptr
     A_indices = A.indices
     A_data = A.data
@@ -65,17 +73,19 @@ def c_maxmin_sparse(object A):
     At_indices = At.indices
     At_data = At.data
 
-    for i in xrange(N):
+    for i in xrange(Nout):
     
-        # number of non-zero elements on the i-th row
+        # innz keeps track of the number of non-zero elements on the i-th output row in
+        # this iteration; ih is the corresponding index in the input matrix
         innz = 0
+        ih = a + i
 
-        for j in xrange(M):
+        for j in xrange(N):
             
             # ii is the index of the first non-zero element value (in A.data)
             # and column index (in A.indices) of the the i-th row
-            ii = A_indptr[i] 
-            iimax = A_indptr[i + 1]
+            ii = A_indptr[ih] 
+            iimax = A_indptr[ih + 1]
 
             # jj is the index of the first non-zero element value (in At.data)
             # and column (that is, row) index (in A.indices) of the the j-th row
@@ -121,4 +131,4 @@ def c_maxmin_sparse(object A):
         AP_indptr.append(iptr)
 
     # return in CSR format
-    return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (N, N))
+    return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
