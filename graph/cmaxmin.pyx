@@ -76,7 +76,7 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
     for i in xrange(Nout):
     
         # innz keeps track of the number of non-zero elements on the i-th output row in
-        # this iteration; ih is the corresponding index in the input matrix
+        # this iteration; ih is the index corresponding to i in the input matrix
         innz = 0
         ih = a + i
 
