@@ -4,7 +4,7 @@ from nose.tools import raises
 import warnings
 
 # local imports
-from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin, \
+from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
         productclosure
 from cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
@@ -63,7 +63,6 @@ def test_parallel():
 
 def test_parallel_is_faster():
     from time import time
-    np.random.seed(10)
     B = sp.rand(4000, 4000, 1e-4, 'csr')
 
     tic = time()
@@ -108,3 +107,12 @@ def test_closure_cycle_3():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         productclosure(Cl3, maxiter=10)
+
+def test_closure():
+    B = sp.rand(10, 10, .2, 'csr')
+    with warnings.catch_warnings():
+        # most likely it won't converge, so we ignore the warning
+        warnings.simplefilter("ignore")
+        Cl1 = productclosure(B, splits=2, nprocs=2, maxiter=10, parallel=True)
+        Cl2 = productclosure(B, maxiter=100)
+        assert np.allclose(Cl1.todense(), Cl2.todense())

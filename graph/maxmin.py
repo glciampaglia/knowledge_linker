@@ -37,7 +37,7 @@ def _maxmin_worker(a_b):
     # return also the first index to help re-arrange the result
     return maxmin(_A, a, b)
 
-# Parallel version, with closure functionality (off by default)
+# Parallel version
 
 # TODO switch from processes to threads, refactor the productclosure, move to
 # Cython and release the GIL like this:
@@ -371,11 +371,13 @@ if __name__ == '__main__':
             B.getnnz())
 
     tic = time()
-    Cl1 = productclosure(B, splits=2, nprocs=2, parallel=True)
+    Cl1 = productclosure(B, splits=2, nprocs=2, maxiter=10, parallel=True)
     toc = time()
     print '* parallel version executed in %.2e seconds' % (toc - tic)
 
     tic = time()
-    Cl2 = productclosure(B)
+    Cl2 = productclosure(B, maxiter=10)
     toc = time()
     print '* serial version executed in %.2e seconds' % (toc - tic)
+
+    assert _allclose_csr(Cl1, Cl2)
