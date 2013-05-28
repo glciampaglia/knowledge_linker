@@ -83,30 +83,26 @@ def test_maximum_csr():
     C2 = c_maximum_csr(A, B).todense()
     assert np.array_equal(C1, C2)
 
-@raises(UserWarning)
 def test_closure_cycle_2():
     # length 2 cycle
-    Cl2 = np.array([
+    C2 = np.array([
             [0.0, 0.5, 0.0], 
             [0.0, 0.0, 0.1], 
             [0.2, 0.0, 0.0]
             ])
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        productclosure(Cl2, maxiter=10)
+    C2T = productclosure(C2, maxiter=100)
+    assert not np.allclose(C2T, 0.1)
 
-@raises(UserWarning)
 def test_closure_cycle_3():
     # length 3 cycle
-    Cl3 = np.array([
+    C3 = np.array([
             [0.0, 0.5, 0.0, 0.0], 
             [0.0, 0.0, 0.2, 0.0],
             [0.4, 0.0, 0.0, 0.0],
             [0.1, 0.0, 0.0, 0.0]
             ])
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        productclosure(Cl3, maxiter=10)
+    C3T = productclosure(C3, maxiter=100)
+    assert not np.allclose(C3T, 0.1)
 
 def test_closure():
     B = sp.rand(10, 10, .2, 'csr')

@@ -250,7 +250,3 @@ def c_maximum_csr(object A, object B):
             Out_indptr.append(kptr)
 
     return sp.csr_matrix((np.asarray(Out_data), Out_indices, Out_indptr), (N, M))
-
-
-
-    # iterate over A and B indices
