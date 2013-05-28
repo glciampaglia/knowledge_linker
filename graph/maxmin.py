@@ -39,6 +39,11 @@ def _maxmin_worker(a_b):
 
 # Parallel version, with closure functionality (off by default)
 
+# TODO switch from processes to threads, refactor the productclosure, move to
+# Cython and release the GIL like this:
+#
+# with nogil:
+#   <do stuff>
 def pmaxmin(A, splits=None, nprocs=None):
     '''
     See `maxmin`. Parallel version. Splits the rows of A in even intervals and
