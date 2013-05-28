@@ -135,17 +135,14 @@ def productclosure(A, parallel=False, maxiter=1000, **kwrds):
         AP = maxmin(A, **kwrds)
     A = _maximum_csr_safe(A, AP)
     iterations = 0
-#    while not _allclose_csr(A, AP) and iterations < maxiter:
-    while not np.allclose(A.todense(), AP.todense()) and iterations < maxiter:
+    while not _allclose_csr(A, AP) and iterations < maxiter:
         if parallel:
             AP = pmaxmin(A, **kwrds)
         else:
             AP = maxmin(A, **kwrds)
         A = _maximum_csr_safe(A, AP)
         iterations += 1 
-#    if not _allclose_csr(A, AP):
-    if not np.allclose(A.todense(), AP.todense()):
-        print A.todense() == AP.todense()
+    if not _allclose_csr(A, AP):
         import warnings
         warnings.warn('Closure did not converge in %d iterations!' %
                 maxiter)
