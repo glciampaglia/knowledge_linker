@@ -39,18 +39,6 @@ def weights(adj, kind='indegree'):
     else:
         raise ValueError('unknonw weight kind: {}'.format(kind))
 
-def make_spmatrix(coords, nodes):
-    '''
-    create a COO sparse matrix for a records array with 'row', 'col', and
-    'weight' records.
-    '''
-    irow = coords['row']
-    icol = coords['col']
-    w = coords['weight']
-    shp = (nodes,) * 2
-    return sp.coo_matrix((w, (irow, icol)), shp) 
-
-
 if __name__ == '__main__':
 
     parser = ArgumentParser(description=__doc__)
@@ -64,7 +52,11 @@ if __name__ == '__main__':
     coords = np.load(args.data_path)
     
     # create sparse adjacency matrix
-    adj = make_spmatrix(coords, nodes)
+    irow = coords['row']
+    icol = coords['col']
+    w = coords['weight']
+    shp = (args.nodes,) * 2
+    adj = sp.coo_matrix((w, (irow, icol)), shp) 
 
     # compute weights
     weights = weights(adj)
