@@ -4,7 +4,7 @@ from nose.tools import raises
 
 # local imports
 from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin
-from cmaxmin import c_maxmin_naive, c_maxmin_sparse
+from cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
 def test_naive():
     A = np.random.rand(5, 5)
@@ -74,3 +74,13 @@ def test_parallel_is_faster():
     toc = time()
     time_serial = toc - tic
     assert time_serial > time_parallel, "parallel version slower than serial!"
+
+def test_maximum_csr():
+    A = sp.rand(5, 5, .2, 'csr')
+    B = sp.rand(5, 5, .2, 'csr')
+    C1 = np.maximum(A.todense(), B.todense())
+    C2 = c_maximum_csr(A, B).todense()
+    assert np.array_equal(C1, C2)
+
+def test_closure():
+    pass
