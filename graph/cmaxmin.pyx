@@ -6,7 +6,7 @@ cimport cython
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_naive(object A, int a=0, int b=-1):
+def c_maxmin_naive(object A, object a=None, object b=None):
     '''
     See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse
     matrices (`scipy.sparse.csr_matrix`).
@@ -18,12 +18,14 @@ def c_maxmin_naive(object A, int a=0, int b=-1):
         int i,j,ih
         cnp.double_t max_ij, aik, akj, min_k
     N = A.shape[0]
-    if b == -1:
+    if a is None:
+        a = 0
+    if b is None:
         b = N
-    Nout = b - a
+    Nout = <int>(b - a)
     AP = np.zeros((Nout, N), A.dtype)
     for i in xrange(Nout):
-        ih = a + i
+        ih = <int>a + i
         for j in xrange(N):
             max_ij = 0.
             for k in xrange(N):
@@ -37,9 +39,9 @@ def c_maxmin_naive(object A, int a=0, int b=-1):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def c_maxmin_sparse(object A, int a=0, int b=-1):
+def c_maxmin_sparse(object A, object a=None, object b=None):
     '''
-    See `maxmin.maxmin_sparse`. Cythonized version. Will convert argument to
+    See `maxmin.maxmin_sparse`. Cythonized version. Requires as argument a
     sparse CSR matrix (see `scipy.sparse.csr_matrix`).
     '''
     cdef:
@@ -53,9 +55,11 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
         raise ValueError('expecting a sparse CSR matrix')
 
     N = A.shape[0] 
-    if b == -1:
+    if a is None:
+        a = 0
+    if b is None:
         b = N
-    Nout = b - a
+    Nout = <int>(b - a)
 
     # build output matrix directly in compressed sparse row format. These are
     # the index pointers, indices, and data lists for the output matrix
@@ -76,9 +80,9 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
     for i in xrange(Nout):
     
         # innz keeps track of the number of non-zero elements on the i-th output row in
-        # this iteration; ih is the corresponding index in the input matrix
+        # this iteration; ih is the index corresponding to i in the input matrix
         innz = 0
-        ih = a + i
+        ih = <int>a + i
 
         for j in xrange(N):
             
@@ -132,3 +136,121 @@ def c_maxmin_sparse(object A, int a=0, int b=-1):
 
     # return in CSR format
     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
+
+def c_maximum_csr(object A, object B):
+    '''
+    Equivalent of numpy.maximum for CSR matrices. 
+    '''
+    cdef:
+        cnp.ndarray[int, ndim=1] A_indptr, A_indices, B_indptr, B_indices
+        cnp.ndarray[cnp.double_t, ndim=1] A_data, B_data
+        object Out_indptr, Out_indices, Out_data
+        int k, kptr, knnz, ii, jj, iimax, jjmax, icol, jcol, N, M, ik, jk
+
+    # check input is CSR 
+    if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):
+        raise ValueError('expecting a CSR matrix')
+
+    N = A.shape[0]
+    M = A.shape[1]
+    A_indptr = A.indptr
+    A_indices = A.indices
+    A_data = A.data
+    B_indptr = B.indptr
+    B_indices= B.indices
+    B_data = B.data
+    Out_indptr = [0]
+    Out_indices = []
+    Out_data = []
+    kptr = 0
+
+    for k in xrange(N):
+        ii = A_indptr[k]
+        jj = B_indptr[k]
+        iimax = A_indptr[k + 1]
+        jjmax = B_indptr[k + 1]
+        knnz = 0
+
+        if (ii == iimax) and (jj == jjmax):
+            # both rows in A and B are empty, skip this row
+            Out_indptr.append(kptr)
+            continue
+
+        elif (ii == iimax) ^ (jj == jjmax):
+            # either one of A and B (but not both) has non-zero elements
+
+            if (ii == iimax):
+                # the k-th row in A is empty, add the elements of B
+                knnz = jjmax - jj
+                for jk in xrange(knnz):
+                    jcol = B_indices[jk + jj]
+                    Out_indices.append(jcol)
+                    Out_data.append(B_data[jk + jj])
+                kptr += knnz
+                Out_indptr.append(kptr)
+
+            else:
+                # the k-th row in B is empty, add the elements of A
+                knnz = iimax - ii
+                for ik in xrange(knnz):
+                    icol = A_indices[ik + ii]
+                    Out_indices.append(icol)
+                    Out_data.append(A_data[ik + ii])
+                kptr += knnz
+                Out_indptr.append(kptr)
+
+        else:
+            # the k-th rows in both B and A contain non-zero elements. 
+            
+            # First, scan both index pointers simultaneously. Will break as soon
+            # as all non-zero elements on one row are exhausted
+            while ii < iimax and jj < jjmax:
+
+                icol = A_indices[ii]
+                jcol = B_indices[jj]
+
+                # both elements non-zero, add max
+                if icol == jcol:
+                    Out_data.append(max(A_data[ii], B_data[jj]))
+                    Out_indices.append(icol)
+                    ii += 1
+                    jj += 1
+
+                # A-element is zero, add B-element
+                elif icol > jcol:
+                    Out_data.append(B_data[jj])
+                    Out_indices.append(jcol)
+                    jj += 1
+
+                # B-element is zero, add A-element
+                else:
+                    Out_data.append(A_data[ii])
+                    Out_indices.append(icol)
+                    ii += 1
+
+                knnz += 1
+
+            # Second, complete by adding the elements left in the other row, if
+            # any. By the previous loop condition, no more than one of these two
+            # loops will execute.
+            for ik in xrange(iimax - ii):
+                icol = A_indices[ik + ii]
+                Out_data.append(A_data[ik + ii])
+                Out_indices.append(icol)
+                knnz += 1
+
+            for jk in xrange(jjmax - jj):
+                jcol = B_indices[jk + jj]
+                Out_data.append(B_data[jk + jj])
+                Out_indices.append(jcol)
+                knnz += 1
+
+            # update the output index pointers array 
+            kptr += knnz
+            Out_indptr.append(kptr)
+
+    return sp.csr_matrix((np.asarray(Out_data), Out_indices, Out_indptr), (N, M))
+
+
+
+    # iterate over A and B indices
