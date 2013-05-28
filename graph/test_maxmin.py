@@ -1,9 +1,11 @@
 import numpy as np
 import scipy.sparse as sp
 from nose.tools import raises
+import warnings
 
 # local imports
-from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin
+from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin, \
+        productclosure
 from cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
 def test_naive():
@@ -82,5 +84,27 @@ def test_maximum_csr():
     C2 = c_maximum_csr(A, B).todense()
     assert np.array_equal(C1, C2)
 
-def test_closure():
-    pass
+@raises(UserWarning)
+def test_closure_cycle_2():
+    # length 2 cycle
+    Cl2 = np.array([
+            [0.0, 0.5, 0.0], 
+            [0.0, 0.0, 0.1], 
+            [0.2, 0.0, 0.0]
+            ])
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        productclosure(Cl2, maxiter=10)
+
+@raises(UserWarning)
+def test_closure_cycle_3():
+    # length 3 cycle
+    Cl3 = np.array([
+            [0.0, 0.5, 0.0, 0.0], 
+            [0.0, 0.0, 0.2, 0.0],
+            [0.4, 0.0, 0.0, 0.0],
+            [0.1, 0.0, 0.0, 0.0]
+            ])
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        productclosure(Cl3, maxiter=10)
