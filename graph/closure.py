@@ -4,64 +4,100 @@ import numpy as np
 import scipy.sparse as sp
 from argparse import ArgumentParser
 
-def _to_similarity(x):
+from maxmin import productclosure
+
+def disttosim(x):
     '''
-    transform into proximity/similarity weights \in [0,1]
+    transforms a vector non-negative integer distances x to proximity/similarity
+    weights in the [0,1] interval:
+          1
+    s = -----
+        x + 1
     '''
     return (x + 1) ** -1
 
-def _indegree_weights(adj):
+def indegree(adj):
     '''
-    in-degree weights
+    computes the in-degree of each node
     '''
-    icol = adj.col
     adj = adj.tocsc()
     indegree = adj.sum(axis=0)
-    indegree = np.asarray(indegree).flatten()
-    weights = _to_similarity(indegree)
-    return weights[icol]
+    return np.asarray(indegree).flatten()
     
-def weights(adj, kind='indegree'):
+def recstosparse(coords, shape=None, fmt='csr'):
     '''
-    Computes proximity/similarity weights
+    Returns a sparse adjancency matrix from a records array of (col, row,
+    weights) 
 
     Parameters
     ----------
-    adj     - a sparse matrix in COO format
-    kind    - the type of weights definition. Right now only `indegree' is
-              available
-
-    Returns the similarity weights in the same order as the `data` attribute of
-    the `adj` argument.
+    coords - either a recarray or a 2d ndarray. If recarray, fields must be
+             named: `col`, `row`, and `weight`.
+    shape  - the shape of the array, optional.
+    fmt    - the sparse matrix format to use. See `scipy.sparse`. Default:
+             csr. 
     '''
-    if kind == 'indegree':
-        return _indegree_weights(adj)
+    if coords.dtype.names is not None:
+        # recarray
+        irow = coords['row']
+        icol = coords['col']
+        w = coords['weight']
     else:
-        raise ValueError('unknonw weight kind: {}'.format(kind))
+        # plain ndarray
+        if coords.ndims != 2:
+            raise ValueError('expecting a 2-d array or a recarray')
+        if coords.shape[1] != 3:
+            raise ValueError('expecting three columns (row, col, weights)')
+        irow = coords[:,0]
+        icol = coords[:,1]
+        w = coords[:,2]
+    adj = sp.coo_matrix((w, (irow, icol)), shape=shape) 
+    return adj.asformat(fmt)
 
 if __name__ == '__main__':
 
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('data_path', metavar='data', help='Graph data')
     parser.add_argument('nodes', type=int, help='number of nodes')
+    parser.add_argument('output', help='output file')
+    parser.add_argument('-p', '--procs', type=int, metavar='NUM', 
+            help='use %(metavar)s process for computing the transitive closure')
 
     args = parser.parse_args()
 
     # load coordinates from file. 
     # coords is a recarray with records (row, col, weights)
     coords = np.load(args.data_path)
-    
-    # create sparse adjacency matrix
+
+    # shortcuts
     irow = coords['row']
     icol = coords['col']
-    w = coords['weight']
-    shp = (args.nodes,) * 2
-    adj = sp.coo_matrix((w, (irow, icol)), shp) 
+    shape = (args.nodes,) * 2
+    
+    # create sparse adjacency matrix
+    adj = recstosparse(coords, (args.nodes,)*2)
 
-    # compute weights
-    weights = weights(adj)
+    # computes distances based on in-degrees
+    dist = indegree(adj)
 
-    # recreate sparse matrix with weights and convert to CSR format
-    adj = sp.coo_matrix((weights, (irow, icol)), shp)
+    # transform distances to similarity scores
+    sim = disttosim(dist)
+
+    # assign the weight to each edge
+    weights = sim[coords['col']]
+
+    # recreate the sparse matrix with weights and convert to CSR format
+    adj = sp.coo_matrix((weights, (irow, icol)), shape=shape)
     adj = adj.tocsr()
 
+    # compute transitive closure
+    if args.procs is not None:
+        adjt = productclosure(adj, parallel=True, splits=args.procs, nprocs=args.procs)
+    else:
+        adjt = productclosure(adj) 
+
+    # save to file as records array
+    adjt = adjt.tocoo()
+    rectype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
+    np.save(args.output, np.asarray(np.c_[adjt.row, adjt.col, adjt.data],
+        dtype=rectype))

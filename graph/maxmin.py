@@ -1,13 +1,32 @@
+from __future__ import division
+import os
+import sys
 import numpy as np
 import scipy.sparse as sp
 from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 from contextlib import closing
+import warnings
 
 from cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
-# the indices array has dtype float64. This happens intermittently.
+# the indices array has dtype float64. This happens intermittently. In the
+# meanwhile, just ignore it.
+
+warnings.filterwarnings('ignore', 
+        message='.*',
+        module='scipy\.sparse\.compressed.*',
+        lineno=122)
+
+# Format warnings nicely
+
+def _showwarning(message, category, filename, lineno, line=None):
+    filename = os.path.basename(__file__)
+    warning = category.__name__
+    print >> sys.stderr, '{}:{}: {}: {}'.format(filename, lineno, warning, message)
+
+warnings.showwarning = _showwarning
 
 # Global variables each worker needs
 
@@ -54,8 +73,8 @@ def pmaxmin(A, splits=None, nprocs=None):
     A       - a 2D array, matrix, or CSR matrix
     splits  - integer; split the rows of A in equal intervals. If not provided, each
               worker will be assigned exactly an interval. If `split` is not
-              a divisor of the number of rows of A, the last interval will be
-              equal to the remainder of the division. 
+              an integer divisor of the number of rows of A, the last interval
+              will be equal to the remainder of the integer division. 
     nprocs  - integer; number of workers to spawn.
 
     Returns
@@ -79,13 +98,9 @@ def pmaxmin(A, splits=None, nprocs=None):
             raise ValueError('too many splits for %d rows: %d' % (N, splits))
     if not sp.isspmatrix_csr(A):
         A = sp.csr_matrix(A)
-    chunk_size = N / splits
-    breaks = [(i, i + chunk_size) for i in xrange(0, N, chunk_size)]
 
-    # adjust last break, if needed
-    if splits % N != 0:
-        a, b = breaks[-1]
-        breaks[-1] = (a, N)
+    chunk_size = int(np.ceil(N / splits))
+    breaks = [(i, min(i + chunk_size, N)) for i in xrange(0, N, chunk_size)]
 
     # Wrap the indptr/indices and data arrays of the CSR matrix into shared
     # memory arrays and pass them to the initialization function of the workers
@@ -144,7 +159,6 @@ def productclosure(A, parallel=False, maxiter=1000, **kwrds):
         AP = _maximum_csr_safe(A, AP)
         iterations += 1 
     if not _allclose_csr(A, AP):
-        import warnings
         with warnings.catch_warnings():
             warnings.simplefilter('always')
             warnings.warn('Closure did not converge in %d iterations!' % maxiter)
