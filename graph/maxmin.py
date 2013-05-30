@@ -7,6 +7,7 @@ from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 from contextlib import closing
 import warnings
+from datetime import datetime
 
 from cmaxmin import c_maximum_csr # see below for other imports
 
@@ -127,7 +128,7 @@ def pmaxmin(A, splits=None, nprocs=None):
 
 # Maxmin product closure, serial version.
 
-def productclosure(A, parallel=False, maxiter=1000, **kwrds):
+def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
     '''
     Computes the max-min product closure. 
 
@@ -135,6 +136,7 @@ def productclosure(A, parallel=False, maxiter=1000, **kwrds):
     maxiter  - integer; maximum number of iterations for the closure loop. Will
                warn if the maximum number of iterations is reached without
                convergence.
+    quiet    - if True, will not print the current time at each iteration. 
 
     Additional keyword arguments are passed to p/maxmin. 
 
@@ -158,11 +160,13 @@ def productclosure(A, parallel=False, maxiter=1000, **kwrds):
             AP = maxmin(A, **kwrds)
         AP = _maximum_csr_safe(A, AP)
         iterations += 1 
+        if not quiet:
+            print '%s: iteration %d completed.' % (datetime.now(), iterations)
     if not _allclose_csr(A, AP):
-        with warnings.catch_warnings():
-            warnings.simplefilter('always')
-            warnings.warn('Closure did not converge in %d iterations!' % maxiter)
-    return A
+        print 'Closure did not converge in %d iterations!' % maxiter
+    else:
+        print 'Closure converged after %d iterations.' % iterations
+    return AP
 
 # Frontend function. 
 
