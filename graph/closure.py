@@ -3,8 +3,13 @@
 import numpy as np
 import scipy.sparse as sp
 from argparse import ArgumentParser
+from datetime import datetime
 
 from maxmin import productclosure
+
+rectype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
+
+_now = datetime.now
 
 def disttosim(x):
     '''
@@ -68,6 +73,7 @@ if __name__ == '__main__':
     # load coordinates from file. 
     # coords is a recarray with records (row, col, weights)
     coords = np.load(args.data_path)
+    print "{}: read data from {}.".format(_now(), args.data_path)
 
     # shortcuts
     irow = coords['row']
@@ -76,6 +82,7 @@ if __name__ == '__main__':
     
     # create sparse adjacency matrix
     adj = recstosparse(coords, (args.nodes,)*2)
+    print "{}: adjacency matrix created.".format(_now())
 
     # computes distances based on in-degrees
     dist = indegree(adj)
@@ -90,14 +97,17 @@ if __name__ == '__main__':
     adj = sp.coo_matrix((weights, (irow, icol)), shape=shape)
     adj = adj.tocsr()
 
+    print "{}: in-degree weights computed. Computing closure...".format(_now())
+
     # compute transitive closure
     if args.procs is not None:
         adjt = productclosure(adj, parallel=True, splits=args.procs, nprocs=args.procs)
     else:
         adjt = productclosure(adj) 
 
+    print "{}: closure algorithm completed.".format(_now())
+
     # save to file as records array
     adjt = adjt.tocoo()
-    rectype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
-    np.save(args.output, np.asarray(np.c_[adjt.row, adjt.col, adjt.data],
-        dtype=rectype))
+    np.save(args.output, np.asarray(zip(adjt.row, adjt.col, adjt.data), dtype=rectype))
+    print "{}: closure graph saved to {}.".format(_now(), args.output)
