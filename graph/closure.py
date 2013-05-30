@@ -79,9 +79,9 @@ if __name__ == '__main__':
     irow = coords['row']
     icol = coords['col']
     shape = (args.nodes,) * 2
-    
+
     # create sparse adjacency matrix
-    adj = recstosparse(coords, (args.nodes,)*2)
+    adj = recstosparse(coords, shape)
     print "{}: adjacency matrix created.".format(_now())
 
     # computes distances based on in-degrees
@@ -90,8 +90,9 @@ if __name__ == '__main__':
     # transform distances to similarity scores
     sim = disttosim(dist)
 
-    # assign the weight to each edge
-    weights = sim[coords['col']]
+    # assign the weight to each edge (the weight of an edge is the in-degree of
+    # the incoming vertex, translated to a similarity score)
+    weights = sim[icol]
 
     # recreate the sparse matrix with weights and convert to CSR format
     adj = sp.coo_matrix((weights, (irow, icol)), shape=shape)

@@ -161,11 +161,12 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
         AP = _maximum_csr_safe(A, AP)
         iterations += 1 
         if not quiet:
-            print '%s: iteration %d completed.' % (datetime.now(), iterations)
+            print '%s: iteration %d completed.' % (datetime.now(), iterations +
+                    1)
     if not _allclose_csr(A, AP):
         print 'Closure did not converge in %d iterations!' % maxiter
     else:
-        print 'Closure converged after %d iterations.' % iterations
+        print 'Closure converged after %d iterations.' % (iterations + 1)
     return AP
 
 # Frontend function. 
