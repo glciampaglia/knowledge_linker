@@ -59,30 +59,27 @@ def recstosparse(coords, shape=None, fmt='csr'):
     adj = sp.coo_matrix((w, (irow, icol)), shape=shape) 
     return adj.asformat(fmt)
 
-if __name__ == '__main__':
+def make_weighted(path, N):
+    '''
+    Return a weighted adjacency matrix, with edge weights computed as the
+    in-degree of the incoming vertex, transformed to similarity scores.
 
-    parser = ArgumentParser(description=__doc__)
-    parser.add_argument('data_path', metavar='data', help='Graph data')
-    parser.add_argument('nodes', type=int, help='number of nodes')
-    parser.add_argument('output', help='output file')
-    parser.add_argument('-p', '--procs', type=int, metavar='NUM', 
-            help='use %(metavar)s process for computing the transitive closure')
-
-    args = parser.parse_args()
-
+    Parameters
+    ----------
+    path - path to data file
+    N    - number of nodes
+    '''
     # load coordinates from file. 
     # coords is a recarray with records (row, col, weights)
-    coords = np.load(args.data_path)
-    print "{}: read data from {}.".format(_now(), args.data_path)
+    coords = np.load(path)
 
     # shortcuts
     irow = coords['row']
     icol = coords['col']
-    shape = (args.nodes,) * 2
+    shape = (N,) * 2
 
     # create sparse adjacency matrix
     adj = recstosparse(coords, shape)
-    print "{}: adjacency matrix created.".format(_now())
 
     # computes distances based on in-degrees
     dist = indegree(adj)
@@ -98,6 +95,23 @@ if __name__ == '__main__':
     adj = sp.coo_matrix((weights, (irow, icol)), shape=shape)
     adj = adj.tocsr()
 
+    return adj
+
+if __name__ == '__main__':
+
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('data_path', metavar='data', help='Graph data')
+    parser.add_argument('nodes', type=int, help='number of nodes')
+    parser.add_argument('output', help='output file')
+    parser.add_argument('-p', '--procs', type=int, metavar='NUM', 
+            help='use %(metavar)s process for computing the transitive closure')
+
+    args = parser.parse_args()
+
+    # read adjacency matrix from file and compute weights
+    print "{}: read data from {}.".format(_now(), path)
+    print "{}: adjacency matrix created.".format(_now())
+    adj = make_weighted(args.data_path, args.nodes)
     print "{}: in-degree weights computed. Computing closure...".format(_now())
 
     # compute transitive closure
