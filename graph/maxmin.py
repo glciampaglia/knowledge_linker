@@ -151,7 +151,7 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
     else:
         AP = maxmin(A, **kwrds)
     AP = _maximum_csr_safe(A, AP)
-    iterations = 0
+    iterations = 1
     while not _allclose_csr(A, AP) and iterations < maxiter:
         A = AP.copy()
         if parallel:
@@ -166,7 +166,7 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
     if not _allclose_csr(A, AP):
         print 'Closure did not converge in %d iterations!' % maxiter
     else:
-        print 'Closure converged after %d iterations.' % (iterations + 1)
+        print 'Closure converged after %d iterations.' % iterations
     return AP
 
 # Frontend function. 
