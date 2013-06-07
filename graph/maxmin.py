@@ -71,18 +71,22 @@ def pmaxmin(A, splits=None, nprocs=None):
     See `maxmin`. Parallel version. Splits the rows of A in even intervals and
     distribute them to a pool of workers. 
 
-    Parameter
-    ---------
-    A       - a 2D array, matrix, or CSR matrix
-    splits  - integer; split the rows of A in equal intervals. If not provided, each
-              worker will be assigned exactly an interval. If `split` is not
-              an integer divisor of the number of rows of A, the last interval
-              will be equal to the remainder of the integer division. 
-    nprocs  - integer; number of workers to spawn.
+    Parameters
+    ----------
+    A : array_like
+        a 2D array, matrix, or CSR matrix representing an NxN adjacency matrix
+    splits : integer
+        split the rows of A in equal intervals. If not provided, each worker
+        will be assigned exactly an interval. If `split` is not an integer
+        divisor of the number of rows of A, the last interval will be equal to
+        the remainder of the integer division. 
+    nprocs : integer
+        number of workers to spawn.
 
     Returns
     -------
-    A matrix in compressed sparse row format. See `scipy.sparse`.
+    maxmin : `scipy.sparse.csr_matrix`
+        The maxmin composition of A with itself. See `maxmin`.
     '''
     N = A.shape[0]
     if nprocs is None:
@@ -135,18 +139,28 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False,
     '''
     Computes the max-min product closure. 
 
-    parallel - if True, the parallel maxmin is used. 
-    maxiter  - integer; maximum number of iterations for the closure loop. Will
-               warn if the maximum number of iterations is reached without
-               convergence.
-    quiet    - if True, will not print the current time at each iteration. 
+    Parameters
+    ----------
+    A : array_like
+        an NxN adjacency matrix. Can be either sparse or dense.
+    parallel : bool
+        if True, the parallel maxmin is used. 
+    maxiter  : integer
+        maximum number of iterations for the closure loop. Will warn if the
+        maximum number of iterations is reached without convergence.
+    quiet : bool
+        if True, will not print the current time at each iteration. 
+    dumpiter : bool 
+        if True, will dump to file `closure_<iter>.npy` the intermediate matrix
+        computed at each iteration.
 
     Additional keyword arguments are passed to p/maxmin. 
 
     Returns 
     -------
-    If parallel is True, returns a matrix in compressed sparse row format (CSR).
-    See `scipy.sparse`.
+    closure : array_like
+        If parallel is True, returns a matrix in compressed sparse row format
+        (CSR). See `scipy.sparse`.
     '''
     if parallel:
         A = sp.csr_matrix(A)
