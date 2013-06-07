@@ -8,7 +8,9 @@ from ctypes import c_int, c_double
 from contextlib import closing
 import warnings
 from datetime import datetime
+from itertools import izip
 
+from utils import coo_dtype
 from cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
@@ -128,7 +130,8 @@ def pmaxmin(A, splits=None, nprocs=None):
 
 # Maxmin product closure, serial version.
 
-def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
+def productclosure(A, parallel=False, maxiter=1000, quiet=False,
+        dumpiter=None, **kwrds):
     '''
     Computes the max-min product closure. 
 
@@ -152,6 +155,13 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
         AP = maxmin(A, **kwrds)
     AP = _maximum_csr_safe(A, AP)
     iterations = 1
+    if dumpiter:
+        _AP = AP.tocoo()
+        fn = 'closure_%d.npy' % iterations
+        np.save(fn, np.fromiter(izip(_AP.row, _AP.col, _AP.data), coo_dtype,
+            len(_AP.data))) 
+        if not quiet:
+            print 'Intermediate matrix saved to %s.' % fn
     while not _allclose_csr(A, AP) and iterations < maxiter:
         A = AP.copy()
         if parallel:
@@ -160,6 +170,13 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, **kwrds):
             AP = maxmin(A, **kwrds)
         AP = _maximum_csr_safe(A, AP)
         iterations += 1 
+        if dumpiter:
+            _AP = AP.tocoo()
+            fn = 'closure_%d.npy' % iterations
+            np.save(fn, np.fromiter(izip(_AP.row, _AP.col, _AP.data), coo_dtype, 
+                len(_AP.data)))
+            if not quiet:
+                print 'Intermediate matrix saved to %s.' % fn
         if not quiet:
             print '%s: iteration %d completed.' % (datetime.now(), iterations +
                     1)
