@@ -419,8 +419,8 @@ if __name__ == '__main__':
     toc = time()
     print '* serial version executed in %.2e seconds' % (toc - tic)
 
-    print 'Testing maxmin product closure on a matrix of shape %s with nnz = %d:' % (B.shape,
-            B.getnnz())
+    print 'Testing maxmin product closure on a matrix of shape %s with'\
+            ' nnz = %d:' % (B.shape, B.getnnz())
 
     tic = time()
     Cl1 = productclosure(B, splits=2, nprocs=2, maxiter=10, parallel=True)
