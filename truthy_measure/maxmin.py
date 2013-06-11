@@ -133,21 +133,37 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
-# Maxmin product closure, serial version.
+# Maxmin product closure, or All-pairs bottleneck path, for cyclical directed
+# graphs
 
-def productclosure(A, cycles=False, parallel=False, maxiter=1000, quiet=False,
-        dumpiter=None, **kwrds):
+def closure_cycles(A):
     '''
-    Computes the max-min product closure. 
+    Maxmin transitive closure for cyclical directed graphs. Implementation based
+    on the algorithm for finding transitive closure by Nuutila et
+    Soisalon-Soininen.
+
+    Arguments
+    ---------
+    A : array_like
+        The adjacency matrix of the graph
+    '''
+    roots = {}
+    in_scc = defaultdict(bool) # default value : False
+    return A
+
+# Maxmin product closure, for directed acyclical graphs or undirected graphs.
+
+def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
+        **kwrds):
+    '''
+    Computes the max-min product closure. This algorithm is based matrix
+    operation and is guaranteed to converge only in the case of undirected
+    graphs or directed acyclical graphs (DAG).
 
     Parameters
     ----------
     A : array_like
         an NxN adjacency matrix. Can be either sparse or dense.
-    cycles : bool
-        The default algorithm is not guaranteed to give the correct results in
-        presence of cycles. If True, will use an alternative algorithm for
-        directed cyclical graphs. 
     parallel : bool
         if True, the parallel maxmin is used. 
     maxiter  : integer
@@ -207,7 +223,7 @@ def productclosure(A, cycles=False, parallel=False, maxiter=1000, quiet=False,
 
 # Frontend function. 
 
-def maxmin(A, a=None, b=None, sparse=False, cycles=False):
+def maxmin(A, a=None, b=None, sparse=False):
     '''
     Compute the max-min product of A with itself:
 
@@ -245,8 +261,6 @@ def maxmin(A, a=None, b=None, sparse=False, cycles=False):
     if (a is not None) and (b is not None):
         if a > b:
             raise ValueError('a must be less or equal b')
-    if cycles:
-        return maxmin_cycles(A, a, b)
     if sp.isspmatrix(A) or sparse:
         if not sp.isspmatrix_csr(A):
             A = sp.csr_matrix(A)
@@ -350,23 +364,6 @@ def _maxmin_sparse(A, a=None, b=None):
 
     # return in CSR format
     return AP.tocsr()
-
-def _maxmin_cycles(A, a, b):
-    '''
-    Maxmin product for cyclical directed graphs. Implementation based on the
-    algorithm for finding transitive closure by Nuutila et Soisalon-Soininen.
-
-    Arguments
-    ---------
-    A : array_like
-        The adjacency matrix of the graph
-    a,b : integer
-        optional; Returns only distances between nodes in interval (a,b). See
-        `maxmin`. 
-    '''
-    roots = {}
-    in_scc = defaultdict(bool) # default value : False
-    return A
 
 def _maximum_csr_safe(A, B):
     '''
