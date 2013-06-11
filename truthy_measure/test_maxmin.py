@@ -5,7 +5,7 @@ import warnings
 
 # local imports
 from .maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
-        productclosure
+        productclosure, _maxmin_cycles
 from .cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
 def test_naive():
@@ -112,3 +112,12 @@ def test_closure():
         Cl1 = productclosure(B, splits=2, nprocs=2, maxiter=10, parallel=True)
         Cl2 = productclosure(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
+
+def test_cyclical():
+    C2 = np.array([
+            [0.0, 0.5, 0.0], 
+            [0.0, 0.0, 0.1], 
+            [0.2, 0.0, 0.0]
+            ])
+    C2T = productclosure(C2, cycles=True, maxiter=100)
+    assert np.allclose(C2T, 0.1)

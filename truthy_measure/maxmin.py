@@ -9,6 +9,7 @@ from contextlib import closing
 import warnings
 from datetime import datetime
 from itertools import izip
+from collections import defaultdict
 
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -134,7 +135,7 @@ def pmaxmin(A, splits=None, nprocs=None):
 
 # Maxmin product closure, serial version.
 
-def productclosure(A, parallel=False, maxiter=1000, quiet=False,
+def productclosure(A, cycles=False, parallel=False, maxiter=1000, quiet=False,
         dumpiter=None, **kwrds):
     '''
     Computes the max-min product closure. 
@@ -143,6 +144,10 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False,
     ----------
     A : array_like
         an NxN adjacency matrix. Can be either sparse or dense.
+    cycles : bool
+        The default algorithm is not guaranteed to give the correct results in
+        presence of cycles. If True, will use an alternative algorithm for
+        directed cyclical graphs. 
     parallel : bool
         if True, the parallel maxmin is used. 
     maxiter  : integer
@@ -202,26 +207,29 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False,
 
 # Frontend function. 
 
-def maxmin(A, a=None, b=None, sparse=False):
+def maxmin(A, a=None, b=None, sparse=False, cycles=False):
     '''
     Compute the max-min product of A with itself:
 
-    [ AP ]_ij = max_k min ( A_ik, A_kj )
+    [ AP ]_ij = max_k min ( [ A ]_ik, [ A ]_kj )
 
     Parameters
     ----------
-    A       - A 2D square ndarray, matrix or sparse (CSR) matrix (see
-              `scipy.sparse`). The sparse implementation will be used
-              automatically for sparse matrices.
-    a,b     - optional integers; compute only the max-min product between
-              A[a:b,:] and A.T 
-    sparse  - if True, transforms A to CSR matrix format and use the sparse
-              implementation.
+    A : array_like
+        A 2D square ndarray, matrix or sparse (CSR) matrix (see `scipy.sparse`).
+        The sparse implementation will be used automatically for sparse
+        matrices.
+    a,b : integer
+        optional; compute only the max-min product between A[a:b,:] and A.T 
+    sparse : bool
+        if True, transforms A to CSR matrix format and use the sparse
+        implementation.
 
     Return
     ------
-    A CSR sparse matrix if the sparse implementation is used, otherwise a numpy
-    matrix.
+    A' : array_like
+        The max-min product of A with itself. A CSR sparse matrix will be
+        returned if the sparse implementation is used, otherwise a numpy matrix.
     '''
     if A.ndim != 2:
         raise ValueError('expecting 2D array or matrix')
@@ -237,13 +245,14 @@ def maxmin(A, a=None, b=None, sparse=False):
     if (a is not None) and (b is not None):
         if a > b:
             raise ValueError('a must be less or equal b')
+    if cycles:
+        return maxmin_cycles(A, a, b)
     if sp.isspmatrix(A) or sparse:
         if not sp.isspmatrix_csr(A):
             A = sp.csr_matrix(A)
         return maxmin_sparse(A, a, b)
     else:
         return np.matrix(maxmin_naive(A, a, b))
-
 
 # These functions don't perform checks on the argument, so don't use these
 # functions directly. Use the frontend instead.
@@ -341,6 +350,23 @@ def _maxmin_sparse(A, a=None, b=None):
 
     # return in CSR format
     return AP.tocsr()
+
+def _maxmin_cycles(A, a, b):
+    '''
+    Maxmin product for cyclical directed graphs. Implementation based on the
+    algorithm for finding transitive closure by Nuutila et Soisalon-Soininen.
+
+    Arguments
+    ---------
+    A : array_like
+        The adjacency matrix of the graph
+    a,b : integer
+        optional; Returns only distances between nodes in interval (a,b). See
+        `maxmin`. 
+    '''
+    roots = {}
+    in_scc = defaultdict(bool) # default value : False
+    return A
 
 def _maximum_csr_safe(A, B):
     '''
