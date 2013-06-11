@@ -1,4 +1,4 @@
-from maxmin import *
+from truthy_measure.maxmin import *
 import networkx as nx
 
 # maximum path length is 1

@@ -19,7 +19,7 @@ from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
-from .utils import coo_type
+from truthy_measure.utils import coo_dtype
 
 namespaces = {}
 
@@ -202,7 +202,7 @@ def _second_pass(path, vertexmap, num_triples, properties):
             # default weight is 1
             data.append((int(out_vertex), int(in_vertex), 1.0))
             i += 1
-    np.save('adjacency.npy', np.asarray(data, dtype=coo_type))
+    np.save('adjacency.npy', np.asarray(data, dtype=coo_dtype))
 
 if __name__ == '__main__':
 

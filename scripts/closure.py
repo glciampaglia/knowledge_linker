@@ -6,8 +6,8 @@ from argparse import ArgumentParser
 from datetime import datetime
 from itertools import izip
 
-from .maxmin import productclosure
-from .utils import coo_dtype
+from truthy_measure.maxmin import productclosure
+from truthy_measure.utils import coo_dtype
 
 _now = datetime.now
 
