@@ -10,8 +10,8 @@ import warnings
 from datetime import datetime
 from itertools import izip
 
-from utils import coo_dtype
-from cmaxmin import c_maximum_csr # see below for other imports
+from .utils import coo_dtype
+from .cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
 # the indices array has dtype float64. This happens intermittently. In the
@@ -391,7 +391,7 @@ def _allclose_csr(A, B, **kwrds):
 # try importing the fast C implementations first, otherwise use the Python
 # versions provided in this module as a fallback
 try:
-    from cmaxmin import c_maxmin_naive as maxmin_naive,\
+    from .cmaxmin import c_maxmin_naive as maxmin_naive,\
             c_maxmin_sparse as maxmin_sparse
 except ImportError:
     import warnings

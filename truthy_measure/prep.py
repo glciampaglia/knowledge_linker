@@ -19,6 +19,8 @@ from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
+from .utils import coo_type
+
 namespaces = {}
 
 def arrayfile(data_file, shape, descr, fortran=False):
@@ -188,7 +190,6 @@ def _second_pass(path, vertexmap, num_triples, properties):
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
     edgesfile = open('edges.txt', 'w')
     data = []
-    rectype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
     with closing(edgesfile):
         i = 0 
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
@@ -201,7 +202,7 @@ def _second_pass(path, vertexmap, num_triples, properties):
             # default weight is 1
             data.append((int(out_vertex), int(in_vertex), 1.0))
             i += 1
-    np.save('adjacency.npy', np.asarray(data, dtype=rectype))
+    np.save('adjacency.npy', np.asarray(data, dtype=coo_type))
 
 if __name__ == '__main__':
 

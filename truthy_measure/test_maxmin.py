@@ -4,9 +4,9 @@ from nose.tools import raises
 import warnings
 
 # local imports
-from maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
+from .maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
         productclosure
-from cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
+from .cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
 def test_naive():
     A = np.random.rand(5, 5)
