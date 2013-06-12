@@ -10,6 +10,8 @@ import warnings
 from datetime import datetime
 from itertools import izip
 from collections import defaultdict
+from array import array
+from networkx import DiGraph
 
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -136,10 +138,12 @@ def pmaxmin(A, splits=None, nprocs=None):
 # Maxmin product closure, or All-pairs bottleneck path, for cyclical directed
 # graphs
 
+dfs_order = 0
+
 def closure_cycles(A):
     '''
-    Maxmin transitive closure for cyclical directed graphs. Implementation based
-    on the algorithm for finding transitive closure by Nuutila et
+    Maxmin transitive closure for directed graphs with cycles. Implementation
+    based on the algorithm for finding transitive closure by Nuutila et
     Soisalon-Soininen.
 
     Arguments
@@ -147,9 +151,62 @@ def closure_cycles(A):
     A : array_like
         The adjacency matrix of the graph
     '''
-    roots = {}
+    global dfs_order
+    dfs_order = 0
+    # for min comparison
+    def _order(node):
+        return order[node]
+    # dfs visiting function
+    def visit(node):
+        global dfs_order
+        visited[node] = True
+        order[node] = dfs_order
+        dfs_order += 1
+        root[node] = node
+        for neigh_node in graph.neighbors_iter(node):
+            if not visited[neigh_node]:
+                visit(neigh_node)
+            if not in_scc[root[neigh_node]]:
+                root[node] = min(root[node], root[neigh_node], key=_order)
+            else:
+                local_roots[node].update((root[neigh_node],))
+        tmp = set()
+        for cand_root in local_roots[node]:
+            tmp.update(set((cand_root,)).union(succ[cand_root]))
+        succ[root[node]].update(tmp) 
+        if root[node] == node:
+            if len(stack) and order[stack[-1]] > order[node]:
+                succ[node].update((node,))
+                while True:
+                    comp_node = stack.pop()
+                    in_scc[comp_node] = True
+                    scc[node].append(comp_node)
+                    if comp_node != node:
+                        succ[node] = succ[node].union(succ[comp_node])
+                        succ[comp_node] = succ[node]
+                    if len(stack) == 0 or order[stack[-1]] < order[node]:
+                        break 
+            else:
+                in_scc[node] = True
+                scc[node] = [node]
+        else:
+            if order[root[node]] not in stack:
+                stack.append(order[root[node]])
+            succ[root[node]].update((node,))
+    # main function
+    order = array('i', (0 for i in xrange(A.shape[0])))
+    root = {}
+    stack = []
     in_scc = defaultdict(bool) # default value : False
-    return A
+    scc = defaultdict(list)
+    visited = defaultdict(bool)
+    local_roots = defaultdict(set)
+    succ = defaultdict(set)
+    graph = DiGraph(A)
+    for node in graph:
+        if not visited[node]:
+            visit(node)
+    return scc
 
 # Maxmin product closure, for directed acyclical graphs or undirected graphs.
 
