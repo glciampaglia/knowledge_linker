@@ -5,7 +5,7 @@ import warnings
 
 # local imports
 from .maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
-        productclosure, closure_cycles
+        productclosure, closure_cycles, closure_cycles_recursive
 from .cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
 
 def test_naive():
@@ -104,6 +104,17 @@ def test_closure_cycle_3():
     C3T = productclosure(C3, maxiter=100)
     assert not np.allclose(C3T, 0.1)
 
+def test_transitive_closure():
+    '''
+    Test recursive vs non-recursive implementation of closure_cycles
+    '''
+    B = sp.rand(10, 10, .2, 'csr')
+    root1, succ1 = closure_cycles(B)
+    root2, succ2 = closure_cycles_recursive(B)
+    for i in xrange(B.shape[0]):
+        if succ1[root1[i]] != succ2[root2[i]]:
+            raise AssertionError(succ1, succ2)
+
 def test_closure():
     B = sp.rand(10, 10, .2, 'csr')
     with warnings.catch_warnings():
@@ -113,11 +124,12 @@ def test_closure():
         Cl2 = productclosure(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
 
+@raises(TypeError)
 def test_cyclical():
     C2 = np.array([
             [0.0, 0.5, 0.0], 
             [0.0, 0.0, 0.1], 
             [0.2, 0.0, 0.0]
             ])
-    C2T = closure_cycles(C2)
+    C2T = closure_cycles(C2) # XXX must use 
     assert np.allclose(C2T, 0.1)

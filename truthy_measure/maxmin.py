@@ -135,21 +135,13 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
-# Maxmin product closure, or All-pairs bottleneck path, for cyclical directed
-# graphs
+# Transitive closure for cyclical directed graphs. Recursive implementation.
 
 dfs_order = 0
 
-def closure_cycles(A):
+def closure_cycles_recursive(A):
     '''
-    Maxmin transitive closure for directed graphs with cycles. Implementation
-    based on the algorithm for finding transitive closure by Nuutila et
-    Soisalon-Soininen.
-
-    Arguments
-    ---------
-    A : array_like
-        The adjacency matrix of the graph
+    See `closure_cycles`.
     '''
     global dfs_order
     dfs_order = 0
@@ -180,7 +172,6 @@ def closure_cycles(A):
                 while True:
                     comp_node = stack.pop()
                     in_scc[comp_node] = True
-                    scc[node].append(comp_node)
                     if comp_node != node:
                         succ[node] = succ[node].union(succ[comp_node])
                         succ[comp_node] = succ[node]
@@ -188,17 +179,15 @@ def closure_cycles(A):
                         break 
             else:
                 in_scc[node] = True
-                scc[node] = [node]
         else:
-            if order[root[node]] not in stack:
-                stack.append(order[root[node]])
+            if root[node] not in stack:
+                stack.append(root[node])
             succ[root[node]].update((node,))
     # main function
     order = array('i', (0 for i in xrange(A.shape[0])))
     root = {}
     stack = []
     in_scc = defaultdict(bool) # default value : False
-    scc = defaultdict(list)
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
@@ -206,9 +195,95 @@ def closure_cycles(A):
     for node in graph:
         if not visited[node]:
             visit(node)
-    return scc
+    return root, dict(succ)
 
-# Maxmin product closure, for directed acyclical graphs or undirected graphs.
+# Transitive closure for directed cyclical graphs. Iterative implementation.
+
+def closure_cycles(A):
+    '''
+    Maxmin transitive closure for directed graphs with cycles. Implementation
+    based on the algorithm for finding transitive closure by Nuutila et
+    Soisalon-Soininen.
+
+    Arguments
+    ---------
+    A : array_like
+        The adjacency matrix of the graph
+
+    Returns
+    -------
+    root : instance of `array.array`
+        for each node, the root of the SCC of that node
+    succ : dict of lists
+        for each SCC root, the list of successors from that SCC
+    '''
+    def _order(node):
+        return dfs_order[node]
+    graph = DiGraph(A)
+    dfs_counter = 0
+    dfs_stack = []
+    dfs_order = array('i', (-1 for i in xrange(A.shape[0])))
+    root = {}
+    scc_stack = []
+    in_scc = defaultdict(bool)
+    local_roots = defaultdict(set)
+    succ = defaultdict(set)
+    for source in graph:
+        if dfs_order[source] < 0:
+            # start a new depth-first traversal from source
+            dfs_stack = [source]
+        else:
+            # we have already traversed this source
+            continue
+        while dfs_stack:
+            # the top of dfs_stack holds the current node
+            node = dfs_stack[-1]
+            # we are visiting a new node.
+            dfs_order[node] = dfs_counter
+            dfs_counter += 1
+            root[node] = node
+            # go through all the neighbors, until we find a non-visited node. If
+            # we find one, put it on top of the stack and break to next iteration.
+            # If no neighbors exist, or all neighbors have been already visited,
+            # backtrack.
+            backtracking = True
+            for neighbor_node in graph.neighbors_iter(node):
+                if dfs_order[neighbor_node] < 0:
+                    dfs_stack.append(neighbor_node)
+                    backtracking = False
+                    break # will visit neighbor_node at next iteration
+            if backtracking:
+                # all neighbors have been visited at this point
+                for neigh_node in graph.neighbors_iter(node):
+                    if not in_scc[root[neigh_node]]:
+                        root[node] = min(root[node], root[neigh_node], key=_order)
+                    else:
+                        local_roots[node].update((root[neigh_node],))
+                tmp = set()
+                for cand_root in local_roots[node]:
+                    tmp.update(set((cand_root,)).union(succ[cand_root]))
+                succ[root[node]].update(tmp)
+                if root[node] == node:
+                    if len(scc_stack) and dfs_order[scc_stack[-1]] > dfs_order[node]:
+                        succ[node].update((node,))
+                        while True:
+                            comp_node = scc_stack.pop()
+                            in_scc[comp_node] = True
+                            if comp_node != node:
+                                succ[node] = succ[node].union(succ[comp_node])
+                                succ[comp_node] = succ[node]
+                            if len(scc_stack) == 0 or\
+                                    dfs_order[scc_stack[-1]] < dfs_order[node]:
+                                break
+                    else:
+                        in_scc[node] = True
+                else:
+                    if root[node] not in scc_stack:
+                        scc_stack.append(root[node])
+                    succ[root[node]].update((node,))
+                # clear the current node from the top of the DFS stack.
+                dfs_stack.pop()
+    return root, dict(succ)
 
 def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         **kwrds):
