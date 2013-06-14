@@ -139,9 +139,13 @@ def pmaxmin(A, splits=None, nprocs=None):
 
 dfs_order = 0
 
-def closure_cycles_recursive(A):
+def closure_cycles_recursive(graph):
     '''
-    Recursive implementation. See `closure_cycles`. 
+    Transitive closure for directed graphs with cycles. Original recursive
+    implementation. Not suited for large graphs: will throw `RuntimeError` when
+    the maximum recursion depth is reached. See `sys.setrecursionlimit`.
+
+    See `closure_cycles` for more details.
     '''
     global dfs_order
     dfs_order = 0
@@ -184,14 +188,13 @@ def closure_cycles_recursive(A):
                 stack.append(root[node])
             succ[root[node]].update((node,))
     # main function
-    order = array('i', (0 for i in xrange(A.shape[0])))
+    order = array('i', (0 for i in xrange(len(graph))))
     root = {}
     stack = []
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-    graph = DiGraph(A)
     for node in graph:
         if not visited[node]:
             visit(node)
@@ -199,30 +202,34 @@ def closure_cycles_recursive(A):
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-def closure_cycles(A):
+def closure_cycles(graph):
     '''
-    Maxmin transitive closure for directed graphs with cycles. Implementation
-    based on the algorithm for finding transitive closure by Nuutila et
-    Soisalon-Soininen.
+    Transitive closure for directed graphs with cycles. Iterative implementation
+    of the algorithm by Nuutila et Soisalon-Soininen [1].
 
     Arguments
     ---------
-    A : array_like
-        The adjacency matrix of the graph
+    graph : Networkx `DiGraph`
+        a directed graph; cycles are allowed.
 
     Returns
     -------
     root : instance of `array.array`
-        for each node, the root of the SCC of that node
+        for each node, the root of the SCC of that node.
     succ : dict of lists
-        for each SCC root, the list of successors from that SCC
+        for each root of an SCC, the list of successors of that node.
+
+    References
+    ----------
+    .. [1] On finding the strongly connected components in a directed graph.
+       E. Nuutila and E. Soisalon-Soininen.
+       Information Processing Letters 49(1): 9-14, (1994)
     '''
     def _order(node):
         return dfs_order[node]
-    graph = DiGraph(A)
     dfs_counter = 0
     dfs_stack = []
-    dfs_order = array('i', (-1 for i in xrange(A.shape[0])))
+    dfs_order = array('i', (-1 for i in xrange(len(graph))))
     root = {}
     scc_stack = []
     in_scc = defaultdict(bool)

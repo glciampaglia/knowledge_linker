@@ -2,6 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 from nose.tools import raises
 import warnings
+import networkx as nx
 
 # local imports
 from .maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
@@ -109,11 +110,12 @@ def test_transitive_closure():
     Test recursive vs non-recursive implementation of closure_cycles
     '''
     B = sp.rand(10, 10, .2, 'csr')
-    root1, succ1 = closure_cycles(B)
-    root2, succ2 = closure_cycles_recursive(B)
+    g = nx.DiGraph(B)
+    root1, succ1 = closure_cycles(g)
+    root2, succ2 = closure_cycles_recursive(g)
     for i in xrange(B.shape[0]):
         if succ1[root1[i]] != succ2[root2[i]]:
-            raise AssertionError(succ1, succ2)
+            raise AssertionError("successors sets differ.")
 
 def test_closure():
     B = sp.rand(10, 10, .2, 'csr')
