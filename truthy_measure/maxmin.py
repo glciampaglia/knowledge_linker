@@ -135,6 +135,30 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
+def maxmin_closure_cycles(A):
+    '''
+    Maxmin transitive closure.
+
+    Parameters
+    ----------
+    A : array_like
+        A NumPy 2D array/matrix or a SciPy sparse matrix. This is the adjacency
+        matrix of the graph.
+
+    Returns
+    -------
+    tbd
+    '''
+    graph = DiGraph(A)
+    root, succ = closure_cycles(graph)
+    for node in graph:
+        pass
+    # for each node:
+    #       for each target in succ(node):
+    #           search for successors starting from node, with pruning
+    #           propagate the min weight along each branch of the DFS tree
+    #           pick the maximum among all branches
+
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
 dfs_order = 0
@@ -171,13 +195,13 @@ def closure_cycles_recursive(graph):
             tmp.update(set((cand_root,)).union(succ[cand_root]))
         succ[root[node]].update(tmp) 
         if root[node] == node:
-            if len(stack) and order[stack[-1]] > order[node]:
+            if len(stack) and order[stack[-1]] >= order[node]:
                 succ[node].update((node,))
                 while True:
                     comp_node = stack.pop()
                     in_scc[comp_node] = True
                     if comp_node != node:
-                        succ[node] = succ[node].union(succ[comp_node])
+                        succ[node].update(succ[comp_node])
                         succ[comp_node] = succ[node]
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break 
@@ -245,10 +269,11 @@ def closure_cycles(graph):
         while dfs_stack:
             # the top of dfs_stack holds the current node
             node = dfs_stack[-1]
-            # we are visiting a new node.
-            dfs_order[node] = dfs_counter
-            dfs_counter += 1
-            root[node] = node
+            if node not in root:
+                # we are visiting a new node.
+                dfs_order[node] = dfs_counter
+                dfs_counter += 1
+                root[node] = node
             # go through all the neighbors, until we find a non-visited node. If
             # we find one, put it on top of the stack and break to next iteration.
             # If no neighbors exist, or all neighbors have been already visited,
@@ -271,13 +296,13 @@ def closure_cycles(graph):
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
                 succ[root[node]].update(tmp)
                 if root[node] == node:
-                    if len(scc_stack) and dfs_order[scc_stack[-1]] > dfs_order[node]:
+                    if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         succ[node].update((node,))
                         while True:
                             comp_node = scc_stack.pop()
                             in_scc[comp_node] = True
                             if comp_node != node:
-                                succ[node] = succ[node].union(succ[comp_node])
+                                succ[node].update(succ[comp_node])
                                 succ[comp_node] = succ[node]
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
