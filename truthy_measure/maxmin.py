@@ -141,7 +141,7 @@ dfs_order = 0
 
 def closure_cycles_recursive(A):
     '''
-    See `closure_cycles`.
+    Recursive implementation. See `closure_cycles`. 
     '''
     global dfs_order
     dfs_order = 0
