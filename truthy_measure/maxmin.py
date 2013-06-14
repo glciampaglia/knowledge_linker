@@ -158,6 +158,9 @@ def maxmin_closure_cycles(A):
     #           search for successors starting from node, with pruning
     #           propagate the min weight along each branch of the DFS tree
     #           pick the maximum among all branches
+    #
+    # pruning: whenever I enter a node that does not have target in its
+    # successors set, stop the DFS and backtrack.
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
