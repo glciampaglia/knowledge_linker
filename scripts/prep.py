@@ -19,44 +19,18 @@ from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
-from .utils import coo_type
+from truthy_measure.utils import coo_dtype
 
 namespaces = {}
 
-def arrayfile(data_file, shape, descr, fortran=False):
-    ''' 
-    Returns an array that is memory-mapped to an NPY (v1.0) file
-
-    Arguments
-    ---------
-    data_file - a file-like object opened with write mode
-    shape - shape of the ndarray
-    descr - any argument that numpy.dtype() can take
-    fortran - if True, the array uses Fortran data order, otherwise C order
-    '''
-    from numpy.lib import format
-    header = { 
-        'descr' : descr, 
-        'fortran_order' : fortran, 
-        'shape' : shape
-        }
-    preamble = '\x93NUMPY\x01\x00'
-    data_file.write(preamble)
-    cio = StringIO()
-    format.write_array_header_1_0(cio, header) # write header here first
-    format.write_array_header_1_0(data_file, header) # write header
-    cio.seek(0) 
-    offset = len(preamble) + len(cio.readline()) # get offset 
-    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
-            shape=shape, offset=offset)
-
 def itertriples(path):
     ''' 
-    iterates over an N-triples file returning triples as tuples 
+    Iterates over an N-triples file returning triples as tuples.
     
     Parameters
     ----------
-    path - path to N-triples file
+    path : string
+        path to N-triples file.
     '''
     if path.endswith('.gz'):
         ntfile = GzipFile(path)
@@ -79,15 +53,17 @@ def itertriples(path):
 
 def iterabbrv(triples, abbreviations, properties=False):
     ''' 
-    returns an iterator over n-triples, with namespaces inside URI abbreviated
-    to their "canonical" form. 
+    Iterator over n-triples, with namespaces abbreviated to their "canonical"
+    form (e.g. rdf:, rdfs:, dbpedia:, etc)
 
     Parameters
     ----------
-    triples     - an iterator over n-triples as tuples
-    abbreviated - a mapping of namespaces to abbreviations
-    properties  - boolean; if true, yield also properties. Default is no
-                  properties
+    triples : sequence
+        An iterator over n-triples as tuples.
+    abbreviated : mapping
+        A mapping of namespaces to abbreviations.
+    properties : bool
+        If true, yield also properties. Default is no properties.
     '''
     x = re.compile('({})'.format('|'.join(abbreviations.keys())))
     for triple in triples:
@@ -202,7 +178,7 @@ def _second_pass(path, vertexmap, num_triples, properties):
             # default weight is 1
             data.append((int(out_vertex), int(in_vertex), 1.0))
             i += 1
-    np.save('adjacency.npy', np.asarray(data, dtype=coo_type))
+    np.save('adjacency.npy', np.asarray(data, dtype=coo_dtype))
 
 if __name__ == '__main__':
 

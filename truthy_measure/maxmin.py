@@ -9,6 +9,9 @@ from contextlib import closing
 import warnings
 from datetime import datetime
 from itertools import izip
+from collections import defaultdict
+from array import array
+from networkx import DiGraph
 
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -132,12 +135,197 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
-# Maxmin product closure, serial version.
-
-def productclosure(A, parallel=False, maxiter=1000, quiet=False,
-        dumpiter=None, **kwrds):
+def maxmin_closure_cycles(A):
     '''
-    Computes the max-min product closure. 
+    Maxmin transitive closure.
+
+    Parameters
+    ----------
+    A : array_like
+        A NumPy 2D array/matrix or a SciPy sparse matrix. This is the adjacency
+        matrix of the graph.
+
+    Returns
+    -------
+    tbd
+    '''
+    graph = DiGraph(A)
+    root, succ = closure_cycles(graph)
+    for node in graph:
+        pass
+    # for each node:
+    #       for each target in succ(node):
+    #           search for successors starting from node, with pruning
+    #           propagate the min weight along each branch of the DFS tree
+    #           pick the maximum among all branches
+    #
+    # pruning: whenever I enter a node that does not have target in its
+    # successors set, stop the DFS and backtrack.
+
+# Transitive closure for cyclical directed graphs. Recursive implementation.
+
+dfs_order = 0
+
+def closure_cycles_recursive(graph):
+    '''
+    Transitive closure for directed graphs with cycles. Original recursive
+    implementation. Not suited for large graphs: will throw `RuntimeError` when
+    the maximum recursion depth is reached. See `sys.setrecursionlimit`.
+
+    See `closure_cycles` for more details.
+    '''
+    global dfs_order
+    dfs_order = 0
+    # for min comparison
+    def _order(node):
+        return order[node]
+    # dfs visiting function
+    def visit(node):
+        global dfs_order
+        visited[node] = True
+        order[node] = dfs_order
+        dfs_order += 1
+        root[node] = node
+        for neigh_node in graph.neighbors_iter(node):
+            if not visited[neigh_node]:
+                visit(neigh_node)
+            if not in_scc[root[neigh_node]]:
+                root[node] = min(root[node], root[neigh_node], key=_order)
+            else:
+                local_roots[node].update((root[neigh_node],))
+        tmp = set()
+        for cand_root in local_roots[node]:
+            tmp.update(set((cand_root,)).union(succ[cand_root]))
+        succ[root[node]].update(tmp) 
+        if root[node] == node:
+            if len(stack) and order[stack[-1]] >= order[node]:
+                succ[node].update((node,))
+                while True:
+                    comp_node = stack.pop()
+                    in_scc[comp_node] = True
+                    if comp_node != node:
+                        succ[node].update(succ[comp_node])
+                        succ[comp_node] = succ[node]
+                    if len(stack) == 0 or order[stack[-1]] < order[node]:
+                        break 
+            else:
+                in_scc[node] = True
+        else:
+            if root[node] not in stack:
+                stack.append(root[node])
+            succ[root[node]].update((node,))
+    # main function
+    order = array('i', (0 for i in xrange(len(graph))))
+    root = {}
+    stack = []
+    in_scc = defaultdict(bool) # default value : False
+    visited = defaultdict(bool)
+    local_roots = defaultdict(set)
+    succ = defaultdict(set)
+    for node in graph:
+        if not visited[node]:
+            visit(node)
+    return root, dict(succ)
+
+# Transitive closure for directed cyclical graphs. Iterative implementation.
+
+def closure_cycles(graph):
+    '''
+    Transitive closure for directed graphs with cycles. Iterative implementation
+    of the algorithm by Nuutila et Soisalon-Soininen [1].
+
+    Arguments
+    ---------
+    graph : Networkx `DiGraph`
+        a directed graph; cycles are allowed.
+
+    Returns
+    -------
+    root : instance of `array.array`
+        for each node, the root of the SCC of that node.
+    succ : dict of lists
+        for each root of an SCC, the list of successors of that node.
+
+    References
+    ----------
+    .. [1] On finding the strongly connected components in a directed graph.
+       E. Nuutila and E. Soisalon-Soininen.
+       Information Processing Letters 49(1): 9-14, (1994)
+    '''
+    def _order(node):
+        return dfs_order[node]
+    dfs_counter = 0
+    dfs_stack = []
+    dfs_order = array('i', (-1 for i in xrange(len(graph))))
+    root = {}
+    scc_stack = []
+    in_scc = defaultdict(bool)
+    local_roots = defaultdict(set)
+    succ = defaultdict(set)
+    for source in graph:
+        if dfs_order[source] < 0:
+            # start a new depth-first traversal from source
+            dfs_stack = [source]
+        else:
+            # we have already traversed this source
+            continue
+        while dfs_stack:
+            # the top of dfs_stack holds the current node
+            node = dfs_stack[-1]
+            if node not in root:
+                # we are visiting a new node.
+                dfs_order[node] = dfs_counter
+                dfs_counter += 1
+                root[node] = node
+            # go through all the neighbors, until we find a non-visited node. If
+            # we find one, put it on top of the stack and break to next iteration.
+            # If no neighbors exist, or all neighbors have been already visited,
+            # backtrack.
+            backtracking = True
+            for neighbor_node in graph.neighbors_iter(node):
+                if dfs_order[neighbor_node] < 0:
+                    dfs_stack.append(neighbor_node)
+                    backtracking = False
+                    break # will visit neighbor_node at next iteration
+            if backtracking:
+                # all neighbors have been visited at this point
+                for neigh_node in graph.neighbors_iter(node):
+                    if not in_scc[root[neigh_node]]:
+                        root[node] = min(root[node], root[neigh_node], key=_order)
+                    else:
+                        local_roots[node].update((root[neigh_node],))
+                tmp = set()
+                for cand_root in local_roots[node]:
+                    tmp.update(set((cand_root,)).union(succ[cand_root]))
+                succ[root[node]].update(tmp)
+                if root[node] == node:
+                    if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
+                        succ[node].update((node,))
+                        while True:
+                            comp_node = scc_stack.pop()
+                            in_scc[comp_node] = True
+                            if comp_node != node:
+                                succ[node].update(succ[comp_node])
+                                succ[comp_node] = succ[node]
+                            if len(scc_stack) == 0 or\
+                                    dfs_order[scc_stack[-1]] < dfs_order[node]:
+                                break
+                    else:
+                        in_scc[node] = True
+                else:
+                    if root[node] not in scc_stack:
+                        scc_stack.append(root[node])
+                    succ[root[node]].update((node,))
+                # clear the current node from the top of the DFS stack.
+                dfs_stack.pop()
+    return root, dict(succ)
+
+def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
+        **kwrds):
+    '''
+    Computes the max-min product closure. This algorithm is based matrix
+    operation and is guaranteed to converge only in the case of undirected
+    graphs or directed acyclical graphs (DAG).
 
     Parameters
     ----------
@@ -206,22 +394,25 @@ def maxmin(A, a=None, b=None, sparse=False):
     '''
     Compute the max-min product of A with itself:
 
-    [ AP ]_ij = max_k min ( A_ik, A_kj )
+    [ AP ]_ij = max_k min ( [ A ]_ik, [ A ]_kj )
 
     Parameters
     ----------
-    A       - A 2D square ndarray, matrix or sparse (CSR) matrix (see
-              `scipy.sparse`). The sparse implementation will be used
-              automatically for sparse matrices.
-    a,b     - optional integers; compute only the max-min product between
-              A[a:b,:] and A.T 
-    sparse  - if True, transforms A to CSR matrix format and use the sparse
-              implementation.
+    A : array_like
+        A 2D square ndarray, matrix or sparse (CSR) matrix (see `scipy.sparse`).
+        The sparse implementation will be used automatically for sparse
+        matrices.
+    a,b : integer
+        optional; compute only the max-min product between A[a:b,:] and A.T 
+    sparse : bool
+        if True, transforms A to CSR matrix format and use the sparse
+        implementation.
 
     Return
     ------
-    A CSR sparse matrix if the sparse implementation is used, otherwise a numpy
-    matrix.
+    A' : array_like
+        The max-min product of A with itself. A CSR sparse matrix will be
+        returned if the sparse implementation is used, otherwise a numpy matrix.
     '''
     if A.ndim != 2:
         raise ValueError('expecting 2D array or matrix')
@@ -243,7 +434,6 @@ def maxmin(A, a=None, b=None, sparse=False):
         return maxmin_sparse(A, a, b)
     else:
         return np.matrix(maxmin_naive(A, a, b))
-
 
 # These functions don't perform checks on the argument, so don't use these
 # functions directly. Use the frontend instead.
