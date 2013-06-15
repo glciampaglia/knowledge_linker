@@ -25,11 +25,12 @@ namespaces = {}
 
 def itertriples(path):
     ''' 
-    iterates over an N-triples file returning triples as tuples 
+    Iterates over an N-triples file returning triples as tuples.
     
     Parameters
     ----------
-    path - path to N-triples file
+    path : string
+        path to N-triples file.
     '''
     if path.endswith('.gz'):
         ntfile = GzipFile(path)
@@ -52,15 +53,17 @@ def itertriples(path):
 
 def iterabbrv(triples, abbreviations, properties=False):
     ''' 
-    returns an iterator over n-triples, with namespaces inside URI abbreviated
-    to their "canonical" form. 
+    Iterator over n-triples, with namespaces abbreviated to their "canonical"
+    form (e.g. rdf:, rdfs:, dbpedia:, etc)
 
     Parameters
     ----------
-    triples     - an iterator over n-triples as tuples
-    abbreviated - a mapping of namespaces to abbreviations
-    properties  - boolean; if true, yield also properties. Default is no
-                  properties
+    triples : sequence
+        An iterator over n-triples as tuples.
+    abbreviated : mapping
+        A mapping of namespaces to abbreviations.
+    properties : bool
+        If true, yield also properties. Default is no properties.
     '''
     x = re.compile('({})'.format('|'.join(abbreviations.keys())))
     for triple in triples:
