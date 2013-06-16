@@ -138,6 +138,28 @@ def make_weighted(path, N):
     adj = adj.tocsr()
     return adj
 
+def dict_of_dicts_to_coo(dd):
+    '''
+    Transforms a dict of dicts to a records array in COOrdinates format. 
+    
+    Parameters
+    ----------
+    dd : dict of dicts
+
+    Returns
+    -------
+    coo : recarray
+        A records array with fields: row, col, and data. This can be used to
+        create a sparse matrix. See `coo_dtype`, `scipy.sparse.coo_matrix`.
+    '''
+        
+    def coorditer(dd):
+        for irow in sorted(dd):
+            d = dd[irow]
+            for icol in sorted(d):
+                yield irow, icol, d[icol]
+    return np.asarray(list(coorditer(dd)), dtype=coo_dtype)
+
 def dict_of_dicts_to_ndarray(dd):
     '''
     Transforms a dict of dicts to 2-D array
@@ -153,6 +175,9 @@ def dict_of_dicts_to_ndarray(dd):
     a 2-D ndarray
     '''
     def _sorted_values(d):
+        N = len(d)
         for k in sorted(d):
+            if len(d[k]) != N:
+                raise ValueError('row does not contain all values')
             yield d[k]
     return np.asarray([ list(_sorted_values(d)) for d in _sorted_values(dd) ])
