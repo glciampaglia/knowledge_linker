@@ -11,7 +11,6 @@ from datetime import datetime
 from itertools import izip
 from collections import defaultdict
 from array import array
-from networkx import DiGraph
 
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -139,10 +138,22 @@ def pmaxmin(A, splits=None, nprocs=None):
 
 def maxmin_closure_cycles_recursive(A):
     '''
-    Maxmin transitive closure. Recursive implementation. Do not use with large
-    graphs.
+    Maxmin transitive closure. Recursive implementation. If A is large, this
+    implementation will likely raise RuntimeError for reaching the maximum
+    recursion depth.
 
-    See `maxmin_closure_cycles`.
+    See `maxmin_closure_cycles` for parameters, return value, etc.
+    '''
+    AT = np.ones(A.shape) * np.inf
+    for row, col, weight in _maxmin_closure_cycles_recursive(A):
+        AT[row, col] = weight
+    return AT
+
+def _maxmin_closure_cycles_recursive(A):
+    '''
+    Maxmin transitive closure, recursive implementation. Returns an iterator
+    over COO tuples. The fronted `maxmin_closure_cycles_recursive` constructs a
+    2-D array out of it. 
     '''
     def _succ(node):
         return succ[root[node]]
@@ -152,28 +163,24 @@ def maxmin_closure_cycles_recursive(A):
                 weights.append(min_weight)
         if target not in _succ(node): # prune branch
             return
-        for neighbor in graph.neighbors_iter(node):
+        for neighbor in A.rows[node]:
             if explored[(node, neighbor)]:
                 continue
             explored[(node, neighbor)] = True
-            w = graph[node][neighbor]['weight']
+            w = float(A[node, neighbor]) # copy value
             if w < min_weight:
                 search(neighbor, target, w, weights)
             else:
                 search(neighbor, target, min_weight, weights)
     maxval = np.inf
-    graph = DiGraph(A)
-    root, succ = closure_cycles(graph)
-    mm = defaultdict(dict)
-    num_edges = 0
-    for source in graph:
+    A = sp.lil_matrix(A)
+    root, succ = closure_cycles(A)
+    for source in xrange(A.shape[0]):
         for target in _succ(source):
             explored = defaultdict(bool)
             weights = [] # for each path
             search(source, target, maxval, weights)
-            mm[source][target] = max(weights)
-            num_edges += 1
-    return dict(mm), num_edges
+            yield (source, target, max(weights))
 
 # maxmin closure for directed networks with cycles. Iterative implementation.
 
@@ -189,29 +196,36 @@ def maxmin_closure_cycles(A):
 
     Returns
     -------
-    mm : dict of dicts
-        The maxmin distances between each node and its successors.
-    num_edges : int
-        The number of edges in the closure graph
+    AT : 2-D array
+        the transitive closure of A. If two nodes are disconnected their
+        distance will be inf.
 
     Notes
     ----- 
     For each source, and for each target in the successors of the source, this
-    function: performs a depth-first search of target, propagating the minimum
-    weight along, and pruning whenever a node that does not have `target` among
-    its successors is entered. Whenever the target node is reached, the minimum
-    weight found along the path is added to a list of minima. When the DFS
-    search tree is exhausted, the maximum weight is extract. The successors are
-    computed using `closure_cycles`.
+    function performs a depth-first search of target, propagating the minimum
+    weight along the DFS branch, and pruning whenever a node that does not have
+    `target` among its successors is entered. Whenever the target node is
+    reached, the minimum weight found along the path is added to a list of
+    minima. When the DFS search tree is exhausted, the maximum weight is
+    extract. The successors are computed using `closure_cycles`.
+    '''
+    AT = np.ones(A.shape) * np.inf
+    for row, col, weight in _maxmin_closure_cycles(A):
+        AT[row, col] = weight
+    return AT
+
+def _maxmin_closure_cycles(A):
+    '''
+    Maxmin transitive closure. Returns an iterator over COO tuples.
+    The fronted `maxmin_closure_cycles` constructs a 2-D array out of it.
     '''
     def _succ(node):
         return succ[root[node]]
     maxval = np.inf
-    graph = DiGraph(A)
-    root, succ = closure_cycles(graph)
-    mm = defaultdict(dict)
-    num_edges = 0
-    for source in graph:
+    A = sp.lil_matrix(A)
+    root, succ = closure_cycles(A)
+    for source in xrange(A.shape[0]):
         for target in _succ(source):
             explored = defaultdict(bool)
             dfs_stack = [(source, maxval)]
@@ -225,12 +239,12 @@ def maxmin_closure_cycles(A):
                     dfs_stack.pop()
                     continue
                 backtracking = True
-                for neighbor in graph.neighbors_iter(node):
+                for neighbor in A.rows[node]:
                     if explored[(node, neighbor)]:
                         continue
                     backtracking = False
                     explored[(node, neighbor)] = True
-                    w = graph[node][neighbor]['weight']
+                    w = float(A[node, neighbor]) # value copy
                     if w < min_weight:
                         dfs_stack.append((neighbor, w))
                     else:
@@ -239,15 +253,14 @@ def maxmin_closure_cycles(A):
                 # node has no neighbors, or all outgoing edges already explored
                 if backtracking: 
                     dfs_stack.pop()
-            mm[source][target] = max(weights)
-            num_edges += 1
-    return dict(mm), num_edges
+            yield (source, target, max(weights))
+
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
 _dfs_order = 0 # this must be a module-level global
 
-def closure_cycles_recursive(graph):
+def closure_cycles_recursive(adj):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
     implementation. Not suited for large graphs: will throw `RuntimeError` when
@@ -267,7 +280,7 @@ def closure_cycles_recursive(graph):
         order[node] = _dfs_order
         _dfs_order += 1
         root[node] = node
-        for neigh_node in graph.neighbors_iter(node):
+        for neigh_node in adj.rows[node]:
             if not visited[neigh_node]:
                 visit(neigh_node)
             if not in_scc[root[neigh_node]]:
@@ -286,7 +299,7 @@ def closure_cycles_recursive(graph):
                     in_scc[comp_node] = True
                     if comp_node != node:
                         succ[node].update(succ[comp_node])
-                        succ[comp_node] = succ[node]
+                        succ[comp_node] = succ[node] # ref copy only
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break 
             else:
@@ -296,29 +309,30 @@ def closure_cycles_recursive(graph):
                 stack.append(root[node])
             succ[root[node]].update((node,))
     # main function
-    order = array('i', (0 for i in xrange(len(graph))))
-    root = {}
+    adj = sp.lil_matrix(adj)
+    order = array('i', (0 for i in xrange(adj.shape[0])))
+    root = array('i', (-1 for i in xrange(adj.shape[0])))
     stack = []
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-    for node in graph:
+    for node in xrange(adj.shape[0]):
         if not visited[node]:
             visit(node)
-    return root, dict(succ)
+    return np.frombuffer(root, dtype=np.int32), dict(succ)
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-def closure_cycles(graph):
+def closure_cycles(adj):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
     of the algorithm by Nuutila et Soisalon-Soininen [1].
 
     Arguments
     ---------
-    graph : Networkx `DiGraph`
-        a directed graph; cycles are allowed.
+    adj : array_like
+        the adjacency matrix of the graph
 
     Returns
     -------
@@ -337,13 +351,14 @@ def closure_cycles(graph):
         return dfs_order[node]
     dfs_counter = 0
     dfs_stack = []
-    dfs_order = array('i', (-1 for i in xrange(len(graph))))
-    root = {}
+    adj = sp.lil_matrix(adj)
+    dfs_order = array('i', (-1 for i in xrange(adj.shape[0])))
+    root = array('i', (-1 for i in xrange(adj.shape[0])))
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-    for source in graph:
+    for source in xrange(adj.shape[0]):
         if dfs_order[source] < 0:
             # start a new depth-first traversal from source
             dfs_stack = [source]
@@ -363,14 +378,14 @@ def closure_cycles(graph):
             # If no neighbors exist, or all neighbors have been already visited,
             # backtrack.
             backtracking = True
-            for neighbor_node in graph.neighbors_iter(node):
+            for neighbor_node in adj.rows[node]:
                 if dfs_order[neighbor_node] < 0:
                     dfs_stack.append(neighbor_node)
                     backtracking = False
                     break # will visit neighbor_node at next iteration
             if backtracking:
                 # all neighbors have been visited at this point
-                for neigh_node in graph.neighbors_iter(node):
+                for neigh_node in adj.rows[node]:
                     if not in_scc[root[neigh_node]]:
                         root[node] = min(root[node], root[neigh_node], key=_order)
                     else:
@@ -387,7 +402,7 @@ def closure_cycles(graph):
                             in_scc[comp_node] = True
                             if comp_node != node:
                                 succ[node].update(succ[comp_node])
-                                succ[comp_node] = succ[node]
+                                succ[comp_node] = succ[node] # ref copy only
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
                                 break
@@ -399,7 +414,7 @@ def closure_cycles(graph):
                     succ[root[node]].update((node,))
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
-    return root, dict(succ)
+    return np.frombuffer(root, dtype=np.int32), dict(succ)
 
 def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         **kwrds):
@@ -430,6 +445,11 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
     closure : array_like
         If parallel is True, returns a matrix in compressed sparse row format
         (CSR). See `scipy.sparse`.
+
+    Note
+    ----
+    To save space, disconnected pairs of vertices will have a zero entry instead
+    of inf.
     '''
     if parallel:
         A = sp.csr_matrix(A)
