@@ -135,7 +135,7 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
-def maxmin_closure_cycles_recursive(A, maxval=1.0):
+def maxmin_closure_cycles_recursive(A, maxval=np.inf):
     '''
     Maxmin transitive closure. Recursive implementation. Do not use with large
     graphs.
