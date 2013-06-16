@@ -164,7 +164,7 @@ def maxmin_closure_cycles(A):
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
-dfs_order = 0
+_dfs_order = 0 # this must be a module-level global
 
 def closure_cycles_recursive(graph):
     '''
@@ -174,17 +174,17 @@ def closure_cycles_recursive(graph):
 
     See `closure_cycles` for more details.
     '''
-    global dfs_order
-    dfs_order = 0
+    global _dfs_order
+    _dfs_order = 0
     # for min comparison
     def _order(node):
         return order[node]
     # dfs visiting function
     def visit(node):
-        global dfs_order
+        global _dfs_order
         visited[node] = True
-        order[node] = dfs_order
-        dfs_order += 1
+        order[node] = _dfs_order
+        _dfs_order += 1
         root[node] = node
         for neigh_node in graph.neighbors_iter(node):
             if not visited[neigh_node]:
