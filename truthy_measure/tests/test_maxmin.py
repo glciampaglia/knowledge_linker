@@ -5,10 +5,10 @@ import warnings
 import networkx as nx
 
 # local imports
-from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse, maxmin,\
-        pmaxmin, productclosure, closure_cycles, closure_cycles_recursive
-from truthy_measure.cmaxmin import c_maxmin_naive, c_maxmin_sparse, \
-        c_maximum_csr
+from truthy_measure.maxmin import *
+from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse 
+from truthy_measure.cmaxmin import *
+from truthy_measure.utils import dict_of_dicts_to_ndarray
 
 def test_naive():
     A = np.random.rand(5, 5)
@@ -127,12 +127,23 @@ def test_closure():
         Cl2 = productclosure(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
 
-@raises(TypeError)
-def test_cyclical():
+def test_maxmin_cycles():
     C2 = np.array([
-            [0.0, 0.5, 0.0], 
-            [0.0, 0.0, 0.1], 
-            [0.2, 0.0, 0.0]
-            ])
-    C2T = closure_cycles(C2) # XXX must use 
-    assert np.allclose(C2T, 0.1)
+        [0.0, 0.5, 0.0], 
+        [0.0, 0.0, 0.1], 
+        [0.2, 0.0, 0.0] 
+        ])
+    C2T = np.array([
+        [0.1, 0.5, 0.1],
+        [0.1, 0.1, 0.1],
+        [0.2, 0.2, 0.1]
+        ])
+    mm = maxmin_closure_cycles(C2)
+    mm = dict_of_dicts_to_ndarray(mm) 
+    assert np.allclose(mm, C2T)
+
+def test_maxmin_cycles_iterative():
+    A = np.random.random_sample((5,5))
+    mm1 = maxmin_closure_cycles(A)
+    mm2 = maxmin_closure_cycles_recursive(A)
+    assert mm1 == mm2

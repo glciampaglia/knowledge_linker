@@ -138,3 +138,21 @@ def make_weighted(path, N):
     adj = adj.tocsr()
     return adj
 
+def dict_of_dicts_to_ndarray(dd):
+    '''
+    Transforms a dict of dicts to 2-D array
+
+    Parameters
+    ----------
+    dd : dict of dicts
+        a dictionary of dictionary; a dictionary with len(dd) is mapped to each
+        key in dd.
+
+    Returns
+    -------
+    a 2-D ndarray
+    '''
+    def _sorted_values(d):
+        for k in sorted(d):
+            yield d[k]
+    return np.asarray([ list(_sorted_values(d)) for d in _sorted_values(dd) ])

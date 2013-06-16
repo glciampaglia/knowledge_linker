@@ -135,7 +135,9 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
-def maxmin_closure_cycles_recursive(A, maxval=np.inf):
+# maxmin closure for directed networks with cycles. Recursive implementation.
+
+def maxmin_closure_cycles_recursive(A):
     '''
     Maxmin transitive closure. Recursive implementation. Do not use with large
     graphs.
@@ -146,8 +148,8 @@ def maxmin_closure_cycles_recursive(A, maxval=np.inf):
         return succ[root[node]]
     def search(node, target, min_weight, weights):
         if node == target: # append minimum of path
-            weights.append(min_weight)
-            return
+            if min_weight != maxval:
+                weights.append(min_weight)
         if target not in _succ(node): # prune branch
             return
         for neighbor in graph.neighbors_iter(node):
@@ -159,6 +161,7 @@ def maxmin_closure_cycles_recursive(A, maxval=np.inf):
                 search(neighbor, target, w, weights)
             else:
                 search(neighbor, target, min_weight, weights)
+    maxval = np.inf
     graph = DiGraph(A)
     root, succ = closure_cycles(graph)
     mm = defaultdict(dict)
@@ -169,6 +172,8 @@ def maxmin_closure_cycles_recursive(A, maxval=np.inf):
             search(source, target, maxval, weights)
             mm[source][target] = max(weights)
     return dict(mm)
+
+# maxmin closure for directed networks with cycles. Iterative implementation.
 
 def maxmin_closure_cycles(A):
     '''
@@ -182,20 +187,55 @@ def maxmin_closure_cycles(A):
 
     Returns
     -------
-    tbd
+    mm : dict of dicts
+        The maxmin distances between each node and its successors.
+
+    Notes
+    ----- 
+    For each source, and for each target in the successors of the source, this
+    function: performs a depth-first search of target, propagating the minimum
+    weight along, and pruning whenever a node that does not have `target` among
+    its successors is entered. Whenever the target node is reached, the minimum
+    weight found along the path is added to a list of minima. When the DFS
+    search tree is exhausted, the maximum weight is extract. The successors are
+    computed using `closure_cycles`.
     '''
+    def _succ(node):
+        return succ[root[node]]
+    maxval = np.inf
     graph = DiGraph(A)
     root, succ = closure_cycles(graph)
-    for node in graph:
-        pass
-    # for each node:
-    #       for each target in succ(node):
-    #           search for successors starting from node, with pruning
-    #           propagate the min weight along each branch of the DFS tree
-    #           pick the maximum among all branches
-    #
-    # pruning: whenever I enter a node that does not have target in its
-    # successors set, stop the DFS and backtrack.
+    mm = defaultdict(dict)
+    for source in graph:
+        for target in _succ(source):
+            explored = defaultdict(bool)
+            dfs_stack = [(source, maxval)]
+            weights = [] # weight of each branch
+            while dfs_stack:
+                node, min_weight = dfs_stack[-1]
+                if node == target: # append minimum of path
+                    if min_weight != maxval:
+                        weights.append(min_weight)
+                if target not in _succ(node): # prune
+                    dfs_stack.pop()
+                    continue
+                backtracking = True
+                for neighbor in graph.neighbors_iter(node):
+                    if explored[(node, neighbor)]:
+                        continue
+                    backtracking = False
+                    explored[(node, neighbor)] = True
+                    w = graph[node][neighbor]['weight']
+                    if w < min_weight:
+                        dfs_stack.append((neighbor, w))
+                    else:
+                        dfs_stack.append((neighbor, min_weight))
+                    break # break to visit neighbor
+                # node has no neighbors, or all outgoing edges already explored
+                if backtracking: 
+                    dfs_stack.pop()
+            mm[source][target] = max(weights)
+    return dict(mm)
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
