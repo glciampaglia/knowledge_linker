@@ -5,9 +5,10 @@ import warnings
 import networkx as nx
 
 # local imports
-from .maxmin import _maxmin_naive, _maxmin_sparse, maxmin, pmaxmin,\
-        productclosure, closure_cycles, closure_cycles_recursive
-from .cmaxmin import c_maxmin_naive, c_maxmin_sparse, c_maximum_csr
+from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse, maxmin,\
+        pmaxmin, productclosure, closure_cycles, closure_cycles_recursive
+from truthy_measure.cmaxmin import c_maxmin_naive, c_maxmin_sparse, \
+        c_maximum_csr
 
 def test_naive():
     A = np.random.rand(5, 5)
