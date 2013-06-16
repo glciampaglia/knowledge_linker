@@ -135,6 +135,41 @@ def pmaxmin(A, splits=None, nprocs=None):
     pool.join()
     return AP
 
+def maxmin_closure_cycles_recursive(A, maxval=1.0):
+    '''
+    Maxmin transitive closure. Recursive implementation. Do not use with large
+    graphs.
+
+    See `maxmin_closure_cycles`.
+    '''
+    def _succ(node):
+        return succ[root[node]]
+    def search(node, target, min_weight, weights):
+        if node == target: # append minimum of path
+            weights.append(min_weight)
+            return
+        if target not in _succ(node): # prune branch
+            return
+        for neighbor in graph.neighbors_iter(node):
+            if explored[(node, neighbor)]:
+                continue
+            explored[(node, neighbor)] = True
+            w = graph[node][neighbor]['weight']
+            if w < min_weight:
+                search(neighbor, target, w, weights)
+            else:
+                search(neighbor, target, min_weight, weights)
+    graph = DiGraph(A)
+    root, succ = closure_cycles(graph)
+    mm = defaultdict(dict)
+    for source in graph:
+        for target in _succ(source):
+            explored = defaultdict(bool)
+            weights = [] # for each path
+            search(source, target, maxval, weights)
+            mm[source][target] = max(weights)
+    return dict(mm)
+
 def maxmin_closure_cycles(A):
     '''
     Maxmin transitive closure.
