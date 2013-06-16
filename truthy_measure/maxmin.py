@@ -165,13 +165,15 @@ def maxmin_closure_cycles_recursive(A):
     graph = DiGraph(A)
     root, succ = closure_cycles(graph)
     mm = defaultdict(dict)
+    num_edges = 0
     for source in graph:
         for target in _succ(source):
             explored = defaultdict(bool)
             weights = [] # for each path
             search(source, target, maxval, weights)
             mm[source][target] = max(weights)
-    return dict(mm)
+            num_edges += 1
+    return dict(mm), num_edges
 
 # maxmin closure for directed networks with cycles. Iterative implementation.
 
@@ -189,6 +191,8 @@ def maxmin_closure_cycles(A):
     -------
     mm : dict of dicts
         The maxmin distances between each node and its successors.
+    num_edges : int
+        The number of edges in the closure graph
 
     Notes
     ----- 
@@ -206,6 +210,7 @@ def maxmin_closure_cycles(A):
     graph = DiGraph(A)
     root, succ = closure_cycles(graph)
     mm = defaultdict(dict)
+    num_edges = 0
     for source in graph:
         for target in _succ(source):
             explored = defaultdict(bool)
@@ -235,7 +240,8 @@ def maxmin_closure_cycles(A):
                 if backtracking: 
                     dfs_stack.pop()
             mm[source][target] = max(weights)
-    return dict(mm)
+            num_edges += 1
+    return dict(mm), num_edges
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 

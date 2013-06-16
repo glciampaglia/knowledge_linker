@@ -138,12 +138,13 @@ def test_maxmin_cycles():
         [0.1, 0.1, 0.1],
         [0.2, 0.2, 0.1]
         ])
-    mm = maxmin_closure_cycles(C2)
-    mm = dict_of_dicts_to_ndarray(mm) 
+    mm, _ = maxmin_closure_cycles(C2)
+    mm = dict_of_dicts_to_ndarray(mm, C2.shape)
     assert np.allclose(mm, C2T)
 
 def test_maxmin_cycles_iterative():
     A = np.random.random_sample((5,5))
-    mm1 = maxmin_closure_cycles(A)
-    mm2 = maxmin_closure_cycles_recursive(A)
+    mm1, n1 = maxmin_closure_cycles(A)
+    mm2, n2 = maxmin_closure_cycles_recursive(A)
     assert mm1 == mm2
+    assert n1 == n2

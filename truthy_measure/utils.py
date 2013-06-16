@@ -138,13 +138,16 @@ def make_weighted(path, N):
     adj = adj.tocsr()
     return adj
 
-def dict_of_dicts_to_coo(dd):
+def dict_of_dicts_to_coo(dd, num=-1):
     '''
     Transforms a dict of dicts to a records array in COOrdinates format. 
     
     Parameters
     ----------
     dd : dict of dicts
+
+    num : int
+        the number of coordinate entries
 
     Returns
     -------
@@ -158,9 +161,9 @@ def dict_of_dicts_to_coo(dd):
             d = dd[irow]
             for icol in sorted(d):
                 yield irow, icol, d[icol]
-    return np.asarray(list(coorditer(dd)), dtype=coo_dtype)
+    return np.fromiter(coorditer(dd), coo_dtype, count=num)
 
-def dict_of_dicts_to_ndarray(dd):
+def dict_of_dicts_to_ndarray(dd, size):
     '''
     Transforms a dict of dicts to 2-D array
 
@@ -169,15 +172,20 @@ def dict_of_dicts_to_ndarray(dd):
     dd : dict of dicts
         a dictionary of dictionary; a dictionary with len(dd) is mapped to each
         key in dd.
+    size : tuple
+        dimensions of the output array
 
     Returns
     -------
-    a 2-D ndarray
+    a 2-D ndarray. The dtype is inferred from the first element. Missing
+    elements are equal to zero.
     '''
-    def _sorted_values(d):
-        N = len(d)
-        for k in sorted(d):
-            if len(d[k]) != N:
-                raise ValueError('row does not contain all values')
-            yield d[k]
-    return np.asarray([ list(_sorted_values(d)) for d in _sorted_values(dd) ])
+    if len(size) != 2:
+        raise ValueError('can return only 2-D arrays')
+    dty = type(dd.itervalues().next().itervalues().next())
+    tmp = np.zeros(size, dtype=dty)
+    for irow in dd:
+        d = dd[irow]
+        for icol in d:
+            tmp[irow, icol] = d[icol]
+    return tmp
