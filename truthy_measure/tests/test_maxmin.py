@@ -126,6 +126,9 @@ def test_maxmin_cycles_iterative():
     res2 = maxmin_closure_cycles_recursive(A)
     assert np.allclose(res1, res2)
 
+# on simple cycles, the matrix multiplication and the graph traversal algorithms
+# give the same correct answer
+
 def test_maxmin_c3():
     '''
     length 3 cycle
