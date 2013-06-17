@@ -144,7 +144,7 @@ def maxmin_closure_cycles_recursive(A):
 
     See `maxmin_closure_cycles` for parameters, return value, etc.
     '''
-    AT = np.ones(A.shape) * np.inf
+    AT = np.zeros(A.shape)
     for row, col, weight in _maxmin_closure_cycles_recursive(A):
         AT[row, col] = weight
     return AT
@@ -197,8 +197,9 @@ def maxmin_closure_cycles(A):
     Returns
     -------
     AT : 2-D array
-        the transitive closure of A. If two nodes are disconnected their
-        distance will be inf.
+        the max-min, or ultra-metric transitive closure of A. This is also equal
+        to the all-pairs bottleneck paths. Zero entries correspond to
+        disconnected pairs, i.e. null capacities.
 
     Notes
     ----- 
@@ -210,7 +211,7 @@ def maxmin_closure_cycles(A):
     minima. When the DFS search tree is exhausted, the maximum weight is
     extract. The successors are computed using `closure_cycles`.
     '''
-    AT = np.ones(A.shape) * np.inf
+    AT = np.zeros(A.shape)
     for row, col, weight in _maxmin_closure_cycles(A):
         AT[row, col] = weight
     return AT
@@ -443,13 +444,10 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
     Returns 
     -------
     closure : array_like
-        If parallel is True, returns a matrix in compressed sparse row format
-        (CSR). See `scipy.sparse`.
-
-    Note
-    ----
-    To save space, disconnected pairs of vertices will have a zero entry instead
-    of inf.
+        The max-min, or ultra-metric, closure. This is also equal to the
+        all-pairs bottleneck paths. Zero entries correspond to disconnected
+        pairs, i.e. null capacity paths. If parallel is True, returns a matrix
+        in compressed sparse row format (CSR). See `scipy.sparse`.
     '''
     if parallel:
         A = sp.csr_matrix(A)
