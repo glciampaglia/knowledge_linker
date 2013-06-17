@@ -152,8 +152,10 @@ def maxmin_closure_cycles_recursive(A):
 def _maxmin_closure_cycles_recursive(A):
     '''
     Maxmin transitive closure, recursive implementation. Returns an iterator
-    over COO tuples. The fronted `maxmin_closure_cycles_recursive` constructs a
-    2-D array out of it. 
+    over COO tuples.
+
+    NOTE: The frontend `maxmin_closure_cycles_recursive` constructs a 2-D array
+    out of it.
     '''
     def _succ(node):
         return succ[root[node]]
@@ -219,7 +221,8 @@ def maxmin_closure_cycles(A):
 def _maxmin_closure_cycles(A):
     '''
     Maxmin transitive closure. Returns an iterator over COO tuples.
-    The fronted `maxmin_closure_cycles` constructs a 2-D array out of it.
+
+    NOTE: The frontend `maxmin_closure_cycles` constructs a 2-D array out of it.
     '''
     def _succ(node):
         return succ[root[node]]
@@ -264,10 +267,12 @@ _dfs_order = 0 # this must be a module-level global
 def closure_cycles_recursive(adj):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
-    implementation. Not suited for large graphs: will throw `RuntimeError` when
-    the maximum recursion depth is reached. See `sys.setrecursionlimit`.
-
-    See `closure_cycles` for more details.
+    implementation. See `closure_cycles` for more details.
+    
+    Note
+    ----
+    This implementation is not suited for large graphs, as it will likely reach
+    the maximum recursion depth and throw a RuntimeError. 
     '''
     global _dfs_order
     _dfs_order = 0
