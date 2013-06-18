@@ -160,8 +160,10 @@ def _maxmin_closure_cycles_recursive(A):
     # the full successors set
     def _succ(node):
         r = root[node]
-        s = succ[r] # only SCC roots
-        return np.where(reduce(_ndor, map(_rooteq, s)))[0]
+        idx = np.zeros(len(root), dtype=bool)
+        for s in succ[r]: # only SCC roots
+            idx |= root == s
+        return np.where(idx)[0]
     def search(node, target, min_weight, weights):
         if node == target: # append minimum of path
             if min_weight != maxval:
@@ -231,8 +233,10 @@ def _maxmin_closure_cycles(A):
     '''
     def _succ(node):
         r = root[node]
-        s = succ[r] # only SCC roots
-        return np.where(reduce(_ndor, map(_rooteq, s)))[0]
+        idx = np.zeros(len(root), dtype=bool)
+        for s in succ[r]: # only SCC roots
+            idx |= root == s
+        return np.where(idx)[0]
     maxval = np.inf
     A = sp.lil_matrix(A)
     root, succ = closure_cycles(A)
