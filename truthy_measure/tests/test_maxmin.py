@@ -117,6 +117,7 @@ def test_transitive_closure():
     B = sp.rand(10, 10, .2, 'csr')
     root1, scc_succ1 = closure_cycles(B)
     root2, scc_succ2 = closure_cycles_recursive(B)
+    assert np.allclose(root1, root2)
     for i in xrange(B.shape[0]):
         succ1 = _successors(i, root1, scc_succ1)
         succ2 = _successors(i, root2, scc_succ2)
