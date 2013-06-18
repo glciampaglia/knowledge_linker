@@ -100,15 +100,28 @@ def test_closure_cycle_2():
     print res
     assert np.allclose(res, C2T) 
 
+def _successors(node, root, succ_scc):
+    '''
+    Returns the full list of successors
+    '''
+    r = root[node]
+    s = succ_scc[r]
+    _or = np.ndarray.__or__ # shorthand
+    _eq = root.__eq__
+    return set(np.where(reduce(_or, map(_eq, s)))[0])
+
 def test_transitive_closure():
     '''
     Test recursive vs non-recursive implementation of closure_cycles
     '''
     B = sp.rand(10, 10, .2, 'csr')
-    root1, succ1 = closure_cycles(B)
-    root2, succ2 = closure_cycles_recursive(B)
+    root1, scc_succ1 = closure_cycles(B)
+    root2, scc_succ2 = closure_cycles_recursive(B)
     for i in xrange(B.shape[0]):
-        if succ1[root1[i]] != succ2[root2[i]]:
+        succ1 = _successors(i, root1, scc_succ1)
+        succ2 = _successors(i, root2, scc_succ2)
+        if succ1 != succ2:
+            print succ1, succ2
             raise AssertionError("successors sets differ.")
 
 def test_closure():
