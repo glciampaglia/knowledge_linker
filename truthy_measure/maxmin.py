@@ -298,8 +298,8 @@ def closure_cycles_recursive(adj):
             tmp.update(set((cand_root,)).union(succ[cand_root]))
         succ[root[node]].update(tmp) 
         if root[node] == node:
+            succ[node].update((node,))
             if len(stack) and order[stack[-1]] >= order[node]:
-                succ[node].update((node,))
                 while True:
                     comp_node = stack.pop()
                     in_scc[comp_node] = True
@@ -313,7 +313,6 @@ def closure_cycles_recursive(adj):
         else:
             if root[node] not in stack:
                 stack.append(root[node])
-            succ[root[node]].update((node,))
     # main function
     adj = sp.lil_matrix(adj)
     order = array('i', (0 for i in xrange(adj.shape[0])))
@@ -333,7 +332,7 @@ def closure_cycles_recursive(adj):
 def closure_cycles(adj):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
-    of the algorithm by Nuutila et Soisalon-Soininen [1].
+    based on the algorithm by Nuutila et Soisalon-Soininen [1].
 
     Arguments
     ---------
@@ -345,7 +344,14 @@ def closure_cycles(adj):
     root : instance of `array.array`
         for each node, the root of the SCC of that node.
     succ : dict of lists
-        for each root of an SCC, the list of successors of that node.
+        for each root of an SCC, the list of strongly connected components that
+        can be reached by that node. Each SCC is identified by its root node.
+
+    Note
+    ----
+    In the original paper [1], the algorithm builds the full set of successors
+    of each SCC. Here, the function returns only the set of roots of strongly
+    connected successor components.
 
     References
     ----------
@@ -401,8 +407,8 @@ def closure_cycles(adj):
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
                 succ[root[node]].update(tmp)
                 if root[node] == node:
+                    succ[node].update((node,))
                     if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
-                        succ[node].update((node,))
                         while True:
                             comp_node = scc_stack.pop()
                             in_scc[comp_node] = True
@@ -417,7 +423,6 @@ def closure_cycles(adj):
                 else:
                     if root[node] not in scc_stack:
                         scc_stack.append(root[node])
-                    succ[root[node]].update((node,))
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
     return np.frombuffer(root, dtype=np.int32), dict(succ)
