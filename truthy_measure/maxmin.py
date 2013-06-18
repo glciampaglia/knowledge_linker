@@ -338,6 +338,8 @@ def closure_cycles_recursive(adj):
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
+# XXX: does not always compute the correct SCC set!
+
 def closure_cycles(adj):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
