@@ -189,3 +189,33 @@ def dict_of_dicts_to_ndarray(dd, size):
         for icol in d:
             tmp[irow, icol] = d[icol]
     return tmp
+
+class Cache(dict):
+    '''
+    A dictionary with maximum capacity. Oldest items are removed first.
+    '''
+    def __init__(self, size, *args, **kwargs):
+        super(Cache, self).__init__(*args, **kwargs)
+        self.size = size
+        self._queue = []
+    def __repr__(self):
+        return '<{}({}) at 0x{:x}>'.format(self.__class__.__name__,
+                self.size, id(self))
+    def __setitem__(self, key, value):
+        # if key queue is full, pop the oldest item
+        if key not in self._queue and len(self._queue) == self.size:
+            oldest_key = self._queue.pop(0)
+            del self[oldest_key]
+        super(Cache, self).__setitem__(key, value)
+        # update position of key
+        try:
+            self._queue.remove(key)
+        except ValueError:
+            pass
+        self._queue.append(key)
+    def renew(self, key):
+        '''
+        Renews a key.
+        '''
+        val = self[key]
+        self[key] = value
