@@ -391,7 +391,7 @@ def closure_cycles(adj):
         while dfs_stack:
             # the top of dfs_stack holds the current node
             node = dfs_stack[-1]
-            if node not in root:
+            if dfs_order[node] < 0:
                 # we are visiting a new node.
                 dfs_order[node] = dfs_counter
                 dfs_counter += 1
@@ -406,13 +406,12 @@ def closure_cycles(adj):
                     dfs_stack.append(neighbor_node)
                     backtracking = False
                     break # will visit neighbor_node at next iteration
+                if not in_scc[root[neighbor_node]]:
+                    root[node] = min(root[node], root[neighbor_node], key=_order)
+                else:
+                    local_roots[node].update((root[neighbor_node],))
             if backtracking:
                 # all neighbors have been visited at this point
-                for neigh_node in adj.rows[node]:
-                    if not in_scc[root[neigh_node]]:
-                        root[node] = min(root[node], root[neigh_node], key=_order)
-                    else:
-                        local_roots[node].update((root[neigh_node],))
                 tmp = set()
                 for cand_root in local_roots[node]:
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
