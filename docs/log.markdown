@@ -27,3 +27,9 @@ SCCs of size 1. It's almost 95% of the nodes. This could be a problem if many of
 those SCCs are actually reachable, because then we don't save much by storing
 only the SCC root rather than the whole SCC, but my hunch is that most of them
 are probably not reachable (e.g. leaves of the DAG hierarchy). 
+
+## Wed Jun 19 14:01:12 EDT 2013
+
+Bad news. It still takes all the memory on smithers (a total of 144GB). I am
+going to compute the successors for 1000 at random and see what the size
+distribution of these sets is.

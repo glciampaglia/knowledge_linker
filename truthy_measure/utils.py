@@ -191,19 +191,37 @@ def dict_of_dicts_to_ndarray(dd, size):
     return tmp
 
 class Cache(dict):
-    '''
-    A dictionary with maximum capacity. Oldest items are removed first.
-    '''
-    def __init__(self, size, *args, **kwargs):
-        super(Cache, self).__init__(*args, **kwargs)
-        self.size = size
+    def __init__(self, maxsize, *args, **kwargs):
+        '''
+        A dictionary with maximum capacity. Oldest items are removed first,
+        using a queue. Whenever a key is gotten from the dictionary, its
+        position in the queue is reset to zero.
+
+        Parameters
+        ----------
+        maxsize : integer
+            The maximum size of the cache. When reached, the oldest element in
+            the queue is removed.
+
+        Additional arguments are assigned to the dictionary.
+
+        Notes
+        -----
+        Probably not thread-safe.
+        '''
+        super(Cache, self).__init__()
+        self.maxsize = maxsize
         self._queue = []
+        for k, v in args:
+            self.__setitem__(k, v)
+        for k in kwargs:
+            self.__setitem__(k, kwargs[k])
     def __repr__(self):
         return '<{}({}) at 0x{:x}>'.format(self.__class__.__name__,
-                self.size, id(self))
+                self.maxsize, id(self))
     def __setitem__(self, key, value):
         # if key queue is full, pop the oldest item
-        if key not in self._queue and len(self._queue) == self.size:
+        if key not in self._queue and len(self._queue) == self.maxsize:
             oldest_key = self._queue.pop(0)
             del self[oldest_key]
         super(Cache, self).__setitem__(key, value)
@@ -213,9 +231,8 @@ class Cache(dict):
         except ValueError:
             pass
         self._queue.append(key)
-    def renew(self, key):
-        '''
-        Renews a key.
-        '''
-        val = self[key]
-        self[key] = value
+    def __getitem__(self, key):
+        value = super(Cache, self).__getitem__(key)
+        self._queue.remove(key)
+        self._queue.append(key)
+        return value
