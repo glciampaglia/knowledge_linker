@@ -400,18 +400,18 @@ def closure_cycles(adj, sources=None, trace=False):
             tot_sources = 'N/A'
     counter = 0
     for source in sources:
-        if dfs_order[source] < 0:
-            # start a new depth-first traversal from source
-            dfs_stack = [source]
-        else:
-            # we have already traversed this source
-            continue
         counter += 1
         if trace:
             now = datetime.now()
             print '{}: traversing from {} ({}/{}).'.format(now, source, counter,
                     tot_sources)
             sys.stdout.flush()
+        if dfs_order[source] < 0:
+            # start a new depth-first traversal from source
+            dfs_stack = [source]
+        else:
+            # we have already traversed this source
+            continue
         while dfs_stack:
             # the top of dfs_stack holds the current node
             node = dfs_stack[-1]
