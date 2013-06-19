@@ -277,7 +277,7 @@ def _maxmin_closure_cycles(A):
 
 _dfs_order = 0 # this must be a module-level global
 
-def closure_cycles_recursive(adj):
+def closure_cycles_recursive(adj, sources=None):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
     implementation. See `closure_cycles` for more details.
@@ -335,16 +335,16 @@ def closure_cycles_recursive(adj):
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-    for node in xrange(adj.shape[0]):
+    if sources is None:
+        sources = xrange(adj.shape[0]) # explore the whole graph
+    for node in sources:
         if not visited[node]:
             visit(node)
     return np.frombuffer(root, dtype=np.int32), dict(succ)
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-# XXX: does not always compute the correct SCC set!
-
-def closure_cycles(adj):
+def closure_cycles(adj, sources=None):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
     based on the algorithm by Nuutila et Soisalon-Soininen [1].
@@ -353,6 +353,9 @@ def closure_cycles(adj):
     ---------
     adj : array_like
         the adjacency matrix of the graph
+    source : sequence or array_like
+        a sequence of source nodes. Roots and successors will be computed only
+        starting from these nodes.
 
     Returns
     -------
@@ -385,7 +388,11 @@ def closure_cycles(adj):
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-    for source in xrange(adj.shape[0]):
+
+    if sources is None:
+        sources = xrange(adj.shape[0]) # explore the whole graph
+
+    for source in sources:
         if dfs_order[source] < 0:
             # start a new depth-first traversal from source
             dfs_stack = [source]

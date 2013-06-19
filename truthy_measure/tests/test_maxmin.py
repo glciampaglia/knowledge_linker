@@ -117,13 +117,19 @@ def test_transitive_closure():
     B = sp.rand(10, 10, .2, 'csr')
     root1, scc_succ1 = closure_cycles(B)
     root2, scc_succ2 = closure_cycles_recursive(B)
-    assert np.allclose(root1, root2)
-    for i in xrange(B.shape[0]):
-        succ1 = _successors(i, root1, scc_succ1)
-        succ2 = _successors(i, root2, scc_succ2)
-        if succ1 != succ2:
-            print succ1, succ2
-            raise AssertionError("successors sets differ.")
+    assert np.allclose(root1, root2), 'roots differ'
+    assert scc_succ1 == scc_succ2, 'successor sets differ'
+
+def test_transitive_closure_sources():
+    '''
+    Test sources parameter in closure_cycle* functions
+    '''
+    B = sp.rand(10, 10, .2, 'csr')
+    sources = np.random.randint(0, 10, 4)
+    root1, scc_succ1 = closure_cycles(B, sources)
+    root2, scc_succ2 = closure_cycles_recursive(B, sources)
+    assert np.allclose(root1, root2), 'roots differ'
+    assert scc_succ1 == scc_succ2, 'successor sets differ'
 
 def test_closure():
     B = sp.rand(10, 10, .2, 'csr')
