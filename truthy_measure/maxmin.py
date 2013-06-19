@@ -344,7 +344,7 @@ def closure_cycles_recursive(adj, sources=None):
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-def closure_cycles(adj, sources=None):
+def closure_cycles(adj, sources=None, trace=False):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
     based on the algorithm by Nuutila et Soisalon-Soininen [1].
@@ -356,6 +356,8 @@ def closure_cycles(adj, sources=None):
     source : sequence or array_like
         a sequence of source nodes. Roots and successors will be computed only
         starting from these nodes.
+    trace : bool
+        if True, prints information about progress of the computation.
 
     Returns
     -------
@@ -388,10 +390,15 @@ def closure_cycles(adj, sources=None):
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = defaultdict(set)
-
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
-
+        tot_sources = adj.shape[0]
+    else:
+        try:
+            tot_sources = len(sources)
+        except TypeError: # sources is an iterator
+            tot_sources = 'N/A'
+    counter = 0
     for source in sources:
         if dfs_order[source] < 0:
             # start a new depth-first traversal from source
@@ -399,6 +406,12 @@ def closure_cycles(adj, sources=None):
         else:
             # we have already traversed this source
             continue
+        counter += 1
+        if trace:
+            now = datetime.now()
+            print '{}: traversing from {} ({}/{}).'.format(now, source, counter,
+                    tot_sources)
+            sys.stdout.flush()
         while dfs_stack:
             # the top of dfs_stack holds the current node
             node = dfs_stack[-1]
