@@ -157,18 +157,24 @@ def _maxmin_closure_cycles_recursive(A):
     NOTE: The frontend `maxmin_closure_cycles_recursive` constructs a 2-D array
     out of it.
     '''
-    # the full successors set
-    def _succ(node):
+    # test if b is reachable from a
+    def _reachable(a, b):
+        if root[a] == root[b]: # same SCC
+            return True
+        else: # different SCC, check if root of b in the set of succ SCC roots
+            return root[b] in succ[a]
+     # the full successors set
+    def _succ(node): 
         r = root[node]
-        idx = np.zeros(len(root), dtype=bool)
-        for s in succ[r]: # only SCC roots
+        idx = root == r # nodes in the same SCC of node
+        for s in succ[r]: # roots of reachable SCCs other than node's own SCC
             idx |= root == s
         return np.where(idx)[0]
     def search(node, target, min_weight, weights):
         if node == target: # append minimum of path
             if min_weight != maxval:
                 weights.append(min_weight)
-        if target not in _succ(node): # prune branch
+        if not _reachable(node, target): # prune branch
             return
         for neighbor in A.rows[node]:
             if explored[(node, neighbor)]:
@@ -231,10 +237,17 @@ def _maxmin_closure_cycles(A):
 
     NOTE: The frontend `maxmin_closure_cycles` constructs a 2-D array out of it.
     '''
+    # test if b is reachable from a
+    def _reachable(a, b):
+        if root[a] == root[b]: # same SCC
+            return True
+        else: # different SCC, check if root of b in the set of succ SCC roots
+            return root[b] in succ[a]
+     # the full successors set
     def _succ(node):
         r = root[node]
-        idx = np.zeros(len(root), dtype=bool)
-        for s in succ[r]: # only SCC roots
+        idx = root == r # nodes in the same SCC of node
+        for s in succ[r]: # roots of reachable SCCs other than node's own SCC
             idx |= root == s
         return np.where(idx)[0]
     maxval = np.inf
@@ -252,7 +265,7 @@ def _maxmin_closure_cycles(A):
                 if node == target: # append minimum of path
                     if min_weight != maxval:
                         weights.append(min_weight)
-                if target not in _succ(node): # prune
+                if not _reachable(node, target): # prune branch
                     dfs_stack.pop()
                     continue
                 backtracking = True
@@ -316,7 +329,6 @@ def closure_cycles_recursive(adj, sources=None):
             tmp.update(set((cand_root,)).union(succ[cand_root]))
         _update_succ(root[node], *tmp)
         if root[node] == node:
-            _update_succ(node, node)
             if len(stack) and order[stack[-1]] >= order[node]:
                 while True:
                     comp_node = stack.pop()
@@ -450,7 +462,6 @@ def closure_cycles(adj, sources=None, trace=False):
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
                 _update_succ(root[node], *tmp)
                 if root[node] == node:
-                    _update_succ(node, node)
                     if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         while True:
                             comp_node = scc_stack.pop()
