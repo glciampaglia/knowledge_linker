@@ -12,7 +12,7 @@ from itertools import izip
 from collections import defaultdict
 from array import array
 
-from .utils import coo_dtype
+from .utils import coo_dtype, RefDict
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
@@ -292,6 +292,11 @@ def closure_cycles_recursive(adj, sources=None):
     # for min comparison
     def _order(node):
         return order[node]
+    # update successors set
+    def _update_succ(key, *succset):
+        s = set(succ.get(key, set()))
+        s.update(succset)
+        succ[key] = frozenset(s)
     # dfs visiting function
     def visit(node):
         global _dfs_order
@@ -309,15 +314,15 @@ def closure_cycles_recursive(adj, sources=None):
         tmp = set()
         for cand_root in local_roots[node]:
             tmp.update(set((cand_root,)).union(succ[cand_root]))
-        succ[root[node]].update(tmp) 
+        _update_succ(root[node], *tmp)
         if root[node] == node:
-            succ[node].update((node,))
+            _update_succ(node, node)
             if len(stack) and order[stack[-1]] >= order[node]:
                 while True:
                     comp_node = stack.pop()
                     in_scc[comp_node] = True
                     if comp_node != node:
-                        succ[node].update(succ[comp_node])
+                        _update_succ(node, *succ[comp_node])
                         succ[comp_node] = succ[node] # ref copy only
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break 
@@ -334,13 +339,13 @@ def closure_cycles_recursive(adj, sources=None):
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = defaultdict(set)
+    succ = RefDict()
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
     for node in sources:
         if not visited[node]:
             visit(node)
-    return np.frombuffer(root, dtype=np.int32), dict(succ)
+    return np.frombuffer(root, dtype=np.int32), succ
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
@@ -364,7 +369,7 @@ def closure_cycles(adj, sources=None, trace=False):
     root : instance of `array.array`
         for each node, the root of the SCC of that node.
     succ : dict of lists
-        for each root of an SCC, the list of strongly connected components that
+        for each root of an SCC, the list of SCCs (other than itself) that
         can be reached by that node. Each SCC is identified by its root node.
 
     Note
@@ -381,6 +386,10 @@ def closure_cycles(adj, sources=None, trace=False):
     '''
     def _order(node):
         return dfs_order[node]
+    def _update_succ(key, *succset):
+        s = set(succ.get(key, set()))
+        s.update(succset)
+        succ[key] = frozenset(s)
     dfs_counter = 0
     dfs_stack = []
     adj = sp.lil_matrix(adj)
@@ -389,7 +398,7 @@ def closure_cycles(adj, sources=None, trace=False):
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = defaultdict(set)
+    succ = RefDict()
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
         tot_sources = adj.shape[0]
@@ -439,15 +448,15 @@ def closure_cycles(adj, sources=None, trace=False):
                 tmp = set()
                 for cand_root in local_roots[node]:
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
-                succ[root[node]].update(tmp)
+                _update_succ(root[node], *tmp)
                 if root[node] == node:
-                    succ[node].update((node,))
+                    _update_succ(node, node)
                     if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         while True:
                             comp_node = scc_stack.pop()
                             in_scc[comp_node] = True
                             if comp_node != node:
-                                succ[node].update(succ[comp_node])
+                                _update_succ(node, *succ[comp_node])
                                 succ[comp_node] = succ[node] # ref copy only
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
@@ -459,7 +468,7 @@ def closure_cycles(adj, sources=None, trace=False):
                         scc_stack.append(root[node])
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
-    return np.frombuffer(root, dtype=np.int32), dict(succ)
+    return np.frombuffer(root, dtype=np.int32), succ
 
 def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         **kwrds):
