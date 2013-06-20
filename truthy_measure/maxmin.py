@@ -159,10 +159,12 @@ def _maxmin_closure_cycles_recursive(A):
     '''
     # test if b is reachable from a
     def _reachable(a, b):
-        if root[a] == root[b]: # same SCC
+        if a == b:
+            return True
+        elif root[a] == root[b]: # same scc
             return True
         else: # different SCC, check if root of b in the set of succ SCC roots
-            return root[b] in succ[a]
+            return root[b] in succ[root[a]]
      # the full successors set
     def _succ(node): 
         r = root[node]
@@ -195,7 +197,8 @@ def _maxmin_closure_cycles_recursive(A):
             explored = defaultdict(bool)
             weights = [] # for each path
             search(source, target, maxval, weights)
-            yield (source, target, max(weights))
+            if len(weights):
+                yield (source, target, max(weights))
 
 # maxmin closure for directed networks with cycles. Iterative implementation.
 
@@ -239,10 +242,12 @@ def _maxmin_closure_cycles(A):
     '''
     # test if b is reachable from a
     def _reachable(a, b):
-        if root[a] == root[b]: # same SCC
+        if a == b:
+            return True
+        elif root[a] == root[b]: # same scc
             return True
         else: # different SCC, check if root of b in the set of succ SCC roots
-            return root[b] in succ[a]
+            return root[b] in succ[root[a]]
      # the full successors set
     def _succ(node):
         r = root[node]
@@ -283,8 +288,8 @@ def _maxmin_closure_cycles(A):
                 # node has no neighbors, or all outgoing edges already explored
                 if backtracking: 
                     dfs_stack.pop()
-            yield (source, target, max(weights))
-
+            if len(weights):
+                yield (source, target, max(weights))
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
