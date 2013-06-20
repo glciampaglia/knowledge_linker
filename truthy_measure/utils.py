@@ -258,6 +258,8 @@ class RefDict(dict):
         return '<RefDict {} at 0x{:x} ({} keys, {} unique values)>'.format(
                 base_rep, id(self), len(self), len(self._values))
 
+# Not used right now
+
 class Cache(dict):
     def __init__(self, maxsize, *args, **kwargs):
         '''
