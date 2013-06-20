@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse as sp
+from collections import defaultdict
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
@@ -189,6 +190,73 @@ def dict_of_dicts_to_ndarray(dd, size):
         for icol in d:
             tmp[irow, icol] = d[icol]
     return tmp
+
+class RefDict(dict):
+    def __init__(self, *args, **kwargs):
+        '''
+        A dictionary that stores references to a set of values. It gives an
+        advantage in terms of memory when one needs to store several large
+        duplicate objects.
+        
+        Note
+        ----
+        Values must be hashable types. Instead of lists, use tuples; instead of
+        sets, use frozensets.
+        '''
+        super(RefDict, self).__init__()
+        self._values = {} # mapping of value to list of k : self[k] = value
+        for k, v in args:
+            self.__setitem__(k, v)
+        for k in kwargs:
+            self.__setitem__(k, kwargs[k])
+    def __setitem__(self, key, value):
+        if key in self: # key exists, update value
+            oldvalue = super(RefDict, self).__getitem__(key)
+            if oldvalue == value: # nothing to do
+                return
+            # remove key from list of keys associated to old value
+            oldkeys = self._values[oldvalue]
+            oldkeys.remove(key)
+            if len(oldkeys) == 0:
+                # remove old value as well
+                del self._values[oldvalue]
+            if value in self._values: 
+                # append key to list of keys associated to value 
+                keys = self._values[value]
+                if len(keys) == 0:
+                    raise RuntimeError('Cannot retrieve value: {}'.format(value))
+                k0 = keys[0]
+                v = super(RefDict, self).__getitem__(k0)
+            else:
+                # create new list of keys
+                keys = []
+                self._values[value] = keys
+                v = value
+            keys.append(key)
+            super(RefDict, self).__setitem__(key, v)
+        else: # new key : value mapping
+            if value in self._values: # value already exists
+                keys = self._values[value]
+                if len(keys) == 0:
+                    raise RuntimeError('Cannot retrieve value: {}'.format(value))
+                keys.append(key)
+                k0 = keys[0]
+                v = super(RefDict, self).__getitem__(k0)
+                super(RefDict, self).__setitem__(key, v)
+            else: # new value
+                self._values[value] = [key]
+                super(RefDict, self).__setitem__(key, value)
+    def __delitem__(self, key):
+        v = super(RefDict, self).__getitem__(key)
+        keys = self._values[v]
+        keys.remove(key)
+        if len(keys) == 0: # remove list of keys if last key
+            del self._values[v]
+        super(RefDict, self).__delitem__(key) # standard del self[k]
+    def __repr__(self):
+        base_rep = super(RefDict, self).__repr__()
+        return '<RefDict {} at 0x{:x} ({} keys, {} unique values)>'.format(
+                base_rep, id(self), len(self), len(self._values))
 
 class Cache(dict):
     def __init__(self, maxsize, *args, **kwargs):
