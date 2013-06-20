@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.sparse as sp
-from nose.tools import raises
+from nose.tools import raises, nottest
 import warnings
 
 # local imports
@@ -62,6 +62,7 @@ def test_parallel():
     AP2 = pmaxmin(A, nprocs=2)
     assert np.array_equal(AP.todense(), AP2.todense())
 
+@nottest
 def test_parallel_is_faster():
     from time import time
     B = sp.rand(4000, 4000, 1e-4, 'csr')
