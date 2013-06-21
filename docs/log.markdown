@@ -33,3 +33,11 @@ are probably not reachable (e.g. leaves of the DAG hierarchy).
 Bad news. It still takes all the memory on smithers (a total of 144GB). I am
 going to compute the successors for 1000 at random and see what the size
 distribution of these sets is.
+
+Did an experiment with saving the DBpedia adjancency graph as a sparse file,
+which could then be opened with mmap. The estimated size for storing 23M weights
+(as 64 bits floats) would be **70GB**. This is because each block with a signe
+non-null value must be written in full. With a block size of 4K this should make
+sense. PyTables has a `CArray` class that saves the data as a B-tree (chuncked
+array) and that should be able to apply compression to the data chuncks. Worth
+giving it a look!
