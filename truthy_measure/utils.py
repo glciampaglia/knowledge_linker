@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
+from cStringIO import StringIO
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
@@ -200,8 +201,8 @@ class RefDict(dict):
         
         Note
         ----
-        Values must be hashable types. Instead of lists, use tuples; instead of
-        sets, use frozensets.
+        Values must be hashable. Instead of lists, use tuples; instead of sets,
+        use frozensets.
         '''
         super(RefDict, self).__init__()
         self._values = {} # mapping of value to list of k : self[k] = value
@@ -221,14 +222,16 @@ class RefDict(dict):
                 # remove old value as well
                 del self._values[oldvalue]
             if value in self._values: 
-                # append key to list of keys associated to value 
+                # append key to list of keys associated to value; retrieve
+                # instance of value to which key will be mapped to
                 keys = self._values[value]
                 if len(keys) == 0:
                     raise RuntimeError('Cannot retrieve value: {}'.format(value))
                 k0 = keys[0]
                 v = super(RefDict, self).__getitem__(k0)
             else:
-                # create new list of keys
+                # create new list of keys; key is going to be mapped to this
+                # instance of value
                 keys = []
                 self._values[value] = keys
                 v = value
