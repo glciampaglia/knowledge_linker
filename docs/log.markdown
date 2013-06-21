@@ -67,3 +67,28 @@ plotted the number of duplicates as a function of the cardinality of the sets
 and there are good savings even for the very big sets. 
 
 I relaunched the closure script on the full graph. Keep fingers crossed!
+
+## Fri Jun 21 11:57:29 EDT 2013
+
+Unfortunately it did not work. The script took up all the memory on smithers.
+This made the tweet filtering process running on smithers crash at around 7.44
+AM today. Bruce rebooted smithers and now the data collection is back online. On
+my side, the script was still in `closure_cycles`.
+
+This means that there is no way to keep in memory the successor sets of all
+SCCs. I have to change the algorithm so that it does without the full set of all
+successor sets, and instead uses only the successors set of the current source.
+In particular, we cannot prune the DFS search tree when we visit nodes that do
+not lead to the target. But instead of running a full DFS for each target, we
+can compute the max-min closure of all the successors at once, i.e. each node is
+a target. This should be efficient both in terms of memory and computation, and
+should be easily parallelizable. 
+
+The above idea could be even turned to a dynamic programming problem if, before
+computing the closure of a node, we have managed to compute the closure of its
+successors. But to do this we need to know the dependency structure of the
+succession among SCCs, i.e. we need to compute the graph of the SCCs. This is a
+directed acyclic multigraph in which each node corresponds to an SCC from the
+original graph, and there is an edge between two distinct SCCs for each edge
+that connected nodes in them. Analysing this graph will also let us answer my
+previous question about the bow-tie structure of the DBpedia graph.
