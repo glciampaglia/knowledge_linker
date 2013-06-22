@@ -100,3 +100,11 @@ non-null value must be written in full. With a block size of 4K this should make
 sense. PyTables has a `CArray` class that saves the data as a B-tree (chuncked
 array) and that should be able to apply compression to the data chuncks. Worth
 giving it a look!
+
+These are the results of diameter analysis on the full DBpedia graph:
+
+> Is the graph a strongly connected component? False
+> The number of connected components in the graph is 2873970
+> Is the graph weakly connected? True
+> The number of connected components in the graph is 1
+
