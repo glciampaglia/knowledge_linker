@@ -118,7 +118,16 @@ edges/s), while with the full matrix it drops to just 4 edges/s. Written a post
 on pytables-users, let's see if I get a reply.
 
 Also, killed the networkx script for computing the diameter: after 24h it had
-covered 57K source! The maximum distance was nonetheless equal to 260 at that
+covered 57K source! The maximum distance was nonetheless equal to *260* at that
 point -- quite a lot. Tried looking at alternative Python libraries, but
-graph_tool doesn't have a decent way to load an adjacency matrix, and scipy's
+graph\_tool doesn't have a decent way to load an adjacency matrix, and scipy's
 sparse graph routines do not seem to work properly. Maybe try iGraph?
+
+## Sun Jun 23 16:59:15 EDT 2013
+
+Today started compiling graph\_tool on smithers. Converted the adjancecy list
+(no weights) to GraphML format, with good results in terms of speed and and
+memory occupancy, though I believe most of the speedup comes from my using of
+the laptop, which is equipped with an SSD disk. If everything works out on
+Lenny, I will pimp up the diameter script to compute it in parallel with
+graph\_tool though I will probably have to install OpenMP as well.
