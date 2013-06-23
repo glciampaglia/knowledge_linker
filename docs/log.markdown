@@ -108,3 +108,17 @@ These are the results of diameter analysis on the full DBpedia graph:
 > Is the graph weakly connected? True
 > The number of connected components in the graph is 1
 
+## Sat Jun 22 22:53:33 EDT 2013
+
+I wrote a script for converting the adjacency matrix from NumPy format to
+PyTable's `CArray` but I had to give up because it was incredibly slow at
+writing to disk. It seems that there is a problem with the way the slices are
+written to disk, because with the `test_30k` data it goes decently fast (4000
+edges/s), while with the full matrix it drops to just 4 edges/s. Written a post
+on pytables-users, let's see if I get a reply.
+
+Also, killed the networkx script for computing the diameter: after 24h it had
+covered 57K source! The maximum distance was nonetheless equal to 260 at that
+point -- quite a lot. Tried looking at alternative Python libraries, but
+graph_tool doesn't have a decent way to load an adjacency matrix, and scipy's
+sparse graph routines do not seem to work properly. Maybe try iGraph?
