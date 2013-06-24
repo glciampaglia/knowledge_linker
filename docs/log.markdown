@@ -130,4 +130,10 @@ Today started compiling graph\_tool on smithers. Converted the adjancecy list
 memory occupancy, though I believe most of the speedup comes from my using of
 the laptop, which is equipped with an SSD disk. If everything works out on
 Lenny, I will pimp up the diameter script to compute it in parallel with
-graph\_tool though I will probably have to install OpenMP as well.
+graph\_tool though I will probably have to install OpenMP as well. 
+
+Update: it compiled and I relaunched the diameter script. The code work in
+parallel out of the box, which was a pleasant surprise (but be careful about the
+priority, as it seemed to take all the CPUs!). It's going faster than NetworkX
+(100K sources explored vs 60K in probably half to two thirds of the time), and
+so far the diameter is still at 260.
