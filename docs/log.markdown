@@ -133,7 +133,17 @@ Lenny, I will pimp up the diameter script to compute it in parallel with
 graph\_tool though I will probably have to install OpenMP as well. 
 
 Update: it compiled and I relaunched the diameter script. The code work in
-parallel out of the box, which was a pleasant surprise (but be careful about the
-priority, as it seemed to take all the CPUs!). It's going faster than NetworkX
-(100K sources explored vs 60K in probably half to two thirds of the time), and
-so far the diameter is still at 260.
+parallel out of the box, which was a pleasant surprise. Be careful about the
+priority, as it seemed to take all the CPUs and had to renice it immediately!
+
+## Mon Jun 24 12:27:26 EDT 2013
+
+Fixed the speed problem with PyTables: apparently the default chunkshape is
+still too large for the I/O buffer. Using row blocks of size 100 with
+medium compression level gives very good speeds and a 1.5GB file, compared to
+the 70GB file you would get with an uncompressed sparse UNIX file holding the
+raw NumPy binary array. Horray!
+
+The diameter code with graph\_tool is running faster than NetworkX (100K sources
+explored vs 57K in probably half to two thirds of the time), and so far the
+diameter is still stuck at 260.
