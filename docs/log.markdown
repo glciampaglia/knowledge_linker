@@ -1,10 +1,11 @@
 Project logbook
 ===============
 
-Somehow I figured out that instead of writing long, abstruse emails to my collaborators,
-it's simpler to write them here. 
+_Somehow I figured out that, for the purpose of recapping what I did every day,
+instead of addressing my collaborators with long, abstruse emails that they
+won't reply to, it's simpler to put everything here._
 
-## Tue Jun 18 18:52:27 EDT 2013
+### Tue Jun 18 18:52:27 EDT 2013
 
 The code for doing the maxmin transitive closure on the cyclical graphs works
 correctly and it's now running on the full dbpedia graph on Smithers. I took me
@@ -28,13 +29,13 @@ those SCCs are actually reachable, because then we don't save much by storing
 only the SCC root rather than the whole SCC, but my hunch is that most of them
 are probably not reachable (e.g. leaves of the DAG hierarchy). 
 
-## Wed Jun 19 14:01:12 EDT 2013
+### Wed Jun 19 14:01:12 EDT 2013
 
 Bad news. It still takes all the memory on smithers (a total of 144GB). I am
 going to compute the successors for 1000 at random and see what the size
 distribution of these sets is. 
 
-## Thu Jun 20 18:57:00 EDT 2013
+### Thu Jun 20 18:57:00 EDT 2013
 
 The analysis of the successors shows that, on a sample of 132K successor sets
 collected from starting the traversal at 1000 random source nodes, only a
@@ -68,7 +69,7 @@ and there are good savings even for the very big sets.
 
 I relaunched the closure script on the full graph. Keep fingers crossed!
 
-## Fri Jun 21 11:57:29 EDT 2013
+### Fri Jun 21 11:57:29 EDT 2013
 
 Unfortunately it did not work. The script took up all the memory on smithers.
 This made the tweet filtering process running on smithers crash at around 7.44
@@ -108,7 +109,7 @@ These are the results of diameter analysis on the full DBpedia graph:
 > Is the graph weakly connected? True
 > The number of connected components in the graph is 1
 
-## Sat Jun 22 22:53:33 EDT 2013
+### Sat Jun 22 22:53:33 EDT 2013
 
 I wrote a script for converting the adjacency matrix from NumPy format to
 PyTable's `CArray` but I had to give up because it was incredibly slow at
@@ -123,7 +124,7 @@ point -- quite a lot. Tried looking at alternative Python libraries, but
 graph\_tool doesn't have a decent way to load an adjacency matrix, and scipy's
 sparse graph routines do not seem to work properly. Maybe try iGraph?
 
-## Sun Jun 23 16:59:15 EDT 2013
+### Sun Jun 23 16:59:15 EDT 2013
 
 Today started compiling graph\_tool on smithers. Converted the adjancecy list
 (no weights) to GraphML format, with good results in terms of speed and and
@@ -136,7 +137,7 @@ Update: it compiled and I relaunched the diameter script. The code work in
 parallel out of the box, which was a pleasant surprise. Be careful about the
 priority, as it seemed to take all the CPUs and had to renice it immediately!
 
-## Mon Jun 24 12:27:26 EDT 2013
+### Mon Jun 24 12:27:26 EDT 2013
 
 Fixed the speed problem with PyTables: apparently the default chunkshape is
 still too large for the I/O buffer. Using row blocks of size 100 with
@@ -147,3 +148,20 @@ raw NumPy binary array. Horray!
 The diameter code with graph\_tool is running faster than NetworkX (100K sources
 explored vs 57K in probably half to two thirds of the time), and so far the
 diameter is still stuck at 260.
+
+Read [DBpedia2009](the DBpedia paper). Weird averaging for in-degree: should be
+46.25 for the mapping-based network if computed as number of edges over number
+of vertices. Instead they average only on the vertices with at least one
+incoming edge. So the figure should be larger than my estimate, and instead what
+they report is smaller (11.03)! The density is not so large, but need to check
+on the Newman if that level is OK for small-world networks. The node with the
+highest in-degree is that of the United States. Also, the in-degree distribution
+looks more like a log-normal, once you draw in the plot a straight line as a
+guide to the eye.
+
+## References
+
+[DBpedia2009]: http://dx.doi.org/10.1016/j.websem.2009.07.002
+
+
+
