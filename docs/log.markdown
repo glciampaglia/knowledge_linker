@@ -159,6 +159,10 @@ highest in-degree is that of the United States. Also, the in-degree distribution
 looks more like a log-normal, once you draw in the plot a straight line as a
 guide to the eye.
 
+Wrote a script to sample the pseudo-diameter of the graph and launched it on
+Lenny. Draws 10000 sources without replacement and computes the pseudo-diameter.
+So far stuck at D = 148, which is much smaller than 260.
+
 ## References
 
 [DBpedia2009]: http://dx.doi.org/10.1016/j.websem.2009.07.002
