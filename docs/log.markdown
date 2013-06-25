@@ -149,7 +149,7 @@ The diameter code with graph\_tool is running faster than NetworkX (100K sources
 explored vs 57K in probably half to two thirds of the time), and so far the
 diameter is still stuck at 260.
 
-Read [DBpedia2009](the DBpedia paper). Weird averaging for in-degree: should be
+Read [the DBpedia paper][DBpedia2009]. Weird averaging for in-degree: should be
 46\.25 for the mapping-based network if computed as number of edges over number
 of vertices. Instead they average only on the vertices with at least one
 incoming edge. So the figure should be larger than my estimate, and instead what
