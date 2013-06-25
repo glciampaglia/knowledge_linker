@@ -150,7 +150,7 @@ explored vs 57K in probably half to two thirds of the time), and so far the
 diameter is still stuck at 260.
 
 Read [DBpedia2009](the DBpedia paper). Weird averaging for in-degree: should be
-46.25 for the mapping-based network if computed as number of edges over number
+46\.25 for the mapping-based network if computed as number of edges over number
 of vertices. Instead they average only on the vertices with at least one
 incoming edge. So the figure should be larger than my estimate, and instead what
 they report is smaller (11.03)! The density is not so large, but need to check
@@ -162,6 +162,26 @@ guide to the eye.
 Wrote a script to sample the pseudo-diameter of the graph and launched it on
 Lenny. Draws 10000 sources without replacement and computes the pseudo-diameter.
 So far stuck at D = 148, which is much smaller than 260.
+
+### Tue Jun 25 17:45:33 EDT 2013
+
+The pseudo-diameter computed over 10^5 random sources (without replacement) is
+256\. I know already that this number is smaller than the actual diameter found
+so far by the full exhaustive search, which as of today is still at 260. Also,
+I went through the output and there were only 8 cases where the pseudo-diameter
+was > 200. Most cases are either 0, 1 or some number around 140.
+
+Wrote a script to create the macro-graph of the strongly connected components,
+that is, this graph has vertex for each SCC in the original graph and an edge
+between two nodes whether the corresponding SCCs are connected by at least one
+edge. I am storing the size of the SCC, as well as the number of links between
+nodes in the SCC, on the nodes using a BGL `PropertyMap` (BGL = Boost Graph
+Library); the edges are instead weighted by the number of between-components
+links. I'll try to visualize this graph or, as Sandro suggested, list the
+components that have the highest value of the product of the out-degree with the
+in-degree, to see if it is true that there is a bow-tie structure. Should also
+compute the percentage of nodes in the largest component, both directed and
+undirected. Must read the chapter about largest components in the Newman.
 
 ## References
 
