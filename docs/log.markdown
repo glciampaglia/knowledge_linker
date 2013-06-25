@@ -186,6 +186,7 @@ undirected. Must read the chapter about largest components in the Newman.
 ## References
 
 [DBpedia2009]: http://dx.doi.org/10.1016/j.websem.2009.07.002
+    "DBpedia - A crystallization point for the Web of Data"
 
 
 
