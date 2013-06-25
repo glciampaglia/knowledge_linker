@@ -163,6 +163,8 @@ Wrote a script to sample the pseudo-diameter of the graph and launched it on
 Lenny. Draws 10000 sources without replacement and computes the pseudo-diameter.
 So far stuck at D = 148, which is much smaller than 260.
 
+[DBpedia2009]: http://dx.doi.org/10.1016/j.websem.2009.07.002 
+
 ### Tue Jun 25 17:45:33 EDT 2013
 
 The pseudo-diameter computed over 10^5 random sources (without replacement) is
@@ -182,8 +184,3 @@ components that have the highest value of the product of the out-degree with the
 in-degree, to see if it is true that there is a bow-tie structure. Should also
 compute the percentage of nodes in the largest component, both directed and
 undirected. Must read the chapter about largest components in the Newman.
-
-## References
-
-.. [DBpedia2009]: http://dx.doi.org/10.1016/j.websem.2009.07.002
-    "DBpedia - A crystallization point for the Web of Data"
