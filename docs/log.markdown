@@ -184,3 +184,19 @@ components that have the highest value of the product of the out-degree with the
 in-degree, to see if it is true that there is a bow-tie structure. Should also
 compute the percentage of nodes in the largest component, both directed and
 undirected. Must read the chapter about largest components in the Newman.
+
+### Wed Jun 26 22:58:38 EDT 2013
+
+The script that I had launched on Lenny for computing the SCC graph (which, btw,
+according to Wikipedia is called the *condensation* of the graph) got first
+slowed down tonight by a job launched by Onur, and later unexplicably killed. In
+the meanwhile, Smithers, on which the other job for completely enumerating the
+diameter of the graph was running, has been reported to be unresponsive, and
+has been reboot by Bruce, since the data collection from twitter was likely
+down. Bummer. 
+
+Spoke to Sandro, who suggested to sample a subgraph of the condensation, and
+visualize it, just to get an idea of how the graph looks like. I illustrated him
+the idea of computing the ultrametric (actually, any) closure with a dynamic
+programming scheme, and he said it makes sense to him. Just need to find some
+time to implement it before I leave for Switzerland.
