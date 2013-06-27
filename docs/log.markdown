@@ -200,3 +200,19 @@ visualize it, just to get an idea of how the graph looks like. I illustrated him
 the idea of computing the ultrametric (actually, any) closure with a dynamic
 programming scheme, and he said it makes sense to him. Just need to find some
 time to implement it before I leave for Switzerland.
+
+### Thu Jun 27 19:12:00 EDT 2013
+
+Started implementing the dynamic programming scheme. We had a guest today so
+could not do much besides jotting down some pseudo-code and erasing the old code
+and starting the general structure of the function. The compressed sparse graph
+routines package from SciPy (`scipy.sparse.csgraph`) has a graph for the
+connected components, which is implemented in C++, so I am gonna use that
+directly. Also, wrote a script for dumping to disk the adjacency matrix of the
+SCC graph -- the *condensation*, though I do not like the term and will probably
+stop using it. Launched it with an ETA of 30' (thanks to the `progressbar`
+package!). In the meanwhile, the `graph-tool`-based script that I relaunched
+yesterday night is still halfway through. Funny how `graph_tool`, which is a
+super-optimized package, incurs in these silly bottlenecks. The classic problem
+with one-man projects is that if you don't fit in the workflow of the creator
+then the software becomes almost useless.
