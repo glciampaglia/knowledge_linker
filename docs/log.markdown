@@ -216,3 +216,49 @@ yesterday night is still halfway through. Funny how `graph_tool`, which is a
 super-optimized package, incurs in these silly bottlenecks. The classic problem
 with one-man projects is that if you don't fit in the workflow of the creator
 then the software becomes almost useless.
+
+### Fri Jun 28 21:03:43 EDT 2013
+
+Last day before my Summer break. Plotted the distribution of between
+in/out-degree and within component degree of the graph of the strongly connected
+components, as well as the standard in/out-degree distribution of the original
+graph. Let's start with the original graph. The out-degree looks Poisson with
+average equal to ten (10) neighbors. This make all in all sense, considered that
+the number of attributes of each infobox does not vary dramatically, and that
+the depth of the DBpedia ontology is not huge. The CDF of the in-degree,
+instead, seem to scale down straight for almost seven orders of magnitude with a
+slope of -1, which would correspond to a power-law exponent of -2 -- if it is
+actually a power-law at all, of course. This is interesting but sounds not
+terribly surprising if one considers that the is-a graph is already closed. But
+still, even adding the mapping-based properties the scaling looks fairly
+straight, so both I and Sandro were intrigued by it.
+
+When we look at the SCCs, things change quite a bit. I looked at three
+quantities: the first two are the total between-component in- and out-degree,
+that is, the count of all edges spanning different components, and the
+within-component degree, that is, the count of all edges that connect nodes
+within the same component. The latter quantity is bounded below by the size of
+the component itself, since you need at least N edges to close a cycle among N
+nodes, and is the same if one counts the incoming or outgoing edges, therefore I
+call it simply "degree". The result is that, while the between-component
+in-degree doesn't change much, the between-component out-degree increases in
+what looks like a multi-modal distribution up to roughly k = 10^4, plus a single
+observation at roughly 10^6, that is, a "monster" component with something
+roughly like 1M out edges to other components. The within-component in-degree
+scales somewhat similarly to the out-degree, again with a single data point at
+roughly 900K within component edges. On the other side of the range, there are
+also other interesting things going on at the head of the distribution, but
+anyway the first question was obviously to see if these three outliers, one per
+distribution, actually corresponded to the same component. I made a scatter plot
+in which all the three quantities are related, using the between component
+degrees as x/y coordinates, and the within component degree as the size of the
+points, and the plot confirmed this intuition!
+
+So we have a big component (which nonetheless amounts to just a 3% of the total
+number of nodes), that works as a big exchange node. A very small bowtie, it
+seems, though I would need more analysis to see if that's effectively the case.
+Also, there a lot of nodes with in-degree equal to zero or one, which end up
+being trivial components, and that's why the trick of storing only the component
+roots was not saving us much memory. It would be good to understand at what
+level of the is-a hierarchy these guys connect, just to make sure that they
+don't correspond to one or more big sequence of edges (a filament?).
