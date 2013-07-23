@@ -1,9 +1,14 @@
 Project logbook
 ===============
 
-_Somehow I figured out that, for the purpose of recapping what I did every day,
-instead of addressing my collaborators with long, abstruse emails that they
-won't reply to, it's simpler to put everything here._
+_I frequently have to send updates to Johan, Luis, Fil, and Sandro about my
+progresses with the project. Since I cannot usually meet with all of them at
+once, I used to send, every few days, an email with the updates to everyone. The
+result was that I would often send long, abstruse messages, full of technical
+details that made sense only to me. I was in fact trying to recap for myself
+what I had done every day. So eventually I just figured out that it would be simpler
+to write everything in a log book, and send them only short updates. That's why
+this file exists._
 
 ### Tue Jun 18 18:52:27 EDT 2013
 
@@ -262,3 +267,35 @@ being trivial components, and that's why the trick of storing only the component
 roots was not saving us much memory. It would be good to understand at what
 level of the is-a hierarchy these guys connect, just to make sure that they
 don't correspond to one or more big sequence of edges (a filament?).
+
+## Mon Jul 22 22:31:56 EDT 2013
+
+Back from vacations. Had a phone conversation with Mo Moadeli from
+[DEEMOK](http://deemok.com), a NYC-based startup that is trying to build a
+platform for political discussions that would feature a number of automatic
+fact-checking tools. He sounded very interested to the stuff I am doing. Will
+follow-up with the rest of his team next week and try to see if, besides the
+obvious relatedness of what we are both trying to do, there are real
+opportunities for mutual collaborations with them.
+
+Organized a nice birthday party, really a lunch, back in Rome, for a bunch of
+friends. Trying to describe what I am doing in this project to them, and today
+to Mo, I came to the conclusion that there is no point in trying the compute the
+maxmin distance over all possible pairs (that is, the all-pairs shortest
+bottleneck path, even though this applies, as always to any kind of metric, not
+just the ultra-metric). What's really interesting for us, in fact, is to see if
+certain statements have a measure of truthiness at all, and to do this we don't
+need to compute the whole closure of the graph, but just the maxmin similarity
+for candidate statements vs average statements. Also, more than the actual
+values, it would be more interesting to see how the values change when you start
+to remove edges, the idea of robustness Luis was talking about. If I start to
+disconnect the graph, I am preventing an hypothetical agent from using certain
+connections when trying to "resolve" the statement. Statements such as _X is a
+Y_ could have a higher truthiness if, as the number of removed edges decreases,
+their similarity decreases slower than the average. 
+
+From the technical point of view. The DFS would just work, without having the
+need of implementing the dynamic programming algorithm, which requires to keep a
+huge table either in memory or on disk. I could even use a cache to avoid from
+wasting time recomputing over and over the same intermediate results.
+
