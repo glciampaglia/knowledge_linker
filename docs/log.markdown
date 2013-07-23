@@ -53,24 +53,28 @@ we encountered 132K SCCs, is interesting in itself.
 
 My hypothesis is that the network has a huge bowtie structure, and that there is
 a component (perhaps a huge one), that: 1) has a large set of successors, and 2)
-has a large set of predecessors. That means that, for the exception of the
-themselves, many SCCs share the same set of successors. This intuition was
-confirmed by looking at the set themselves. I dumped them to a text file and
-looked at the largest sets. They are indeed identical (again, with the exception
-of itself, that is for any vertex/component $v$, $v \in succ(v)$).
+has a large set of predecessors. That means that there is a lot of overlap
+between the successor sets of many SCCs. This intuition was confirmed by looking
+at the set themselves. I dumped them to a text file and looked at the largest
+sets. They are indeed identical (again, with the exception of itself, that is
+for any vertex/component $v$, $v \in succ(v)$).
 
 If this is the case, then there is room for reducing the usage of memory. I
-implemented a Python dictionary class that stores references to values, without
-keeping duplicates. I then modified the code of `transitive_closure` so that now
-the successors set of a SCC root does not contain itself and integrated the new
-dictionary class. I did a test running the same successor sets sampling code,
-but starting from 100 sources only (it takes less time than with 1000 and I had
-tested that too with the old code). The result is that roughly 124K SCC are
-encountered and the same number of successor sets is collected, but now only
-3200 sets are effectively stored in memory, i.e. it stores 97% less set objects
-than before. How this translates to normal memory is difficult to compute, but I
-plotted the number of duplicates as a function of the cardinality of the sets
-and there are good savings even for the very big sets. 
+implemented a Python dictionary class that stores references to values, instead
+of values, that is, when two objects have the same value, only one is
+effectively stored and the second is stored as a reference to the first. I then
+modified the code of `transitive_closure` so that now the set of successors of a
+SCC (really, its root) does not contain the root itself (for the above reason
+that the successor sets of two different SCCs will at least differ in the SCC
+themselves), and integrated the new dictionary class. I did a test running the
+same successor sets sampling code, but starting from 100 sources only (it takes
+less time than with 1000 and I had tested that too with the old code). The
+result is that roughly 124K SCC are encountered and the same number of successor
+sets is collected, but now only 3200 sets are effectively stored in memory, i.e.
+it stores 97% less set objects than before. How this translates to normal memory
+is difficult to compute, but I plotted the number of duplicates as a function of
+the cardinality of the sets and there are good savings even for the very big
+sets. 
 
 I relaunched the closure script on the full graph. Keep fingers crossed!
 
@@ -109,10 +113,10 @@ giving it a look!
 
 These are the results of diameter analysis on the full DBpedia graph:
 
-> Is the graph a strongly connected component? False
-> The number of connected components in the graph is 2873970
-> Is the graph weakly connected? True
-> The number of connected components in the graph is 1
+    Is the graph a strongly connected component? False
+    The number of connected components in the graph is 2873970
+    Is the graph weakly connected? True
+    The number of connected components in the graph is 1
 
 ### Sat Jun 22 22:53:33 EDT 2013
 
@@ -124,19 +128,19 @@ edges/s), while with the full matrix it drops to just 4 edges/s. Written a post
 on pytables-users, let's see if I get a reply.
 
 Also, killed the networkx script for computing the diameter: after 24h it had
-covered 57K source! The maximum distance was nonetheless equal to *260* at that
-point -- quite a lot. Tried looking at alternative Python libraries, but
-graph\_tool doesn't have a decent way to load an adjacency matrix, and scipy's
+covered only 57K source! The maximum distance was nonetheless equal to *260* at
+that point -- quite a lot. Tried looking at alternative Python libraries, but
+graph-tool doesn't have a decent way to load an adjacency matrix, and scipy's
 sparse graph routines do not seem to work properly. Maybe try iGraph?
 
 ### Sun Jun 23 16:59:15 EDT 2013
 
-Today started compiling graph\_tool on smithers. Converted the adjancecy list
-(no weights) to GraphML format, with good results in terms of speed and and
-memory occupancy, though I believe most of the speedup comes from my using of
-the laptop, which is equipped with an SSD disk. If everything works out on
-Lenny, I will pimp up the diameter script to compute it in parallel with
-graph\_tool though I will probably have to install OpenMP as well. 
+Today started compiling graph-tool on smithers. Converted the adjancecy list
+(no weights) to GraphML format, with good results in terms of speed and memory
+occupancy, though I believe most of the speedup comes from my using of the
+laptop, which is equipped with an SSD disk. If everything works out on Lenny, I
+will pimp up the diameter script to compute it in parallel with graph-tool
+though I will probably have to install OpenMP as well. 
 
 Update: it compiled and I relaunched the diameter script. The code work in
 parallel out of the box, which was a pleasant surprise. Be careful about the
@@ -145,24 +149,24 @@ priority, as it seemed to take all the CPUs and had to renice it immediately!
 ### Mon Jun 24 12:27:26 EDT 2013
 
 Fixed the speed problem with PyTables: apparently the default chunkshape is
-still too large for the I/O buffer. Using row blocks of size 100 with
-medium compression level gives very good speeds and a 1.5GB file, compared to
-the 70GB file you would get with an uncompressed sparse UNIX file holding the
+still too large for the I/O buffer. Using row blocks of size 100 with medium
+compression level gives very good speeds and results in a 1.5GB file, compared
+to the 70GB file you would get with an uncompressed sparse UNIX file holding the
 raw NumPy binary array. Horray!
 
-The diameter code with graph\_tool is running faster than NetworkX (100K sources
+The diameter code with graph-tool is running faster than NetworkX (100K sources
 explored vs 57K in probably half to two thirds of the time), and so far the
 diameter is still stuck at 260.
 
-Read [the DBpedia paper][DBpedia2009]. Weird averaging for in-degree: should be
-46\.25 for the mapping-based network if computed as number of edges over number
-of vertices. Instead they average only on the vertices with at least one
-incoming edge. So the figure should be larger than my estimate, and instead what
-they report is smaller (11.03)! The density is not so large, but need to check
-on the Newman if that level is OK for small-world networks. The node with the
-highest in-degree is that of the United States. Also, the in-degree distribution
-looks more like a log-normal, once you draw in the plot a straight line as a
-guide to the eye.
+Read [the DBpedia paper][DBpedia2009]. Weird averaging for in-degree: my
+estimate was 46\.25 for the mapping-based network (computed as number of edges
+over number of vertices). They chose instead to compute the average only on
+vertices with at least one incoming edge. Thus the value should be larger than
+my estimate, and instead they report a smaller figure (11.03)! The density is not
+so large, but need to check on the Newman if that level is OK for small-world
+networks. The node with the highest in-degree is that of the United States.
+Also, the in-degree distribution looks more like a log-normal, once you draw in
+the plot a straight line as a guide to the eye.
 
 Wrote a script to sample the pseudo-diameter of the graph and launched it on
 Lenny. Draws 10000 sources without replacement and computes the pseudo-diameter.
@@ -179,16 +183,17 @@ I went through the output and there were only 8 cases where the pseudo-diameter
 was > 200. Most cases are either 0, 1 or some number around 140.
 
 Wrote a script to create the macro-graph of the strongly connected components,
-that is, this graph has vertex for each SCC in the original graph and an edge
-between two nodes whether the corresponding SCCs are connected by at least one
-edge. I am storing the size of the SCC, as well as the number of links between
-nodes in the SCC, on the nodes using a BGL `PropertyMap` (BGL = Boost Graph
-Library); the edges are instead weighted by the number of between-components
-links. I'll try to visualize this graph or, as Sandro suggested, list the
-components that have the highest value of the product of the out-degree with the
-in-degree, to see if it is true that there is a bow-tie structure. Should also
-compute the percentage of nodes in the largest component, both directed and
-undirected. Must read the chapter about largest components in the Newman.
+that is, the graph whose nodes are the SCC of the original graph and in which
+there is an edge between two nodes if the corresponding SCCs are connected by at
+least one edge. I am storing the size of the SCC, as well as the number of links
+between nodes in the SCC, on the nodes using a BGL `PropertyMap` (BGL = Boost
+Graph Library); the edges are instead weighted by the number of
+between-components links. I'll try to visualize this graph or, as Sandro
+suggested, list the components that have the highest value of the product of the
+out-degree with the in-degree, to see if it is true that there is a bow-tie
+structure. Should also compute the percentage of nodes in the largest component,
+both directed and undirected. Must read the chapter about largest components in
+the Newman.
 
 ### Wed Jun 26 22:58:38 EDT 2013
 
@@ -215,49 +220,52 @@ routines package from SciPy (`scipy.sparse.csgraph`) has a graph for the
 connected components, which is implemented in C++, so I am gonna use that
 directly. Also, wrote a script for dumping to disk the adjacency matrix of the
 SCC graph -- the *condensation*, though I do not like the term and will probably
-stop using it. Launched it with an ETA of 30' (thanks to the `progressbar`
-package!). In the meanwhile, the `graph-tool`-based script that I relaunched
-yesterday night is still halfway through. Funny how `graph_tool`, which is a
-super-optimized package, incurs in these silly bottlenecks. The classic problem
-with one-man projects is that if you don't fit in the workflow of the creator
-then the software becomes almost useless.
+stop using it. Launched it with an ETA of 30' (estimate thanks to the
+`progressbar` package!). In the meanwhile, the graph-tool script (the one for
+the SCC graph) that I relaunched yesterday night is still halfway through. Funny
+how `graph_tool`, which is a super-optimized package, incurs in these silly
+bottlenecks. The classic problem with one-man projects is that if you don't fit
+in the workflow of the creator then the software becomes almost useless.
 
 ### Fri Jun 28 21:03:43 EDT 2013
 
-Last day before my Summer break. Plotted the distribution of between
-in/out-degree and within component degree of the graph of the strongly connected
-components, as well as the standard in/out-degree distribution of the original
-graph. Let's start with the original graph. The out-degree looks Poisson with
-average equal to ten (10) neighbors. This make all in all sense, considered that
-the number of attributes of each infobox does not vary dramatically, and that
-the depth of the DBpedia ontology is not huge. The CDF of the in-degree,
-instead, seem to scale down straight for almost seven orders of magnitude with a
-slope of -1, which would correspond to a power-law exponent of -2 -- if it is
-actually a power-law at all, of course. This is interesting but sounds not
-terribly surprising if one considers that the is-a graph is already closed. But
-still, even adding the mapping-based properties the scaling looks fairly
-straight, so both I and Sandro were intrigued by it.
+Last day before my Summer break. Plotted various quantities related to node
+degree for both the original and the SCC graph. Let's start with the original
+graph. 
 
-When we look at the SCCs, things change quite a bit. I looked at three
-quantities: the first two are the total between-component in- and out-degree,
-that is, the count of all edges spanning different components, and the
-within-component degree, that is, the count of all edges that connect nodes
-within the same component. The latter quantity is bounded below by the size of
-the component itself, since you need at least N edges to close a cycle among N
-nodes, and is the same if one counts the incoming or outgoing edges, therefore I
-call it simply "degree". The result is that, while the between-component
-in-degree doesn't change much, the between-component out-degree increases in
-what looks like a multi-modal distribution up to roughly k = 10^4, plus a single
-observation at roughly 10^6, that is, a "monster" component with something
-roughly like 1M out edges to other components. The within-component in-degree
-scales somewhat similarly to the out-degree, again with a single data point at
-roughly 900K within component edges. On the other side of the range, there are
-also other interesting things going on at the head of the distribution, but
-anyway the first question was obviously to see if these three outliers, one per
-distribution, actually corresponded to the same component. I made a scatter plot
-in which all the three quantities are related, using the between component
-degrees as x/y coordinates, and the within component degree as the size of the
-points, and the plot confirmed this intuition!
+For the original graph, I plotted the in- and out-degree distribution. The
+out-degree looks Poisson with average equal to ten (10) neighbors. This make all
+in all sense, considered that the number of attributes of each infobox does not
+vary dramatically, and that the depth of the DBpedia ontology, which is an upper
+bound to the number of additional outgoing links added by the closure of the
+*is-a* graph, is not huge. The CDF of the in-degree, instead, seems to scale for
+almost seven orders of magnitude with a slope of -1, which would correspond to a
+power-law exponent of -2 -- if it is actually a power-law at all, of course.
+This is interesting but sounds not terribly surprising if one considers that the
+is-a graph is already closed. But still, even adding the mapping-based
+properties the scaling looks fairly straight, so both I and Sandro were
+intrigued by it.
+
+For the SCC graph, I plotted three quantities: the first two are the total
+between-component in- and out-degree, that is, the count of all edges spanning
+different components, and the within-component degree, that is, the count of all
+edges that connect nodes within the same component. Compared with the previous
+plots, things change quite a bit. The latter quantity is bounded below by the
+size of the component itself, since you need at least N edges to close a cycle
+among N nodes, and is the same if one counts the incoming or outgoing edges,
+therefore I call it simply "degree". The result is that, while the
+between-component in-degree doesn't change much, the between-component
+out-degree increases in what looks like a multi-modal distribution up to roughly
+k = 10^4, plus a single observation at roughly 10^6, that is, a "monster"
+component with something roughly like 1M out edges to other components. The
+within-component in-degree scales somewhat similarly to the out-degree, again
+with a single data point at roughly 900K within component edges. On the other
+side of the range, there are also other interesting things going on at the head
+of the distribution, but anyway the first question was obviously to see if these
+three outliers, one per distribution, actually corresponded to the same
+component. I made a scatter plot in which all the three quantities are related,
+using the between component degrees as x/y coordinates, and the within component
+degree as the size of the points, and the plot confirmed this intuition!
 
 So we have a big component (which nonetheless amounts to just a 3% of the total
 number of nodes), that works as a big exchange node. A very small bowtie, it
@@ -296,6 +304,15 @@ their similarity decreases slower than the average.
 
 From the technical point of view. The DFS would just work, without having the
 need of implementing the dynamic programming algorithm, which requires to keep a
-huge table either in memory or on disk. I could even use a cache to avoid from
+huge table either in memory or on disk. I could even use a cache to avoid
 wasting time recomputing over and over the same intermediate results.
 
+## Tue Jul 23 17:42:09 EDT 2013
+
+Today went again through these notes, just to get back into the problem, and it
+worked great. Keeping these notes is proving to be useful, at last! Spent most
+of the time today following the summer interns and wrote a simple reverse
+geocoding script for Bryce, so could not devote much time to implementing
+yesterday's ideas. A tornardo struck south of the city around 2.30pm and we
+all had to go downstair and wait 20' until the emergence was over. There do not
+seem to be any big damages, at least from what I see from my office window.
