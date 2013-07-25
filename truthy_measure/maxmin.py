@@ -1,3 +1,68 @@
+'''
+maxmin
+======
+
+This module provides functions to compute the max-min (i.e. ultra-metric)
+transitive closure on a similarity (weights $\in [0,1]$) graph. These functions
+compute the closure on the whole graph. The notion of max-min similarity is akin
+to bottleneck capacity, and these functions can thus be seen used for solving
+the all-pairs shortest bottleneck path problem (APSBP).
+
+There are two classes of algorithms implemented in this module: approaches based
+on matrix multiplication, and graph traversal algorithms. Matrix multiplication
+methods are guaranteed to converge only on undirected graphs or on directed acyclical
+graphs (DAG). For directed graphs with cycles you can use a graph traversal
+algorithms.
+
+## Module contents
+
+### Matrix multiplication methods
+* maxmin
+    Max-min transitive closure via matrix multiplication, sequential version.
+    Two implementation are provided, depending on whether a regular numpy array
+    (or matrix), or a scipy sparse matrix is passed. See below `_maxmin_naive`
+    and `_maxmin_sparse`.
+* pmaxmin
+    Max-min transitive closue via matrix multiplication, parallel version
+    (process-based). Uses maxmin in parallel.
+* _maxmin_naive
+    Basic (i.e. O(N^3)) matrix multiplication. This function exists only for
+    testing purpose. A fast Cython implementation is used instead.
+* _maxmin_sparse
+    Matrix multiplication on compressed sparse row matrix. This function exists
+    only for testing purpose. A fast Cython implementation is used instead.
+
+### Graph traversal methods
+* closure_cycles_recursive
+    Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
+    (1994). Compute (strongly) connected components and successors sets.
+    Recursive implementation. For larger graphs, use the iterative version
+    `closure_cycles`. Note that this function has a significant memory usage and
+    cannot be used on large graphs.
+* closure_cycles
+    Iterative version of the above.
+* maxmin_closure_cycles_recursive
+    Max-min transitive closure, based on depth-first traversal with pruning.
+    Pruning is performed using the information on the successors of a node,
+    computed with `closure_cycles_recursive`.
+* _maxmin_closure_cycles_recursive
+    This is the actual function that computes the closure, and returns an
+    iterator over all node pairs with non-zero weight.
+* maxmin_closure_cycles
+    Same as `maxmin_closure_cycles_recursive`, except that depth-first traversal
+    is implemented iteratively.
+* _maxmin_closure_cycles
+    Actual implementation of `maxmin_closure_cycles`. Returns an iterator over
+    all non-zero weight node pairs.
+
+### Helper functions
+* _maximum_csr_safe
+    Element-wise maximum for CSR sparse matrices.
+* _allclose_csr
+    Replacement of `numpy.allclose` for CSR sparse matrices.
+'''
+
+
 from __future__ import division
 import os
 import sys
@@ -190,7 +255,7 @@ def _maxmin_closure_cycles_recursive(A):
     maxval = np.inf
     A = sp.lil_matrix(A)
     root, succ = closure_cycles(A)
-    _ndor = np.ndarray.__or__ # element-wise or (x|y)
+    _ndor = np.ndarray.__or__ # element-wise OR: (x|y)
     _rooteq = root.__eq__ 
     for source in xrange(A.shape[0]):
         for target in _succ(source):
@@ -215,8 +280,8 @@ def maxmin_closure_cycles(A):
     Returns
     -------
     AT : 2-D array
-        the max-min, or ultra-metric transitive closure of A. This is also equal
-        to the all-pairs bottleneck paths. Zero entries correspond to
+        the max-min, or ultra-metric, transitive closure of A. This is also equal
+        to the all-pairs bottleneck paths. Entries equal to zero correspond to
         disconnected pairs, i.e. null capacities.
 
     Notes
@@ -227,7 +292,7 @@ def maxmin_closure_cycles(A):
     `target` among its successors is entered. Whenever the target node is
     reached, the minimum weight found along the path is added to a list of
     minima. When the DFS search tree is exhausted, the maximum weight is
-    extract. The successors are computed using `closure_cycles`.
+    extracted. The successors are computed using `closure_cycles`.
     '''
     AT = np.zeros(A.shape)
     for row, col, weight in _maxmin_closure_cycles(A):
