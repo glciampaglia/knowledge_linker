@@ -16,22 +16,6 @@ algorithms.
 
 ## Module contents
 
-### Matrix multiplication methods
-* maxmin
-    Max-min transitive closure via matrix multiplication, sequential version.
-    Two implementation are provided, depending on whether a regular numpy array
-    (or matrix), or a scipy sparse matrix is passed. See below `_maxmin_naive`
-    and `_maxmin_sparse`.
-* pmaxmin
-    Max-min transitive closue via matrix multiplication, parallel version
-    (process-based). Uses maxmin in parallel.
-* _maxmin_naive
-    Basic (i.e. O(N^3)) matrix multiplication. This function exists only for
-    testing purpose. A fast Cython implementation is used instead.
-* _maxmin_sparse
-    Matrix multiplication on compressed sparse row matrix. This function exists
-    only for testing purpose. A fast Cython implementation is used instead.
-
 ### Graph traversal methods
 * closure_cycles_recursive
     Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
@@ -55,13 +39,30 @@ algorithms.
     Actual implementation of `maxmin_closure_cycles`. Returns an iterator over
     all non-zero weight node pairs.
 
+### Matrix multiplication methods
+* productclosure
+    Max-min transitive closure via matrix multiplication, user function. This
+    function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
+    compute the transitive closure sequentially or in parallel, respectively.
+* maxmin
+    Max-min matrix multiplication, sequential version. Two implementation are
+    provided, depending on whether a regular numpy array (or matrix), or a scipy
+    sparse matrix is passed. See below `_maxmin_naive` and `_maxmin_sparse`.
+* pmaxmin
+    Max-min matrix multiplication, parallel (process-based) version.
+* _maxmin_naive
+    Basic (i.e. O(N^3)) matrix multiplication. This function exists only for
+    testing purpose. A fast Cython implementation is used instead.
+* _maxmin_sparse
+    Matrix multiplication on compressed sparse row matrix. This function exists
+    only for testing purpose. A fast Cython implementation is used instead.
+
 ### Helper functions
 * _maximum_csr_safe
     Element-wise maximum for CSR sparse matrices.
 * _allclose_csr
     Replacement of `numpy.allclose` for CSR sparse matrices.
 '''
-
 
 from __future__ import division
 import os
@@ -84,7 +85,7 @@ from .cmaxmin import c_maximum_csr # see below for other imports
 # the indices array has dtype float64. This happens intermittently. In the
 # meanwhile, just ignore it.
 
-warnings.filterwarnings('ignore', 
+warnings.filterwarnings('ignore',
         message='.*',
         module='scipy\.sparse\.compressed.*',
         lineno=122)
@@ -97,107 +98,6 @@ def _showwarning(message, category, filename, lineno, line=None):
     print >> sys.stderr, '{}:{}: {}: {}'.format(filename, lineno, warning, message)
 
 warnings.showwarning = _showwarning
-
-# Global variables each worker needs
-
-_indptr = None
-_indices = None
-_data = None
-_A = None
-
-# Each worker process is initialized with this function
-
-def _init_worker(indptr, indices, data, shape):
-    '''
-    See `pmaxmin`. This is the worker initialization function.
-    '''
-    global _indptr, _indices, _data, _A
-    _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
-    _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
-    _data = np.frombuffer(data.get_obj())
-    _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
-
-def _maxmin_worker(a_b):
-    '''
-    See `pmaxmin`. This is the map function each worker executes
-    '''
-    global _A
-    a, b = a_b
-    # return also the first index to help re-arrange the result
-    return maxmin(_A, a, b)
-
-# Parallel version
-
-# TODO switch from processes to threads, refactor the productclosure, move to
-# Cython and release the GIL like this:
-#
-# with nogil:
-#   <do stuff>
-def pmaxmin(A, splits=None, nprocs=None):
-    '''
-    See `maxmin`. Parallel version. Splits the rows of A in even intervals and
-    distribute them to a pool of workers. 
-
-    Parameters
-    ----------
-    A : array_like
-        a 2D array, matrix, or CSR matrix representing an NxN adjacency matrix
-    splits : integer
-        split the rows of A in equal intervals. If not provided, each worker
-        will be assigned exactly an interval. If `split` is not an integer
-        divisor of the number of rows of A, the last interval will be equal to
-        the remainder of the integer division. 
-    nprocs : integer
-        number of workers to spawn.
-
-    Returns
-    -------
-    maxmin : `scipy.sparse.csr_matrix`
-        The maxmin composition of A with itself. See `maxmin`.
-    '''
-    N = A.shape[0]
-    if nprocs is None:
-        nprocs = cpu_count()
-
-    # check splits
-    if splits is None:
-        if N > nprocs:
-            splits = nprocs
-        else:
-            splits = N
-    else:
-        if not isinstance(splits, int):
-            raise TypeError('expecting an integer number of splits')
-        if splits > N:
-            raise ValueError('too many splits for %d rows: %d' % (N, splits))
-    if not sp.isspmatrix_csr(A):
-        A = sp.csr_matrix(A)
-
-    chunk_size = int(np.ceil(N / splits))
-    breaks = [(i, min(i + chunk_size, N)) for i in xrange(0, N, chunk_size)]
-
-    # Wrap the indptr/indices and data arrays of the CSR matrix into shared
-    # memory arrays and pass them to the initialization function of the workers
-    # NOTE: this introduces overhead, as it copies each array to a new memory
-    # location.
-    indptr = Array(c_int, A.indptr)
-    indices = Array(c_int, A.indices)
-    data = Array(c_double, A.data)
-    initargs = (indptr, indices, data, A.shape)
-
-    # create the pool; this will initialize the workers with the shared memory
-    # arrays
-    pool = Pool(processes=nprocs, initializer=_init_worker, initargs=initargs)
-
-    with closing(pool):
-
-        # call map, reassemble result
-        chunks = pool.map(_maxmin_worker, breaks)
-        AP = sp.vstack(chunks).tocsr()
-
-    # wait for worker processes to terminate
-    pool.join()
-    return AP
 
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
@@ -231,7 +131,7 @@ def _maxmin_closure_cycles_recursive(A):
         else: # different SCC, check if root of b in the set of succ SCC roots
             return root[b] in succ[root[a]]
      # the full successors set
-    def _succ(node): 
+    def _succ(node):
         r = root[node]
         idx = root == r # nodes in the same SCC of node
         for s in succ[r]: # roots of reachable SCCs other than node's own SCC
@@ -256,7 +156,7 @@ def _maxmin_closure_cycles_recursive(A):
     A = sp.lil_matrix(A)
     root, succ = closure_cycles(A)
     _ndor = np.ndarray.__or__ # element-wise OR: (x|y)
-    _rooteq = root.__eq__ 
+    _rooteq = root.__eq__
     for source in xrange(A.shape[0]):
         for target in _succ(source):
             explored = defaultdict(bool)
@@ -285,7 +185,7 @@ def maxmin_closure_cycles(A):
         disconnected pairs, i.e. null capacities.
 
     Notes
-    ----- 
+    -----
     For each source, and for each target in the successors of the source, this
     function performs a depth-first search of target, propagating the minimum
     weight along the DFS branch, and pruning whenever a node that does not have
@@ -324,7 +224,7 @@ def _maxmin_closure_cycles(A):
     A = sp.lil_matrix(A)
     root, succ = closure_cycles(A)
     _ndor = np.ndarray.__or__ # element-wise or (x|y)
-    _rooteq = root.__eq__ 
+    _rooteq = root.__eq__
     for source in xrange(A.shape[0]):
         for target in _succ(source):
             explored = defaultdict(bool)
@@ -351,7 +251,7 @@ def _maxmin_closure_cycles(A):
                         dfs_stack.append((neighbor, min_weight))
                     break # break to visit neighbor
                 # node has no neighbors, or all outgoing edges already explored
-                if backtracking: 
+                if backtracking:
                     dfs_stack.pop()
             if len(weights):
                 yield (source, target, max(weights))
@@ -364,11 +264,11 @@ def closure_cycles_recursive(adj, sources=None):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
     implementation. See `closure_cycles` for more details.
-    
+
     Note
     ----
     This implementation is not suited for large graphs, as it will likely reach
-    the maximum recursion depth and throw a RuntimeError. 
+    the maximum recursion depth and throw a RuntimeError.
     '''
     global _dfs_order
     _dfs_order = 0
@@ -407,7 +307,7 @@ def closure_cycles_recursive(adj, sources=None):
                         _update_succ(node, *succ[comp_node])
                         succ[comp_node] = succ[node] # ref copy only
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
-                        break 
+                        break
             else:
                 in_scc[node] = True
         else:
@@ -563,19 +463,19 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
     A : array_like
         an NxN adjacency matrix. Can be either sparse or dense.
     parallel : bool
-        if True, the parallel maxmin is used. 
+        if True, the parallel maxmin is used.
     maxiter  : integer
         maximum number of iterations for the closure loop. Will warn if the
         maximum number of iterations is reached without convergence.
     quiet : bool
-        if True, will not print the current time at each iteration. 
-    dumpiter : bool 
+        if True, will not print the current time at each iteration.
+    dumpiter : bool
         if True, will dump to file `closure_<iter>.npy` the intermediate matrix
         computed at each iteration.
 
-    Additional keyword arguments are passed to p/maxmin. 
+    Additional keyword arguments are passed to p/maxmin.
 
-    Returns 
+    Returns
     -------
     closure : array_like
         The max-min, or ultra-metric, closure. This is also equal to the
@@ -594,7 +494,7 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         _AP = AP.tocoo()
         fn = 'closure_%d.npy' % iterations
         np.save(fn, np.fromiter(izip(_AP.row, _AP.col, _AP.data), coo_dtype,
-            len(_AP.data))) 
+            len(_AP.data)))
         if not quiet:
             print 'Intermediate matrix saved to %s.' % fn
     while not _allclose_csr(A, AP) and iterations < maxiter:
@@ -604,11 +504,11 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         else:
             AP = maxmin(A, **kwrds)
         AP = _maximum_csr_safe(A, AP)
-        iterations += 1 
+        iterations += 1
         if dumpiter:
             _AP = AP.tocoo()
             fn = 'closure_%d.npy' % iterations
-            np.save(fn, np.fromiter(izip(_AP.row, _AP.col, _AP.data), coo_dtype, 
+            np.save(fn, np.fromiter(izip(_AP.row, _AP.col, _AP.data), coo_dtype,
                 len(_AP.data)))
             if not quiet:
                 print 'Intermediate matrix saved to %s.' % fn
@@ -620,8 +520,6 @@ def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
     else:
         print 'Closure converged after %d iterations.' % iterations
     return AP
-
-# Frontend function. 
 
 def maxmin(A, a=None, b=None, sparse=False):
     '''
@@ -636,7 +534,7 @@ def maxmin(A, a=None, b=None, sparse=False):
         The sparse implementation will be used automatically for sparse
         matrices.
     a,b : integer
-        optional; compute only the max-min product between A[a:b,:] and A.T 
+        optional; compute only the max-min product between A[a:b,:] and A.T
     sparse : bool
         if True, transforms A to CSR matrix format and use the sparse
         implementation.
@@ -668,6 +566,105 @@ def maxmin(A, a=None, b=None, sparse=False):
     else:
         return np.matrix(maxmin_naive(A, a, b))
 
+# Global variables used by _maxmin_worker (see below)
+
+_indptr = None
+_indices = None
+_data = None
+_A = None
+
+# Pool functions
+
+def _init_worker(indptr, indices, data, shape):
+    '''
+    See `pmaxmin`. This is the worker initialization function.
+    '''
+    global _indptr, _indices, _data, _A
+    _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
+    _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
+    _data = np.frombuffer(data.get_obj())
+    _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
+
+def _maxmin_worker(a_b):
+    '''
+    See `pmaxmin`. This is the map function each worker executes
+    '''
+    global _A
+    a, b = a_b
+    # return also the first index to help re-arrange the result
+    return maxmin(_A, a, b)
+
+# TODO switch from processes to threads, refactor the productclosure, move to
+# Cython and release the GIL like this:
+#
+# with nogil:
+#   <do stuff>
+def pmaxmin(A, splits=None, nprocs=None):
+    '''
+    See `maxmin`. Parallel version. Splits the rows of A in even intervals and
+    distribute them to a pool of workers.
+
+    Parameters
+    ----------
+    A : array_like
+        a 2D array, matrix, or CSR matrix representing an NxN adjacency matrix
+    splits : integer
+        split the rows of A in equal intervals. If not provided, each worker
+        will be assigned exactly an interval. If `split` is not an integer
+        divisor of the number of rows of A, the last interval will be equal to
+        the remainder of the integer division.
+    nprocs : integer
+        number of workers to spawn.
+
+    Returns
+    -------
+    maxmin : `scipy.sparse.csr_matrix`
+        The maxmin composition of A with itself. See `maxmin`.
+    '''
+    N = A.shape[0]
+    if nprocs is None:
+        nprocs = cpu_count()
+
+    # check splits
+    if splits is None:
+        if N > nprocs:
+            splits = nprocs
+        else:
+            splits = N
+    else:
+        if not isinstance(splits, int):
+            raise TypeError('expecting an integer number of splits')
+        if splits > N:
+            raise ValueError('too many splits for %d rows: %d' % (N, splits))
+    if not sp.isspmatrix_csr(A):
+        A = sp.csr_matrix(A)
+
+    chunk_size = int(np.ceil(N / splits))
+    breaks = [(i, min(i + chunk_size, N)) for i in xrange(0, N, chunk_size)]
+
+    # Wrap the indptr/indices and data arrays of the CSR matrix into shared
+    # memory arrays and pass them to the initialization function of the workers
+    # NOTE: this introduces overhead, as it copies each array to a new memory
+    # location.
+    indptr = Array(c_int, A.indptr)
+    indices = Array(c_int, A.indices)
+    data = Array(c_double, A.data)
+    initargs = (indptr, indices, data, A.shape)
+
+    # create the pool; this will initialize the workers with the shared memory
+    # arrays
+    pool = Pool(processes=nprocs, initializer=_init_worker, initargs=initargs)
+
+    with closing(pool):
+
+        # call map, reassemble result
+        chunks = pool.map(_maxmin_worker, breaks)
+        AP = sp.vstack(chunks).tocsr()
+
+    # wait for worker processes to terminate
+    pool.join()
+    return AP
+
 # These functions don't perform checks on the argument, so don't use these
 # functions directly. Use the frontend instead.
 
@@ -675,14 +672,14 @@ def _maxmin_naive(A, a=None, b=None):
     '''
     See `maxmin`. This is the naive algorithm that runs in O(n^3). It should be
     used only for testing with small matrices. Works both on dense and CSR
-    sparse matrices. 
+    sparse matrices.
 
     Don't use these functions directly. Use the frontend instead.
     '''
     N = A.shape[0]
-    if a is None: 
+    if a is None:
         a = 0
-    if b is None: 
+    if b is None:
         b = N
     Nout = b - a
     AP = np.zeros((Nout, N), A.dtype)
@@ -707,9 +704,9 @@ def _maxmin_sparse(A, a=None, b=None):
         raise ValueError('expecting a sparse CSR matrix')
 
     N = A.shape[0]
-    if a is None: 
+    if a is None:
         a = 0
-    if b is None: 
+    if b is None:
         b = N
     Nout = b - a
 
@@ -718,13 +715,13 @@ def _maxmin_sparse(A, a=None, b=None):
     At = A.tocsc()
 
     for i in xrange(Nout):
-    
+
         ih = a + i
         for j in xrange(N):
-            
+
             # ii is the index of the first non-zero element value (in A.data)
             # and column index (in A.indices) of the the i-th row
-            ii = A.indptr[ih] 
+            ii = A.indptr[ih]
             iimax = A.indptr[ih + 1]
 
             # jj is the index of the first non-zero element value (in At.data)
@@ -734,13 +731,13 @@ def _maxmin_sparse(A, a=None, b=None):
             jjmax = At.indptr[j + 1]
 
             max_ij = 0.
-            
+
             while (ii < iimax) and (jj < jjmax):
-                
+
                 ik = A.indices[ii]
                 kj = At.indices[jj]
 
-                if ik == kj: 
+                if ik == kj:
                     # same element, apply min
                     min_k = min(A.data[ii], At.data[jj])
                     # update the maximum so far
@@ -749,7 +746,7 @@ def _maxmin_sparse(A, a=None, b=None):
                     ii += 1
                     jj += 1
 
-                elif ik > kj: 
+                elif ik > kj:
                     # the row element (in A) corresponding to kj is zero,
                     # hence min_k is zero. Advance only jj.
                     jj += 1
@@ -772,9 +769,9 @@ def _maximum_csr_safe(A, B):
     # fall back on numpy's default if both matrices are dense
     if not sp.isspmatrix(A) and not sp.isspmatrix(B):
         return np.maximum(A, B)
-    
+
     # if one of the two inputs is sparse and the other is dense, convert the
-    # latter to sparse 
+    # latter to sparse
     if not sp.isspmatrix_csr(A):
         A = sp.csr_matrix(A)
     if not sp.isspmatrix_csr(B):
