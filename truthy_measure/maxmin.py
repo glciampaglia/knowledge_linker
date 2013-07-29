@@ -99,6 +99,51 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
+def recursive_iter_maxmin(a, sources, targets):
+    '''
+    Max-min transitive closure (iterator). Performs a DFS search from source to
+    target, caching results as they are computed.
+
+    Parameters
+    ----------
+    a : array_like
+        the adjacency matrix
+    sources : iterable of int
+        the source nodes
+    targets : iterable of int
+        the target nodes
+
+    Returns
+    -------
+    An iterator over max-min values.
+    '''
+    # TODO use cache to check intermediate nodes
+    def search(node, target, min_weight, weights):
+        if node == target: # append minimum of path
+            if min_weight != maxval:
+                weights.append(min_weight)
+        for neighbor in a.rows[node]:
+            if explored[(node, neighbor)]:
+                continue
+            explored[(node, neighbor)] = True
+            w = float(a[node, neighbor]) # copy value
+            if w < min_weight:
+                search(neighbor, target, w, weights)
+            else:
+                search(neighbor, target, min_weight, weights)
+    cache = {}
+    a = sp.lil_matrix(a)
+    maxval = np.inf
+    for s, t in zip(sources, targets):
+        explored = defaultdict(bool)
+        weights = [] # for each path
+        if (s, t) in cache:
+            yield _mm_cache[(s, t)]
+        search(s, t, maxval, weights)
+        m = max(weights)
+        cache[(s, t)] = m
+        yield m
+
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
 def maxmin_closure_cycles_recursive(A):
