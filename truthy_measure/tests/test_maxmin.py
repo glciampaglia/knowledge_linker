@@ -189,3 +189,27 @@ def test_closure_c4():
     res2 = productclosure(C4, maxiter=100) # matrix multiplication
     assert np.allclose(res1, res2)
     assert np.allclose(res1, C4T)
+
+def test_itermaxmin():
+    '''
+    Test that the two implementations return the same results.
+    '''
+    A = sp.rand(10,10,.3)
+    l1 = itermaxmin(A, xrange(A.shape[0]))
+    l2 = itermaxmin_recursive(A, xrange(10))
+    assert list(l1) == list(l2)
+
+def test_itermaxmin_closure():
+    '''
+    Test that the implementation based on pure DFS returns the same results as
+    the one based on the transitive closures.
+    '''
+    A = sp.rand(5, 5, .2)
+    n = A.shape[0]
+    l1 = itermaxmin_recursive(A, xrange(n))
+    coords = list(l1)
+    I, J, W = zip(*coords)
+    C1 = sp.coo_matrix((W, (I, J)), (n, n)).todense()
+    C2 = productclosure(A).todense()
+    assert np.allclose(C1, C2)
+

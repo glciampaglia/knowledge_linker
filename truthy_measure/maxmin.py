@@ -99,7 +99,18 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
-def recursive_iter_maxmin(a, sources, targets):
+# Max-min from sources to targets
+
+def _alltargets(n, sources):
+    '''
+    For each source in sources, generate all possible pairs:
+        (source, 0), ... (source, n)
+    '''
+    for s in sources:
+        for t in xrange(n):
+            yield s, t
+
+def itermaxmin(a, sources, targets=None):
     '''
     Max-min transitive closure (iterator). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -107,42 +118,121 @@ def recursive_iter_maxmin(a, sources, targets):
     Parameters
     ----------
     a : array_like
-        the adjacency matrix
+        an (n,n) adjacency matrix
     sources : iterable of int
         the source nodes
     targets : iterable of int
-        the target nodes
+        the target nodes; optional. If not provided, for each source will test
+        all n possible targets.
 
     Returns
     -------
-    An iterator over max-min values.
+    An iterator over source, target, max-min weight. Only pairs with non-zero
+    weight are returned.
     '''
-    # TODO use cache to check intermediate nodes
-    def search(node, target, min_weight, weights):
-        if node == target: # append minimum of path
-            if min_weight != maxval:
-                weights.append(min_weight)
-        for neighbor in a.rows[node]:
-            if explored[(node, neighbor)]:
-                continue
-            explored[(node, neighbor)] = True
-            w = float(a[node, neighbor]) # copy value
-            if w < min_weight:
-                search(neighbor, target, w, weights)
-            else:
-                search(neighbor, target, min_weight, weights)
-    cache = {}
     a = sp.lil_matrix(a)
-    maxval = np.inf
-    for s, t in zip(sources, targets):
-        explored = defaultdict(bool)
-        weights = [] # for each path
-        if (s, t) in cache:
-            yield _mm_cache[(s, t)]
-        search(s, t, maxval, weights)
-        m = max(weights)
-        cache[(s, t)] = m
-        yield m
+    if targets is not None:
+        items = zip(sources, targets)
+    else:
+        items = _alltargets(a.shape[0], sources)
+    for s, t in items:
+        explored = set() # explored edges
+        visited = set() # visited nodes along the path
+        dfs_stack = [(s,t,np.inf,-1)] # local context
+        return_value = None # return value from recursive call
+        while dfs_stack:
+            node, target, min_so_far, max_weight = dfs_stack[-1]
+            if node != target:
+                visited.add(node)
+            if node == target and min_so_far < np.inf:
+                return_value = min_so_far
+                dfs_stack.pop()
+                continue
+            backtracking = True
+            for neighbor in a.rows[node]:
+                if return_value is None:
+                    if (node, neighbor) in explored or neighbor in visited:
+                        # to avoid getting stuck inside cycles
+                        continue
+                    explored.add((node, neighbor))
+                    # emulate recursion by push on top of the stack
+                    backtracking = False
+                    w = float(a[node, neighbor]) # copy value
+                    if w < min_so_far:
+                        dfs_stack.append((neighbor, target, w, -1))
+                    else:
+                        dfs_stack.append((neighbor, target, min_so_far, -1))
+                    break
+                else:
+                    # this emulates the code that is executed after the
+                    # recursive call. The return value is used and cleared up.
+                    # The top of the stack is execute since we are updating the
+                    # local context.
+                    m = return_value
+                    if m is not None and m > max_weight:
+                        max_weight = m
+                    return_value = None
+                    dfs_stack[-1] = (node, target, min_so_far, max_weight)
+            if backtracking:
+                visited.discard(node)
+                if max_weight < min_so_far:
+                    return_value = max_weight
+                else:
+                    return_value = min_so_far
+                dfs_stack.pop()
+        m = return_value
+        if m > -1:
+            yield s, t, m
+
+def mm(a):
+    d = list(itermaxmin(a, xrange(a.shape[0])))
+    i,j,w = zip(*d)
+    return sp.coo_matrix((w, (i,j)), a.shape)
+
+def itermaxmin_recursive(a, sources, targets=None):
+    '''
+    Recursive version of `itermaxmin`. Not suitable for large graphs.
+    '''
+    def search(node, target, min_so_far):
+        if node != target:
+            visited.add(node)
+        if node == target and min_so_far < np.inf:
+            return min_so_far
+        max_weight = -1
+        for neighbor in a.rows[node]:
+            if (node, neighbor) in explored or neighbor in visited:
+                # to avoid getting stuck inside cycles
+                continue 
+            explored.add((node, neighbor))
+            w = float(a[node, neighbor]) # copy value
+            if w < min_so_far:
+                m = search(neighbor, target, w)
+            else:
+                m = search(neighbor, target, min_so_far)
+            if m is not None and m > max_weight:
+                max_weight = m
+        visited.discard(node)
+        if max_weight > -1: 
+            if max_weight < min_so_far:
+                return max_weight
+            else:
+                return min_so_far
+    a = sp.lil_matrix(a)
+    if targets is not None:
+        items = zip(sources, targets)
+    else:
+        items = _alltargets(a.shape[0], sources)
+    for s, t in items:
+        explored = set() # traversed edges
+        visited = set() # nodes traversed along the path
+        m = search(s, t, np.inf) # None if t is not reachable from s
+        if m is not None:
+            yield s, t, m
+
+def mm_recursive(a):
+    d = list(itermaxmin_recursive(a, xrange(a.shape[0])))
+    i,j,w = zip(*d)
+    return sp.coo_matrix((w, (i,j)), a.shape)
 
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
