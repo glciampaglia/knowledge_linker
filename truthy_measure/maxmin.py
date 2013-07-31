@@ -40,7 +40,7 @@ algorithms.
     all non-zero weight node pairs.
 
 ### Matrix multiplication methods
-* productclosure
+* maxmin_closure_matmul
     Max-min transitive closure via matrix multiplication, user function. This
     function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
     compute the transitive closure sequentially or in parallel, respectively.
@@ -590,7 +590,7 @@ def closure_cycles(adj, sources=None, trace=False):
                 dfs_stack.pop()
     return np.frombuffer(root, dtype=np.int32), succ
 
-def productclosure(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
+def maxmin_closure_matmul(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         **kwrds):
     '''
     Computes the max-min product closure. This algorithm is based matrix
@@ -733,7 +733,7 @@ def _maxmin_worker(a_b):
     # return also the first index to help re-arrange the result
     return maxmin(_A, a, b)
 
-# TODO switch from processes to threads, refactor the productclosure, move to
+# TODO switch from processes to threads, refactor the maxmin_closure_matmul, move to
 # Cython and release the GIL like this:
 #
 # with nogil:
@@ -982,12 +982,13 @@ if __name__ == '__main__':
             ' nnz = %d:' % (B.shape, B.getnnz())
 
     tic = time()
-    Cl1 = productclosure(B, splits=2, nprocs=2, maxiter=10, parallel=True)
+    Cl1 = maxmin_closure_matmul(B, splits=2, nprocs=2, maxiter=10, 
+            parallel=True)
     toc = time()
     print '* parallel version executed in %.2e seconds' % (toc - tic)
 
     tic = time()
-    Cl2 = productclosure(B, maxiter=10)
+    Cl2 = maxmin_closure_matmul(B, maxiter=10)
     toc = time()
     print '* serial version executed in %.2e seconds' % (toc - tic)
 
