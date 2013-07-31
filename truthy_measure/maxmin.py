@@ -25,18 +25,18 @@ algorithms.
     be used on large graphs.
 * closure
     Iterative version of the above.
-* maxmin_closure_cycles_recursive
+* maxmin_closure_recsearch
     Max-min transitive closure, based on depth-first traversal with pruning.
     Pruning is performed using the information on the successors of a node,
     computed with `closure_recursive`.
-* _maxmin_closure_cycles_recursive
+* itermaxmin_closure_recsearch
     This is the actual function that computes the closure, and returns an
     iterator over all node pairs with non-zero weight.
-* maxmin_closure_cycles
-    Same as `maxmin_closure_cycles_recursive`, except that depth-first traversal
+* maxmin_closure_search
+    Same as `maxmin_closure_recsearch`, except that depth-first traversal
     is implemented iteratively.
-* _maxmin_closure_cycles
-    Actual implementation of `maxmin_closure_cycles`. Returns an iterator over
+* itermaxmin_closure_search
+    Actual implementation of `maxmin_closure_search`. Returns an iterator over
     all non-zero weight node pairs.
 
 ### Matrix multiplication methods
@@ -99,7 +99,7 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
-def itermaxmin(a, sources, targets=None):
+def itermaxmin_closure_simplesearch(a, sources, targets=None):
     '''
     Max-min transitive closure (iterator). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -173,14 +173,14 @@ def itermaxmin(a, sources, targets=None):
         if m > -1:
             yield s, t, m
 
-def mm(a):
-    d = list(itermaxmin(a, xrange(a.shape[0])))
+def maxmin_closure_simplesearch(a):
+    d = list(itermaxmin_closure_simplesearch(a, xrange(a.shape[0])))
     i,j,w = zip(*d)
     return sp.coo_matrix((w, (i,j)), a.shape)
 
-def itermaxmin_recursive(a, sources, targets=None):
+def itermaxmin_closure_simplerecsearch(a, sources, targets=None):
     '''
-    Recursive version of `itermaxmin`. Not suitable for large graphs.
+    Recursive version of `itermaxmin_closure_simplesearch`. Not suitable for large graphs.
     '''
     def search(node, target, min_so_far):
         if node != target:
@@ -218,34 +218,34 @@ def itermaxmin_recursive(a, sources, targets=None):
         if m is not None:
             yield s, t, m
 
-def mm_recursive(a):
-    d = list(itermaxmin_recursive(a, xrange(a.shape[0])))
+def maxmin_closure_simplerecsearch(a):
+    d = list(itermaxmin_closure_simplerecsearch(a, xrange(a.shape[0])))
     i,j,w = zip(*d)
     return sp.coo_matrix((w, (i,j)), a.shape)
 
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
-def maxmin_closure_cycles_recursive(A):
+def maxmin_closure_recsearch(A):
     '''
     Maxmin transitive closure. Recursive implementation. If A is large, this
     implementation will likely raise RuntimeError for reaching the maximum
     recursion depth.
 
-    See `maxmin_closure_cycles` for parameters, return value, etc.
+    See `maxmin_closure_search` for parameters, return value, etc.
     '''
     AT = np.zeros(A.shape)
-    for row, col, weight in _maxmin_closure_cycles_recursive(A):
+    for row, col, weight in itermaxmin_closure_recsearch(A):
         AT[row, col] = weight
     return AT
 
-# XXX update to DFS traversal scheme implemented in itermaxmin_recursive
+# XXX update to DFS traversal scheme implemented in itermaxmin_closure_simplerecsearch
 
-def _maxmin_closure_cycles_recursive(A):
+def itermaxmin_closure_recsearch(A):
     '''
     Maxmin transitive closure, recursive implementation. Returns an iterator
     over COO tuples.
 
-    NOTE: The frontend `maxmin_closure_cycles_recursive` constructs a 2-D array
+    NOTE: The frontend `maxmin_closure_recsearch` constructs a 2-D array
     out of it.
     '''
     # test if b is reachable from a
@@ -293,7 +293,7 @@ def _maxmin_closure_cycles_recursive(A):
 
 # maxmin closure for directed networks with cycles. Iterative implementation.
 
-def maxmin_closure_cycles(A):
+def maxmin_closure_search(A):
     '''
     Maxmin transitive closure.
 
@@ -321,17 +321,17 @@ def maxmin_closure_cycles(A):
     extracted. The successors are computed using `closure`.
     '''
     AT = np.zeros(A.shape)
-    for row, col, weight in _maxmin_closure_cycles(A):
+    for row, col, weight in itermaxmin_closure_search(A):
         AT[row, col] = weight
     return AT
 
-# XXX update to DFS traversal scheme implemented in itermaxmin
+# XXX update to DFS traversal scheme implemented in itermaxmin_closure_simplesearch
 
-def _maxmin_closure_cycles(A):
+def itermaxmin_closure_search(A):
     '''
     Maxmin transitive closure. Returns an iterator over COO tuples.
 
-    NOTE: The frontend `maxmin_closure_cycles` constructs a 2-D array out of it.
+    NOTE: The frontend `maxmin_closure_search` constructs a 2-D array out of it.
     '''
     # test if b is reachable from a
     def _reachable(a, b):
