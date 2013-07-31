@@ -345,3 +345,13 @@ task for tomorrow will be to test PyTables or just plain numpy array files.
 
 Bought a bed from a classical music student and an entertainment system (DVD, CD
 player, 5+1 speakers) from a SOIC staffer who's leaving soon.
+
+## Wed Jul 31 19:17:40 EDT 2013
+
+In the morning reorganized the function names in maxmin.py. In the afternoon,
+modified the transitive closure function so that it can store the successors
+sets to disk. The changes introduced break the integration with the maxmin
+closure functions. Will run a test later today to see if now it is feasible to
+compute the closure of the full DBPedia graph. If this works, must integrate the
+code from the DFS search of yesterday with the branch pruning. Also must make
+sure that the full successors set is iterated upon, not just the SCC roots.
