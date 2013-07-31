@@ -84,8 +84,11 @@ from datetime import datetime
 from itertools import izip, product
 from collections import defaultdict
 from array import array
+from tables import BoolAtom, Filters, open_file
+from tempfile import NamedTemporaryFile
+from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 
-from .utils import coo_dtype, RefDict
+from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
@@ -396,7 +399,8 @@ def itermmclosure_search(A):
 
 _dfs_order = 0 # this must be a module-level global
 
-def closure_recursive(adj, sources=None):
+def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
+        progress=False):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
     implementation. See `closure` for more details.
@@ -411,11 +415,6 @@ def closure_recursive(adj, sources=None):
     # for min comparison
     def _order(node):
         return order[node]
-    # update successors set
-    def _update_succ(key, *succset):
-        s = set(succ.get(key, set()))
-        s.update(succset)
-        succ[key] = frozenset(s)
     # dfs visiting function
     def visit(node):
         global _dfs_order
@@ -430,18 +429,18 @@ def closure_recursive(adj, sources=None):
                 root[node] = min(root[node], root[neigh_node], key=_order)
             else:
                 local_roots[node].update((root[neigh_node],))
-        tmp = set()
         for cand_root in local_roots[node]:
-            tmp.update(set((cand_root,)).union(succ[cand_root]))
-        _update_succ(root[node], *tmp)
+            succ[root[node], :] += succ[cand_root, :]
+            succ[root[node], cand_root] = True
+        del local_roots[node]
         if root[node] == node:
             if len(stack) and order[stack[-1]] >= order[node]:
                 while True:
                     comp_node = stack.pop()
                     in_scc[comp_node] = True
                     if comp_node != node:
-                        _update_succ(node, *succ[comp_node])
-                        succ[comp_node] = succ[node] # ref copy only
+                        succ[node, :] += succ[comp_node, :]
+                        succ[comp_node, :] = False
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break
             else:
@@ -457,17 +456,36 @@ def closure_recursive(adj, sources=None):
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = RefDict()
+    if ondisk:
+        # create CArray on disk
+        if outpath is None:
+            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
+            outpath = outfile.name
+        h5f = open_file(outpath, 'w')
+        atom = BoolAtom()
+        filters = Filters(complevel=5, complib='zlib')
+        succ = h5f.create_carray(h5f.root, 'succ', atom, adj.shape,
+                filters=filters, chunkshape=(1,100)) # hardcoded chunkshape
+    else:
+        # XXX otherwise just use an in-memory HDF5 file!
+        # create LIL sparse matrix in memory
+        succ = sp.lil_matrix(adj.shape, dtype=np.bool)
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
+    if progress:
+        pbar = ProgressBar(widgets=[AdaptiveETA(), Bar(), Percentage()])
+        sources = pbar(sources)
     for node in sources:
         if not visited[node]:
             visit(node)
-    return np.frombuffer(root, dtype=np.int32), succ
+    if ondisk:
+        return np.frombuffer(root, dtype=np.int32), succ, outpath
+    else:
+        return np.frombuffer(root, dtype=np.int32), succ
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-def closure(adj, sources=None, trace=False):
+def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
     based on the algorithm by Nuutila et Soisalon-Soininen [1].
@@ -479,7 +497,12 @@ def closure(adj, sources=None, trace=False):
     source : sequence or array_like
         a sequence of source nodes. Roots and successors will be computed only
         starting from these nodes.
-    trace : bool
+    ondisk : bool
+        if True, will store the successors matrix to disk.
+    outpath : string
+        optional; specify the path to the output file used for storing the
+        successors matrix on disk.
+    progress : bool
         if True, prints information about progress of the computation.
 
     Returns
@@ -489,6 +512,9 @@ def closure(adj, sources=None, trace=False):
     succ : dict of lists
         for each root of an SCC, the list of SCCs (other than itself) that
         can be reached by that node. Each SCC is identified by its root node.
+    outpath : string
+        optional; if outpath was not passed, the path to an open temporary file.
+        The file will be delete upon closing it.
 
     Note
     ----
@@ -504,10 +530,6 @@ def closure(adj, sources=None, trace=False):
     '''
     def _order(node):
         return dfs_order[node]
-    def _update_succ(key, *succset):
-        s = set(succ.get(key, set()))
-        s.update(succset)
-        succ[key] = frozenset(s)
     dfs_counter = 0
     dfs_stack = []
     adj = sp.lil_matrix(adj)
@@ -516,23 +538,28 @@ def closure(adj, sources=None, trace=False):
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = RefDict()
+    if ondisk:
+        # create CArray on disk
+        if outpath is None:
+            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
+            outpath = outfile.name
+        h5f = open_file(outpath, 'w')
+        atom = BoolAtom()
+        filters = Filters(complevel=5, complib='zlib')
+        succ = h5f.create_carray(h5f.root, 'succ', atom, adj.shape,
+                filters=filters, chunkshape=(1,100)) # hardcoded chunkshape
+    else:
+        # XXX otherwise just use an in-memory HDF5 file!
+        # create LIL sparse matrix in memory
+        succ = sp.lil_matrix(adj.shape, dtype=np.bool)
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
-        tot_sources = adj.shape[0]
-    else:
-        try:
-            tot_sources = len(sources)
-        except TypeError: # sources is an iterator
-            tot_sources = 'N/A'
+    if progress:
+        pbar = ProgressBar(widgets=[AdaptiveETA(), Bar(), Percentage()])
+        sources = pbar(sources)
     counter = 0
     for source in sources:
         counter += 1
-        if trace:
-            now = datetime.now()
-            print '{}: traversing from {} ({}/{}).'.format(now, source, counter,
-                    tot_sources)
-            sys.stdout.flush()
         if dfs_order[source] < 0:
             # start a new depth-first traversal from source
             dfs_stack = [source]
@@ -565,8 +592,9 @@ def closure(adj, sources=None, trace=False):
                 # all neighbors have been visited at this point
                 tmp = set()
                 for cand_root in local_roots[node]:
-                    tmp.update(set((cand_root,)).union(succ[cand_root]))
-                _update_succ(root[node], *tmp)
+                    succ[root[node], :] += succ[cand_root, :]
+                    succ[root[node], cand_root] = True
+                del local_roots[node]
                 if root[node] == node:
                     if len(scc_stack) and \
                             dfs_order[scc_stack[-1]] >= dfs_order[node]:
@@ -574,8 +602,8 @@ def closure(adj, sources=None, trace=False):
                             comp_node = scc_stack.pop()
                             in_scc[comp_node] = True
                             if comp_node != node:
-                                _update_succ(node, *succ[comp_node])
-                                succ[comp_node] = succ[node] # ref copy only
+                                succ[node, :] += succ[comp_node, :]
+                                succ[comp_node, :] = False
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
                                 break
@@ -586,7 +614,10 @@ def closure(adj, sources=None, trace=False):
                         scc_stack.append(root[node])
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
-    return np.frombuffer(root, dtype=np.int32), succ
+    if ondisk:
+        return np.frombuffer(root, dtype=np.int32), succ, outpath
+    else:
+        return np.frombuffer(root, dtype=np.int32), succ
 
 def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
         dumpiter=None, **kwrds):
