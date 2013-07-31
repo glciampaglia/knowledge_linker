@@ -10,9 +10,9 @@ the all-pairs shortest bottleneck path problem (APSBP).
 
 There are two classes of algorithms implemented in this module: approaches based
 on matrix multiplication, and graph traversal algorithms. Matrix multiplication
-methods are guaranteed to converge only on undirected graphs or on directed acyclical
-graphs (DAG). For directed graphs with cycles you can use a graph traversal
-algorithms.
+methods are guaranteed to converge only on undirected graphs or on directed
+acyclical graphs (DAG). For directed graphs with cycles you can use a graph
+traversal algorithms.
 
 ## Module contents
 
@@ -187,7 +187,8 @@ def mmclosure_simplesearch(a):
 
 def itermmclosure_simplerecsearch(a, sources, targets=None):
     '''
-    Recursive version of `itermmclosure_simplesearch`. Not suitable for large graphs.
+    Recursive version of `itermmclosure_simplesearch`. Not suitable for large
+    graphs. 
     '''
     def search(node, target, min_so_far):
         if node != target:
@@ -567,7 +568,8 @@ def closure(adj, sources=None, trace=False):
                     tmp.update(set((cand_root,)).union(succ[cand_root]))
                 _update_succ(root[node], *tmp)
                 if root[node] == node:
-                    if len(scc_stack) and dfs_order[scc_stack[-1]] >= dfs_order[node]:
+                    if len(scc_stack) and \
+                            dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         while True:
                             comp_node = scc_stack.pop()
                             in_scc[comp_node] = True
@@ -586,8 +588,8 @@ def closure(adj, sources=None, trace=False):
                 dfs_stack.pop()
     return np.frombuffer(root, dtype=np.int32), succ
 
-def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
-        **kwrds):
+def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
+        dumpiter=None, **kwrds):
     '''
     Computes the max-min product closure. This algorithm is based matrix
     operation and is guaranteed to converge only in the case of undirected
