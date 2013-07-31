@@ -316,3 +316,32 @@ geocoding script for Bryce, so could not devote much time to implementing
 yesterday's ideas. A tornardo struck south of the city around 2.30pm and we
 all had to go downstair and wait 20' until the emergence was over. There do not
 seem to be any big damages, at least from what I see from my office window.
+
+## Tue Jul 30 20:22:16 EDT 2013
+
+Worked most of the last week supporting Kehontas and Bryce to finalize their
+summer project and produce the poster for the final presentation in Indy.
+
+Yesterday evening had a hangout with Mo Moadeli from Deemok and the rest of his
+team. They were obviously very interested in understanding more about the
+project and see if they can leverage anything of what we do or will do (the
+future tense is more appropriate here) for their product. Not sure about the real
+possibities for collaborating now, since they don't seem to have any data at
+hand, but suggested them to talk to Fil anyway and see. 
+
+Had finally time yesterday and today to code the DFS. It took me more than
+expected and several iterations of the algorithm (the original idea was not
+really correct), but, at last, keeping in memory the set of nodes that
+constitute the paths did the trick. Shouldn't be a problem in terms of memory
+footprint (at worst $O(n)$), but probably will have to cythonize it to speed it
+up. Will do some tests tomorrow.
+
+Sandro advised not to throw away the implementation based on the transitive
+closure -- Implementation which, btw, I discovered to be not correct while
+implementing the DFS yesterday -- but the good news is that I can just plug in the
+new DFS code and it should work -- provided that I can find a way to store the
+information about the successors sets on disk and access it with ease. Other
+task for tomorrow will be to test PyTables or just plain numpy array files.
+
+Bought a bed from a classical music student and an entertainment system (DVD, CD
+player, 5+1 speakers) from a SOIC staffer who's leaving soon.
