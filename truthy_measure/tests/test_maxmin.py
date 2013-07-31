@@ -113,11 +113,11 @@ def _successors(node, root, succ_scc):
 
 def test_transitive_closure():
     '''
-    Test recursive vs non-recursive implementation of closure_cycles
+    Test recursive vs non-recursive implementation of `closure`
     '''
     B = sp.rand(10, 10, .2, 'csr')
-    root1, scc_succ1 = closure_cycles(B)
-    root2, scc_succ2 = closure_cycles_recursive(B)
+    root1, scc_succ1 = closure(B)
+    root2, scc_succ2 = closure_recursive(B)
     assert np.allclose(root1, root2), 'roots differ'
     assert scc_succ1 == scc_succ2, 'successor sets differ'
 
@@ -127,8 +127,8 @@ def test_transitive_closure_sources():
     '''
     B = sp.rand(10, 10, .2, 'csr')
     sources = np.random.randint(0, 10, 4)
-    root1, scc_succ1 = closure_cycles(B, sources)
-    root2, scc_succ2 = closure_cycles_recursive(B, sources)
+    root1, scc_succ1 = closure(B, sources)
+    root2, scc_succ2 = closure_recursive(B, sources)
     assert np.allclose(root1, root2), 'roots differ'
     assert scc_succ1 == scc_succ2, 'successor sets differ'
 

@@ -17,18 +17,18 @@ algorithms.
 ## Module contents
 
 ### Graph traversal methods
-* closure_cycles_recursive
+* closure_recursive
     Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
     (1994). Compute (strongly) connected components and successors sets.
     Recursive implementation. For larger graphs, use the iterative version
-    `closure_cycles`. Note that this function has a significant memory usage and
-    cannot be used on large graphs.
-* closure_cycles
+    `closure`. Note that this function has a significant memory usage and cannot
+    be used on large graphs.
+* closure
     Iterative version of the above.
 * maxmin_closure_cycles_recursive
     Max-min transitive closure, based on depth-first traversal with pruning.
     Pruning is performed using the information on the successors of a node,
-    computed with `closure_cycles_recursive`.
+    computed with `closure_recursive`.
 * _maxmin_closure_cycles_recursive
     This is the actual function that computes the closure, and returns an
     iterator over all node pairs with non-zero weight.
@@ -291,7 +291,7 @@ def _maxmin_closure_cycles_recursive(A):
                 search(neighbor, target, min_weight, weights)
     maxval = np.inf
     A = sp.lil_matrix(A)
-    root, succ = closure_cycles(A)
+    root, succ = closure(A)
     _ndor = np.ndarray.__or__ # element-wise OR: (x|y)
     _rooteq = root.__eq__
     for source in xrange(A.shape[0]):
@@ -329,7 +329,7 @@ def maxmin_closure_cycles(A):
     `target` among its successors is entered. Whenever the target node is
     reached, the minimum weight found along the path is added to a list of
     minima. When the DFS search tree is exhausted, the maximum weight is
-    extracted. The successors are computed using `closure_cycles`.
+    extracted. The successors are computed using `closure`.
     '''
     AT = np.zeros(A.shape)
     for row, col, weight in _maxmin_closure_cycles(A):
@@ -361,7 +361,7 @@ def _maxmin_closure_cycles(A):
         return np.where(idx)[0]
     maxval = np.inf
     A = sp.lil_matrix(A)
-    root, succ = closure_cycles(A)
+    root, succ = closure(A)
     _ndor = np.ndarray.__or__ # element-wise or (x|y)
     _rooteq = root.__eq__
     for source in xrange(A.shape[0]):
@@ -399,10 +399,10 @@ def _maxmin_closure_cycles(A):
 
 _dfs_order = 0 # this must be a module-level global
 
-def closure_cycles_recursive(adj, sources=None):
+def closure_recursive(adj, sources=None):
     '''
     Transitive closure for directed graphs with cycles. Original recursive
-    implementation. See `closure_cycles` for more details.
+    implementation. See `closure` for more details.
 
     Note
     ----
@@ -470,7 +470,7 @@ def closure_cycles_recursive(adj, sources=None):
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
-def closure_cycles(adj, sources=None, trace=False):
+def closure(adj, sources=None, trace=False):
     '''
     Transitive closure for directed graphs with cycles. Iterative implementation
     based on the algorithm by Nuutila et Soisalon-Soininen [1].
