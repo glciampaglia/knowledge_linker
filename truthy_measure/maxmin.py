@@ -16,34 +16,30 @@ algorithms.
 
 ## Module contents
 
-### Graph traversal methods
-* closure_recursive
-    Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
-    (1994). Compute (strongly) connected components and successors sets.
-    Recursive implementation. For larger graphs, use the iterative version
-    `closure`. Note that this function has a significant memory usage and cannot
-    be used on large graphs.
-* closure
-    Iterative version of the above.
-* mmclosure_recsearch
-    Max-min transitive closure, based on depth-first traversal with pruning.
-    Pruning is performed using the information on the successors of a node,
-    computed with `closure_recursive`.
-* itermmclosure_recsearch
-    This is the actual function that computes the closure, and returns an
-    iterator over all node pairs with non-zero weight.
-* mmclosure_search
-    Same as `mmclosure_recsearch`, except that depth-first traversal
-    is implemented iteratively.
-* itermmclosure_search
-    Actual implementation of `mmclosure_search`. Returns an iterator over
-    all non-zero weight node pairs.
-
-### Matrix multiplication methods
+### Maxmin closure
 * mmclosure_matmul
     Max-min transitive closure via matrix multiplication, user function. This
     function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
     compute the transitive closure sequentially or in parallel, respectively.
+* mmclosure_recsearch
+    Max-min transitive closure, based on depth-first traversal with pruning.
+    For each source, only targets that are reachable are searched. Pruning is
+    performed using the information on the successors of a node, computed with
+    `closure_recursive`.
+* mmclosure_search
+    Same as `mmclosure_recsearch`, except that depth-first traversal
+    is implemented iteratively.
+* mmclosure_simplerecsearch
+    Max-min transitive closure, based on depth-first search. All possible
+    targets are searched for.
+* itermmclosure_search
+* itermmclosure_recsearch
+* itermmclosure_simplesearch
+* itermmmclosure_simplerecsearch
+    Thesea are the actual function that computes the closure; they all return an
+    iterator over all node pairs with non-zero weight.
+
+### Maxmin matrix multiplication
 * maxmin
     Max-min matrix multiplication (one step), sequential version. Two
     implementation are provided, depending on whether a regular numpy array (or
@@ -57,6 +53,16 @@ algorithms.
 * _maxmin_sparse
     Matrix multiplication on compressed sparse row matrix. This function exists
     only for testing purpose. A fast Cython implementation is used instead.
+
+### Transitive closure
+* closure_recursive
+    Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
+    (1994). Compute (strongly) connected components and successors sets.
+    Recursive implementation. For larger graphs, use the iterative version
+    `closure`. Note that this function has a significant memory usage and cannot
+    be used on large graphs.
+* closure
+    Iterative version of the above.
 
 ### Helper functions
 * _maximum_csr_safe
