@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 from itertools import izip
 
-from truthy_measure.maxmin import maxmin_closure_matmul
+from truthy_measure.maxmin import mmclosure_matmul
 from truthy_measure.utils import make_weighted
 
 _now = datetime.now
@@ -31,10 +31,10 @@ if __name__ == '__main__':
 
     # compute transitive closure
     if args.procs is not None:
-        adjt = maxmin_closure_matmul(adj, parallel=True, splits=args.procs,
+        adjt = mmclosure_matmul(adj, parallel=True, splits=args.procs,
                 nprocs=args.procs, dumpiter=args.intermediate)
     else:
-        adjt = maxmin_closure_matmul(adj, dumpiter=args.intermediate) 
+        adjt = mmclosure_matmul(adj, dumpiter=args.intermediate) 
     print "{}: closure algorithm completed.".format(_now())
 
     # save to file as records array

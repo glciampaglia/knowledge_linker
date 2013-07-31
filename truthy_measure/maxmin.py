@@ -25,31 +25,32 @@ algorithms.
     be used on large graphs.
 * closure
     Iterative version of the above.
-* maxmin_closure_recsearch
+* mmclosure_recsearch
     Max-min transitive closure, based on depth-first traversal with pruning.
     Pruning is performed using the information on the successors of a node,
     computed with `closure_recursive`.
-* itermaxmin_closure_recsearch
+* itermmclosure_recsearch
     This is the actual function that computes the closure, and returns an
     iterator over all node pairs with non-zero weight.
-* maxmin_closure_search
-    Same as `maxmin_closure_recsearch`, except that depth-first traversal
+* mmclosure_search
+    Same as `mmclosure_recsearch`, except that depth-first traversal
     is implemented iteratively.
-* itermaxmin_closure_search
-    Actual implementation of `maxmin_closure_search`. Returns an iterator over
+* itermmclosure_search
+    Actual implementation of `mmclosure_search`. Returns an iterator over
     all non-zero weight node pairs.
 
 ### Matrix multiplication methods
-* maxmin_closure_matmul
+* mmclosure_matmul
     Max-min transitive closure via matrix multiplication, user function. This
     function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
     compute the transitive closure sequentially or in parallel, respectively.
 * maxmin
-    Max-min matrix multiplication, sequential version. Two implementation are
-    provided, depending on whether a regular numpy array (or matrix), or a scipy
-    sparse matrix is passed. See below `_maxmin_naive` and `_maxmin_sparse`.
+    Max-min matrix multiplication (one step), sequential version. Two
+    implementation are provided, depending on whether a regular numpy array (or
+    matrix), or a scipy sparse matrix is passed. See below `_maxmin_naive` and
+    `_maxmin_sparse`.
 * pmaxmin
-    Max-min matrix multiplication, parallel (process-based) version.
+    Max-min matrix multiplication (one step), parallel (process-based) version.
 * _maxmin_naive
     Basic (i.e. O(N^3)) matrix multiplication. This function exists only for
     testing purpose. A fast Cython implementation is used instead.
@@ -99,7 +100,7 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
-def itermaxmin_closure_simplesearch(a, sources, targets=None):
+def itermmclosure_simplesearch(a, sources, targets=None):
     '''
     Max-min transitive closure (iterator). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -173,14 +174,14 @@ def itermaxmin_closure_simplesearch(a, sources, targets=None):
         if m > -1:
             yield s, t, m
 
-def maxmin_closure_simplesearch(a):
-    d = list(itermaxmin_closure_simplesearch(a, xrange(a.shape[0])))
+def mmclosure_simplesearch(a):
+    d = list(itermmclosure_simplesearch(a, xrange(a.shape[0])))
     i,j,w = zip(*d)
     return sp.coo_matrix((w, (i,j)), a.shape)
 
-def itermaxmin_closure_simplerecsearch(a, sources, targets=None):
+def itermmclosure_simplerecsearch(a, sources, targets=None):
     '''
-    Recursive version of `itermaxmin_closure_simplesearch`. Not suitable for large graphs.
+    Recursive version of `itermmclosure_simplesearch`. Not suitable for large graphs.
     '''
     def search(node, target, min_so_far):
         if node != target:
@@ -218,34 +219,34 @@ def itermaxmin_closure_simplerecsearch(a, sources, targets=None):
         if m is not None:
             yield s, t, m
 
-def maxmin_closure_simplerecsearch(a):
-    d = list(itermaxmin_closure_simplerecsearch(a, xrange(a.shape[0])))
+def mmclosure_simplerecsearch(a):
+    d = list(itermmclosure_simplerecsearch(a, xrange(a.shape[0])))
     i,j,w = zip(*d)
     return sp.coo_matrix((w, (i,j)), a.shape)
 
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
-def maxmin_closure_recsearch(A):
+def mmclosure_recsearch(A):
     '''
     Maxmin transitive closure. Recursive implementation. If A is large, this
     implementation will likely raise RuntimeError for reaching the maximum
     recursion depth.
 
-    See `maxmin_closure_search` for parameters, return value, etc.
+    See `mmclosure_search` for parameters, return value, etc.
     '''
     AT = np.zeros(A.shape)
-    for row, col, weight in itermaxmin_closure_recsearch(A):
+    for row, col, weight in itermmclosure_recsearch(A):
         AT[row, col] = weight
     return AT
 
-# XXX update to DFS traversal scheme implemented in itermaxmin_closure_simplerecsearch
+# XXX update to DFS traversal scheme implemented in itermmclosure_simplerecsearch
 
-def itermaxmin_closure_recsearch(A):
+def itermmclosure_recsearch(A):
     '''
     Maxmin transitive closure, recursive implementation. Returns an iterator
     over COO tuples.
 
-    NOTE: The frontend `maxmin_closure_recsearch` constructs a 2-D array
+    NOTE: The frontend `mmclosure_recsearch` constructs a 2-D array
     out of it.
     '''
     # test if b is reachable from a
@@ -293,7 +294,7 @@ def itermaxmin_closure_recsearch(A):
 
 # maxmin closure for directed networks with cycles. Iterative implementation.
 
-def maxmin_closure_search(A):
+def mmclosure_search(A):
     '''
     Maxmin transitive closure.
 
@@ -321,17 +322,17 @@ def maxmin_closure_search(A):
     extracted. The successors are computed using `closure`.
     '''
     AT = np.zeros(A.shape)
-    for row, col, weight in itermaxmin_closure_search(A):
+    for row, col, weight in itermmclosure_search(A):
         AT[row, col] = weight
     return AT
 
-# XXX update to DFS traversal scheme implemented in itermaxmin_closure_simplesearch
+# XXX update to DFS traversal scheme implemented in itermmclosure_simplesearch
 
-def itermaxmin_closure_search(A):
+def itermmclosure_search(A):
     '''
     Maxmin transitive closure. Returns an iterator over COO tuples.
 
-    NOTE: The frontend `maxmin_closure_search` constructs a 2-D array out of it.
+    NOTE: The frontend `mmclosure_search` constructs a 2-D array out of it.
     '''
     # test if b is reachable from a
     def _reachable(a, b):
@@ -579,7 +580,7 @@ def closure(adj, sources=None, trace=False):
                 dfs_stack.pop()
     return np.frombuffer(root, dtype=np.int32), succ
 
-def maxmin_closure_matmul(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
+def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False, dumpiter=None,
         **kwrds):
     '''
     Computes the max-min product closure. This algorithm is based matrix
@@ -722,7 +723,7 @@ def _maxmin_worker(a_b):
     # return also the first index to help re-arrange the result
     return maxmin(_A, a, b)
 
-# TODO switch from processes to threads, refactor the maxmin_closure_matmul, move to
+# TODO switch from processes to threads, refactor the mmclosure_matmul, move to
 # Cython and release the GIL like this:
 #
 # with nogil:
@@ -971,13 +972,13 @@ if __name__ == '__main__':
             ' nnz = %d:' % (B.shape, B.getnnz())
 
     tic = time()
-    Cl1 = maxmin_closure_matmul(B, splits=2, nprocs=2, maxiter=10, 
+    Cl1 = mmclosure_matmul(B, splits=2, nprocs=2, maxiter=10, 
             parallel=True)
     toc = time()
     print '* parallel version executed in %.2e seconds' % (toc - tic)
 
     tic = time()
-    Cl2 = maxmin_closure_matmul(B, maxiter=10)
+    Cl2 = mmclosure_matmul(B, maxiter=10)
     toc = time()
     print '* serial version executed in %.2e seconds' % (toc - tic)
 
