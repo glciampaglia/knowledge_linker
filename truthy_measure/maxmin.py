@@ -74,7 +74,7 @@ from ctypes import c_int, c_double
 from contextlib import closing
 import warnings
 from datetime import datetime
-from itertools import izip
+from itertools import izip, product
 from collections import defaultdict
 from array import array
 
@@ -99,17 +99,6 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
-# Max-min from sources to targets
-
-def _alltargets(n, sources):
-    '''
-    For each source in sources, generate all possible pairs:
-        (source, 0), ... (source, n)
-    '''
-    for s in sources:
-        for t in xrange(n):
-            yield s, t
-
 def itermaxmin(a, sources, targets=None):
     '''
     Max-min transitive closure (iterator). Performs a DFS search from source to
@@ -132,9 +121,9 @@ def itermaxmin(a, sources, targets=None):
     '''
     a = sp.lil_matrix(a)
     if targets is not None:
-        items = zip(sources, targets)
+        items = izip(sources, targets)
     else:
-        items = _alltargets(a.shape[0], sources)
+        items = product(sources, xrange(a.shape[0]))
     for s, t in items:
         explored = set() # explored edges
         visited = set() # nodes visited along the path
@@ -221,7 +210,7 @@ def itermaxmin_recursive(a, sources, targets=None):
     if targets is not None:
         items = zip(sources, targets)
     else:
-        items = _alltargets(a.shape[0], sources)
+        items = product(sources, xrange(a.shape[0]))
     for s, t in items:
         explored = set() # traversed edges
         visited = set() # nodes traversed along the path
