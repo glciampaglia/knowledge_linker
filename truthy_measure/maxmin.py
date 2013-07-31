@@ -137,7 +137,7 @@ def itermaxmin(a, sources, targets=None):
         items = _alltargets(a.shape[0], sources)
     for s, t in items:
         explored = set() # explored edges
-        visited = set() # visited nodes along the path
+        visited = set() # nodes visited along the path
         dfs_stack = [(s,t,np.inf,-1)] # local context
         return_value = None # return value from recursive call
         while dfs_stack:
@@ -155,7 +155,7 @@ def itermaxmin(a, sources, targets=None):
                         # to avoid getting stuck inside cycles
                         continue
                     explored.add((node, neighbor))
-                    # emulate recursion by push on top of the stack
+                    # recurse by pushing on the top of the stack
                     backtracking = False
                     w = float(a[node, neighbor]) # copy value
                     if w < min_so_far:
@@ -166,7 +166,7 @@ def itermaxmin(a, sources, targets=None):
                 else:
                     # this emulates the code that is executed after the
                     # recursive call. The return value is used and cleared up.
-                    # The top of the stack is execute since we are updating the
+                    # The top of the stack is updated since we are updating the
                     # local context.
                     m = return_value
                     if m is not None and m > max_weight:
@@ -248,6 +248,8 @@ def maxmin_closure_cycles_recursive(A):
     for row, col, weight in _maxmin_closure_cycles_recursive(A):
         AT[row, col] = weight
     return AT
+
+# XXX update to DFS traversal scheme implemented in itermaxmin_recursive
 
 def _maxmin_closure_cycles_recursive(A):
     '''
@@ -333,6 +335,8 @@ def maxmin_closure_cycles(A):
     for row, col, weight in _maxmin_closure_cycles(A):
         AT[row, col] = weight
     return AT
+
+# XXX update to DFS traversal scheme implemented in itermaxmin
 
 def _maxmin_closure_cycles(A):
     '''
