@@ -1,0 +1,4 @@
+scipy
+numpy
+tables >= 3.0
+progressbar >= 2.4
