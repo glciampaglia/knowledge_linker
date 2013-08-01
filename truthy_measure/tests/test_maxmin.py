@@ -243,17 +243,3 @@ def test_dfs_frontend():
     C = mmclosure_dfsrec(A).todense()
     assert np.allclose(B, C)
 
-def test_itermaxmin_closure():
-    '''
-    Test that the implementation based on pure DFS returns the same results as
-    the one based on the transitive closures.
-    '''
-    A = sp.rand(5, 5, .2)
-    n = A.shape[0]
-    l1 = itermmclosure_dfsrec(A, xrange(n))
-    coords = list(l1)
-    I, J, W = zip(*coords)
-    C1 = sp.coo_matrix((W, (I, J)), (n, n)).todense()
-    C2 = mmclosure_matmul(A).todense()
-    assert np.allclose(C1, C2)
-
