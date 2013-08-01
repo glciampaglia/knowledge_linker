@@ -85,6 +85,9 @@ from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
 
+# for closure/closure_recursive
+CHUNKSIZE = 100000
+
 # TODO understand why sometimes _init_worker raises a warning complaining that
 # the indices array has dtype float64. This happens intermittently. In the
 # meanwhile, just ignore it.
@@ -158,6 +161,27 @@ class ProductIter(object):
     def __len__(self):
         return self._len
 
+def _dfs_items(sources, targets, n, succ, roots, progress):
+    '''
+    Produces input (source, target) pairs for DFS search.
+    '''
+    if succ is not None:
+        if roots is None:
+            roots = np.arange((n,), dtype=np.int32)
+        else:
+            roots = np.ravel(roots)
+        items = ReachablePairsIter(sources, roots, succ)
+    else:
+        if targets is not None:
+            items = zip(sources, targets)
+        else:
+            items = ProductIter(sources, xrange(n))
+    if progress:
+        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
+        pbar = ProgressBar(widgets=widgets)
+        items = pbar(items)
+    return items
+
 def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
         progress=False):
     '''
@@ -190,21 +214,7 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
     '''
     n = a.shape[0]
     a = sp.lil_matrix(a)
-    if succ is not None:
-        if roots is None:
-            roots = np.arange((n,), dtype=np.int32) 
-        else:
-            roots = np.ravel(roots)
-        items = ReachablePairsIter(sources, roots, succ)
-    else:
-        if targets is not None:
-            items = zip(sources, targets)
-        else:
-            items = ProductIter(sources, xrange(n))
-    if progress:
-        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
-        pbar = ProgressBar(widgets=widgets)
-        items = pbar(items)
+    items = _dfs_items(sources, targets, n, succ, roots, progress)
     for s, t in items:
         explored = set() # explored edges
         visited = set() # nodes visited along the path
@@ -299,21 +309,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
                 return min_so_far
     n = a.shape[0]
     a = sp.lil_matrix(a)
-    if succ is not None:
-        if roots is None:
-            roots = np.arange((n,), dtype=np.int32) 
-        else:
-            roots = np.ravel(roots)
-        items = ReachablePairsIter(sources, roots, succ)
-    else:
-        if targets is not None:
-            items = zip(sources, targets)
-        else:
-            items = ProductIter(sources, xrange(n))
-    if progress:
-        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
-        pbar = ProgressBar(widgets=widgets)
-        items = pbar(items)
+    items = _dfs_items(sources, targets, n, succ, roots, progress)
     for s, t in items:
         explored = set() # traversed edges
         visited = set() # nodes traversed along the path
@@ -331,6 +327,38 @@ def mmclosure_dfsrec(a):
     return A
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
+
+def _mk_succ(outpath, shape, ondisk=False):
+    '''
+    Creates the chunked array that will hold the successors
+    '''
+    if ondisk:
+        # create CArray on disk
+        if outpath is None:
+            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
+            outpath = outfile.name
+        h5f = open_file(outpath, 'w')
+        atom = BoolAtom()
+        filters = Filters(complevel=5, complib='zlib')
+        succ = h5f.create_carray(h5f.root, 'succ', atom, shape,
+                filters=filters, chunkshape=(1, CHUNKSIZE))
+    else:
+        # XXX otherwise just use an in-memory HDF5 file!
+        # create LIL sparse matrix in memory
+        succ = sp.lil_matrix(shape, dtype=np.bool)
+    return succ
+
+def _mk_sources(sources, n, progress):
+    '''
+    Creates the sources sequence for the transitive closure functions
+    '''
+    if sources is None:
+        sources = xrange(n) # explore the whole graph
+    if progress:
+        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(),
+            Percentage()])
+        sources = pbar(sources)
+    return sources
 
 _dfs_order = 0 # this must be a module-level global
 
@@ -393,25 +421,8 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
-    if ondisk:
-        # create CArray on disk
-        if outpath is None:
-            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
-            outpath = outfile.name
-        h5f = open_file(outpath, 'w')
-        atom = BoolAtom()
-        filters = Filters(complevel=5, complib='zlib')
-        succ = h5f.create_carray(h5f.root, 'succ', atom, adj.shape,
-                filters=filters, chunkshape=(1,100)) # hardcoded chunkshape
-    else:
-        # XXX otherwise just use an in-memory HDF5 file!
-        # create LIL sparse matrix in memory
-        succ = sp.lil_matrix(adj.shape, dtype=np.bool)
-    if sources is None:
-        sources = xrange(adj.shape[0]) # explore the whole graph
-    if progress:
-        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(), Percentage()])
-        sources = pbar(sources)
+    succ = _mk_succ(outpath, adj.shape, ondisk)
+    sources = _mk_sources(sources, adj.shape[0], progress)
     for node in sources:
         if not visited[node]:
             visit(node)
@@ -475,25 +486,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
-    if ondisk:
-        # create CArray on disk
-        if outpath is None:
-            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
-            outpath = outfile.name
-        h5f = open_file(outpath, 'w')
-        atom = BoolAtom()
-        filters = Filters(complevel=5, complib='zlib')
-        succ = h5f.create_carray(h5f.root, 'succ', atom, adj.shape,
-                filters=filters, chunkshape=(1,100)) # hardcoded chunkshape
-    else:
-        # XXX otherwise just use an in-memory HDF5 file!
-        # create LIL sparse matrix in memory
-        succ = sp.lil_matrix(adj.shape, dtype=np.bool)
-    if sources is None:
-        sources = xrange(adj.shape[0]) # explore the whole graph
-    if progress:
-        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(), Percentage()])
-        sources = pbar(sources)
+    succ = _mk_succ(outpath, adj.shape, ondisk)
+    sources = _mk_sources(sources, adj.shape[0], progress)
     counter = 0
     for source in sources:
         counter += 1
