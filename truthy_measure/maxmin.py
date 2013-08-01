@@ -434,6 +434,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
             succ[root[node], cand_root] = True
         del local_roots[node]
         if root[node] == node:
+            succ[node, node] = True
             if len(stack) and order[stack[-1]] >= order[node]:
                 while True:
                     comp_node = stack.pop()
@@ -448,6 +449,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
         else:
             if root[node] not in stack:
                 stack.append(root[node])
+            succ[root[node], node] = True
     # main function
     adj = sp.lil_matrix(adj)
     order = array('i', (0 for i in xrange(adj.shape[0])))
@@ -596,6 +598,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                     succ[root[node], cand_root] = True
                 del local_roots[node]
                 if root[node] == node:
+                    succ[node, node] = True
                     if len(scc_stack) and \
                             dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         while True:
@@ -612,6 +615,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                 else:
                     if root[node] not in scc_stack:
                         scc_stack.append(root[node])
+                    succ[root[node], node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
     if ondisk:
