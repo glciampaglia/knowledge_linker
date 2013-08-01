@@ -105,20 +105,61 @@ warnings.showwarning = _showwarning
 
 # max-min transitive closure based on DFS
 
-def _iterreachables(sources, roots, succ):
+class ReachablePairsIter(object):
     '''
-    For each s in source, combine iterators over (s, t) such that t is a
-    successor of s.
-
-    Parameters
-    ----------
+    Instances of this class are iterator that, for each source, yield (source,
+    target) pairs where target is reachable from source according to the succ
+    matrix.
     '''
-    for s in sources:
-        for t in xrange(len(roots)):
-            if succ[roots[s], roots[t]]:
-                yield s, t
+    def __init__(self, sources, roots, succ):
+        '''
+        Parameters
+        ----------
+        sources : sequence of ints
+            The sources
+        roots : array_like
+            A 1D array of root labels (see `closure`)
+        succ : array_like
+            A 2D bool matrix representing the "successor" relation
+        '''
+        try:
+            len(sources)
+        except TypeError:
+            raise ValueError("sources must be a sequence")
+        self.sources = sources
+        self.roots = roots
+        self.succ = succ
+        self._len = sum([succ[roots[i],:].sum() for i in sources])
+    def __len__(self):
+        return self._len
+    def __iter__(self):
+        for s in self.sources:
+            for t in xrange(len(self.roots)):
+                if self.succ[self.roots[s], self.roots[t]]:
+                    yield s, t
 
-def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
+class ProductIter(object):
+    '''
+    Wrapper around `itertools.product` with len() method.
+    '''
+    def __init__(self, *sequences):
+        '''
+        Parameters
+        ----------
+
+        *sequences : sequence of sequences
+
+            Each sequeunce must support len().
+        '''
+        self.sequences = sequences
+        self._len = reduce(int.__mul__, map(len, self.sequences))
+    def __iter__(self):
+        return product(*self.sequences)
+    def __len__(self):
+        return self._len
+
+def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
+        progress=False):
     '''
     Max-min transitive closure (iterative). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -127,7 +168,7 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
     ----------
     a : array_like
         an (n,n) adjacency matrix
-    sources : iterable of int
+    sources : sequence of int
         the source nodes
     targets : iterable of int
         the target nodes; optional. If not provided, for each source will test
@@ -139,6 +180,8 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
         optional; an (n,) array of labels (roots) of strongly connected
         components. If passed, then only the rows and columns of `succ`
         corresponding to the elements in `roots` are consulted.
+    progress : bool
+        optional; if True, a progress bar will be shown.
 
     Returns
     -------
@@ -152,12 +195,16 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
             roots = np.arange((n,), dtype=np.int32) 
         else:
             roots = np.ravel(roots)
-        items = _iterreachable(sources, roots, succ)
+        items = ReachablePairsIter(sources, roots, succ)
     else:
         if targets is not None:
             items = zip(sources, targets)
         else:
-            items = product(sources, xrange(n))
+            items = ProductIter(sources, xrange(n))
+    if progress:
+        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
+        pbar = ProgressBar(widgets=widgets)
+        items = pbar(items)
     for s, t in items:
         explored = set() # explored edges
         visited = set() # nodes visited along the path
@@ -218,7 +265,8 @@ def mmclosure_dfs(a):
         A[i,j] = w
     return A
 
-def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None): 
+def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
+        progress=False):
     '''
     Recursive version of `itermmclosure_simplesearch`. Not suitable for large
     graphs. 
@@ -256,12 +304,16 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None):
             roots = np.arange((n,), dtype=np.int32) 
         else:
             roots = np.ravel(roots)
-        items = _iterreachable(sources, roots, succ)
+        items = ReachablePairsIter(sources, roots, succ)
     else:
         if targets is not None:
             items = zip(sources, targets)
         else:
-            items = product(sources, xrange(n))
+            items = ProductIter(sources, xrange(n))
+    if progress:
+        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
+        pbar = ProgressBar(widgets=widgets)
+        items = pbar(items)
     for s, t in items:
         explored = set() # traversed edges
         visited = set() # nodes traversed along the path
@@ -358,7 +410,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=['TC', AdaptiveETA(), Bar(), Percentage()])
+        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(), Percentage()])
         sources = pbar(sources)
     for node in sources:
         if not visited[node]:
@@ -440,7 +492,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=['TC', AdaptiveETA(), Bar(), Percentage()])
+        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(), Percentage()])
         sources = pbar(sources)
     counter = 0
     for source in sources:
