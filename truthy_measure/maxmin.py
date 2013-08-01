@@ -29,14 +29,17 @@ traversal algorithms.
 * mmclosure_search
     Same as `mmclosure_recsearch`, except that depth-first traversal
     is implemented iteratively.
-* mmclosure_simplerecsearch
+* mmclosure_dfs
     Max-min transitive closure, based on depth-first search. All possible
     targets are searched for.
+* mmclosure_dfsrec
+    Same as `mmclosure_dfs`, except that the depth-first traversal is
+    implemented iteratively.
 * itermmclosure_search
 * itermmclosure_recsearch
-* itermmclosure_simplesearch
-* itermmmclosure_simplerecsearch
-    Thesea are the actual function that computes the closure; they all return an
+* itermmclosure_dfs
+* itermmmclosure_dfsrec
+    These are the actual function that computes the closure; they all return an
     iterator over all node pairs with non-zero weight.
 
 ### Maxmin matrix multiplication
@@ -109,9 +112,9 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
-def itermmclosure_simplesearch(a, sources, targets=None):
+def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
     '''
-    Max-min transitive closure (iterator). Performs a DFS search from source to
+    Max-min transitive closure (iterative). Performs a DFS search from source to
     target, caching results as they are computed.
 
     Parameters
@@ -123,17 +126,35 @@ def itermmclosure_simplesearch(a, sources, targets=None):
     targets : iterable of int
         the target nodes; optional. If not provided, for each source will test
         all n possible targets.
+    succ : array_like
+        optional; an (n,n) boolean array (or matrix) indicating successors
+        relation succ[i, j] == True iff j is a successor of i.
+    roots : array_like
+        optional; an (n,) array of labels (roots) of strongly connected
+        components. If passed, then only the rows and columns of `succ`
+        corresponding to the elements in `roots` are consulted.
 
     Returns
     -------
     An iterator over source, target, max-min weight. Only pairs with non-zero
-    weight are returned.
+    weight are returned. 
     '''
+    def iterreachables(sources):
+        for s in sources:
+            for t in xrange(n):
+                if succ[roots[s], roots[t]]:
+                    yield s, t
+    n = a.shape[0]
     a = sp.lil_matrix(a)
-    if targets is not None:
-        items = izip(sources, targets)
+    if succ is not None:
+        if roots is None:
+            roots = np.arange((n,), dtype=np.int32) 
+        items = iterreachable(sources)
     else:
-        items = product(sources, xrange(a.shape[0]))
+        if targets is not None:
+            items = zip(sources, targets)
+        else:
+            items = product(sources, xrange(n))
     for s, t in items:
         explored = set() # explored edges
         visited = set() # nodes visited along the path
@@ -150,6 +171,8 @@ def itermmclosure_simplesearch(a, sources, targets=None):
             backtracking = True
             for neighbor in a.rows[node]:
                 if return_value is None:
+                    if succ is not None and not succ[roots[node], roots[neighbor]]:
+                        continue # prune
                     if (node, neighbor) in explored or neighbor in visited:
                         # to avoid getting stuck inside cycles
                         continue
@@ -183,16 +206,25 @@ def itermmclosure_simplesearch(a, sources, targets=None):
         if m > -1:
             yield s, t, m
 
-def mmclosure_simplesearch(a):
-    d = list(itermmclosure_simplesearch(a, xrange(a.shape[0])))
-    i,j,w = zip(*d)
-    return sp.coo_matrix((w, (i,j)), a.shape)
+def mmclosure_dfs(a):
+    '''
+    Max-min closure by simple DFS traversals. Returns a sparse matrix.
+    '''
+    A = so.coo_matrix(a.shape)
+    for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0])):
+        A[i,j] = w
+    return A
 
-def itermmclosure_simplerecsearch(a, sources, targets=None):
+def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None): 
     '''
     Recursive version of `itermmclosure_simplesearch`. Not suitable for large
     graphs. 
     '''
+    def iterreachables(sources):
+        for s in sources:
+            for t in xrange(n):
+                if succ[roots[s], roots[t]]:
+                    yield s, t
     def search(node, target, min_so_far):
         if node != target:
             visited.add(node)
@@ -200,6 +232,8 @@ def itermmclosure_simplerecsearch(a, sources, targets=None):
             return min_so_far
         max_weight = -1
         for neighbor in a.rows[node]:
+            if succ is not None and not succ[roots[node], roots[neighbor]]:
+                continue # prune
             if (node, neighbor) in explored or neighbor in visited:
                 # to avoid getting stuck inside cycles
                 continue 
@@ -217,11 +251,17 @@ def itermmclosure_simplerecsearch(a, sources, targets=None):
                 return max_weight
             else:
                 return min_so_far
+    n = a.shape[0]
     a = sp.lil_matrix(a)
-    if targets is not None:
-        items = zip(sources, targets)
+    if succ is not None:
+        if roots is None:
+            roots = np.arange((n,), dtype=np.int32) 
+        items = iterreachable(sources)
     else:
-        items = product(sources, xrange(a.shape[0]))
+        if targets is not None:
+            items = zip(sources, targets)
+        else:
+            items = product(sources, xrange(n))
     for s, t in items:
         explored = set() # traversed edges
         visited = set() # nodes traversed along the path
@@ -229,10 +269,14 @@ def itermmclosure_simplerecsearch(a, sources, targets=None):
         if m is not None:
             yield s, t, m
 
-def mmclosure_simplerecsearch(a):
-    d = list(itermmclosure_simplerecsearch(a, xrange(a.shape[0])))
-    i,j,w = zip(*d)
-    return sp.coo_matrix((w, (i,j)), a.shape)
+def mmclosure_dfsrec(a):
+    '''
+    Max-min closure by simple recursive DFS traversals. Returns a sparse matrix.
+    '''
+    A = so.coo_matrix(a.shape)
+    for i,j,w in itermmclosure_dfsrec(a, xrange(a.shape[0])):
+        A[i,j] = w
+    return A
 
 # maxmin closure for directed networks with cycles. Recursive implementation.
 
@@ -251,7 +295,7 @@ def mmclosure_recsearch(A):
 
 # XXX update to DFS traversal scheme implemented in itermmclosure_simplerecsearch
 
-def itermmclosure_recsearch(A):
+def itermmclosure_recsearch(A, ondisk=False, outpath=None, progress=False):
     '''
     Maxmin transitive closure, recursive implementation. Returns an iterator
     over COO tuples.
@@ -289,9 +333,9 @@ def itermmclosure_recsearch(A):
                 search(neighbor, target, w, weights)
             else:
                 search(neighbor, target, min_weight, weights)
+    root, succ = closure(A, ondisk=ondisk, outpath=outpath, progress=progress)
     maxval = np.inf
     A = sp.lil_matrix(A)
-    root, succ = closure(A)
     _ndor = np.ndarray.__or__ # element-wise OR: (x|y)
     _rooteq = root.__eq__
     for source in xrange(A.shape[0]):
@@ -475,7 +519,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=[AdaptiveETA(), Bar(), Percentage()])
+        pbar = ProgressBar(widgets=['TC', AdaptiveETA(), Bar(), Percentage()])
         sources = pbar(sources)
     for node in sources:
         if not visited[node]:
@@ -557,7 +601,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     if sources is None:
         sources = xrange(adj.shape[0]) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=[AdaptiveETA(), Bar(), Percentage()])
+        pbar = ProgressBar(widgets=['TC', AdaptiveETA(), Bar(), Percentage()])
         sources = pbar(sources)
     counter = 0
     for source in sources:
