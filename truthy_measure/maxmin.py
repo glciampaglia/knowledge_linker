@@ -332,20 +332,20 @@ def _mk_succ(outpath, shape, ondisk=False):
     '''
     Creates the chunked array that will hold the successors
     '''
+    # create CArray on disk
+    if outpath is None:
+        outfile = NamedTemporaryFile(suffix='.h5', delete=True)
+        outpath = outfile.name
     if ondisk:
-        # create CArray on disk
-        if outpath is None:
-            outfile = NamedTemporaryFile(suffix='.h5', delete=True)
-            outpath = outfile.name
         h5f = open_file(outpath, 'w')
-        atom = BoolAtom()
-        filters = Filters(complevel=5, complib='zlib')
-        succ = h5f.create_carray(h5f.root, 'succ', atom, shape,
-                filters=filters, chunkshape=(1, CHUNKSIZE))
     else:
-        # XXX otherwise just use an in-memory HDF5 file!
-        # create LIL sparse matrix in memory
-        succ = sp.lil_matrix(shape, dtype=np.bool)
+        # this will create an in-memory file, which will be synced to disk when
+        # closed
+        h5f = open_file(outpath, 'w', driver="H5FD_CORE")
+    atom = BoolAtom()
+    filters = Filters(complevel=5, complib='zlib')
+    succ = h5f.create_carray(h5f.root, 'succ', atom, shape,
+            filters=filters, chunkshape=(1, CHUNKSIZE))
     return succ
 
 def _mk_sources(sources, n, progress):
@@ -426,10 +426,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     for node in sources:
         if not visited[node]:
             visit(node)
-    if ondisk:
-        return np.frombuffer(root, dtype=np.int32), succ, outpath
-    else:
-        return np.frombuffer(root, dtype=np.int32), succ
+    return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
 
@@ -547,10 +544,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                     succ[root[node], node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
-    if ondisk:
-        return np.frombuffer(root, dtype=np.int32), succ, outpath
-    else:
-        return np.frombuffer(root, dtype=np.int32), succ
+    return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
         dumpiter=None, **kwrds):

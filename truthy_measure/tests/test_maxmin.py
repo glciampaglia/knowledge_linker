@@ -135,10 +135,10 @@ def test_transitive_closure():
     Test recursive vs non-recursive implementation of transitive closure.
     '''
     B = sp.rand(10, 10, .2, 'csr')
-    root1, scc_succ1 = closure(B)
-    root2, scc_succ2 = closure_recursive(B)
+    root1, scc_succ1, _ = closure(B)
+    root2, scc_succ2, _ = closure_recursive(B)
     assert np.allclose(root1, root2), 'roots differ'
-    assert np.allclose(scc_succ1.todense(), scc_succ2.todense()), \
+    assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
             'successor sets differ'
 
 def test_transitive_closure_ondisk():
@@ -163,10 +163,10 @@ def test_transitive_closure_sources():
     '''
     B = sp.rand(10, 10, .2, 'csr')
     sources = np.random.randint(0, 10, 4)
-    root1, scc_succ1 = closure(B, sources)
-    root2, scc_succ2 = closure_recursive(B, sources)
+    root1, scc_succ1, _ = closure(B, sources)
+    root2, scc_succ2, _ = closure_recursive(B, sources)
     assert np.allclose(root1, root2), 'roots differ'
-    assert np.allclose(scc_succ1.todense(), scc_succ2.todense()), \
+    assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
             'successor sets differ'
 
 def test_matmul_closure():
