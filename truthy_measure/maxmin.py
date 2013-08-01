@@ -30,7 +30,7 @@ traversal algorithms.
     Same as `mmclosure_dfs`, except that depth-first traversal
     is implemented iteratively.
 * itermmclosure_dfs
-* itermmmclosure_dfsrec
+* itermmclosure_dfsrec
     These are the actual function that computes the closure; they both return an
     iterator over all node pairs with non-zero weight.
 
