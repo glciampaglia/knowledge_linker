@@ -1,3 +1,5 @@
+from contextlib import closing, nested
+from tempfile import mktemp
 import numpy as np
 import scipy.sparse as sp
 from nose.tools import raises, nottest
@@ -10,12 +12,18 @@ from truthy_measure.cmaxmin import *
 from truthy_measure.utils import dict_of_dicts_to_ndarray
 
 def test_naive():
+    '''
+    Test naive implementation Python vs Cython.
+    '''
     A = np.random.rand(5, 5)
     AP = _maxmin_naive(A)
     AP2 = c_maxmin_naive(A) 
     assert np.array_equal(AP, AP2)
 
 def test_naive_subset():
+    '''
+    Test naive implementation Python vs Cython with source/target parameters.
+    '''
     a = 1
     b = 3
     A = np.random.rand(5, 5)
@@ -25,12 +33,18 @@ def test_naive_subset():
 
 @raises(ValueError)
 def test_naive_sparse():
+    '''
+    Test parameter checking cythonized maxmin product.
+    '''
     A = sp.rand(5, 5, .2, 'csr')
     AP = _maxmin_naive(A)
     AP2 = c_maxmin_naive(A) # expects ndarray type
     assert np.array_equal(AP, AP2)
 
 def test_sparse():
+    '''
+    Test maxmin product sparse implementation.
+    '''
     A = sp.rand(5, 5, .2, 'csr')
     AP = _maxmin_naive(A)
     AP2 = _maxmin_sparse(A)
@@ -40,6 +54,9 @@ def test_sparse():
     assert np.array_equal(AP, AP3.todense())
 
 def test_sparse_subset():
+    '''
+    Test maxmin product with source/target parameters.
+    '''
     a = 1
     b = 3
     A = sp.rand(5, 5, .2, 'csr')
@@ -51,12 +68,18 @@ def test_sparse_subset():
     assert np.array_equal(AP, AP3.todense())
 
 def test_frontend():
+    '''
+    Test maxmin product frontend.
+    '''
     A = sp.rand(5, 5, .2, 'csr')
     AP = _maxmin_naive(A)
     AP2 = maxmin(A)
     assert np.array_equal(AP, AP2.todense())
 
 def test_parallel():
+    '''
+    Test maxmin product parallel frontend.
+    '''
     A = sp.rand(5, 5, .2, 'csr')
     AP = maxmin(A)
     AP2 = pmaxmin(A, nprocs=2)
@@ -79,6 +102,9 @@ def test_parallel_is_faster():
     assert time_serial > time_parallel, "parallel version slower than serial!"
 
 def test_maximum_csr():
+    '''
+    Test element-wise maximum on CSR matrix.
+    '''
     A = sp.rand(5, 5, .2, 'csr')
     B = sp.rand(5, 5, .2, 'csr')
     C1 = np.maximum(A.todense(), B.todense())
@@ -86,6 +112,9 @@ def test_maximum_csr():
     assert np.array_equal(C1, C2)
 
 def test_closure_cycle_2():
+    '''
+    Test maxmin matrix multiplication on length-2 cycle.
+    '''
     # length 2 cycle
     C2 = np.array([
         [0.0, 0.5, 0.0], 
@@ -101,19 +130,9 @@ def test_closure_cycle_2():
     print res
     assert np.allclose(res, C2T) 
 
-def _successors(node, root, succ_scc):
-    '''
-    Returns the full list of successors
-    '''
-    r = root[node]
-    s = succ_scc[r]
-    _or = np.ndarray.__or__ # shorthand
-    _eq = root.__eq__
-    return set(np.where(reduce(_or, map(_eq, s)))[0])
-
 def test_transitive_closure():
     '''
-    Test recursive vs non-recursive implementation of `closure`
+    Test recursive vs non-recursive implementation of transitive closure.
     '''
     B = sp.rand(10, 10, .2, 'csr')
     root1, scc_succ1 = closure(B)
@@ -122,9 +141,25 @@ def test_transitive_closure():
     assert np.allclose(scc_succ1.todense(), scc_succ2.todense()), \
             'successor sets differ'
 
+def test_transitive_closure_ondisk():
+    '''
+    Test recursive vs non-recursive implementation of transitive closure with
+    on-disk storage.
+    '''
+    B = sp.rand(10, 10, .2, 'csr')
+    path1 = mktemp()
+    path2 = mktemp()
+    with nested(closing(open(path1, 'w')), closing(open(path2, 'w'))) as (f1,
+            f2):
+        root1, scc_succ1, _ = closure(B, ondisk=True, outpath=path1)
+        root2, scc_succ2, _ = closure_recursive(B, ondisk=True, outpath=path2)
+        assert np.allclose(root1, root2), 'roots differ'
+        assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
+                'successor sets differ'
+
 def test_transitive_closure_sources():
     '''
-    Test sources parameter in closure_cycle* functions
+    Test sources parameter in closure functions.
     '''
     B = sp.rand(10, 10, .2, 'csr')
     sources = np.random.randint(0, 10, 4)
@@ -134,7 +169,10 @@ def test_transitive_closure_sources():
     assert np.allclose(scc_succ1.todense(), scc_succ2.todense()), \
             'successor sets differ'
 
-def test_closure():
+def test_matmul_closure():
+    '''
+    Test sequential vs parallel matrix multiplication transitive closure.
+    '''
     B = sp.rand(10, 10, .2, 'csr')
     with warnings.catch_warnings():
         # most likely it won't converge, so we ignore the warning
@@ -149,7 +187,7 @@ def test_closure():
 
 def test_maxmin_c3():
     '''
-    length 3 cycle
+    Test correctedness of transitive closure on length 3 cycle.
     '''
     C3 = np.array([
         [0.0, 0.5, 0.0], 
@@ -168,7 +206,7 @@ def test_maxmin_c3():
 
 def test_closure_c4():
     '''
-    length 4 cycle
+    Test correctedness of transitive closure on length 4 cycle.
     '''
     C4 = np.array([
             [0.0, 0.5, 0.0, 0.0], 
@@ -189,12 +227,21 @@ def test_closure_c4():
 
 def test_dfs():
     '''
-    Test that the two implementations return the same results.
+    Test recursive vs iterative DFS-based transitive closure (iterators).
     '''
     A = sp.rand(10,10,.3)
     l1 = itermmclosure_dfs(A, xrange(A.shape[0]))
     l2 = itermmclosure_dfsrec(A, xrange(10))
     assert list(l1) == list(l2)
+
+def test_dfs_frontend():
+    '''
+    Test recursive vs iterative DFS-based transitive closure (frontends).
+    '''
+    A = sp.rand(10, 10, .3)
+    B = mmclosure_dfs(A).todense()
+    C = mmclosure_dfsrec(A).todense()
+    assert np.allclose(B, C)
 
 def test_itermaxmin_closure():
     '''
