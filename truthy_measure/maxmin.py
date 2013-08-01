@@ -103,6 +103,21 @@ def _showwarning(message, category, filename, lineno, line=None):
 
 warnings.showwarning = _showwarning
 
+# max-min transitive closure based on DFS
+
+def _iterreachables(sources, roots, succ):
+    '''
+    For each s in source, combine iterators over (s, t) such that t is a
+    successor of s.
+
+    Parameters
+    ----------
+    '''
+    for s in sources:
+        for t in xrange(len(roots)):
+            if succ[roots[s], roots[t]]:
+                yield s, t
+
 def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
     '''
     Max-min transitive closure (iterative). Performs a DFS search from source to
@@ -130,17 +145,14 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None):
     An iterator over source, target, max-min weight. Only pairs with non-zero
     weight are returned. 
     '''
-    def iterreachables(sources):
-        for s in sources:
-            for t in xrange(n):
-                if succ[roots[s], roots[t]]:
-                    yield s, t
     n = a.shape[0]
     a = sp.lil_matrix(a)
     if succ is not None:
         if roots is None:
             roots = np.arange((n,), dtype=np.int32) 
-        items = iterreachable(sources)
+        else:
+            roots = np.ravel(roots)
+        items = _iterreachable(sources, roots, succ)
     else:
         if targets is not None:
             items = zip(sources, targets)
@@ -211,11 +223,6 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None):
     Recursive version of `itermmclosure_simplesearch`. Not suitable for large
     graphs. 
     '''
-    def iterreachables(sources):
-        for s in sources:
-            for t in xrange(n):
-                if succ[roots[s], roots[t]]:
-                    yield s, t
     def search(node, target, min_so_far):
         if node != target:
             visited.add(node)
@@ -247,7 +254,9 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None):
     if succ is not None:
         if roots is None:
             roots = np.arange((n,), dtype=np.int32) 
-        items = iterreachable(sources)
+        else:
+            roots = np.ravel(roots)
+        items = _iterreachable(sources, roots, succ)
     else:
         if targets is not None:
             items = zip(sources, targets)
