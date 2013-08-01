@@ -21,25 +21,17 @@ traversal algorithms.
     Max-min transitive closure via matrix multiplication, user function. This
     function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
     compute the transitive closure sequentially or in parallel, respectively.
-* mmclosure_recsearch
+* mmclosure_dfs
     Max-min transitive closure, based on depth-first traversal with pruning.
     For each source, only targets that are reachable are searched. Pruning is
     performed using the information on the successors of a node, computed with
     `closure_recursive`.
-* mmclosure_search
-    Same as `mmclosure_recsearch`, except that depth-first traversal
-    is implemented iteratively.
-* mmclosure_dfs
-    Max-min transitive closure, based on depth-first search. All possible
-    targets are searched for.
 * mmclosure_dfsrec
-    Same as `mmclosure_dfs`, except that the depth-first traversal is
-    implemented iteratively.
-* itermmclosure_search
-* itermmclosure_recsearch
+    Same as `mmclosure_dfs`, except that depth-first traversal
+    is implemented iteratively.
 * itermmclosure_dfs
 * itermmmclosure_dfsrec
-    These are the actual function that computes the closure; they all return an
+    These are the actual function that computes the closure; they both return an
     iterator over all node pairs with non-zero weight.
 
 ### Maxmin matrix multiplication
@@ -62,8 +54,7 @@ traversal algorithms.
     Transitive closure based on the algorithm by Nuutila et Soisalon-Soininen
     (1994). Compute (strongly) connected components and successors sets.
     Recursive implementation. For larger graphs, use the iterative version
-    `closure`. Note that this function has a significant memory usage and cannot
-    be used on large graphs.
+    `closure`. The successors matrix may be stored to disk.
 * closure
     Iterative version of the above.
 
