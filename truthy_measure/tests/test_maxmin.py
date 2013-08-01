@@ -144,12 +144,6 @@ def test_closure():
         Cl2 = mmclosure_matmul(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
 
-def test_maxmin_cycles_iterative():
-    A = np.random.random_sample((5,5))
-    res1 = mmclosure_search(A)
-    res2 = mmclosure_recsearch(A)
-    assert np.allclose(res1, res2)
-
 # on simple cycles, the matrix multiplication and the graph traversal algorithms
 # give the same correct answer
 
@@ -167,7 +161,7 @@ def test_maxmin_c3():
         [0.1, 0.1, 0.1],
         [0.2, 0.2, 0.1]
         ])
-    res1 = mmclosure_search(C3) # graph traversal
+    res1 = mmclosure_dfs(C3).toarray() # graph traversal
     res2 = mmclosure_matmul(C3, maxiter=100) # matrix multiplication
     assert np.allclose(res1, res2)
     assert np.allclose(res1, C3T)
@@ -188,18 +182,18 @@ def test_closure_c4():
             [0.1, 0.1, 0.1, 0.4],
             [0.1, 0.1, 0.1, 0.1]
             ])
-    res1 = mmclosure_search(C4) # graph traversal
+    res1 = mmclosure_dfs(C4).toarray() # graph traversal
     res2 = mmclosure_matmul(C4, maxiter=100) # matrix multiplication
     assert np.allclose(res1, res2)
     assert np.allclose(res1, C4T)
 
-def test_simplesearch():
+def test_dfs():
     '''
     Test that the two implementations return the same results.
     '''
     A = sp.rand(10,10,.3)
-    l1 = itermmclosure_simplesearch(A, xrange(A.shape[0]))
-    l2 = itermmclosure_simplerecsearch(A, xrange(10))
+    l1 = itermmclosure_dfs(A, xrange(A.shape[0]))
+    l2 = itermmclosure_dfsrec(A, xrange(10))
     assert list(l1) == list(l2)
 
 def test_itermaxmin_closure():
@@ -209,7 +203,7 @@ def test_itermaxmin_closure():
     '''
     A = sp.rand(5, 5, .2)
     n = A.shape[0]
-    l1 = itermmclosure_simplerecsearch(A, xrange(n))
+    l1 = itermmclosure_dfsrec(A, xrange(n))
     coords = list(l1)
     I, J, W = zip(*coords)
     C1 = sp.coo_matrix((W, (I, J)), (n, n)).todense()

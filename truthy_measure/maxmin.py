@@ -210,7 +210,7 @@ def mmclosure_dfs(a):
     '''
     Max-min closure by simple DFS traversals. Returns a sparse matrix.
     '''
-    A = so.coo_matrix(a.shape)
+    A = sp.lil_matrix(a.shape)
     for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0])):
         A[i,j] = w
     return A
@@ -273,171 +273,10 @@ def mmclosure_dfsrec(a):
     '''
     Max-min closure by simple recursive DFS traversals. Returns a sparse matrix.
     '''
-    A = so.coo_matrix(a.shape)
+    A = sp.lil_matrix(a.shape)
     for i,j,w in itermmclosure_dfsrec(a, xrange(a.shape[0])):
         A[i,j] = w
     return A
-
-# maxmin closure for directed networks with cycles. Recursive implementation.
-
-def mmclosure_recsearch(A):
-    '''
-    Maxmin transitive closure. Recursive implementation. If A is large, this
-    implementation will likely raise RuntimeError for reaching the maximum
-    recursion depth.
-
-    See `mmclosure_search` for parameters, return value, etc.
-    '''
-    AT = np.zeros(A.shape)
-    for row, col, weight in itermmclosure_recsearch(A):
-        AT[row, col] = weight
-    return AT
-
-# XXX update to DFS traversal scheme implemented in itermmclosure_simplerecsearch
-
-def itermmclosure_recsearch(A, ondisk=False, outpath=None, progress=False):
-    '''
-    Maxmin transitive closure, recursive implementation. Returns an iterator
-    over COO tuples.
-
-    NOTE: The frontend `mmclosure_recsearch` constructs a 2-D array
-    out of it.
-    '''
-    # test if b is reachable from a
-    def _reachable(a, b):
-        if a == b:
-            return True
-        elif root[a] == root[b]: # same scc
-            return True
-        else: # different SCC, check if root of b in the set of succ SCC roots
-            return root[b] in succ[root[a]]
-     # the full successors set
-    def _succ(node):
-        r = root[node]
-        idx = root == r # nodes in the same SCC of node
-        for s in succ[r]: # roots of reachable SCCs other than node's own SCC
-            idx |= root == s
-        return np.where(idx)[0]
-    def search(node, target, min_weight, weights):
-        if node == target: # append minimum of path
-            if min_weight != maxval:
-                weights.append(min_weight)
-        if not _reachable(node, target): # prune branch
-            return
-        for neighbor in A.rows[node]:
-            if explored[(node, neighbor)]:
-                continue
-            explored[(node, neighbor)] = True
-            w = float(A[node, neighbor]) # copy value
-            if w < min_weight:
-                search(neighbor, target, w, weights)
-            else:
-                search(neighbor, target, min_weight, weights)
-    root, succ = closure(A, ondisk=ondisk, outpath=outpath, progress=progress)
-    maxval = np.inf
-    A = sp.lil_matrix(A)
-    _ndor = np.ndarray.__or__ # element-wise OR: (x|y)
-    _rooteq = root.__eq__
-    for source in xrange(A.shape[0]):
-        for target in _succ(source):
-            explored = defaultdict(bool)
-            weights = [] # for each path
-            search(source, target, maxval, weights)
-            if len(weights):
-                yield (source, target, max(weights))
-
-# maxmin closure for directed networks with cycles. Iterative implementation.
-
-def mmclosure_search(A):
-    '''
-    Maxmin transitive closure.
-
-    Parameters
-    ----------
-    A : array_like
-        A NumPy 2D array/matrix or a SciPy sparse matrix. This is the adjacency
-        matrix of the graph.
-
-    Returns
-    -------
-    AT : 2-D array
-        the max-min, or ultra-metric, transitive closure of A. This is also equal
-        to the all-pairs bottleneck paths. Entries equal to zero correspond to
-        disconnected pairs, i.e. null capacities.
-
-    Notes
-    -----
-    For each source, and for each target in the successors of the source, this
-    function performs a depth-first search of target, propagating the minimum
-    weight along the DFS branch, and pruning whenever a node that does not have
-    `target` among its successors is entered. Whenever the target node is
-    reached, the minimum weight found along the path is added to a list of
-    minima. When the DFS search tree is exhausted, the maximum weight is
-    extracted. The successors are computed using `closure`.
-    '''
-    AT = np.zeros(A.shape)
-    for row, col, weight in itermmclosure_search(A):
-        AT[row, col] = weight
-    return AT
-
-# XXX update to DFS traversal scheme implemented in itermmclosure_simplesearch
-
-def itermmclosure_search(A):
-    '''
-    Maxmin transitive closure. Returns an iterator over COO tuples.
-
-    NOTE: The frontend `mmclosure_search` constructs a 2-D array out of it.
-    '''
-    # test if b is reachable from a
-    def _reachable(a, b):
-        if a == b:
-            return True
-        elif root[a] == root[b]: # same scc
-            return True
-        else: # different SCC, check if root of b in the set of succ SCC roots
-            return root[b] in succ[root[a]]
-     # the full successors set
-    def _succ(node):
-        r = root[node]
-        idx = root == r # nodes in the same SCC of node
-        for s in succ[r]: # roots of reachable SCCs other than node's own SCC
-            idx |= root == s
-        return np.where(idx)[0]
-    maxval = np.inf
-    A = sp.lil_matrix(A)
-    root, succ = closure(A)
-    _ndor = np.ndarray.__or__ # element-wise or (x|y)
-    _rooteq = root.__eq__
-    for source in xrange(A.shape[0]):
-        for target in _succ(source):
-            explored = defaultdict(bool)
-            dfs_stack = [(source, maxval)]
-            weights = [] # weight of each branch
-            while dfs_stack:
-                node, min_weight = dfs_stack[-1]
-                if node == target: # append minimum of path
-                    if min_weight != maxval:
-                        weights.append(min_weight)
-                if not _reachable(node, target): # prune branch
-                    dfs_stack.pop()
-                    continue
-                backtracking = True
-                for neighbor in A.rows[node]:
-                    if explored[(node, neighbor)]:
-                        continue
-                    backtracking = False
-                    explored[(node, neighbor)] = True
-                    w = float(A[node, neighbor]) # value copy
-                    if w < min_weight:
-                        dfs_stack.append((neighbor, w))
-                    else:
-                        dfs_stack.append((neighbor, min_weight))
-                    break # break to visit neighbor
-                # node has no neighbors, or all outgoing edges already explored
-                if backtracking:
-                    dfs_stack.pop()
-            if len(weights):
-                yield (source, target, max(weights))
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
