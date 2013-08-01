@@ -185,7 +185,7 @@ def test_matmul_closure():
 # on simple cycles, the matrix multiplication and the graph traversal algorithms
 # give the same correct answer
 
-def test_maxmin_c3():
+def test_closure_c3():
     '''
     Test correctedness of transitive closure on length 3 cycle.
     '''
@@ -224,6 +224,58 @@ def test_closure_c4():
     res2 = mmclosure_matmul(C4, maxiter=100) # matrix multiplication
     assert np.allclose(res1, res2)
     assert np.allclose(res1, C4T)
+
+def test_closure_comb():
+    '''
+    Test correctedness of maxmin closure on a comb graph
+    '''
+    A = np.array([
+        [0.0, 0.3, 0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.2, 0.1, 0.0],
+        [0.0, 0.0, 0.0, 0.0, 0.1],
+        [0.0, 0.0, 0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0, 0.0, 0.0]
+        ])
+    AT = np.array([
+        [0.0, 0.3, 0.2, 0.1, 0.1],
+        [0.0, 0.0, 0.2, 0.1, 0.1],
+        [0.0, 0.0, 0.0, 0.0, 0.1],
+        [0.0, 0.0, 0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0, 0.0, 0.0]
+        ])
+    res1 = mmclosure_dfs(A).toarray() # graph traversal
+    res2 = mmclosure_matmul(A, maxiter=100) # matrix multiplication
+    roots, succ, path = closure(A)
+    coords = list(itermmclosure_dfs(A, xrange(len(A)), succ=succ, roots=roots))
+    I,J,W = zip(*coords)
+    res3 = sp.coo_matrix((W, (I,J)), A.shape).toarray()
+    assert np.allclose(res1, res2)
+    assert np.allclose(res1, res3)
+    assert np.allclose(res1, AT)
+
+def test_closure_two_paths():
+    '''
+    Test correctedness of maxmin closure on a two disjoint paths graph
+    '''
+    A = np.array([
+        [0.0, 0.3, 0.3, 0.0],
+        [0.0, 0.1, 0.0, 0.2],
+        [0.0, 0.0, 0.0, 0.4],
+        [0.0, 0.0, 0.0, 0.0]
+        ])
+    AT = np.array([
+        [0.0, 0.3, 0.3, 0.3],
+        [0.0, 0.1, 0.0, 0.2],
+        [0.0, 0.0, 0.0, 0.4],
+        [0.0, 0.0, 0.0, 0.0]
+        ])
+    res1 = mmclosure_dfs(A).toarray() # graph traversal
+    roots, succ, path = closure(A)
+    coords = list(itermmclosure_dfs(A, xrange(len(A)), succ=succ, roots=roots))
+    I,J,W = zip(*coords)
+    res2 = sp.coo_matrix((W, (I,J)), A.shape).toarray()
+    assert np.allclose(res1, AT)
+    assert np.allclose(res1, res2)
 
 def test_dfs():
     '''

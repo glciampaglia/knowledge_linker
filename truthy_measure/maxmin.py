@@ -177,7 +177,7 @@ def _dfs_items(sources, targets, n, succ, roots, progress):
         else:
             items = ProductIter(sources, xrange(n))
     if progress:
-        widgets = ['MM ', AdaptiveETA(), Bar(), Percentage()]
+        widgets = ['[Maxmin closure] ', AdaptiveETA(), Bar(), Percentage()]
         pbar = ProgressBar(widgets=widgets)
         items = pbar(items)
     return items
@@ -231,7 +231,8 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
             backtracking = True
             for neighbor in a.rows[node]:
                 if return_value is None:
-                    if succ is not None and not succ[roots[node], roots[neighbor]]:
+                    if succ is not None and not succ[roots[neighbor],
+                            roots[target]]:
                         continue # prune
                     if (node, neighbor) in explored or neighbor in visited:
                         # to avoid getting stuck inside cycles
@@ -288,7 +289,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
             return min_so_far
         max_weight = -1
         for neighbor in a.rows[node]:
-            if succ is not None and not succ[roots[node], roots[neighbor]]:
+            if succ is not None and not succ[roots[neighbor], roots[target]]:
                 continue # prune
             if (node, neighbor) in explored or neighbor in visited:
                 # to avoid getting stuck inside cycles
@@ -355,7 +356,7 @@ def _mk_sources(sources, n, progress):
     if sources is None:
         sources = xrange(n) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=['TC ', AdaptiveETA(), Bar(),
+        pbar = ProgressBar(widgets=['[Transitive closure] ', AdaptiveETA(), Bar(),
             Percentage()])
         sources = pbar(sources)
     return sources
