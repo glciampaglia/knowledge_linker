@@ -356,10 +356,10 @@ def _mk_sources(sources, n, progress):
     if sources is None:
         sources = xrange(n) # explore the whole graph
     if progress:
-        pbar = ProgressBar(widgets=['[Transitive closure] ', AdaptiveETA(), Bar(),
-            Percentage()])
-        sources = pbar(sources)
-    return sources
+        widgets = ['[Transitive closure] ', AdaptiveETA(), Bar(), Percentage()]
+        pbar = ProgressBar(maxval=2 * n, widgets=widgets)
+        pbar.start()
+    return sources, pbar
 
 _dfs_order = 0 # this must be a module-level global
 
@@ -386,6 +386,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
         order[node] = _dfs_order
         _dfs_order += 1
         root[node] = node
+        pbar.update(2 * _dfs_order - 1)
         for neigh_node in adj.rows[node]:
             if not visited[neigh_node]:
                 visit(neigh_node)
@@ -414,6 +415,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
             if root[node] not in stack:
                 stack.append(root[node])
             succ[root[node], node] = True
+        pbar.update(2 * _dfs_order)
     # main function
     adj = sp.lil_matrix(adj)
     order = array('i', (0 for i in xrange(adj.shape[0])))
@@ -423,10 +425,11 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = _mk_succ(outpath, adj.shape, ondisk)
-    sources = _mk_sources(sources, adj.shape[0], progress)
+    sources, pbar = _mk_sources(sources, adj.shape[0], progress)
     for node in sources:
         if not visited[node]:
             visit(node)
+    pbar.finish()
     return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
@@ -485,10 +488,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = _mk_succ(outpath, adj.shape, ondisk)
-    sources = _mk_sources(sources, adj.shape[0], progress)
-    counter = 0
+    sources, pbar = _mk_sources(sources, adj.shape[0], progress)
     for source in sources:
-        counter += 1
         if dfs_order[source] < 0:
             # start a new depth-first traversal from source
             dfs_stack = [source]
@@ -503,6 +504,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                 dfs_order[node] = dfs_counter
                 dfs_counter += 1
                 root[node] = node
+                pbar.update(2 * dfs_counter - 1)
             # go through all the neighbors, until we find a non-visited node. If
             # we find one, put it on top of the stack and break to next iteration.
             # If no neighbors exist, or all neighbors have been already visited,
@@ -545,6 +547,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                     succ[root[node], node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
+                pbar.update(2 * dfs_counter)
+    pbar.finish()
     return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
