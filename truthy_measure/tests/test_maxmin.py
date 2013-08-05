@@ -277,6 +277,30 @@ def test_closure_two_paths():
     assert np.allclose(res1, AT)
     assert np.allclose(res1, res2)
 
+def test_closure_cycle_path():
+    '''
+    Test correctedness of maxmin closure on the following graph
+
+     ------>-----
+    |            |
+    1 -- > 0 --> 2
+    |            |
+     ------<-----
+    '''
+    A = np.array([[ 0.  ,  0.  ,  0.09],
+                  [ 0.01,  0.  ,  0.61],
+                  [ 0.  ,  0.98,  0.  ]])
+
+    AT = np.array([[ 0.01,  0.09,  0.09],
+                   [ 0.01,  0.61,  0.61],
+                   [ 0.01,  0.98,  0.61]])
+    B = mmclosure_dfs(A).toarray()
+    C = mmclosure_dfsrec(A).toarray()
+    D = mmclosure_matmul(A)
+    assert np.allclose(AT, B)
+    assert np.allclose(B, C)
+    assert np.allclose(B, D)
+
 def test_dfs():
     '''
     Test recursive vs iterative DFS-based transitive closure (iterators).
