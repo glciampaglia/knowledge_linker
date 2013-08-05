@@ -81,6 +81,7 @@ from array import array
 from tables import BoolAtom, Filters, open_file
 from tempfile import NamedTemporaryFile
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
+from operator import itemgetter
 
 from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -163,7 +164,8 @@ class ProductIter(object):
 
 def _dfs_items(sources, targets, n, succ, roots, progress):
     '''
-    Produces input (source, target) pairs for DFS search.
+    Produces input (source, target) pairs for DFS search and related progress
+    bar object.
     '''
     if succ is not None:
         if roots is None:
@@ -183,7 +185,7 @@ def _dfs_items(sources, targets, n, succ, roots, progress):
     return items
 
 def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
-        progress=False):
+        progress=False, cachesize=1000):
     '''
     Max-min transitive closure (iterative). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -210,69 +212,79 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
     Returns
     -------
     An iterator over source, target, max-min weight. Only pairs with non-zero
-    weight are returned. 
+    weight are returned.
+
+    Notes
+    -----
+    The algorithm traverses the graph in depth-first order, propagating the
+    minimum so far. The generated path does not contain duplicates (with the
+    possible exception of source and target, if they are the same). When
+    backtracking from a node, the maximum of all the minima coming from the
+    neighbors is chosen, and propagated back.
     '''
     n = a.shape[0]
     a = sp.lil_matrix(a)
     items = _dfs_items(sources, targets, n, succ, roots, progress)
+    get0 = itemgetter(0) # e.g. lambda k : k[0]
+    usecache = cachesize > 0
+    if usecache:
+        cache = Cache(cachesize)
     for s, t in items:
-        explored = set() # explored edges
-        visited = set() # nodes visited along the path
-        dfs_stack = [(s,t,np.inf,-1)] # local context
-        return_value = None # return value from recursive call
+        max_weight = -1 # the max-min over all paths so far
+        max_path = None # the nodes in the path of max_weight
+        path = set() # nodes visited along the current path
+        # local context: current node, target node, minimum along the path, last
+        # neighbor explored at current node. Exploration starts from the source
+        # with inf and no neighbor explored (-1)
+        dfs_stack = [(s, t, np.inf, -1)]
+        path.add(s)
         while dfs_stack:
-            node, target, min_so_far, max_weight = dfs_stack[-1]
-            if node != target:
-                visited.add(node)
-            if node == target and min_so_far < np.inf:
-                return_value = min_so_far
-                dfs_stack.pop()
-                continue
+            node, target, min_so_far, last_neighbor = dfs_stack[-1]
             backtracking = True
             for neighbor in a.rows[node]:
-                if return_value is None:
-                    if succ is not None and not succ[roots[neighbor],
-                            roots[target]]:
-                        continue # prune
-                    if (node, neighbor) in explored or neighbor in visited:
-                        # to avoid getting stuck inside cycles
+                # skip all neighbors already explored to pick up from where we
+                # left off
+                if neighbor <= last_neighbor:
+                    continue
+                dfs_stack[-1] = (node, target, min_so_far, neighbor)
+                # prune if target is not reachable through neighbor
+                if succ is not None:
+                    if not succ[roots[neighbor], roots[target]]:
                         continue
-                    explored.add((node, neighbor))
-                    # recurse by pushing on the top of the stack
+                w = float(a[node, neighbor]) # copy value
+                if neighbor == target:
+                    path.add(target) # close the path
+                    max_weight, max_path = max(
+                            (max_weight, max_path),
+                            (min(min_so_far, w), path), key=get0)
+                    continue
+                if usecache and (neighbor, target) in cache:
+                    cached_weight, cached_path = cache[(neighbor, target)]
+                    if not cached_path.intersection(path):
+                        max_weight, max_path = max((max_weight, max_path),\
+                                (min(min_so_far, w, cached_weight), \
+                                path.union(cached_path)), key=get0)
+                        continue
+                if neighbor not in path:
+                    dfs_stack.append((neighbor, target, min(w, min_so_far), -1))
                     backtracking = False
-                    w = float(a[node, neighbor]) # copy value
-                    if w < min_so_far:
-                        dfs_stack.append((neighbor, target, w, -1))
-                    else:
-                        dfs_stack.append((neighbor, target, min_so_far, -1))
+                    path.add(node)
                     break
-                else:
-                    # this emulates the code that is executed after the
-                    # recursive call. The return value is used and cleared up.
-                    # The top of the stack is updated since we are updating the
-                    # local context.
-                    m = return_value
-                    if m is not None and m > max_weight:
-                        max_weight = m
-                    return_value = None
-                    dfs_stack[-1] = (node, target, min_so_far, max_weight)
             if backtracking:
-                visited.discard(node)
-                if max_weight < min_so_far:
-                    return_value = max_weight
-                else:
-                    return_value = min_so_far
+                path.discard(node)
                 dfs_stack.pop()
-        m = return_value
-        if m > -1:
-            yield s, t, m
+        if max_weight > -1:
+            yield s, t, max_weight
+            if usecache:
+                cache[(s,t)] = (max_weight, max_path)
 
-def mmclosure_dfs(a):
+def mmclosure_dfs(a, succ=None, roots=None, progress=False, cachesize=1000):
     '''
     Max-min closure by simple DFS traversals. Returns a sparse matrix.
     '''
     A = sp.lil_matrix(a.shape)
-    for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0])):
+    for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0]), succ=succ,
+            roots=roots, progress=progress, cachesize=cachesize):
         A[i,j] = w
     return A
 
