@@ -83,7 +83,7 @@ from tempfile import NamedTemporaryFile
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 from operator import itemgetter
 
-from .utils import coo_dtype
+from .utils import coo_dtype, Cache
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # for closure/closure_recursive
