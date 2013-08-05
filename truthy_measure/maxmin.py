@@ -86,7 +86,7 @@ from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # for closure/closure_recursive
-CHUNKSIZE = 100000
+CHUNKSIZE = 1000
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
 # the indices array has dtype float64. This happens intermittently. In the
@@ -355,6 +355,7 @@ def _mk_sources(sources, n, progress):
     '''
     if sources is None:
         sources = xrange(n) # explore the whole graph
+    pbar = None
     if progress:
         widgets = ['[Transitive closure] ', AdaptiveETA(), Bar(), Percentage()]
         pbar = ProgressBar(maxval=2 * n, widgets=widgets)
@@ -386,7 +387,8 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
         order[node] = _dfs_order
         _dfs_order += 1
         root[node] = node
-        pbar.update(2 * _dfs_order - 1)
+        if progress:
+            pbar.update(2 * _dfs_order - 1)
         for neigh_node in adj.rows[node]:
             if not visited[neigh_node]:
                 visit(neigh_node)
@@ -406,7 +408,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
                     in_scc[comp_node] = True
                     if comp_node != node:
                         succ[node, :] += succ[comp_node, :]
-                        succ[comp_node, :] = False
+#                         succ[comp_node, :] = False
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break
             else:
@@ -415,7 +417,8 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
             if root[node] not in stack:
                 stack.append(root[node])
             succ[root[node], node] = True
-        pbar.update(2 * _dfs_order)
+        if progress:
+            pbar.update(2 * _dfs_order)
     # main function
     adj = sp.lil_matrix(adj)
     order = array('i', (0 for i in xrange(adj.shape[0])))
@@ -425,11 +428,12 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
     succ = _mk_succ(outpath, adj.shape, ondisk)
-    sources, pbar = _mk_sources(sources, adj.shape[0], progress)
+    sources, progress = _mk_sources(sources, adj.shape[0], progress)
     for node in sources:
         if not visited[node]:
             visit(node)
-    pbar.finish()
+    if progress:
+        pbar.finish()
     return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 # Transitive closure for directed cyclical graphs. Iterative implementation.
@@ -504,7 +508,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                 dfs_order[node] = dfs_counter
                 dfs_counter += 1
                 root[node] = node
-                pbar.update(2 * dfs_counter - 1)
+                if progress:
+                    pbar.update(2 * dfs_counter - 1)
             # go through all the neighbors, until we find a non-visited node. If
             # we find one, put it on top of the stack and break to next iteration.
             # If no neighbors exist, or all neighbors have been already visited,
@@ -535,7 +540,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                             in_scc[comp_node] = True
                             if comp_node != node:
                                 succ[node, :] += succ[comp_node, :]
-                                succ[comp_node, :] = False
+#                                 succ[comp_node, :] = False
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
                                 break
@@ -547,8 +552,10 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                     succ[root[node], node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
-                pbar.update(2 * dfs_counter)
-    pbar.finish()
+                if progress:
+                    pbar.update(2 * dfs_counter)
+    if progress:
+        pbar.finish()
     return np.frombuffer(root, dtype=np.int32), succ, outpath
 
 def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
