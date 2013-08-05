@@ -86,7 +86,7 @@ from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # for closure/closure_recursive
-CHUNKSIZE = 100000
+CHUNKSIZE = 1000
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
 # the indices array has dtype float64. This happens intermittently. In the
@@ -408,7 +408,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
                     in_scc[comp_node] = True
                     if comp_node != node:
                         succ[node, :] += succ[comp_node, :]
-                        succ[comp_node, :] = False
+#                         succ[comp_node, :] = False
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break
             else:
@@ -540,7 +540,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                             in_scc[comp_node] = True
                             if comp_node != node:
                                 succ[node, :] += succ[comp_node, :]
-                                succ[comp_node, :] = False
+#                                 succ[comp_node, :] = False
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
                                 break
