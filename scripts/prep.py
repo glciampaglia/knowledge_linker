@@ -22,15 +22,6 @@ from truthy_measure.utils import coo_dtype
 
 namespaces = {}
 
-def _readns(path):
-    global namespaces
-    namespaces.clear()
-    with closing(open(path)) as nsfile:
-        for line in nsfile:
-            ns, code = line.strip().split('\t')
-            namespaces[ns] = code
-    return namespaces
-
 def _first_pass(path, properties=False, destination=os.path.curdir):
     '''
     Returns an ordered mapping (see `collections.OrderedDict`) of abbreviated
@@ -114,7 +105,7 @@ if __name__ == '__main__':
     print 'WARNING: the n-triples file must be already sorted by source,'\
             ' destination!'
     print
-    _readns(args.ns_file)
+    namespaces = readns(args.ns_file)
     sys.stdout = EncodedFile(sys.stdout, 'utf-8')
     # expand destination path, check it is not an existing file, create it in
     # case it does not exist

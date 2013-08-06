@@ -4,6 +4,15 @@ import re
 from contextlib import closing
 from codecs import EncodedFile
 from gzip import GzipFile
+from itertools import imap
+from operator import methodcaller
+
+def readns(path):
+    '''
+    Returns a dictionary mapping full namespaces URIs to abbreviated names
+    '''
+    with closing(open(path)) as f:
+        return dict(imap(methodcaller('split','\t'), imap(str.strip, f)))
 
 def itertriples(path):
     '''
