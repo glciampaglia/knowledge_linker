@@ -355,3 +355,34 @@ closure functions. Will run a test later today to see if now it is feasible to
 compute the closure of the full DBPedia graph. If this works, must integrate the
 code from the DFS search of yesterday with the branch pruning. Also must make
 sure that the full successors set is iterated upon, not just the SCC roots.
+
+## Mon Aug  5 19:38:30 EDT 2013
+
+Skipped a few entries last week so I am summing all up here.
+
+Last week worked on fixing a bug in the transitive closure algorithm and
+integrating it with PyTables so that the closure graph can be saved to disk.
+Also added a progress bar and ETA, and it looks like that it would take close to
+12 days to finish computing the closure. Launched it on Friday on Lenny but had
+to kill it today because the GFS was running out of space again, though it seems
+that my script it was not the main cause the fillup. Queued it today on Quarry
+with maximum wall time (14 days!) and will start in two days.
+
+Last Friday worked on fixing a bug on the DFS functions and in integrating the
+cache. Today finished rewriting the iterative DFS and wrote some more tests.
+Tested the effect of the cache but found no speedup on random graphs up to 5000
+nodes and sparsity equal 20%. Could be due to the ordering of the computation:
+ideally first computing the sources with higher betweenness should increase the
+ratio of cache hits, though should actually profile this more accurately and not
+use random graphs for doing the benchmarking. The current implementation of the
+cache is also slow, by the way.
+
+Also, found out that `graph_tool` provides a python wrapper to the transitive
+closure function from the BGL. Tried to see if the closure graph would fit in
+memory on smithers (which should have something around 192GB or RAM) with no
+luck -- called it off (i.e. killed the process) at around 75% of memory
+consumption to avoid making the machine unresponsive. In theory, modifying the
+function to store the graph on disk would solve all my problems, but the time it
+would take me to learn how to write decent C++ code would probably even out with
+the slowness of Python. 
+
