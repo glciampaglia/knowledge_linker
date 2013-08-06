@@ -5,111 +5,22 @@ module. '''
 
 from __future__ import division
 import os
-import re
 import sys
 import errno
 import numpy as np
-from gzip import GzipFile
-from StringIO import StringIO
 from argparse import ArgumentParser
 from contextlib import closing, nested
-from collections import deque, OrderedDict
+from collections import OrderedDict
 from itertools import groupby
 from operator import itemgetter
 from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
+from truthy_measure.ntriples import *
 from truthy_measure.utils import coo_dtype
 
 namespaces = {}
-
-def itertriples(path):
-    '''
-    Iterates over an N-triples file returning triples as tuples.
-
-    Parameters
-    ----------
-    path : string
-        path to N-triples file.
-    '''
-    if path.endswith('.gz'):
-        ntfile = GzipFile(path)
-    else:
-        ntfile = open(path)
-    ntfile = EncodedFile(ntfile, 'utf-8')
-    with closing(ntfile):
-        for line_no, line in enumerate(ntfile):
-            if line.startswith('#'):
-                continue
-            # remove trailing newline and dot
-            line = line.strip().strip('.').strip()
-            # the first two whitespaces are guaranteed to split the line
-            # correctly. The trailing part may be a property containing
-            # whitespaces, so using str.split is not viable.
-            s1 = line.find(' ')
-            s2 = line.find(' ', s1 + 1)
-            triple = line[:s1], line[s1 + 1:s2], line[s2 + 1:]
-            yield triple
-
-def iterabbrv(triples, abbreviations, properties=False):
-    '''
-    Iterator over n-triples, with namespaces abbreviated to their "canonical"
-    form (e.g. rdf:, rdfs:, dbpedia:, etc)
-
-    Parameters
-    ----------
-    triples : sequence
-        An iterator over n-triples as tuples.
-    abbreviated : mapping
-        A mapping of namespaces to abbreviations.
-    properties : bool
-        If true, yield also properties. Default is no properties.
-    '''
-    x = re.compile('({})'.format('|'.join(abbreviations.keys())))
-    for triple in triples:
-        abbrvtriple = []
-        triple_has_property = False
-        for item in triple:
-
-            is_property = False
-
-            # detect whether item is an entity or a property
-            if item.startswith('<'):
-                # URI-based entity: e.g. <http://www.w3.org/..>, try to
-                # abbreviate it
-                item = item[1:-1]
-            elif item.endswith('>'):
-                # typed property: property^^<URI>, where <URI> is same as above,
-                # try to abbreviate URI and then recompose with ^^
-                is_property = True
-                triple_has_property = True
-                prop, item = item.split('^^')
-                item = item[1:-1]
-            else:
-                # normal property (e.g. "Rome"@en), no abbreviation possible
-                abbrvtriple.append(item)
-                triple_has_property = True
-                continue
-
-            # substitute namespace with abbreviation
-            m = x.match(item)
-            if m is not None:
-                matchedns = m.group()
-                abbrvns = abbreviations[matchedns]
-                item = x.sub(abbrvns + ':', item)
-
-            # recompose the items of the form property^^<URI>
-            if is_property:
-                item = '^^'.join((prop, item))
-
-            abbrvtriple.append(item)
-
-        # skip properties by default
-        if triple_has_property and not properties:
-            continue
-
-        yield tuple(abbrvtriple)
 
 def _readns(path):
     global namespaces
@@ -163,8 +74,8 @@ def _second_pass(path, vertexmap, num_triples, properties,
 
     where k is the corresponding index in the adjacency matrix, and
     Predicates are written as attributes, collapsing all parallel arcs (the
-    attribute is a
-    comma-separated list of all predicates). Also writes the adjacency matrix in COO format to a NPY file to disk.
+    attribute is a comma-separated list of all predicates). Also writes the
+    adjacency matrix in COO format to a NPY file to disk.
     '''
     _edge = '{} {}\n'
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
@@ -173,6 +84,9 @@ def _second_pass(path, vertexmap, num_triples, properties,
     data = []
     with closing(edgesfile):
         i = 0
+        # we group by source AND destination to make sure we group all parallel
+        # edges in a single one. The predicates are saved as attributes. This
+        # assumes that the input file is already sorted by source, destination!
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
             out_entity, in_entity = key
             predicates = [ p for (oe, p, ie) in subiter ]
@@ -189,18 +103,19 @@ def _second_pass(path, vertexmap, num_triples, properties,
     print >> sys.stderr, 'info: adj written to {}'.format(adjpath)
 
 if __name__ == '__main__':
-
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('ns_file', metavar='namespaces', help='tab-separated list of namespace codes')
     parser.add_argument('nt_file', metavar='ntriples', help='N-Triples file')
     parser.add_argument('-p', '--properties', action='store_true',
             help='print properties')
     parser.add_argument('-D', '--destination', help='destination path')
-
     args = parser.parse_args()
+    print
+    print 'WARNING: the n-triples file must be already sorted by source,'\
+            ' destination!'
+    print
     _readns(args.ns_file)
     sys.stdout = EncodedFile(sys.stdout, 'utf-8')
-
     # expand destination path, check it is not an existing file, create it in
     # case it does not exist
     args.destination = os.path.expanduser(os.path.expandvars(args.destination))
@@ -211,17 +126,13 @@ if __name__ == '__main__':
     elif not os.path.exists(args.destination):
         os.mkdir(args.destination)
         print >> sys.stderr, 'info: created {}'.format(args.destination)
-
     try:
         tic = time()
-
         vertexmap, num_triples = _first_pass(args.nt_file, args.properties,
                 args.destination)
         _second_pass(args.nt_file, vertexmap, num_triples, args.properties,
                 args.destination)
-
         toc = time()
-
         etime = timedelta(seconds=round(toc - tic))
         speed = num_triples / (toc - tic)
         print >> sys.stderr, 'info: {:d} triples processed in {} '\
