@@ -4,6 +4,7 @@
 module. '''
 
 from __future__ import division
+import os
 import re
 import sys
 import errno
@@ -24,9 +25,9 @@ from truthy_measure.utils import coo_dtype
 namespaces = {}
 
 def itertriples(path):
-    ''' 
+    '''
     Iterates over an N-triples file returning triples as tuples.
-    
+
     Parameters
     ----------
     path : string
@@ -52,7 +53,7 @@ def itertriples(path):
             yield triple
 
 def iterabbrv(triples, abbreviations, properties=False):
-    ''' 
+    '''
     Iterator over n-triples, with namespaces abbreviated to their "canonical"
     form (e.g. rdf:, rdfs:, dbpedia:, etc)
 
@@ -73,19 +74,19 @@ def iterabbrv(triples, abbreviations, properties=False):
 
             is_property = False
 
-            # detect whether item is an entity or a property 
-            if item.startswith('<'): 
+            # detect whether item is an entity or a property
+            if item.startswith('<'):
                 # URI-based entity: e.g. <http://www.w3.org/..>, try to
                 # abbreviate it
                 item = item[1:-1]
-            elif item.endswith('>'): 
+            elif item.endswith('>'):
                 # typed property: property^^<URI>, where <URI> is same as above,
                 # try to abbreviate URI and then recompose with ^^
                 is_property = True
                 triple_has_property = True
-                prop, item = item.split('^^') 
+                prop, item = item.split('^^')
                 item = item[1:-1]
-            else: 
+            else:
                 # normal property (e.g. "Rome"@en), no abbreviation possible
                 abbrvtriple.append(item)
                 triple_has_property = True
@@ -97,7 +98,7 @@ def iterabbrv(triples, abbreviations, properties=False):
                 matchedns = m.group()
                 abbrvns = abbreviations[matchedns]
                 item = x.sub(abbrvns + ':', item)
-            
+
             # recompose the items of the form property^^<URI>
             if is_property:
                 item = '^^'.join((prop, item))
@@ -119,7 +120,7 @@ def _readns(path):
             namespaces[ns] = code
     return namespaces
 
-def _first_pass(path, properties=False):
+def _first_pass(path, properties=False, destination=os.path.curdir):
     '''
     Returns an ordered mapping (see `collections.OrderedDict`) of abbreviated
     entity URIs to vertex IDs, and writes them to file `nodes.txt`.
@@ -136,24 +137,27 @@ def _first_pass(path, properties=False):
         num_triples += 1
     vertexmap = OrderedDict(( (entity, i) for i, entity in
         enumerate(sorted(vertices)) ))
-    with closing(open('nodes.txt', 'w')) as nodesfile:
+    nodespath = os.path.join(destination, 'nodes.txt')
+    with closing(open(nodespath, 'w')) as nodesfile:
         for k, v in vertexmap.iteritems():
             nodesfile.write(_node.format(v, k))
+    print >> sys.stderr, 'info: nodes written to {}'.format(nodespath)
     return vertexmap, num_triples
 
-def _second_pass(path, vertexmap, num_triples, properties):
+def _second_pass(path, vertexmap, num_triples, properties,
+        destination=os.path.curdir):
     '''
     Prints the edges list to file `edges.txt` and the coordinate list of the
-    adjacency matrix to file `adjacency.npy`. 
-    
-    The adjacency matrix is written in coordinate format, e.g.: 
-    
+    adjacency matrix to file `adjacency.npy`.
+
+    The adjacency matrix is written in coordinate format, e.g.:
+
         adj[k] = i, j, 1    where e_k = (v_i, v_j)
-        
+
     This is format is suitable for opening the file as a sparse matrix (see
     `scipy.sparse`).
 
-    The edges list has the form: 
+    The edges list has the form:
 
         k, predicate-list
 
@@ -164,10 +168,11 @@ def _second_pass(path, vertexmap, num_triples, properties):
     '''
     _edge = '{} {}\n'
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
-    edgesfile = open('edges.txt', 'w')
+    edgespath = os.path.join(destination, 'edges.txt')
+    edgesfile = open(edgespath, 'w')
     data = []
     with closing(edgesfile):
-        i = 0 
+        i = 0
         for key, subiter in groupby(triplesiter, itemgetter(0,2)):
             out_entity, in_entity = key
             predicates = [ p for (oe, p, ie) in subiter ]
@@ -178,25 +183,42 @@ def _second_pass(path, vertexmap, num_triples, properties):
             # default weight is 1
             data.append((int(out_vertex), int(in_vertex), 1.0))
             i += 1
-    np.save('adjacency.npy', np.asarray(data, dtype=coo_dtype))
+    print >> sys.stderr, 'info: edges written to {}'.format(edgespath)
+    adjpath = os.path.join(destination, 'adjacency.npy')
+    np.save(adjpath, np.asarray(data, dtype=coo_dtype))
+    print >> sys.stderr, 'info: adj written to {}'.format(adjpath)
 
 if __name__ == '__main__':
 
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('ns_file', metavar='namespaces', help='tab-separated list of namespace codes')
     parser.add_argument('nt_file', metavar='ntriples', help='N-Triples file')
-    parser.add_argument('-p', '--properties', action='store_true', 
+    parser.add_argument('-p', '--properties', action='store_true',
             help='print properties')
+    parser.add_argument('-D', '--destination', help='destination path')
 
     args = parser.parse_args()
     _readns(args.ns_file)
     sys.stdout = EncodedFile(sys.stdout, 'utf-8')
 
+    # expand destination path, check it is not an existing file, create it in
+    # case it does not exist
+    args.destination = os.path.expanduser(os.path.expandvars(args.destination))
+    if os.path.exists(args.destination) and not os.path.isdir(args.destination):
+        print >> sys.stderr, 'error: not a directory: '\
+                '{}'.format(args.destination)
+        sys.exit(1)
+    elif not os.path.exists(args.destination):
+        os.mkdir(args.destination)
+        print >> sys.stderr, 'info: created {}'.format(args.destination)
+
     try:
         tic = time()
 
-        vertexmap, num_triples = _first_pass(args.nt_file, args.properties)
-        _second_pass(args.nt_file, vertexmap, num_triples, args.properties)
+        vertexmap, num_triples = _first_pass(args.nt_file, args.properties,
+                args.destination)
+        _second_pass(args.nt_file, vertexmap, num_triples, args.properties,
+                args.destination)
 
         toc = time()
 
