@@ -386,3 +386,11 @@ function to store the graph on disk would solve all my problems, but the time it
 would take me to learn how to write decent C++ code would probably even out with
 the slowness of Python. 
 
+## Tue Aug  6 17:15:25 EDT 2013
+
+Today looked at how to recover from the raw data files the actual ontological
+network without the closure. Recall that the dbpedia instance types file is
+already closed, plus it includes links to external classes that are equivalent
+to classes in the dbpedia ontology (i.e. dbo:Person and foaf:Person). It should
+be possible to recover the ontology without transforming it in a taxonomy (i.e.
+keep cases when a resource has multiple classes) in a fairly simple way.
