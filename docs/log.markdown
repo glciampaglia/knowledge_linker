@@ -394,3 +394,19 @@ already closed, plus it includes links to external classes that are equivalent
 to classes in the dbpedia ontology (i.e. dbo:Person and foaf:Person). It should
 be possible to recover the ontology without transforming it in a taxonomy (i.e.
 keep cases when a resource has multiple classes) in a fairly simple way.
+
+## Wed Aug  7 18:56:13 EDT 2013
+
+Finished the script for filtering the instance-type data files. The script
+filters out classes from external ontologies (such as FOAF or schema.org) and
+extracts the original taxonomy from the existing graph distributed by the
+DBPedia team, which is closed. People from the DBPedia-users mailing list told
+me there should have been a few instances belonging to multiple classes, that
+is, the ontology should be a DAG and not a tree, but I could not find any. This
+process eliminates roughly 80% of the is-a edges from the instance-type file.
+
+Recreated the data file, the network has 3,141,896 nodes and 12,898,752 edges.
+Compared with the previous version (3,141,881 nodes and 26,914,521 edges) the
+difference of 17 nodes is due to the FOAF, bibo, and schema.org classes that
+have been removed to 54 classes from the DBPedia ontology namespace that for
+some reason had been lost.
