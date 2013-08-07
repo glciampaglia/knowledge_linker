@@ -23,10 +23,13 @@ def itertriples(path):
     path : string
         path to N-triples file.
     '''
-    if path.endswith('.gz'):
-        ntfile = GzipFile(path)
+    if isinstance(path, file):
+        ntfile = path
     else:
-        ntfile = open(path)
+        if path.endswith('.gz'):
+            ntfile = GzipFile(path)
+        else:
+            ntfile = open(path)
     ntfile = EncodedFile(ntfile, 'utf-8')
     with closing(ntfile):
         for line_no, line in enumerate(ntfile):
