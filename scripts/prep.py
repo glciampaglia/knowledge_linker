@@ -25,24 +25,30 @@ namespaces = {}
 def _first_pass(path, properties=False, destination=os.path.curdir):
     '''
     Returns an ordered mapping (see `collections.OrderedDict`) of abbreviated
-    entity URIs to vertex IDs, and writes them to file `nodes.txt`.
+    entity URIs to vertex IDs, and writes them to file `nodes.txt`. Also writes
+    the abbreviated triples to `triples_abbrev.nt`.
     '''
     global namespaces
     _node = '{} {}\n'
     vertices = set()
     triplesiter = iterabbrv(itertriples(path), namespaces, properties)
     num_triples = 0
-    for triple in triplesiter:
-        out_entity, predicate, in_entity = triple
-        vertices.add(out_entity)
-        vertices.add(in_entity)
-        num_triples += 1
+    abbrevpath = os.path.join(destination, 'triples_abbrev.nt')
+    with closing(open(abbrevpath, 'w')) as abbrevfile:
+        for triple in triplesiter:
+            out_entity, predicate, in_entity = triple
+            vertices.add(out_entity)
+            vertices.add(in_entity)
+            num_triples += 1
+            print >> abbrevfile, '{} {} {} .'.format(*triple)
     vertexmap = OrderedDict(( (entity, i) for i, entity in
         enumerate(sorted(vertices)) ))
     nodespath = os.path.join(destination, 'nodes.txt')
     with closing(open(nodespath, 'w')) as nodesfile:
         for k, v in vertexmap.iteritems():
             nodesfile.write(_node.format(v, k))
+    print >> sys.stderr, 'info: abbreviated n-triples written to '\
+            '{}'.format(abbrevpath)
     print >> sys.stderr, 'info: nodes written to {}'.format(nodespath)
     return vertexmap, num_triples
 
