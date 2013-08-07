@@ -59,7 +59,7 @@ def iterabbrv(triples, abbreviations, properties=False):
     properties : bool
         If true, yield also properties. Default is no properties.
     '''
-    patterns = map(re.compile, abbreviations)
+    x = re.compile('({})'.format('|'.join(abbreviations.keys())))
     for triple in triples:
         abbrvtriple = []
         triple_has_property = False
@@ -82,15 +82,12 @@ def iterabbrv(triples, abbreviations, properties=False):
                 abbrvtriple.append(item)
                 triple_has_property = True
                 continue
-            # substitute namespace with abbreviation. Abbreviate with the
-            # longest matching namespace URI
-            matches = filter(None, [ x.match(item) for x in patterns ])
-            groups = [ m.group() for m in matches ]
-            if len(groups):
-                max_len, max_group, max_match = max(zip(map(len, groups),
-                    groups, matches))
-                abbrev = abbreviations[max_group]
-                item = max_match.re.sub(abbrev + ':', item)
+            # substitute namespace with abbreviation
+            m = x.match(item)
+            if m is not None:
+                matchedns = m.group()
+                abbrvns = abbreviations[matchedns]
+                item = x.sub(abbrvns + ':', item)
             # recompose the items of the form property^^<URI>
             if is_property:
                 item = '^^'.join((prop, item))
