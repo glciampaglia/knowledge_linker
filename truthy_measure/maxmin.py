@@ -292,7 +292,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
         progress=False):
     '''
     Recursive version of `itermmclosure_simplesearch`. Not suitable for large
-    graphs. 
+    graphs.
     '''
     def search(node, target, min_so_far):
         if node != target:
@@ -305,7 +305,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
                 continue # prune
             if (node, neighbor) in explored or neighbor in visited:
                 # to avoid getting stuck inside cycles
-                continue 
+                continue
             explored.add((node, neighbor))
             w = float(a[node, neighbor]) # copy value
             if w < min_so_far:
@@ -315,7 +315,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
             if m is not None and m > max_weight:
                 max_weight = m
         visited.discard(node)
-        if max_weight > -1: 
+        if max_weight > -1:
             if max_weight < min_so_far:
                 return max_weight
             else:
@@ -417,6 +417,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
             if len(stack) and order[stack[-1]] >= order[node]:
                 while True:
                     comp_node = stack.pop()
+                    in_stack[comp_node] = False
                     in_scc[comp_node] = True
                     if comp_node != node:
                         succ[node, :] += succ[comp_node, :]
@@ -426,8 +427,9 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
             else:
                 in_scc[node] = True
         else:
-            if root[node] not in stack:
+            if not in_stack[root[node]]:
                 stack.append(root[node])
+                in_stack[root[node]] = True
             succ[root[node], node] = True
         if progress:
             pbar.update(2 * _dfs_order)
@@ -436,6 +438,7 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     order = array('i', (0 for i in xrange(adj.shape[0])))
     root = array('i', (-1 for i in xrange(adj.shape[0])))
     stack = []
+    in_stack = array('B', (0 for i in xrange(adj.shape[0])))
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
@@ -500,6 +503,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     adj = sp.lil_matrix(adj)
     dfs_order = array('i', (-1 for i in xrange(adj.shape[0])))
     root = array('i', (-1 for i in xrange(adj.shape[0])))
+    in_stack = array('B', (0 for i in xrange(adj.shape[0])))
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
@@ -549,6 +553,7 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                             dfs_order[scc_stack[-1]] >= dfs_order[node]:
                         while True:
                             comp_node = scc_stack.pop()
+                            in_stack[comp_node] = False
                             in_scc[comp_node] = True
                             if comp_node != node:
                                 succ[node, :] += succ[comp_node, :]
@@ -559,8 +564,9 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                     else:
                         in_scc[node] = True
                 else:
-                    if root[node] not in scc_stack:
+                    if not in_stack[root[node]]:
                         scc_stack.append(root[node])
+                        in_stack[root[node]] = True
                     succ[root[node], node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
@@ -962,7 +968,7 @@ if __name__ == '__main__':
             ' nnz = %d:' % (B.shape, B.getnnz())
 
     tic = time()
-    Cl1 = mmclosure_matmul(B, splits=2, nprocs=2, maxiter=10, 
+    Cl1 = mmclosure_matmul(B, splits=2, nprocs=2, maxiter=10,
             parallel=True)
     toc = time()
     print '* parallel version executed in %.2e seconds' % (toc - tic)
