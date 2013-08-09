@@ -410,3 +410,30 @@ Compared with the previous version (3,141,881 nodes and 26,914,521 edges) the
 difference of 17 nodes is due to the FOAF, bibo, and schema.org classes that
 have been removed to 54 classes from the DBPedia ontology namespace that for
 some reason had been lost.
+
+## Fri Aug  9 19:24:00 EDT 2013
+
+Skipped another log entry (Thursday). Several updates:
+1. Filtered network still has power-law (like) distribution of in-degree, and
+   Poisson like of out-degree. The filtering did not affect that too much.
+   Good. Loaded the new files on Quarry. The process running there is too slow
+   and I will kill it (but read on).
+2. Dumped to file the contents of the strongly connected components. Many
+   interesting thing. The large component is a generic group, while smaller
+   components are all topical groups, e.g. Lost episodes, rivers (there are more
+   than one group for that -- maybe continents?), human anatomy, etc. Also some
+   groups seem to have smaller subgroups, e.g. all glutei nerves, etc. Showed
+   this to Sandro. Plan is to run shortest paths from source components to
+   owl:Thing to see where the paths run through.
+3. Worked on cythonizing the transitive closure function. Spent much time on the
+   recursive function, with horrible results: it was actually slower than the
+   Python version. Did not despair and thought that recursion might be the real
+   problem, and that inline hints where probably dismissed by the compiler, so
+   quickly translated the iterative version and bam! 8ms per loop vs 6s on the
+   test30k graph! There are some glitches in the results but it's probably
+   nothing serious.
+4. Also figured out that the test for the root nodes in the stack was
+   implemented as a membership test on Python list, which is horribly slow.
+   Changed that to a test on an array. Hopefully all these improvements should
+   make the thing work on the full graph. Need to add the PyTables support and
+   see if the gains from Cython are not all wasted by the I/O to disk.
