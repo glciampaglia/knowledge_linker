@@ -1,8 +1,222 @@
+# cython: profile=False
+
 import numpy as np
 import scipy.sparse as sp
+from collections import defaultdict
 
+# cimports
 cimport numpy as cnp
 cimport cython
+
+cdef int _dfs_order
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.profile(False)
+cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
+    '''
+    Returns the neighbors of a row for a CSR adjacency matrix
+    '''
+    cdef int n, i, I, II
+    cdef int [:] res
+    I = indptr[row]
+    II = indptr[row + 1]
+    n = II - I
+    res = np.empty((n,), dtype=np.int)
+    for i in xrange(n):
+        res[i] = indices[i + I]
+    return res
+
+# recursive function
+@cython.boundscheck(False)
+@cython.wraparound(False)
+@cython.profile(False)
+cdef inline int _closure_visit( 
+        int node,
+        int [:] adj_indices,
+        int [:] adj_indptr,
+        int [:] order,
+        int [:] root,
+        int [:] in_scc,
+        int [:] in_stack,
+        int [:] visited,
+        object stack,
+        object succ,
+        object local_roots
+        ) except -1:
+    cdef int n_neigh, neigh_node, cand_root, n, i, r_node, comp_node, st_top,\
+            n_stack
+    cdef int [:] neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
+    global _dfs_order
+    n = len(adj_indptr) - 1
+    visited[node] = True
+    order[node] = _dfs_order
+    _dfs_order += 1
+    root[node] = node
+    n_neigh = len(neighbors)
+    for neigh_node in xrange(n_neigh):
+        if not visited[neigh_node]:
+            _closure_visit(neigh_node, adj_indices, adj_indptr, order, root,
+                    in_scc, in_stack, visited, stack, succ, local_roots)
+        if not in_scc[root[neigh_node]]:
+            if order[neigh_node] < order[node]:
+                root[node] = root[neigh_node]
+        else:
+            local_roots[node].add(root[neigh_node])
+    r_node = root[node]
+    for cand_root in local_roots[node]:
+        for i in xrange(n):
+            if succ[cand_root, i]:
+                succ[r_node, i] = True
+        succ[r_node, cand_root] = True
+    del local_roots[node]
+    if r_node == node:
+        succ[r_node, node] = True
+        n_stack = len(stack)
+        if n_stack > 0:
+            st_top = stack[-1]
+        if len(stack) and order[st_top] >= order[node]:
+            while True:
+                comp_node = stack.pop()
+                in_stack[comp_node] = False
+                in_scc[comp_node] = True
+                if comp_node != node:
+                    for i in xrange(n):
+                        if succ[comp_node, i]:
+                            succ[node, i] = True
+                if len(stack):
+                    st_top = stack[-1]
+                if len(stack) == 0 or order[st_top] < order[node]:
+                    break
+        else:
+            in_scc[node] = True
+    else:
+        if not in_stack[root[node]]:
+            stack.append(root[node])
+            in_stack[root[node]] = True
+        succ[root[node], node] = True
+    return 0
+
+def c_closure_rec(adj, sources=None):
+    global _dfs_order
+    # main function
+    adj = sp.csr_matrix(adj)
+    _dfs_order = 0
+    cdef: 
+        int n = adj.shape[0] 
+        int node, i, n_sources
+        int [:] _sources 
+        int [:] adj_indices = adj.indices
+        int [:] adj_indptr = adj.indptr
+        int [:] order = np.zeros(n, dtype=np.int32)
+        int [:] root = np.zeros(n, dtype=np.int32) - 1
+        int [:] in_scc = np.zeros(n, dtype=np.int32)
+        int [:] in_stack = np.zeros(n, dtype=np.int32)
+        int [:] visited = np.zeros(n, dtype=np.int32)
+        object stack = []
+        object succ = defaultdict(bool)
+        object local_roots = defaultdict(set)
+    if sources is None:
+        n_sources = n
+        _sources = np.arange(n)
+    else:
+        n_sources = len(sources)
+        _sources = np.asarray(sources)
+    for i in xrange(n_sources):
+        node = _sources[i]
+        if not visited[node]:
+            _closure_visit(node, adj_indices, adj_indptr, order, root, in_scc,
+                    in_stack, visited, stack, succ, local_roots)
+    return (np.asarray(root), succ)
+
+# iterative version
+def c_closure(adj, sources=None):
+    # main function
+    adj = sp.csr_matrix(adj)
+    cdef: 
+        int dfs_order = 0
+        int n = adj.shape[0] 
+        int node, i, n_sources
+        int [:] _sources 
+        int [:] adj_indices = adj.indices
+        int [:] adj_indptr = adj.indptr
+        int [:] order = np.zeros(n, dtype=np.int32)
+        int [:] root = np.zeros(n, dtype=np.int32) - 1
+        int [:] in_scc = np.zeros(n, dtype=np.int32)
+        int [:] in_stack = np.zeros(n, dtype=np.int32)
+        int [:] visited = np.zeros(n, dtype=np.int32)
+        int backtracking
+        object stack = []
+        object dfs_stack = []
+        object succ = defaultdict(bool)
+        object local_roots = defaultdict(set)
+    cdef int n_neigh, neigh_node, cand_root, r_node, comp_node, st_top,\
+            n_stack
+    cdef int [:] neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
+    if sources is None:
+        n_sources = n
+        _sources = np.arange(n)
+    else:
+        n_sources = len(sources)
+        _sources = np.asarray(sources)
+    for i in xrange(n_sources):
+        node = _sources[i]
+        if not visited[node]:
+            dfs_stack = [node]
+        while dfs_stack:
+            node = dfs_stack[-1]
+            visited[node] = True
+            order[node] = dfs_order
+            dfs_order += 1
+            root[node] = node
+            backtracking = 1
+            n_neigh = len(neighbors)
+            for neigh_node in xrange(n_neigh):
+                if not visited[neigh_node]:
+                    dfs_stack.append(neigh_node)
+                    backtracking = False
+                    break
+                if not in_scc[root[neigh_node]]:
+                    if order[neigh_node] < order[node]:
+                        root[node] = root[neigh_node]
+                else:
+                    local_roots[node].add(root[neigh_node])
+            if backtracking:
+                r_node = root[node]
+                for cand_root in local_roots[node]:
+                    for i in xrange(n):
+                        if succ[cand_root, i]:
+                            succ[r_node, i] = True
+                    succ[r_node, cand_root] = True
+                del local_roots[node]
+                if r_node == node:
+                    succ[r_node, node] = True
+                    n_stack = len(stack)
+                    if n_stack > 0:
+                        st_top = stack[-1]
+                    if len(stack) and order[st_top] >= order[node]:
+                        while True:
+                            comp_node = stack.pop()
+                            in_stack[comp_node] = False
+                            in_scc[comp_node] = True
+                            if comp_node != node:
+                                for i in xrange(n):
+                                    if succ[comp_node, i]:
+                                        succ[node, i] = True
+                            if len(stack):
+                                st_top = stack[-1]
+                            if len(stack) == 0 or order[st_top] < order[node]:
+                                break
+                    else:
+                        in_scc[node] = True
+                else:
+                    if not in_stack[root[node]]:
+                        stack.append(root[node])
+                        in_stack[root[node]] = True
+                    succ[root[node], node] = True
+                # clear the current node from the top of the DFS stack.
+                dfs_stack.pop()
+    return (np.asarray(root), succ)
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
