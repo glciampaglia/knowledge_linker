@@ -74,7 +74,7 @@ cdef inline int _closure_visit(
         succ[r_node, node] = True
         n_stack = len(stack)
         if n_stack > 0:
-            st_top = stack[-1]
+            st_top = stack[n_stack]
         if len(stack) and order[st_top] >= order[node]:
             while True:
                 comp_node = stack.pop()
@@ -84,8 +84,9 @@ cdef inline int _closure_visit(
                     for i in xrange(n):
                         if succ[comp_node, i]:
                             succ[node, i] = True
-                if len(stack):
-                    st_top = stack[-1]
+                n_stack = len(stack)
+                if n_stack > 0:
+                    st_top = stack[n_stack]
                 if len(stack) == 0 or order[st_top] < order[node]:
                     break
         else:
@@ -137,7 +138,7 @@ def c_closure(adj, sources=None):
         int dfs_order = 0
         int n = adj.shape[0] 
         int node, i, n_sources
-        int [:] _sources 
+        int [:] _sources, neighbors
         int [:] adj_indices = adj.indices
         int [:] adj_indptr = adj.indptr
         int [:] order = np.zeros(n, dtype=np.int32)
@@ -152,7 +153,6 @@ def c_closure(adj, sources=None):
         object local_roots = defaultdict(set)
     cdef int n_neigh, neigh_node, cand_root, r_node, comp_node, st_top,\
             n_stack
-    cdef int [:] neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
     if sources is None:
         n_sources = n
         _sources = np.arange(n)
@@ -170,6 +170,7 @@ def c_closure(adj, sources=None):
             dfs_order += 1
             root[node] = node
             backtracking = 1
+            neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
             n_neigh = len(neighbors)
             for neigh_node in xrange(n_neigh):
                 if not visited[neigh_node]:
