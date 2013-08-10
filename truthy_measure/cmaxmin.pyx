@@ -92,10 +92,10 @@ cdef inline int _closure_visit(
         else:
             in_scc[node] = True
     else:
-        if not in_stack[root[node]]:
-            stack.append(root[node])
-            in_stack[root[node]] = True
-        succ[root[node], node] = True
+        if not in_stack[r_node]:
+            stack.append(r_node)
+            in_stack[r_node] = True
+        succ[r_node, node] = True
     return 0
 
 def c_closure_rec(adj, sources=None):
@@ -211,10 +211,10 @@ def c_closure(adj, sources=None):
                     else:
                         in_scc[node] = True
                 else:
-                    if not in_stack[root[node]]:
-                        stack.append(root[node])
-                        in_stack[root[node]] = True
-                    succ[root[node], node] = True
+                    if not in_stack[r_node]:
+                        stack.append(r_node)
+                        in_stack[r_node] = True
+                    succ[r_node, node] = True
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
     return (np.asarray(root), succ)
