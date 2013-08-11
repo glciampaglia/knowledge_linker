@@ -437,3 +437,19 @@ Skipped another log entry (Thursday). Several updates:
    Changed that to a test on an array. Hopefully all these improvements should
    make the thing work on the full graph. Need to add the PyTables support and
    see if the gains from Cython are not all wasted by the I/O to disk.
+
+## Sat Aug 10 21:20:48 EDT 2013
+
+Sadly, discovered today that the speed-up obtained yesterday was due to a bug I
+had introduced in hastily translating the iterative implementation of the
+closure function -- having copy-pasted the code from the recursive version, the
+neighbors function was being called only once at the initial cdef time. So back
+to 6s. The real bad news though are that integrating PyTables in the cython code
+results in horrible performance degradation, which make the work of the last two
+days utterly useless. No idea why this occurs, and don't want to waste more time
+into this. The only good news is that having introduced a smarter membership
+test for the stack dropped the overall performance of the pure Python
+implementation of more than 50% on the test30k graph, from 18s to 8s. Played a
+bit with the chunkshape, and it seems that single-row chunks of size 10k produce
+reasonably sized files at the best speed. At this point the only option is to
+relaunch the script on Lenny on the filtered graph.
