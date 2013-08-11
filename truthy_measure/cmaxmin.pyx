@@ -3,6 +3,9 @@
 import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
+from tables import BoolAtom
+
+from .utils import mkcarray, CHUNKSHAPE
 
 # cimports
 cimport numpy as cnp
@@ -30,7 +33,6 @@ cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
 # recursive function
 @cython.boundscheck(False)
 @cython.wraparound(False)
-@cython.profile(False)
 cdef inline int _closure_visit( 
         int node,
         int [:] adj_indices,
@@ -75,7 +77,7 @@ cdef inline int _closure_visit(
         n_stack = len(stack)
         if n_stack > 0:
             st_top = stack[n_stack]
-        if len(stack) and order[st_top] >= order[node]:
+        if n_stack and order[st_top] >= order[node]:
             while True:
                 comp_node = stack.pop()
                 in_stack[comp_node] = False
@@ -98,7 +100,9 @@ cdef inline int _closure_visit(
         succ[r_node, node] = True
     return 0
 
-def c_closure_rec(adj, sources=None):
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def c_closure_rec(adj, sources=None, ondisk=False, outpath=None):
     global _dfs_order
     # main function
     adj = sp.csr_matrix(adj)
@@ -117,6 +121,8 @@ def c_closure_rec(adj, sources=None):
         object stack = []
         object succ = defaultdict(bool)
         object local_roots = defaultdict(set)
+    succ = mkcarray('succ', adj.shape, CHUNKSHAPE, BoolAtom(), outpath=outpath,
+            ondisk=ondisk)
     if sources is None:
         n_sources = n
         _sources = np.arange(n)
@@ -131,7 +137,9 @@ def c_closure_rec(adj, sources=None):
     return (np.asarray(root), succ)
 
 # iterative version
-def c_closure(adj, sources=None):
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def c_closure(adj, sources=None, ondisk=False, outpath=None):
     # main function
     adj = sp.csr_matrix(adj)
     cdef: 
@@ -149,7 +157,8 @@ def c_closure(adj, sources=None):
         int backtracking
         object stack = []
         object dfs_stack = []
-        object succ = defaultdict(bool)
+        object succ = mkcarray('succ', adj.shape, CHUNKSHAPE, BoolAtom(),
+                outpath=outpath, ondisk=ondisk)
         object local_roots = defaultdict(set)
     cdef int n_neigh, neigh_node, cand_root, r_node, comp_node, st_top,\
             n_stack
@@ -204,9 +213,10 @@ def c_closure(adj, sources=None):
                                 for i in xrange(n):
                                     if succ[comp_node, i]:
                                         succ[node, i] = True
-                            if len(stack):
+                            n_stack = len(stack)
+                            if n_stack:
                                 st_top = stack[-1]
-                            if len(stack) == 0 or order[st_top] < order[node]:
+                            if n_stack == 0 or order[st_top] < order[node]:
                                 break
                     else:
                         in_scc[node] = True
