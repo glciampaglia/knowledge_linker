@@ -78,16 +78,12 @@ from datetime import datetime
 from itertools import izip, product
 from collections import defaultdict
 from array import array
-from tables import BoolAtom, Filters, open_file
-from tempfile import NamedTemporaryFile
+from tables import BoolAtom
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 from operator import itemgetter
 
-from .utils import coo_dtype, Cache
+from .utils import coo_dtype, Cache, mkcarray, CHUNKSHAPE
 from .cmaxmin import c_maximum_csr # see below for other imports
-
-# for closure/closure_recursive
-CHUNKSIZE = 1000
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
 # the indices array has dtype float64. This happens intermittently. In the
@@ -341,26 +337,6 @@ def mmclosure_dfsrec(a):
 
 # Transitive closure for cyclical directed graphs. Recursive implementation.
 
-def _mk_succ(outpath, shape, ondisk=False):
-    '''
-    Creates the chunked array that will hold the successors
-    '''
-    # create CArray on disk
-    if outpath is None:
-        outfile = NamedTemporaryFile(suffix='.h5', delete=True)
-        outpath = outfile.name
-    if ondisk:
-        h5f = open_file(outpath, 'w')
-    else:
-        # this will create an in-memory file, which will be synced to disk when
-        # closed
-        h5f = open_file(outpath, 'w', driver="H5FD_CORE")
-    atom = BoolAtom()
-    filters = Filters(complevel=5, complib='zlib')
-    succ = h5f.create_carray(h5f.root, 'succ', atom, shape,
-            filters=filters, chunkshape=(1, CHUNKSIZE))
-    return succ
-
 def _mk_sources(sources, n, progress):
     '''
     Creates the sources sequence for the transitive closure functions
@@ -421,7 +397,6 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
                     in_scc[comp_node] = True
                     if comp_node != node:
                         succ[node, :] += succ[comp_node, :]
-#                         succ[comp_node, :] = False
                     if len(stack) == 0 or order[stack[-1]] < order[node]:
                         break
             else:
@@ -442,7 +417,8 @@ def closure_recursive(adj, sources=None, ondisk=False, outpath=None,
     in_scc = defaultdict(bool) # default value : False
     visited = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = _mk_succ(outpath, adj.shape, ondisk)
+    succ = mkcarray('succ', adj.shape, CHUNKSHAPE, BoolAtom(), outpath=outpath, 
+            ondisk=ondisk)
     sources, progress = _mk_sources(sources, adj.shape[0], progress)
     for node in sources:
         if not visited[node]:
@@ -468,8 +444,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     ondisk : bool
         if True, will store the successors matrix to disk.
     outpath : string
-        optional; specify the path to the output file used for storing the
-        successors matrix on disk.
+        optional; path to HDF5 file used for storing the successors matrix on
+        disk.
     progress : bool
         if True, prints information about progress of the computation.
 
@@ -507,7 +483,8 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
     scc_stack = []
     in_scc = defaultdict(bool)
     local_roots = defaultdict(set)
-    succ = _mk_succ(outpath, adj.shape, ondisk)
+    succ = mkcarray('succ', adj.shape, CHUNKSHAPE, BoolAtom(), outpath=outpath,
+            ondisk=ondisk)
     sources, pbar = _mk_sources(sources, adj.shape[0], progress)
     for source in sources:
         if dfs_order[source] < 0:
@@ -557,7 +534,6 @@ def closure(adj, sources=None, ondisk=False, outpath=None, progress=False):
                             in_scc[comp_node] = True
                             if comp_node != node:
                                 succ[node, :] += succ[comp_node, :]
-#                                 succ[comp_node, :] = False
                             if len(scc_stack) == 0 or\
                                     dfs_order[scc_stack[-1]] < dfs_order[node]:
                                 break
