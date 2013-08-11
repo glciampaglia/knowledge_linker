@@ -2,12 +2,18 @@ import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
 from cStringIO import StringIO
+from tables import Filters, open_file
+from tempfile import NamedTemporaryFile
+
+# for closure/closure_rec/c_closure/c_closure_rec
+# NOTE: size 10K seems to produce reasonably sized file at the best speed
+CHUNKSHAPE = (1,10000)
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
 
 def arrayfile(data_file, shape, descr, fortran=False):
-    ''' 
+    '''
     Returns an array that is memory-mapped to an NPY (v1.0) file
 
     Arguments
@@ -18,9 +24,9 @@ def arrayfile(data_file, shape, descr, fortran=False):
     fortran - if True, the array uses Fortran data order, otherwise C order
     '''
     from numpy.lib import format
-    header = { 
-        'descr' : descr, 
-        'fortran_order' : fortran, 
+    header = {
+        'descr' : descr,
+        'fortran_order' : fortran,
         'shape' : shape
         }
     preamble = '\x93NUMPY\x01\x00'
@@ -28,8 +34,8 @@ def arrayfile(data_file, shape, descr, fortran=False):
     cio = StringIO()
     format.write_array_header_1_0(cio, header) # write header here first
     format.write_array_header_1_0(data_file, header) # write header
-    cio.seek(0) 
-    offset = len(preamble) + len(cio.readline()) # get offset 
+    cio.seek(0)
+    offset = len(preamble) + len(cio.readline()) # get offset
     return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
             shape=shape, offset=offset)
 
@@ -68,17 +74,17 @@ def indegree(adj):
 def recstosparse(coords, shape=None, fmt='csr'):
     '''
     Returns a sparse adjancency matrix from a records array of (col, row,
-    weights) 
+    weights)
 
     Parameters
     ----------
     coords : array_likey
         either a recarray or a 2d ndarray. If recarray, fields must be named:
-        `col`, `row`, and `weight`. 
+        `col`, `row`, and `weight`.
     shape : tuple
         the shape of the array, optional.
     fmt : string
-        the sparse matrix format to use. See `scipy.sparse`. Default: csr. 
+        the sparse matrix format to use. See `scipy.sparse`. Default: csr.
 
     Returns
     -------
@@ -99,7 +105,7 @@ def recstosparse(coords, shape=None, fmt='csr'):
         irow = coords[:,0]
         icol = coords[:,1]
         w = coords[:,2]
-    adj = sp.coo_matrix((w, (irow, icol)), shape=shape) 
+    adj = sp.coo_matrix((w, (irow, icol)), shape=shape)
     return adj.asformat(fmt)
 
 def make_weighted(path, N):
@@ -119,7 +125,7 @@ def make_weighted(path, N):
     adj : `scipy.sparse.csr_matrix`
         the weighted adjancency matrix
     '''
-    # load coordinates from file. 
+    # load coordinates from file.
     # coords is a recarray with records (row, col, weights)
     coords = np.load(path)
     # shortcuts
@@ -142,8 +148,8 @@ def make_weighted(path, N):
 
 def dict_of_dicts_to_coo(dd, num=-1):
     '''
-    Transforms a dict of dicts to a records array in COOrdinates format. 
-    
+    Transforms a dict of dicts to a records array in COOrdinates format.
+
     Parameters
     ----------
     dd : dict of dicts
@@ -157,7 +163,7 @@ def dict_of_dicts_to_coo(dd, num=-1):
         A records array with fields: row, col, and data. This can be used to
         create a sparse matrix. See `coo_dtype`, `scipy.sparse.coo_matrix`.
     '''
-        
+
     def coorditer(dd):
         for irow in sorted(dd):
             d = dd[irow]
@@ -192,7 +198,7 @@ def dict_of_dicts_to_ndarray(dd, size):
             tmp[irow, icol] = d[icol]
     return tmp
 
-# Not used right now
+# TODO use heapq with time() as priority
 
 class Cache(dict):
     def __init__(self, maxsize, *args, **kwargs):
@@ -240,3 +246,40 @@ class Cache(dict):
         self._queue.remove(key)
         self._queue.append(key)
         return value
+
+def mkcarray(name, shape, chunkshape, atom, outpath=None, ondisk=False):
+    '''
+    Creates a compressed chunked array.
+
+    Parameters
+    ----------
+    name : string
+        the name of the array in the HDF5 file
+    shape : tuple
+        shape of the array
+    atom : object
+        the atom instance of the array data. See `tables.Atom`
+    outpath : string
+        optional; path to HDF5 file. If None, the array is stored in a temporary
+        file that will deleted upon closing it.
+    ondisk : bool
+        optional; by default the HDF5 file is created in memory and synced to
+        disk only when closed.
+
+    Returns
+    -------
+    arr : tables.CArray instance
+        the chunked array
+    '''
+    if outpath is None:
+        outfile = NamedTemporaryFile(suffix='.h5', delete=True)
+        outpath = outfile.name
+    if ondisk:
+        h5f = open_file(outpath, 'w')
+    else:
+        h5f = open_file(outpath, 'w', driver="H5FD_CORE")
+    filters = Filters(complevel=5, complib='zlib')
+    arr = h5f.create_carray(h5f.root, name, atom, shape, filters=filters,
+            chunkshape=chunkshape)
+    return arr
+
