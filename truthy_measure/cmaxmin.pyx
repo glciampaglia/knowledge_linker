@@ -11,6 +11,80 @@ from .utils import mkcarray, CHUNKSHAPE
 cimport numpy as cnp
 cimport cython
 
+cpdef object shortestpath(object A, int source, int target):
+    '''
+    Return the shortest path from source to target. A is converted to CSR
+    format.
+
+    Parameters
+    ----------
+    A : N x N array_like
+        The adjacency matrix of the graph; will be converted to compressed
+        sparse row format.
+    source : int
+        The source node.
+    target : int
+        The target node.
+
+    Returns
+    -------
+    dist : int
+        The distance between source and target, -1 if they are not in the same
+        connected component.
+    path : array_like
+        If dist > -1, an array of length dist with the path between source and
+        target, else an empty array.
+
+    Notes
+    -----
+    Executes a BFS from source and stops as soon as target is found. Worst case:
+    searches the whole graph.
+    '''
+    A = sp.csr_matrix(A)
+    cdef int [:] A_indices = A.indices
+    cdef int [:] A_indptr = A.indptr
+    cdef int [:] neigh, path
+    cdef int N = A.shape[0], N_neigh, Nd
+    cdef int [:] P = np.empty(N, dtype=np.int32) # Predecessors
+    cdef int [:] D = np.empty(N, dtype=np.int32) # Distance vector
+    cdef int [:] Q = np.empty(N, dtype=np.int32) # FIFO queue
+    cdef int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi
+    # initialize P, D and Q
+    for i in xrange(N):
+        D[i] = -1
+        P[i] = -1
+    D[source] = d
+    Q[readi] = source
+    found = 0
+    while writei < N and not found:
+        d += 1
+        Nd = writei - readi # number of elements at distance d from source
+        for i in xrange(Nd):
+            nodei = Q[i + readi]
+            neigh = _csr_neighbors(nodei, A_indices, A_indptr)
+            N_neigh = len(neigh)
+            for ii in xrange(N_neigh):
+                neighi = neigh[ii]
+                if D[neighi] == -1: # Found new node
+                    writei += 1
+                    D[neighi] = d
+                    P[neighi] = nodei
+                    Q[writei] = neighi
+                if neighi == target:
+                    found = 1
+                    break
+        readi += Nd
+    if found:
+        path = np.empty(d, dtype=np.int32)
+        path[d] = target
+        nodei = target
+        for i in xrange(d - 1):
+            path[d - 2 - i] = P[nodei]
+            nodei = P[nodei]
+    else:
+        path = np.empty(0, dtype=np.int32)
+    return (D[target], path)
+
 cdef int _dfs_order
 
 @cython.boundscheck(False)
