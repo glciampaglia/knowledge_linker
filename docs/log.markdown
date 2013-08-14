@@ -453,3 +453,14 @@ implementation of more than 50% on the test30k graph, from 18s to 8s. Played a
 bit with the chunkshape, and it seems that single-row chunks of size 10k produce
 reasonably sized files at the best speed. At this point the only option is to
 relaunch the script on Lenny on the filtered graph.
+
+## Wed Aug 14 18:27:08 EDT 2013
+
+Relaunched the transitive closure on Lenny over the weekend (Saturday night).
+The computation is currently 1/5th through. Modified the script for printing the
+SCCs to include entities' out degree and sorting them in descending order of out
+degree. Also produced an extra file with all components of size greater than one
+and the member of maximum out degree. In the large component this is the United
+State, with roughly 185k out edges. Jotted down (in Cython!) a shortest path
+function that will serve for tracing the paths from the source components to
+`owl:Thing`. Presently not working (segfaults) but should be just a simple bug.
