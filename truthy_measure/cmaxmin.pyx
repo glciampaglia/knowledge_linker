@@ -33,7 +33,7 @@ cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
 # recursive function
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef inline int _closure_visit( 
+cdef inline int _closure_visit(
         int node,
         int [:] adj_indices,
         int [:] adj_indptr,
@@ -107,10 +107,10 @@ def c_closure_rec(adj, sources=None, ondisk=False, outpath=None):
     # main function
     adj = sp.csr_matrix(adj)
     _dfs_order = 0
-    cdef: 
-        int n = adj.shape[0] 
+    cdef:
+        int n = adj.shape[0]
         int node, i, n_sources
-        int [:] _sources 
+        int [:] _sources
         int [:] adj_indices = adj.indices
         int [:] adj_indptr = adj.indptr
         int [:] order = np.zeros(n, dtype=np.int32)
@@ -142,9 +142,9 @@ def c_closure_rec(adj, sources=None, ondisk=False, outpath=None):
 def c_closure(adj, sources=None, ondisk=False, outpath=None):
     # main function
     adj = sp.csr_matrix(adj)
-    cdef: 
+    cdef:
         int dfs_order = 0
-        int n = adj.shape[0] 
+        int n = adj.shape[0]
         int node, i, n_sources
         int [:] _sources, neighbors
         int [:] adj_indices = adj.indices
@@ -279,7 +279,7 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
     if not sp.isspmatrix_csr(A):
         raise ValueError('expecting a sparse CSR matrix')
 
-    N = A.shape[0] 
+    N = A.shape[0]
     if a is None:
         a = 0
     if b is None:
@@ -294,7 +294,7 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
     iptr = 0
 
     # At is A in compressed sparse column format
-    At = A.tocsc() 
+    At = A.tocsc()
     A_indptr = A.indptr
     A_indices = A.indices
     A_data = A.data
@@ -303,17 +303,17 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
     At_data = At.data
 
     for i in xrange(Nout):
-    
+
         # innz keeps track of the number of non-zero elements on the i-th output row in
         # this iteration; ih is the index corresponding to i in the input matrix
         innz = 0
         ih = <int>a + i
 
         for j in xrange(N):
-            
+
             # ii is the index of the first non-zero element value (in A.data)
             # and column index (in A.indices) of the the i-th row
-            ii = A_indptr[ih] 
+            ii = A_indptr[ih]
             iimax = A_indptr[ih + 1]
 
             # jj is the index of the first non-zero element value (in At.data)
@@ -323,13 +323,13 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
             jjmax = At_indptr[j + 1]
 
             max_ij = 0.
-            
+
             while (ii < iimax) and (jj < jjmax):
-                
+
                 ik = A_indices[ii]
                 kj = At_indices[jj]
 
-                if ik == kj: 
+                if ik == kj:
                     # same element, apply min
                     min_k = min(A_data[ii], At_data[jj])
                     # update the maximum so far
@@ -338,7 +338,7 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
                     ii += 1
                     jj += 1
 
-                elif ik > kj: 
+                elif ik > kj:
                     # the row element (in A) corresponding to kj is zero,
                     # hence min_k is zero. Advance only jj.
                     jj += 1
@@ -364,7 +364,7 @@ def c_maxmin_sparse(object A, object a=None, object b=None):
 
 def c_maximum_csr(object A, object B):
     '''
-    Equivalent of numpy.maximum for CSR matrices. 
+    Equivalent of numpy.maximum for CSR matrices.
     '''
     cdef:
         cnp.ndarray[int, ndim=1] A_indptr, A_indices, B_indptr, B_indices
@@ -372,7 +372,7 @@ def c_maximum_csr(object A, object B):
         object Out_indptr, Out_indices, Out_data
         int k, kptr, knnz, ii, jj, iimax, jjmax, icol, jcol, N, M, ik, jk
 
-    # check input is CSR 
+    # check input is CSR
     if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):
         raise ValueError('expecting a CSR matrix')
 
@@ -425,8 +425,8 @@ def c_maximum_csr(object A, object B):
                 Out_indptr.append(kptr)
 
         else:
-            # the k-th rows in both B and A contain non-zero elements. 
-            
+            # the k-th rows in both B and A contain non-zero elements.
+
             # First, scan both index pointers simultaneously. Will break as soon
             # as all non-zero elements on one row are exhausted
             while ii < iimax and jj < jjmax:
@@ -470,7 +470,7 @@ def c_maximum_csr(object A, object B):
                 Out_indices.append(jcol)
                 knnz += 1
 
-            # update the output index pointers array 
+            # update the output index pointers array
             kptr += knnz
             Out_indptr.append(kptr)
 
