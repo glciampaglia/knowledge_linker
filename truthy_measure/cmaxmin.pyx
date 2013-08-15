@@ -11,7 +11,15 @@ from .utils import mkcarray, CHUNKSHAPE
 cimport numpy as cnp
 cimport cython
 
-cpdef object shortestpath(object A, int source, int target):
+# TODO change _csr_neighbors to use C array as return type
+# TODO --> add nogil to _csr_neighbors
+# TODO instead of np.empty, use malloc to allocate C arrays
+# TODO --> add nogil to shortestpath
+# TODO --> --> write parallel shortestpath with cython.parallel.prange
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef cnp.ndarray shortestpath(object A, int source, int target):
     '''
     Return the shortest path from source to target. A is converted to CSR
     format.
@@ -43,7 +51,8 @@ cpdef object shortestpath(object A, int source, int target):
     A = sp.csr_matrix(A)
     cdef int [:] A_indices = A.indices
     cdef int [:] A_indptr = A.indptr
-    cdef int [:] neigh, path
+    cdef int [:] neigh
+    cdef cnp.ndarray[ndim=1, dtype=cnp.int32_t] path
     cdef int N = A.shape[0], N_neigh, Nd
     cdef int [:] P = np.empty(N, dtype=np.int32) # Predecessors
     cdef int [:] D = np.empty(N, dtype=np.int32) # Distance vector
@@ -53,7 +62,7 @@ cpdef object shortestpath(object A, int source, int target):
     for i in xrange(N):
         D[i] = -1
         P[i] = -1
-    D[source] = d
+    D[source] = 0
     Q[readi] = source
     found = 0
     while writei < N and not found:
@@ -66,30 +75,29 @@ cpdef object shortestpath(object A, int source, int target):
             for ii in xrange(N_neigh):
                 neighi = neigh[ii]
                 if D[neighi] == -1: # Found new node
-                    writei += 1
                     D[neighi] = d
                     P[neighi] = nodei
                     Q[writei] = neighi
+                    writei += 1
                 if neighi == target:
                     found = 1
                     break
         readi += Nd
     if found:
-        path = np.empty(d, dtype=np.int32)
+        path = np.empty(d + 1, dtype=np.int32)
+        path[0] = source
         path[d] = target
         nodei = target
         for i in xrange(d - 1):
-            path[d - 2 - i] = P[nodei]
+            path[d - i - 1] = P[nodei]
             nodei = P[nodei]
     else:
         path = np.empty(0, dtype=np.int32)
-    return (D[target], path)
+    return path
 
-cdef int _dfs_order
-
+@cython.profile(False)
 @cython.boundscheck(False)
 @cython.wraparound(False)
-@cython.profile(False)
 cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
     '''
     Returns the neighbors of a row for a CSR adjacency matrix
@@ -103,6 +111,8 @@ cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
     for i in xrange(n):
         res[i] = indices[i + I]
     return res
+
+cdef int _dfs_order
 
 # recursive function
 @cython.boundscheck(False)
