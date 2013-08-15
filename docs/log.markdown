@@ -464,3 +464,12 @@ and the member of maximum out degree. In the large component this is the United
 State, with roughly 185k out edges. Jotted down (in Cython!) a shortest path
 function that will serve for tracing the paths from the source components to
 `owl:Thing`. Presently not working (segfaults) but should be just a simple bug.
+
+## Thu Aug 15 19:12:48 EDT 2013
+
+Tonight Lenny went out of memory multiple times and the OOM killer thread ended
+up killing the transitive closure script. The culprit was a script by Diego.
+Will move my computation to snowball, in the hope that there no one will hammer
+the machine too much. Finished implementing the shortest path algorithm in
+Cython. Need to use C arrays in it so that I can release the GIL and can run the
+code in parallel.
