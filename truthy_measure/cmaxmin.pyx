@@ -46,7 +46,7 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
     for i in xrange(M):
         path = paths[i]
         if path.found:
-            # coerce allocated buffers to NumPy arrays
+            # copy allocated memory to allow later to free up the paths pointer
             pathlist.append(
                     np.asarray((<int [:path.length + 1]> path.vertices).copy()))
         else:
