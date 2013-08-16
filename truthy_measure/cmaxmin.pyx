@@ -11,7 +11,7 @@ from .utils import mkcarray, CHUNKSHAPE
 # cimports
 cimport numpy as cnp
 cimport cython
-from libc.stdlib cimport malloc, abort
+from libc.stdlib cimport malloc, abort, free
 from libc.string cimport memset
 from libc.stdio cimport printf
 
@@ -48,10 +48,11 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         if path.found:
             # coerce allocated buffers to NumPy arrays
             pathlist.append(
-                    np.asarray((<int [:path.length + 1]> path.vertices)))
+                    np.asarray((<int [:path.length + 1]> path.vertices).copy()))
         else:
             # create an empty array for disconnected vertices
             pathlist.append(np.empty(0, dtype=np.int32))
+    free(<void *> paths)
     return pathlist
 
 @cython.boundscheck(False)
@@ -105,6 +106,7 @@ cdef Path _shortestpath(
         int [:] A_indices,
         int source, 
         int target) nogil:
+    global neigh_buf
     cdef:
         int * P, * D, * Q  # predecessors, distance vectors, fifo queue
         int * neigh # neighbors, path vertices
@@ -135,6 +137,7 @@ cdef Path _shortestpath(
                 if neighi == target:
                     found = 1
                     break
+            free(neigh)
         readi += Nd
     if found:
         path.length = d
@@ -150,11 +153,18 @@ cdef Path _shortestpath(
         path.length = 0
         path.found = 0
         path.vertices = NULL
+    free(<void *> P)
+    free(<void *> D)
+    free(<void *> Q)
     return path
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef inline int * init_intarray(size_t n, int val) nogil:
+    '''
+    Allocates memory for holding n int values, and initialize them to val.
+    Caller is responsible for free-ing up the memory.
+    '''
     cdef:
         void * buf
         int * ret
@@ -170,7 +180,8 @@ cdef inline int * init_intarray(size_t n, int val) nogil:
 @cython.wraparound(False)
 cdef inline int * _csr_neighbors(int row, int [:] indices, int [:] indptr) nogil:
     '''
-    Returns the neighbors of a row for a CSR adjacency matrix
+    Returns the neighbors of a row for a CSR adjacency matrix. Caller is
+    responsible to `free` allocated memory at the end.
     '''
     cdef size_t n
     cdef int i, I, II
