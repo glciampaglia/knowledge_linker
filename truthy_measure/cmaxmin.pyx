@@ -158,6 +158,7 @@ cdef Path _shortestpath(
     free(<void *> Q)
     return path
 
+@cython.profile(False)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef inline int * init_intarray(size_t n, int val) nogil:

@@ -473,3 +473,24 @@ Will move my computation to snowball, in the hope that there no one will hammer
 the machine too much. Finished implementing the shortest path algorithm in
 Cython. Need to use C arrays in it so that I can release the GIL and can run the
 code in parallel.
+
+## Fri Aug 16 18:28:55 EDT 2013
+
+Worked again on the code for the shortest paths, and finished the parallel
+implementation. Learned how to use Cython's parallel facilities, which are based
+upon OpenMP, and even had a brushup of C memory management. The code is now
+running on Lenny and will save all paths from all sources (nodes with zero
+in-degree) to owl:Thing to a file for later analysis. Haven't restarted the
+transitive closure code yet, but have figured out that perhaps using the
+approach based on topological sort could help. In particular, the successors
+matrix of the condensation can be split in a diagonal part, whose rows
+corresponds to source node only, and another matrix that will have an empty
+block, whose columsn correspond to sink nodes only (node with 0 out-degree) and
+a relatively dense part, whose row and nodes corresponds to all intermediate
+nodes (that is, SCCs). There are 1,642,002 sinks and 782,016 sources. The total
+number of SCCs is 2,873,985. This means that the actual sparsity coefficient of
+the matrix is at most 30%. Still a lot: if I wanted to represent the matrix
+as dense, it would require 2,5TB. On the other hand, could be doable on Quarry
+to mmap it as a binary numpy array file, in uncompressed format, which would
+increase the speed quite a bit! Have to think about it and maybe talk about it
+with Fil.
