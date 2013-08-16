@@ -4,18 +4,54 @@ import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
 from tables import BoolAtom
+from cython.parallel import parallel, prange
 
 from .utils import mkcarray, CHUNKSHAPE
 
 # cimports
 cimport numpy as cnp
 cimport cython
+from libc.stdlib cimport malloc, abort
+from libc.string cimport memset
+from libc.stdio cimport printf
 
-# TODO change _csr_neighbors to use C array as return type
-# TODO --> add nogil to _csr_neighbors
-# TODO instead of np.empty, use malloc to allocate C arrays
-# TODO --> add nogil to shortestpath
-# TODO --> --> write parallel shortestpath with cython.parallel.prange
+ctypedef struct Path:
+    size_t length
+    int * vertices
+    int found
+
+ctypedef Path * PathPtr
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def shortestpathmany(object A, int [:] sources, int [:] targets):
+    A = sp.csr_matrix(A)
+    if sources.shape[0] != targets.shape[0]:
+        raise ValueError("sources/targets mismatch")
+    cdef:
+        size_t N = A.shape[0], M = sources.shape[0]
+        PathPtr paths
+        Path path
+        cnp.ndarray p
+        object pathlist = []
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+        int i
+    paths = <PathPtr> malloc(M * sizeof(Path))
+    # parallel part
+    with nogil, parallel():
+        for i in prange(M):
+            paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i], targets[i])
+    # sequential
+    for i in xrange(M):
+        path = paths[i]
+        if path.found:
+            p = np.empty(path.length + 1, dtype=np.int32)
+            p[:] = <int [:path.length + 1]> path.vertices
+            pathlist.append(p)
+        else:
+            pathlist.append(np.empty(0, dtype=np.int32))
+    return pathlist
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -36,12 +72,9 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
 
     Returns
     -------
-    dist : int
-        The distance between source and target, -1 if they are not in the same
-        connected component.
     path : array_like
-        If dist > -1, an array of length dist with the path between source and
-        target, else an empty array.
+        an array of length dist with the path between source and target, else an
+        empty array.
 
     Notes
     -----
@@ -49,19 +82,39 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
     searches the whole graph.
     '''
     A = sp.csr_matrix(A)
-    cdef int [:] A_indices = A.indices
-    cdef int [:] A_indptr = A.indptr
-    cdef int [:] neigh
-    cdef cnp.ndarray[ndim=1, dtype=cnp.int32_t] path
-    cdef int N = A.shape[0], N_neigh, Nd
-    cdef int [:] P = np.empty(N, dtype=np.int32) # Predecessors
-    cdef int [:] D = np.empty(N, dtype=np.int32) # Distance vector
-    cdef int [:] Q = np.empty(N, dtype=np.int32) # FIFO queue
-    cdef int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi
+    cdef:
+        size_t N = A.shape[0]
+        Path path
+        cnp.ndarray[cnp.int32_t] retpath
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+    path = _shortestpath(N, A_indptr, A_indices, source, target)
+    if path.found:
+        retpath = np.empty(path.length + 1, dtype=np.int32)
+        retpath[:] = <int [:path.length + 1]> path.vertices
+    else:
+        retpath = np.empty(0, dtype=np.int32)
+    return retpath
+
+# The actual BFS function
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef Path _shortestpath(
+        size_t N,
+        int [:] A_indptr, 
+        int [:] A_indices,
+        int source, 
+        int target) nogil:
+    cdef:
+        int * P, * D, * Q  # predecessors, distance vectors, fifo queue
+        int * neigh # neighbors, path vertices
+        Path path # return struct
+        size_t N_neigh, Nd
+        int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi
     # initialize P, D and Q
-    for i in xrange(N):
-        D[i] = -1
-        P[i] = -1
+    P = init_intarray(N, -1)
+    D = init_intarray(N, -1)
+    Q = init_intarray(N, -1)
     D[source] = 0
     Q[readi] = source
     found = 0
@@ -71,7 +124,7 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
         for i in xrange(Nd):
             nodei = Q[i + readi]
             neigh = _csr_neighbors(nodei, A_indices, A_indptr)
-            N_neigh = len(neigh)
+            N_neigh = A_indptr[nodei + 1] - A_indptr[nodei]
             for ii in xrange(N_neigh):
                 neighi = neigh[ii]
                 if D[neighi] == -1: # Found new node
@@ -84,32 +137,54 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
                     break
         readi += Nd
     if found:
-        path = np.empty(d + 1, dtype=np.int32)
-        path[0] = source
-        path[d] = target
+        path.length = d
+        path.found = 1
+        path.vertices = init_intarray(d + 1, -1)
+        path.vertices[0] = source
+        path.vertices[d] = target
         nodei = target
         for i in xrange(d - 1):
-            path[d - i - 1] = P[nodei]
+            path.vertices[d - i - 1] = P[nodei]
             nodei = P[nodei]
     else:
-        path = np.empty(0, dtype=np.int32)
+        path.length = 0
+        path.found = 0
+        path.vertices = NULL
     return path
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef inline int * init_intarray(size_t n, int val) nogil:
+    cdef:
+        void * buf
+        int * ret
+    buf = malloc(n * sizeof(int))
+    if buf == NULL:
+        abort()
+    memset(buf, val, n * sizeof(int))
+    ret = <int *> buf
+    return ret
 
 @cython.profile(False)
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef inline int [:] _csr_neighbors(int row, int [:] indices, int [:] indptr):
+cdef inline int * _csr_neighbors(int row, int [:] indices, int [:] indptr) nogil:
     '''
     Returns the neighbors of a row for a CSR adjacency matrix
     '''
-    cdef int n, i, I, II
-    cdef int [:] res
+    cdef size_t n
+    cdef int i, I, II
+    cdef void * buf
+    cdef int * res
     I = indptr[row]
     II = indptr[row + 1]
     n = II - I
-    res = np.empty((n,), dtype=np.int)
+    buf = malloc(n * sizeof(int))
+    if buf == NULL:
+        abort()
+    res = <int *> buf
     for i in xrange(n):
-        res[i] = indices[i + I]
+        res[i] = indices[I + i]
     return res
 
 cdef int _dfs_order
@@ -132,14 +207,14 @@ cdef inline int _closure_visit(
         ) except -1:
     cdef int n_neigh, neigh_node, cand_root, n, i, r_node, comp_node, st_top,\
             n_stack
-    cdef int [:] neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
+    cdef int * neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
     global _dfs_order
     n = len(adj_indptr) - 1
     visited[node] = True
     order[node] = _dfs_order
     _dfs_order += 1
     root[node] = node
-    n_neigh = len(neighbors)
+    n_neigh = adj_indptr[node + 1] - adj_indptr[node]
     for neigh_node in xrange(n_neigh):
         if not visited[neigh_node]:
             _closure_visit(neigh_node, adj_indices, adj_indptr, order, root,
@@ -230,7 +305,8 @@ def c_closure(adj, sources=None, ondisk=False, outpath=None):
         int dfs_order = 0
         int n = adj.shape[0]
         int node, i, n_sources
-        int [:] _sources, neighbors
+        int [:] _sources
+        int * neighbors
         int [:] adj_indices = adj.indices
         int [:] adj_indptr = adj.indptr
         int [:] order = np.zeros(n, dtype=np.int32)
@@ -264,7 +340,7 @@ def c_closure(adj, sources=None, ondisk=False, outpath=None):
             root[node] = node
             backtracking = 1
             neighbors = _csr_neighbors(node, adj_indices, adj_indptr)
-            n_neigh = len(neighbors)
+            n_neigh = adj_indptr[node + 1] - adj_indptr[node]
             for neigh_node in xrange(n_neigh):
                 if not visited[neigh_node]:
                     dfs_stack.append(neigh_node)
