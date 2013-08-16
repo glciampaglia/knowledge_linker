@@ -14,7 +14,10 @@ setup(
         cmdclass={'build_ext' : build_ext},
         ext_modules=[
             Extension("truthy_measure.cmaxmin", ["truthy_measure/cmaxmin.pyx"],
-                include_dirs=_incl, pyrex_gdb=True) 
+                include_dirs=_incl, 
+                extra_compile_args=['-fopenmp'],
+                extra_link_args=['-fopenmp'], 
+                pyrex_gdb=True) 
             ],
         scripts = [
             'scripts/closure.py',

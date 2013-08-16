@@ -40,16 +40,17 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
     paths = <PathPtr> malloc(M * sizeof(Path))
     # parallel part
     with nogil, parallel():
-        for i in prange(M):
+        for i in prange(M, schedule='guided'):
             paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i], targets[i])
-    # sequential
+    # pack results in a Python list
     for i in xrange(M):
         path = paths[i]
         if path.found:
-            p = np.empty(path.length + 1, dtype=np.int32)
-            p[:] = <int [:path.length + 1]> path.vertices
-            pathlist.append(p)
+            # coerce allocated buffers to NumPy arrays
+            pathlist.append(
+                    np.asarray((<int [:path.length + 1]> path.vertices)))
         else:
+            # create an empty array for disconnected vertices
             pathlist.append(np.empty(0, dtype=np.int32))
     return pathlist
 
@@ -90,8 +91,7 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
         int [:] A_indptr = A.indptr
     path = _shortestpath(N, A_indptr, A_indices, source, target)
     if path.found:
-        retpath = np.empty(path.length + 1, dtype=np.int32)
-        retpath[:] = <int [:path.length + 1]> path.vertices
+        retpath = np.asarray(<int [:path.length + 1]> path.vertices)
     else:
         retpath = np.empty(0, dtype=np.int32)
     return retpath
@@ -118,7 +118,7 @@ cdef Path _shortestpath(
     D[source] = 0
     Q[readi] = source
     found = 0
-    while writei < N and not found:
+    while writei < N and readi < writei and not found:
         d += 1
         Nd = writei - readi # number of elements at distance d from source
         for i in xrange(Nd):
