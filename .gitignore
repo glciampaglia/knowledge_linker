@@ -12,3 +12,4 @@
 build/
 docs/*.pdf
 cython_debug
+*.prof
