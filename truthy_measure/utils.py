@@ -283,3 +283,12 @@ def mkcarray(name, shape, chunkshape, atom, outpath=None, ondisk=False):
             chunkshape=chunkshape)
     return arr
 
+def loadadjcsr(path):
+    a = np.load(path)
+    indices = a['indices']
+    indptr = a['indptr']
+    n_rows = len(indptr) - 1
+    n_data = len(indices)
+    if 'data' not in a.files:
+        data = np.ones((n_data,), dtype=np.float64)
+    return sp.csr_matrix((data, indices, indptr), shape=(n_rows, n_rows))
