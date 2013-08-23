@@ -11,9 +11,204 @@ from .utils import mkcarray, CHUNKSHAPE
 # cimports
 cimport numpy as cnp
 cimport cython
+from libc.math cimport fmin
 from libc.stdlib cimport malloc, abort, free
 from libc.string cimport memset
 from libc.stdio cimport printf
+from libc.float cimport DBL_MAX
+
+ctypedef struct MetricPath:
+    size_t length
+    int * vertices
+    int found
+    double distance
+
+ctypedef MetricPath * MetricPathPtr
+
+# parallel version, multiple source-target pairs
+def metricclosuremany(object A, int [:] sources, int [:] targets):
+    A = sp.csr_matrix(A)
+    if sources.shape[0] != targets.shape[0]:
+        raise ValueError("sources/targets mismatch")
+    cdef:
+        size_t N = A.shape[0], M = sources.shape[0]
+        MetricPathPtr paths
+        MetricPath path
+        object pathlist = []
+        double [:] distances = np.zeros((M,), dtype=np.float64)
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+        double [:] A_data = A.data
+        int i
+    paths = <MetricPathPtr> malloc(M * sizeof(MetricPath))
+    # parallel section
+    with nogil, parallel():
+        for i in prange(M, schedule='guided'):
+            paths[i] = _metricclosure(N, A_indptr, A_indices, A_data, sources[i],
+                    targets[i])
+    # pack results in a Python list
+    for i in xrange(N):
+        path = paths[i]
+        if path.found:
+            pathlist.append(
+                    np.asarray((<int [:path.length + 1]> path.vertices).copy()))
+            distances[i] = path.distance
+        else:
+            pathlist.append(np.empty(0, dtype=np.int32))
+    free(<void *> paths)
+    return pathlist, distances
+
+# single source-target pair
+cpdef object metricclosure(object A, int source, int target):
+    A = sp.csr_matrix(A)
+    cdef:
+        size_t N = A.shape[0]
+        MetricPath path
+        double distance
+        int [:] retpath
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+        double [:] A_data = A.data
+    path = _metricclosure(N, A_indptr, A_indices, A_data, source, target)
+    retpath = np.asarray((<int [:path.length + 1]> path.vertices).copy())
+    distance = path.distance
+    return tuple(retpath, distance)
+
+# allocates space for the vertices and launches the DFS
+cdef MetricPath _metricclosure (
+        int N,
+        int [:] indptr,
+        int [:] indices,
+        double [:] data,
+        int source,
+        int target) nogil:
+    cdef:
+        MetricPath path
+    _visit(N, path, source, target, indptr, indices, data)
+    return path
+
+ctypedef struct StackElem:
+    int node
+    int last_neighbor
+    int successor
+    double minsofar
+
+ctypedef StackElem * StackPtr
+
+ctypedef struct Stack:
+    StackPtr elements
+    int top
+    int size
+
+cdef inline void init_stack(int n, Stack stack) nogil:
+    cdef void * buf
+    buf = malloc(n* sizeof(StackElem))
+    if buf == NULL:
+        abort()
+    stack.elements = <StackPtr> buf
+    stack.top = 0
+    stack.size = n
+
+cdef inline void push(StackElem elem, Stack stack) nogil:
+    stack.elements[stack.top + 1] = elem
+    stack.top += 1
+
+cdef inline StackElem pop(Stack stack) nogil:
+    cdef StackElem elem
+    elem = stack.elements[stack.top]
+    stack.top -= 1
+    return elem
+
+cdef inline StackElem newelem(
+        int node,
+        int last_neighbor,
+        double minsofar) nogil:
+    cdef StackElem elem
+    elem.node = node # the current node
+    elem.last_neighbor = last_neighbor # the last neighbor visited so far
+    elem.minsofar = minsofar # the minimum along the path up to node
+    elem.successor = -1
+    return elem
+
+# the actual search function
+cdef inline void _visit(
+        int N,
+        MetricPath path,
+        int source,
+        int target,
+        int [:] indptr,
+        int [:] indices,
+        double [:] data) nogil:
+    cdef:
+        int i, neigh_node, backtracking, N_neigh
+        int found = 0 # flag for updating predecessors upon backtracking
+        int d = -1
+        double w, m, maxsofar = -1
+        int * neigh, * P, * inpath # neighbors, predecessors, in-path
+        Stack stack # DFS stack
+        StackElem curr, top
+    init_stack(N, stack)
+    inpath = init_intarray(N, 0)
+    P = init_intarray(N, -1)
+    push(newelem(source, -1, DBL_MAX), stack)
+    while stack.size > 0:
+        curr = stack.elements[stack.top]
+        if found:
+            P[curr.successor] = curr.node
+        backtracking = 1
+        neigh = _csr_neighbors(curr.node, indices, indptr)
+        N_neigh = indptr[curr.node + 1] - indptr[curr.node]
+        for i in xrange(N_neigh):
+            neigh_node = neigh[i]
+            if neigh_node < curr.last_neighbor:
+                # skip already visited neighbor
+                continue
+            curr.last_neighbor = neigh_node
+            w = data[indptr[curr.node] + i] # i.e. A[node, neigh_node]
+            m = fmin(curr.minsofar, w)
+            if neigh_node == target:
+                # update maximum so far
+                inpath[neigh_node] = 1
+                if maxsofar < m:
+                    maxsofar = m
+                    P[target] = curr.node
+                    d = stack.size
+                found = 1
+                continue
+            if not inpath[neigh_node]:
+                push(newelem(neigh_node, -1, m), stack)
+                backtracking = 0
+                inpath[curr.node] = 1
+                found = 0 # start a new traversal, reset flag
+                break
+        if backtracking:
+            inpath[curr.node] = 0
+            pop(stack)
+            if found:
+                top = stack.elements[stack.top]
+                top.successor = curr.node
+    if maxsofar > -1:
+        path.distance = maxsofar
+        path.found = 1
+        path.length = d
+        path.vertices = init_intarray(d + 1, -1)
+        path.vertices[0] = source
+        path.vertices[d + 1] = target
+        neigh_node = target
+        for i in xrange(d - 1):
+            path.vertices[d - i - 1] = P[neigh_node]
+            neigh_node = P[neigh_node]
+    else:
+        path.length = 0
+        path.found = 0
+        path.vertices = NULL
+        path.distance = -1
+    free(<void *> neigh)
+    free(<void *> P)
+    free(<void *> inpath)
+    free(<void *> stack.elements)
+
+## BFS for shortest path (by number of hops)
 
 ctypedef struct Path:
     size_t length
@@ -32,7 +227,6 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         size_t N = A.shape[0], M = sources.shape[0]
         PathPtr paths
         Path path
-        cnp.ndarray p
         object pathlist = []
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
@@ -102,9 +296,9 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
 @cython.wraparound(False)
 cdef Path _shortestpath(
         size_t N,
-        int [:] A_indptr, 
+        int [:] A_indptr,
         int [:] A_indices,
-        int source, 
+        int source,
         int target) nogil:
     global neigh_buf
     cdef:
@@ -153,6 +347,7 @@ cdef Path _shortestpath(
         path.length = 0
         path.found = 0
         path.vertices = NULL
+    free(<void *> neigh)
     free(<void *> P)
     free(<void *> D)
     free(<void *> Q)
@@ -198,6 +393,8 @@ cdef inline int * _csr_neighbors(int row, int [:] indices, int [:] indptr) nogil
     for i in xrange(n):
         res[i] = indices[I + i]
     return res
+
+## Transitive closure using PyTables to store matrix on disk
 
 cdef int _dfs_order
 
@@ -400,6 +597,8 @@ def c_closure(adj, sources=None, ondisk=False, outpath=None):
                 # clear the current node from the top of the DFS stack.
                 dfs_stack.pop()
     return (np.asarray(root), succ)
+
+## Maxmin matrix multiplication
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
