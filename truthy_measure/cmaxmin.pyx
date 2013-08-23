@@ -72,20 +72,7 @@ cpdef object metricclosure(object A, int source, int target):
     path = _metricclosure(N, A_indptr, A_indices, A_data, source, target)
     retpath = np.asarray((<int [:path.length + 1]> path.vertices).copy())
     distance = path.distance
-    return tuple(retpath, distance)
-
-# allocates space for the vertices and launches the DFS
-cdef MetricPath _metricclosure (
-        int N,
-        int [:] indptr,
-        int [:] indices,
-        double [:] data,
-        int source,
-        int target) nogil:
-    cdef:
-        MetricPath path
-    _visit(N, path, source, target, indptr, indices, data)
-    return path
+    return (retpath, distance)
 
 ctypedef struct StackElem:
     int node
@@ -100,7 +87,7 @@ ctypedef struct Stack:
     int top
     int size
 
-cdef inline void init_stack(int n, Stack stack) nogil:
+cdef inline void init_stack(int n, Stack * stack) nogil:
     cdef void * buf
     buf = malloc(n* sizeof(StackElem))
     if buf == NULL:
@@ -109,11 +96,11 @@ cdef inline void init_stack(int n, Stack stack) nogil:
     stack.top = 0
     stack.size = n
 
-cdef inline void push(StackElem elem, Stack stack) nogil:
+cdef inline void push(StackElem elem, Stack * stack) nogil:
     stack.elements[stack.top + 1] = elem
     stack.top += 1
 
-cdef inline StackElem pop(Stack stack) nogil:
+cdef inline StackElem pop(Stack * stack) nogil:
     cdef StackElem elem
     elem = stack.elements[stack.top]
     stack.top -= 1
@@ -131,14 +118,14 @@ cdef inline StackElem newelem(
     return elem
 
 # the actual search function
-cdef inline void _visit(
+cdef MetricPath _metricclosure(
         int N,
-        MetricPath path,
-        int source,
-        int target,
         int [:] indptr,
         int [:] indices,
-        double [:] data) nogil:
+        double [:] data,
+        int source,
+        int target
+        ) nogil:
     cdef:
         int i, neigh_node, backtracking, N_neigh
         int found = 0 # flag for updating predecessors upon backtracking
@@ -147,12 +134,15 @@ cdef inline void _visit(
         int * neigh, * P, * inpath # neighbors, predecessors, in-path
         Stack stack # DFS stack
         StackElem curr, top
-    init_stack(N, stack)
+        MetricPath path
+    init_stack(N, &stack)
     inpath = init_intarray(N, 0)
     P = init_intarray(N, -1)
-    push(newelem(source, -1, DBL_MAX), stack)
-    while stack.size > 0:
+    push(newelem(source, -1, DBL_MAX), &stack)
+    inpath[source] = 1
+    while stack.top > 0:
         curr = stack.elements[stack.top]
+        printf("I am in %d\n", curr.node)
         if found:
             P[curr.successor] = curr.node
         backtracking = 1
@@ -160,10 +150,11 @@ cdef inline void _visit(
         N_neigh = indptr[curr.node + 1] - indptr[curr.node]
         for i in xrange(N_neigh):
             neigh_node = neigh[i]
-            if neigh_node < curr.last_neighbor:
+            if neigh_node <= curr.last_neighbor:
                 # skip already visited neighbor
                 continue
             curr.last_neighbor = neigh_node
+            stack.elements[stack.top] = curr
             w = data[indptr[curr.node] + i] # i.e. A[node, neigh_node]
             m = fmin(curr.minsofar, w)
             if neigh_node == target:
@@ -176,17 +167,18 @@ cdef inline void _visit(
                 found = 1
                 continue
             if not inpath[neigh_node]:
-                push(newelem(neigh_node, -1, m), stack)
+                push(newelem(neigh_node, -1, m), &stack)
                 backtracking = 0
                 inpath[curr.node] = 1
                 found = 0 # start a new traversal, reset flag
                 break
         if backtracking:
             inpath[curr.node] = 0
-            pop(stack)
+            pop(&stack)
             if found:
                 top = stack.elements[stack.top]
                 top.successor = curr.node
+                stack.elements[stack.top] = top
     if maxsofar > -1:
         path.distance = maxsofar
         path.found = 1
@@ -207,6 +199,7 @@ cdef inline void _visit(
     free(<void *> P)
     free(<void *> inpath)
     free(<void *> stack.elements)
+    return path
 
 ## BFS for shortest path (by number of hops)
 
