@@ -494,3 +494,33 @@ as dense, it would require 2,5TB. On the other hand, could be doable on Quarry
 to mmap it as a binary numpy array file, in uncompressed format, which would
 increase the speed quite a bit! Have to think about it and maybe talk about it
 with Fil.
+
+## Fri Aug 23 18:43:58 EDT 2013
+
+Spent most of the week reading papers for the work on the ultimatum game, so
+could devote little time to this, but still managed to expanded the script for
+the shortest paths to compute the betweenness centrality and the path length
+distribution, and did some preliminary experiments with memory-mapped arrays and
+Cython typed memoryviews (which seem to work flawlessly). 
+
+On Thursday, read the paper by Steyvers and Tenenbaum about the statistical
+structure of three classic semantic networks: WordNet, Rotgen Thesaurus, and the
+Free Association Netword (IIRC). The first two are undirected network while the
+third is originally directed, but they analysed the undirected case as well. We
+should really focus on the undirected case because the edge directionality can
+be too constraining, despite my initial idea to take it into account. 
+
+On Friday, had a meeting with Fil and Sandro, which got again too much into the
+implementation details, anyway the resolve is to stop wasting time on making the
+transitive closure algorithm (the Nuutila one) compute the whole successors
+matrix. Instead, for each source, just perform a first BFS step to gather all
+successors, and then launch as many depth-first traversals as targets. Fil was
+still pushing to use a breadth-first approach but I think that my DF approach is
+better, besides, I have the code working. Spent the afternoon converting the
+depth-first traversal code (`truthy_measure.maxmin.mmclosure_dfs`) into Cython,
+mimicking the API chosen from the shortest path function. Fixed all compilation
+errors thrown by Cython, but the code still throws a segfault, so will need to
+do some debugging, but nothing crazy.
+
+Also, from the meeting it seems that I will get a grad student to help me on
+this, and perhaps also somebody to aid with the infocycle project.
