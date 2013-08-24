@@ -44,8 +44,8 @@ def metricclosuremany(object A, int [:] sources, int [:] targets):
     # parallel section
     with nogil, parallel():
         for i in prange(M, schedule='guided'):
-            paths[i] = _metricclosure(N, A_indptr, A_indices, A_data, sources[i],
-                    targets[i])
+            paths[i] = _metricclosure(N, A_indptr, A_indices, A_data,
+                    sources[i], targets[i])
     # pack results in a Python list
     for i in xrange(N):
         path = paths[i]
@@ -55,6 +55,7 @@ def metricclosuremany(object A, int [:] sources, int [:] targets):
             distances[i] = path.distance
         else:
             pathlist.append(np.empty(0, dtype=np.int32))
+            distances[i] = -1
     free(<void *> paths)
     return pathlist, distances
 
@@ -70,8 +71,12 @@ cpdef object metricclosure(object A, int source, int target):
         int [:] A_indptr = A.indptr
         double [:] A_data = A.data
     path = _metricclosure(N, A_indptr, A_indices, A_data, source, target)
-    retpath = np.asarray((<int [:path.length + 1]> path.vertices).copy())
-    distance = path.distance
+    if path.found:
+        retpath = np.asarray(<int [:path.length + 1]> path.vertices)
+        distance = path.distance
+    else:
+        retpath = np.empty(0, dtype=np.int32)
+        distance = -1
     return (retpath, distance)
 
 ctypedef struct StackElem:
@@ -142,8 +147,8 @@ cdef MetricPath _metricclosure(
     inpath[source] = 1
     while stack.top > 0:
         curr = stack.elements[stack.top]
-        printf("I am in %d\n", curr.node)
-        if found:
+#         printf("I am in %d", curr.node)
+        if found and curr.successor != -1:
             P[curr.successor] = curr.node
         backtracking = 1
         neigh = _csr_neighbors(curr.node, indices, indptr)
@@ -163,8 +168,8 @@ cdef MetricPath _metricclosure(
                 if maxsofar < m:
                     maxsofar = m
                     P[target] = curr.node
-                    d = stack.size
-                found = 1
+                    d = stack.top
+                    found = 1
                 continue
             if not inpath[neigh_node]:
                 push(newelem(neigh_node, -1, m), &stack)
@@ -173,19 +178,22 @@ cdef MetricPath _metricclosure(
                 found = 0 # start a new traversal, reset flag
                 break
         if backtracking:
-            inpath[curr.node] = 0
+#             printf(", backtracking.\n")
             pop(&stack)
+            inpath[curr.node] = 0
             if found:
                 top = stack.elements[stack.top]
                 top.successor = curr.node
                 stack.elements[stack.top] = top
+#         else:
+#             printf("\n")
     if maxsofar > -1:
         path.distance = maxsofar
         path.found = 1
         path.length = d
         path.vertices = init_intarray(d + 1, -1)
         path.vertices[0] = source
-        path.vertices[d + 1] = target
+        path.vertices[d] = target
         neigh_node = target
         for i in xrange(d - 1):
             path.vertices[d - i - 1] = P[neigh_node]
