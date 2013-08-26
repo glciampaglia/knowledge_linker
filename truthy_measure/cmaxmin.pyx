@@ -66,7 +66,7 @@ cpdef object metricclosure(object A, int source, int target):
         size_t N = A.shape[0]
         MetricPath path
         double distance
-        int [:] retpath
+        cnp.ndarray[cnp.int32_t] retpath
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
         double [:] A_data = A.data
@@ -177,6 +177,7 @@ cdef MetricPath _metricclosure(
                 inpath[curr.node] = 1
                 found = 0 # start a new traversal, reset flag
                 break
+        free(<void *> neigh)
         if backtracking:
 #             printf(", backtracking.\n")
             pop(&stack)
@@ -192,10 +193,9 @@ cdef MetricPath _metricclosure(
         path.found = 1
         path.length = d
         path.vertices = init_intarray(d + 1, -1)
-        path.vertices[0] = source
         path.vertices[d] = target
         neigh_node = target
-        for i in xrange(d - 1):
+        for i in xrange(d):
             path.vertices[d - i - 1] = P[neigh_node]
             neigh_node = P[neigh_node]
     else:
@@ -203,7 +203,6 @@ cdef MetricPath _metricclosure(
         path.found = 0
         path.vertices = NULL
         path.distance = -1
-    free(<void *> neigh)
     free(<void *> P)
     free(<void *> inpath)
     free(<void *> stack.elements)
@@ -332,23 +331,21 @@ cdef Path _shortestpath(
                 if neighi == target:
                     found = 1
                     break
-            free(neigh)
+            free(<void *> neigh)
         readi += Nd
     if found:
         path.length = d
         path.found = 1
         path.vertices = init_intarray(d + 1, -1)
-        path.vertices[0] = source
         path.vertices[d] = target
         nodei = target
-        for i in xrange(d - 1):
+        for i in xrange(d):
             path.vertices[d - i - 1] = P[nodei]
             nodei = P[nodei]
     else:
         path.length = 0
         path.found = 0
         path.vertices = NULL
-    free(<void *> neigh)
     free(<void *> P)
     free(<void *> D)
     free(<void *> Q)
