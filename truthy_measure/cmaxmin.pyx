@@ -26,6 +26,8 @@ ctypedef struct MetricPath:
 ctypedef MetricPath * MetricPathPtr
 
 # parallel version, multiple source-target pairs
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def maxminclosuremany(object A, int [:] sources, int [:] targets):
     A = sp.csr_matrix(A)
     if sources.shape[0] != targets.shape[0]:
@@ -60,6 +62,8 @@ def maxminclosuremany(object A, int [:] sources, int [:] targets):
     return pathlist, distances
 
 # single source-target pair
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cpdef object maxminclosure(object A, int source, int target):
     A = sp.csr_matrix(A)
     cdef:
@@ -123,6 +127,8 @@ cdef inline StackElem newelem(
     return elem
 
 # the actual search function
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cdef MetricPath _maxminclosure(
         int N,
         int [:] indptr,
@@ -213,6 +219,38 @@ ctypedef struct Path:
 
 ctypedef Path * PathPtr
 
+cpdef reachables(object A, int source):
+    A = sp.csr_matrix(A)
+    cdef:
+        int N = A.shape[0]
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+        int [:] reachables = np.zeros((N), dtype=np.int32)
+        object items
+        int i
+    _shortestpath(N, A_indptr, A_indices, source, source, reachables, 0)
+    items, = np.where(reachables)
+    return items
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef reachablesmany(object A, int [:] sources):
+    A = sp.csr_matrix(A)
+    cdef:
+        int N = A.shape[0]
+        int M = sources.shape[0]
+        int [:] A_indices = A.indices
+        int [:] A_indptr = A.indptr
+        int [:, :] reachables = np.zeros((M, N), dtype=np.int32)
+        object items
+        int i
+    with nogil, parallel():
+        for i in prange(M, schedule='guided'):
+            _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
+                    reachables[i], 0)
+    items, = zip(*map(np.where, reachables))
+    return items
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def shortestpathmany(object A, int [:] sources, int [:] targets):
@@ -227,11 +265,13 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
         int i
+        int [:] reachable = np.zeros((N,), dtype=np.int32)
     paths = <PathPtr> malloc(M * sizeof(Path))
     # parallel part
     with nogil, parallel():
         for i in prange(M, schedule='guided'):
-            paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i], targets[i])
+            paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i],
+                    targets[i], reachable, 1)
     # pack results in a Python list
     for i in xrange(M):
         path = paths[i]
@@ -280,7 +320,8 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
         cnp.ndarray[cnp.int32_t] retpath
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
-    path = _shortestpath(N, A_indptr, A_indices, source, target)
+        int [:] reachable = np.zeros((N,), dtype=np.int32)
+    path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)
     if path.found:
         retpath = np.asarray(<int [:path.length + 1]> path.vertices)
     else:
@@ -295,7 +336,37 @@ cdef Path _shortestpath(
         int [:] A_indptr,
         int [:] A_indices,
         int source,
-        int target) nogil:
+        int target,
+        int [:] reachable,
+        int stoponfound) nogil:
+    '''
+    The actual BFS function for computing the shortest path
+
+    Parameters
+    ----------
+    N : size_t
+        The number of nodes in the graph.
+
+    A_indptr, A_indices: int memoryviews
+        The array of row index pointers and column pointers from the CSR object
+        holding the adjacency matrix of the graph.
+
+    source, target: int
+
+    reachable: pointer to int
+        Pre-allocated array storing 1 for each reachable node. The function must
+        be called with `stoponfound = 0` in order to correctly compute this
+        information.
+
+    stoponfound: int memoryview
+        integer flag, if 1, stop as soon as target is found, else, continue
+        until the whole graph has been explored. This is needed if wanting to
+        compute the reachability set of source.
+
+    Returns
+    -------
+    path : a Path struct
+    '''
     global neigh_buf
     cdef:
         int * P, * D, * Q  # predecessors, distance vectors, fifo queue
@@ -319,6 +390,7 @@ cdef Path _shortestpath(
             N_neigh = A_indptr[nodei + 1] - A_indptr[nodei]
             for ii in xrange(N_neigh):
                 neighi = neigh[ii]
+                reachable[neighi] = 1
                 if D[neighi] == -1: # Found new node
                     D[neighi] = d
                     P[neighi] = nodei
@@ -326,7 +398,8 @@ cdef Path _shortestpath(
                     writei += 1
                 if neighi == target:
                     found = 1
-                    break
+                    if stoponfound:
+                        break
             free(<void *> neigh)
         readi += Nd
     if found:
