@@ -5,6 +5,7 @@ import scipy.sparse as sp
 from collections import defaultdict
 from tables import BoolAtom
 from cython.parallel import parallel, prange
+from tempfile import NamedTemporaryFile
 
 from .utils import mkcarray, CHUNKSHAPE
 
@@ -165,6 +166,9 @@ cdef MetricPath _maxminclosure(
             curr.last_neighbor = neigh_node
             stack.elements[stack.top] = curr
             w = data[indptr[curr.node] + i] # i.e. A[node, neigh_node]
+            if w < maxsofar:
+                # prune path
+                continue
             m = fmin(curr.minsofar, w)
             if neigh_node == target:
                 # update maximum so far
@@ -174,7 +178,7 @@ cdef MetricPath _maxminclosure(
                     path.distance = maxsofar
                     path.length = stack.top
                     path.found = 1
-                    path.vertices = <int *> realloc(<void *>path.vertices, 
+                    path.vertices = <int *> realloc(<void *>path.vertices,
                             (path.length + 1) * sizeof(int))
                     if path.vertices == NULL:
                         abort()
@@ -209,7 +213,7 @@ cpdef reachables(object A, int source):
         int N = A.shape[0]
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
-        int [:] reachables = np.zeros((N), dtype=np.int32)
+        int [:] reachables = np.zeros((N,), dtype=np.int32)
         object items
         int i
     _shortestpath(N, A_indptr, A_indices, source, source, reachables, 0)
@@ -218,16 +222,21 @@ cpdef reachables(object A, int source):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef reachablesmany(object A, int [:] sources):
+cpdef reachablesmany(object A, int [:] sources, int mmap = 0):
     A = sp.csr_matrix(A)
     cdef:
         int N = A.shape[0]
         int M = sources.shape[0]
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
-        int [:, :] reachables = np.zeros((M, N), dtype=np.int32)
+        int [:, :] reachables
         object items
         int i
+    if mmap:
+        fn = NamedTemporaryFile()
+        reachables = np.memmap(fn, shape=(M, N), dtype=np.int32)
+    else:
+        reachables = np.zeros((M, N), dtype=np.int32)
     with nogil, parallel():
         for i in prange(M, schedule='guided'):
             _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
