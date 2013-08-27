@@ -524,3 +524,11 @@ do some debugging, but nothing crazy.
 
 Also, from the meeting it seems that I will get a grad student to help me on
 this, and perhaps also somebody to aid with the infocycle project.
+
+## Mon Aug 26 21:30:06 EDT 2013
+
+Worked on the Cython implementation of the reachability functions via BFS and on
+the maxmin closure. Still some bugs in the way the parallel function of the
+maxmin closure returns value, but improved a lot the code. Met with Prashant and
+described him broadly the project and its possible applications in terms of
+automatic fact checking.
