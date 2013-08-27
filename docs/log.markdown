@@ -532,3 +532,26 @@ the maxmin closure. Still some bugs in the way the parallel function of the
 maxmin closure returns value, but improved a lot the code. Met with Prashant and
 described him broadly the project and its possible applications in terms of
 automatic fact checking.
+
+## Tue Aug 27 14:50:58 EDT 2013
+
+Fixed the bug with the parallel function, and wrote a script that splits the
+computation over chunks of sources, applies the BFS from each source to find all
+reachable nodes, and launches a DFS traversal for computing the maxmin. Also,
+added a pruning condition that should improve performances. Made some tests on a
+random network with comparable sparsity coefficient and it seems to go decently
+fast, though the complexity depends crucially on the number of nodes, with
+a sparsity coefficient of 1e-2 it was taking forever. Perhaps a branching
+factor? At any rate, launched the script on Lenny to get an idea of the possible
+ETA. In case will move it over Big Red2 if more power is needed.
+
+Did some more research on ways to use Dijkstra instead of a simple DFS, and
+found a nice technical report by [Kaibel and Peinhardt](Kaibel2006) explaining
+the algorithms for the widest path problem (the name under which the transitive
+closure is known in graph theory). Assigned it to Prashant as a reading and to
+implement the algorithm for the undirected case.
+
+[Kaibel2006]: http://www.zib.de/Publications/Reports/ZR-06-22.pdf "Kaibel,
+Volker; Peinhardt, Matthias A. F. (2006), On the bottleneck shortest path
+problem, ZIB-Report 06-22, Konrad-Zuse-Zentrum für Informationstechnik Berlin"
+
