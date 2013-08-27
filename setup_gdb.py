@@ -15,8 +15,6 @@ setup(
         ext_modules=[
             Extension("truthy_measure.cmaxmin", ["truthy_measure/cmaxmin.pyx"],
                 include_dirs=_incl, 
-                extra_compile_args=['-fopenmp', '-O0'],
-                extra_link_args=['-fopenmp'], 
                 pyrex_gdb=True) 
             ],
         scripts = [
