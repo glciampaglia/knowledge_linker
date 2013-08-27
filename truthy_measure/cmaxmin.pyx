@@ -12,7 +12,7 @@ from .utils import mkcarray, CHUNKSHAPE
 cimport numpy as cnp
 cimport cython
 from libc.math cimport fmin
-from libc.stdlib cimport malloc, abort, free
+from libc.stdlib cimport realloc, malloc, abort, free
 from libc.string cimport memset
 from libc.stdio cimport printf
 from libc.float cimport DBL_MAX
@@ -59,7 +59,7 @@ def maxminclosuremany(object A, int [:] sources, int [:] targets):
             pathlist.append(np.empty(0, dtype=np.int32))
             distances[i] = -1
     free(<void *> paths)
-    return pathlist, distances
+    return pathlist, np.asarray(distances)
 
 # single source-target pair
 @cython.boundscheck(False)
@@ -86,7 +86,6 @@ cpdef object maxminclosure(object A, int source, int target):
 ctypedef struct StackElem:
     int node
     int last_neighbor
-    int successor
     double minsofar
 
 ctypedef StackElem * StackPtr
@@ -102,12 +101,12 @@ cdef inline void init_stack(int n, Stack * stack) nogil:
     if buf == NULL:
         abort()
     stack.elements = <StackPtr> buf
-    stack.top = 0
+    stack.top = -1
     stack.size = n
 
 cdef inline void push(StackElem elem, Stack * stack) nogil:
-    stack.elements[stack.top + 1] = elem
     stack.top += 1
+    stack.elements[stack.top] = elem
 
 cdef inline StackElem pop(Stack * stack) nogil:
     cdef StackElem elem
@@ -123,7 +122,6 @@ cdef inline StackElem newelem(
     elem.node = node # the current node
     elem.last_neighbor = last_neighbor # the last neighbor visited so far
     elem.minsofar = minsofar # the minimum along the path up to node
-    elem.successor = -1
     return elem
 
 # the actual search function
@@ -138,24 +136,25 @@ cdef MetricPath _maxminclosure(
         int target
         ) nogil:
     cdef:
-        int i, neigh_node, backtracking, N_neigh
-        int found = 0 # flag for updating predecessors upon backtracking
-        int d = -1
+        int i, j, neigh_node, backtracking, N_neigh
         double w, m, maxsofar = -1
-        int * neigh, * P, * inpath # neighbors, predecessors, in-path
+        int * neigh = NULL, * inpath # neighbors, predecessors, in-path
         Stack stack # DFS stack
         StackElem curr, top
         MetricPath path
+    path.length = 0
+    path.found = 0
+    path.vertices = NULL
+    path.distance = -1
     init_stack(N, &stack)
     inpath = init_intarray(N, 0)
-    P = init_intarray(N, -1)
     push(newelem(source, -1, DBL_MAX), &stack)
     inpath[source] = 1
-    while stack.top > 0:
+    while stack.top >= 0:
         curr = stack.elements[stack.top]
-        if found and curr.successor != -1:
-            P[curr.successor] = curr.node
         backtracking = 1
+        if neigh != NULL:
+            free(<void *> neigh)
         neigh = _csr_neighbors(curr.node, indices, indptr)
         N_neigh = indptr[curr.node + 1] - indptr[curr.node]
         for i in xrange(N_neigh):
@@ -172,40 +171,25 @@ cdef MetricPath _maxminclosure(
                 inpath[neigh_node] = 1
                 if maxsofar < m:
                     maxsofar = m
-                    P[target] = curr.node
-                    d = stack.top
-                    found = 1
+                    path.distance = maxsofar
+                    path.length = stack.top
+                    path.found = 1
+                    path.vertices = <int *> realloc(<void *>path.vertices, 
+                            (path.length + 1) * sizeof(int))
+                    if path.vertices == NULL:
+                        abort()
+                    for j in xrange(path.length):
+                        path.vertices[j] = stack.elements[j].node
+                    path.vertices[path.length] = target
                 continue
             if not inpath[neigh_node]:
                 push(newelem(neigh_node, -1, m), &stack)
                 backtracking = 0
                 inpath[curr.node] = 1
-                found = 0 # start a new traversal, reset flag
                 break
-        free(<void *> neigh)
         if backtracking:
             pop(&stack)
             inpath[curr.node] = 0
-            if found:
-                top = stack.elements[stack.top]
-                top.successor = curr.node
-                stack.elements[stack.top] = top
-    if maxsofar > -1:
-        path.distance = maxsofar
-        path.found = 1
-        path.length = d
-        path.vertices = init_intarray(d + 1, -1)
-        path.vertices[d] = target
-        neigh_node = target
-        for i in xrange(d):
-            path.vertices[d - i - 1] = P[neigh_node]
-            neigh_node = P[neigh_node]
-    else:
-        path.length = 0
-        path.found = 0
-        path.vertices = NULL
-        path.distance = -1
-    free(<void *> P)
     free(<void *> inpath)
     free(<void *> stack.elements)
     return path
@@ -264,12 +248,14 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         object pathlist = []
         int [:] A_indices = A.indices
         int [:] A_indptr = A.indptr
-        int i
+        int i, j
         int [:] reachable = np.zeros((N,), dtype=np.int32)
     paths = <PathPtr> malloc(M * sizeof(Path))
     # parallel part
     with nogil, parallel():
         for i in prange(M, schedule='guided'):
+            for j in xrange(N):
+                reachable[j] = 0
             paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i],
                     targets[i], reachable, 1)
     # pack results in a Python list
@@ -337,7 +323,7 @@ cdef Path _shortestpath(
         int [:] A_indices,
         int source,
         int target,
-        int [:] reachable,
+        int [:] reached,
         int stoponfound) nogil:
     '''
     The actual BFS function for computing the shortest path
@@ -353,8 +339,8 @@ cdef Path _shortestpath(
 
     source, target: int
 
-    reachable: pointer to int
-        Pre-allocated array storing 1 for each reachable node. The function must
+    reached: pointer to int
+        Pre-allocated array storing 1 for each reached node. The function must
         be called with `stoponfound = 0` in order to correctly compute this
         information.
 
@@ -369,18 +355,19 @@ cdef Path _shortestpath(
     '''
     global neigh_buf
     cdef:
-        int * P, * D, * Q  # predecessors, distance vectors, fifo queue
-        int * neigh # neighbors, path vertices
+        int * P, * D, * Q, * visited  # predecessors, distance vectors, fifo queue
+        int * neigh # neighbors
         Path path # return struct
         size_t N_neigh, Nd
-        int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi
+        int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi, found
+        int breakflag = 0
     # initialize P, D and Q
     P = init_intarray(N, -1)
     D = init_intarray(N, -1)
     Q = init_intarray(N, -1)
+    found = 0
     D[source] = 0
     Q[readi] = source
-    found = 0
     while writei < N and readi < writei and not found:
         d += 1
         Nd = writei - readi # number of elements at distance d from source
@@ -390,8 +377,8 @@ cdef Path _shortestpath(
             N_neigh = A_indptr[nodei + 1] - A_indptr[nodei]
             for ii in xrange(N_neigh):
                 neighi = neigh[ii]
-                reachable[neighi] = 1
-                if D[neighi] == -1: # Found new node
+                if not reached[neighi]: # Found new node
+                    reached[neighi] = 1
                     D[neighi] = d
                     P[neighi] = nodei
                     Q[writei] = neighi
@@ -399,8 +386,11 @@ cdef Path _shortestpath(
                 if neighi == target:
                     found = 1
                     if stoponfound:
+                        breakflag = 1
                         break
-            free(<void *> neigh)
+            free(<void *>neigh)
+            if breakflag:
+                break
         readi += Nd
     if found:
         path.length = d
