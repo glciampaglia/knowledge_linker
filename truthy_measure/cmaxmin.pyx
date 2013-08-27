@@ -232,17 +232,22 @@ cpdef reachablesmany(object A, int [:] sources, int mmap = 0):
         int [:, :] reachables
         object items
         int i
+    f = None
     if mmap:
-        fn = NamedTemporaryFile()
-        reachables = np.memmap(fn, shape=(M, N), dtype=np.int32)
+        f = NamedTemporaryFile()
+        reachables = np.memmap(f, shape=(M, N), dtype=np.int32)
     else:
         reachables = np.zeros((M, N), dtype=np.int32)
-    with nogil, parallel():
-        for i in prange(M, schedule='guided'):
-            _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
-                    reachables[i], 0)
-    items, = zip(*map(np.where, reachables))
-    return items
+    try:
+        with nogil, parallel():
+            for i in prange(M, schedule='guided'):
+                _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
+                        reachables[i], 0)
+        items, = zip(*map(np.where, reachables))
+        return items
+    finally:
+        if f:
+            f.close() # delete temporary file
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
