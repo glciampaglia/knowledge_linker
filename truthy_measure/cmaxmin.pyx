@@ -49,7 +49,7 @@ def maxminclosuremany(object A, int [:] sources, int [:] targets):
             paths[i] = _maxminclosure(N, A_indptr, A_indices, A_data,
                     sources[i], targets[i])
     # pack results in a Python list
-    for i in xrange(N):
+    for i in xrange(M):
         path = paths[i]
         if path.found:
             pathlist.append(
