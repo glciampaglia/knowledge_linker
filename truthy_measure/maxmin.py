@@ -80,8 +80,9 @@ def bottleneckpaths(A, source):
     Finds the smallest bottleneck paths in a directed network
     '''
     N = A.shape[0]
-    items = {}
-    Q = []
+    items = {} # handles to the items inserted in the queue
+    Q = [] # heap queue
+    # populate the queue
     for node in xrange(N):
         if node == source:
             sim = 1.
@@ -91,6 +92,7 @@ def bottleneckpaths(A, source):
         item = [dist, node, -1]
         items[node] = item
         heappush(Q, item)
+    # compute bottleneck distances and predecessor information
     while len(Q):
         node_item = heappop(Q)
         dist, node, pred = node_item
@@ -104,11 +106,12 @@ def bottleneckpaths(A, source):
                 neighbor_item[0] = d
                 neighbor_item[2] = node
                 heapreplace(Q, neighbor_item)
+    # generate paths
     bott_dists = []
     paths = []
     for node in xrange(N):
         item = items[node]
-        if item[2] == -1:
+        if item[2] == -1: # disconnected node
             continue
         bdist = item[0] ** -1 - 1.0
         bott_dists.append(bdist)
