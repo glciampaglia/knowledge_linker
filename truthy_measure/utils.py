@@ -4,13 +4,86 @@ from collections import defaultdict
 from cStringIO import StringIO
 from tables import Filters, open_file
 from tempfile import NamedTemporaryFile
-
-# for closure/closure_rec/c_closure/c_closure_rec
-# NOTE: size 10K seems to produce reasonably sized file at the best speed
-CHUNKSHAPE = (1,10000)
+from itertools import product
+from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
+
+class ReachablePairsIter(object):
+    '''
+    Instances of this class are iterator that, for each source, yield (source,
+    target) pairs where target is reachable from source according to the succ
+    matrix.
+    '''
+    def __init__(self, sources, roots, succ):
+        '''
+        Parameters
+        ----------
+        sources : sequence of ints
+            The sources
+        roots : array_like
+            A 1D array of root labels (see `closure`)
+        succ : array_like
+            A 2D bool matrix representing the "successor" relation
+        '''
+        try:
+            len(sources)
+        except TypeError:
+            raise ValueError("sources must be a sequence")
+        self.sources = sources
+        self.roots = roots
+        self.succ = succ
+        self._len = sum([succ[roots[i],:].sum() for i in sources])
+    def __len__(self):
+        return self._len
+    def __iter__(self):
+        for s in self.sources:
+            for t in xrange(len(self.roots)):
+                if self.succ[self.roots[s], self.roots[t]]:
+                    yield s, t
+
+class ProductIter(object):
+    '''
+    Wrapper around `itertools.product` with len() method.
+    '''
+    def __init__(self, *sequences):
+        '''
+        Parameters
+        ----------
+
+        *sequences : sequence of sequences
+
+            Each sequeunce must support len().
+        '''
+        self.sequences = sequences
+        self._len = reduce(int.__mul__, map(len, self.sequences))
+    def __iter__(self):
+        return product(*self.sequences)
+    def __len__(self):
+        return self._len
+
+def dfs_items(sources, targets, n, succ, roots, progress):
+    '''
+    Produces input (source, target) pairs for DFS search and related progress
+    bar object.
+    '''
+    if succ is not None:
+        if roots is None:
+            roots = np.arange((n,), dtype=np.int32)
+        else:
+            roots = np.ravel(roots)
+        items = ReachablePairsIter(sources, roots, succ)
+    else:
+        if targets is not None:
+            items = zip(sources, targets)
+        else:
+            items = ProductIter(sources, xrange(n))
+    if progress:
+        widgets = ['[Maxmin closure] ', AdaptiveETA(), Bar(), Percentage()]
+        pbar = ProgressBar(widgets=widgets)
+        items = pbar(items)
+    return items
 
 def arrayfile(data_file, shape, descr, fortran=False):
     '''
@@ -197,91 +270,6 @@ def dict_of_dicts_to_ndarray(dd, size):
         for icol in d:
             tmp[irow, icol] = d[icol]
     return tmp
-
-# TODO use heapq with time() as priority
-
-class Cache(dict):
-    def __init__(self, maxsize, *args, **kwargs):
-        '''
-        A dictionary with maximum capacity. Oldest items are removed first,
-        using a queue. Whenever a key is gotten from the dictionary, its
-        position in the queue is reset to zero.
-
-        Parameters
-        ----------
-        maxsize : integer
-            The maximum size of the cache. When reached, the oldest element in
-            the queue is removed.
-
-        Additional arguments are assigned to the dictionary.
-
-        Notes
-        -----
-        Probably not thread-safe.
-        '''
-        super(Cache, self).__init__()
-        self.maxsize = maxsize
-        self._queue = []
-        for k, v in args:
-            self.__setitem__(k, v)
-        for k in kwargs:
-            self.__setitem__(k, kwargs[k])
-    def __repr__(self):
-        return '<{}({}) at 0x{:x}>'.format(self.__class__.__name__,
-                self.maxsize, id(self))
-    def __setitem__(self, key, value):
-        # if key queue is full, pop the oldest item
-        if key not in self._queue and len(self._queue) == self.maxsize:
-            oldest_key = self._queue.pop(0)
-            del self[oldest_key]
-        super(Cache, self).__setitem__(key, value)
-        # update position of key
-        try:
-            self._queue.remove(key)
-        except ValueError:
-            pass
-        self._queue.append(key)
-    def __getitem__(self, key):
-        value = super(Cache, self).__getitem__(key)
-        self._queue.remove(key)
-        self._queue.append(key)
-        return value
-
-def mkcarray(name, shape, chunkshape, atom, outpath=None, ondisk=False):
-    '''
-    Creates a compressed chunked array.
-
-    Parameters
-    ----------
-    name : string
-        the name of the array in the HDF5 file
-    shape : tuple
-        shape of the array
-    atom : object
-        the atom instance of the array data. See `tables.Atom`
-    outpath : string
-        optional; path to HDF5 file. If None, the array is stored in a temporary
-        file that will deleted upon closing it.
-    ondisk : bool
-        optional; by default the HDF5 file is created in memory and synced to
-        disk only when closed.
-
-    Returns
-    -------
-    arr : tables.CArray instance
-        the chunked array
-    '''
-    if outpath is None:
-        outfile = NamedTemporaryFile(suffix='.h5', delete=True)
-        outpath = outfile.name
-    if ondisk:
-        h5f = open_file(outpath, 'w')
-    else:
-        h5f = open_file(outpath, 'w', driver="H5FD_CORE")
-    filters = Filters(complevel=5, complib='zlib')
-    arr = h5f.create_carray(h5f.root, name, atom, shape, filters=filters,
-            chunkshape=chunkshape)
-    return arr
 
 def loadadjcsr(path):
     a = np.load(path)

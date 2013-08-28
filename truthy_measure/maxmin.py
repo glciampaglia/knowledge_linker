@@ -66,11 +66,10 @@ from ctypes import c_int, c_double
 from contextlib import closing
 import warnings
 from datetime import datetime
-from itertools import izip, product
-from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
+from itertools import izip
 from operator import itemgetter
 
-from .utils import coo_dtype, Cache, mkcarray, CHUNKSHAPE
+from .utils import coo_dtype, Cache, dfs_items
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # TODO understand why sometimes _init_worker raises a warning complaining that
@@ -92,81 +91,6 @@ def _showwarning(message, category, filename, lineno, line=None):
 warnings.showwarning = _showwarning
 
 # max-min transitive closure based on DFS
-
-class ReachablePairsIter(object):
-    '''
-    Instances of this class are iterator that, for each source, yield (source,
-    target) pairs where target is reachable from source according to the succ
-    matrix.
-    '''
-    def __init__(self, sources, roots, succ):
-        '''
-        Parameters
-        ----------
-        sources : sequence of ints
-            The sources
-        roots : array_like
-            A 1D array of root labels (see `closure`)
-        succ : array_like
-            A 2D bool matrix representing the "successor" relation
-        '''
-        try:
-            len(sources)
-        except TypeError:
-            raise ValueError("sources must be a sequence")
-        self.sources = sources
-        self.roots = roots
-        self.succ = succ
-        self._len = sum([succ[roots[i],:].sum() for i in sources])
-    def __len__(self):
-        return self._len
-    def __iter__(self):
-        for s in self.sources:
-            for t in xrange(len(self.roots)):
-                if self.succ[self.roots[s], self.roots[t]]:
-                    yield s, t
-
-class ProductIter(object):
-    '''
-    Wrapper around `itertools.product` with len() method.
-    '''
-    def __init__(self, *sequences):
-        '''
-        Parameters
-        ----------
-
-        *sequences : sequence of sequences
-
-            Each sequeunce must support len().
-        '''
-        self.sequences = sequences
-        self._len = reduce(int.__mul__, map(len, self.sequences))
-    def __iter__(self):
-        return product(*self.sequences)
-    def __len__(self):
-        return self._len
-
-def _dfs_items(sources, targets, n, succ, roots, progress):
-    '''
-    Produces input (source, target) pairs for DFS search and related progress
-    bar object.
-    '''
-    if succ is not None:
-        if roots is None:
-            roots = np.arange((n,), dtype=np.int32)
-        else:
-            roots = np.ravel(roots)
-        items = ReachablePairsIter(sources, roots, succ)
-    else:
-        if targets is not None:
-            items = zip(sources, targets)
-        else:
-            items = ProductIter(sources, xrange(n))
-    if progress:
-        widgets = ['[Maxmin closure] ', AdaptiveETA(), Bar(), Percentage()]
-        pbar = ProgressBar(widgets=widgets)
-        items = pbar(items)
-    return items
 
 def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
         progress=False, cachesize=1000):
@@ -208,7 +132,7 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
     '''
     n = a.shape[0]
     a = sp.lil_matrix(a)
-    items = _dfs_items(sources, targets, n, succ, roots, progress)
+    items = dfs_items(sources, targets, n, succ, roots, progress)
     get0 = itemgetter(0) # e.g. lambda k : k[0]
     usecache = cachesize > 0
     if usecache:
@@ -306,7 +230,7 @@ def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
                 return min_so_far
     n = a.shape[0]
     a = sp.lil_matrix(a)
-    items = _dfs_items(sources, targets, n, succ, roots, progress)
+    items = dfs_items(sources, targets, n, succ, roots, progress)
     for s, t in items:
         explored = set() # traversed edges
         visited = set() # nodes traversed along the path
