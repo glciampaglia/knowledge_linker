@@ -7,8 +7,6 @@ from tables import BoolAtom
 from cython.parallel import parallel, prange
 from tempfile import NamedTemporaryFile
 
-from .utils import mkcarray, CHUNKSHAPE
-
 # cimports
 cimport numpy as cnp
 cimport cython

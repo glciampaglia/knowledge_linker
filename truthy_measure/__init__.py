@@ -1,3 +1,4 @@
+import os
 import warnings
 
 # filter out some harmless warnings
