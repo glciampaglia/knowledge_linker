@@ -67,9 +67,6 @@ from contextlib import closing
 import warnings
 from datetime import datetime
 from itertools import izip, product
-from collections import defaultdict
-from array import array
-from tables import BoolAtom
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 from operator import itemgetter
 
