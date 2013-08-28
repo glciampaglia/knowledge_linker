@@ -555,3 +555,12 @@ implement the algorithm for the undirected case.
 Volker; Peinhardt, Matthias A. F. (2006), On the bottleneck shortest path
 problem, ZIB-Report 06-22, Konrad-Zuse-Zentrum für Informationstechnik Berlin"
 
+## Wed Aug 28 16:39:31 EDT 2013
+
+Today implemented a modified version of Dijkstra to compute the maxmin paths. It
+works, and is fast enough on the random graph with sparsity coefficient where
+the previous brute-force-ish attempts where taking forever. Since the algorithm
+uses a binary heap, needed to find a C or C++ implementation of binary heaps (or
+priority queues). Tried to get Boosts's heap library to work but with no success
+(must really start to study C++ seriously) and finally found a Cython
+implementation posted on SciPy User.
