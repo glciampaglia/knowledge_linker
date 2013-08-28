@@ -64,31 +64,12 @@ import scipy.sparse as sp
 from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 from contextlib import closing
-import warnings
 from datetime import datetime
 from itertools import izip
 from operator import itemgetter
 
 from .utils import coo_dtype, Cache, dfs_items
 from .cmaxmin import c_maximum_csr # see below for other imports
-
-# TODO understand why sometimes _init_worker raises a warning complaining that
-# the indices array has dtype float64. This happens intermittently. In the
-# meanwhile, just ignore it.
-
-warnings.filterwarnings('ignore',
-        message='.*',
-        module='scipy\.sparse\.compressed.*',
-        lineno=122)
-
-# Format warnings nicely
-
-def _showwarning(message, category, filename, lineno, line=None):
-    filename = os.path.basename(__file__)
-    warning = category.__name__
-    print >> sys.stderr, '{}:{}: {}: {}'.format(filename, lineno, warning, message)
-
-warnings.showwarning = _showwarning
 
 # max-min transitive closure based on DFS
 
