@@ -130,45 +130,6 @@ def test_closure_cycle_2():
     print res
     assert np.allclose(res, C2T) 
 
-def test_transitive_closure():
-    '''
-    Test recursive vs non-recursive implementation of transitive closure.
-    '''
-    B = sp.rand(10, 10, .2, 'csr')
-    root1, scc_succ1, _ = closure(B)
-    root2, scc_succ2, _ = closure_recursive(B)
-    assert np.allclose(root1, root2), 'roots differ'
-    assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
-            'successor sets differ'
-
-def test_transitive_closure_ondisk():
-    '''
-    Test recursive vs non-recursive implementation of transitive closure with
-    on-disk storage.
-    '''
-    B = sp.rand(10, 10, .2, 'csr')
-    path1 = mktemp()
-    path2 = mktemp()
-    with nested(closing(open(path1, 'w')), closing(open(path2, 'w'))) as (f1,
-            f2):
-        root1, scc_succ1, _ = closure(B, ondisk=True, outpath=path1)
-        root2, scc_succ2, _ = closure_recursive(B, ondisk=True, outpath=path2)
-        assert np.allclose(root1, root2), 'roots differ'
-        assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
-                'successor sets differ'
-
-def test_transitive_closure_sources():
-    '''
-    Test sources parameter in closure functions.
-    '''
-    B = sp.rand(10, 10, .2, 'csr')
-    sources = np.random.randint(0, 10, 4)
-    root1, scc_succ1, _ = closure(B, sources)
-    root2, scc_succ2, _ = closure_recursive(B, sources)
-    assert np.allclose(root1, root2), 'roots differ'
-    assert np.allclose(scc_succ1.read(), scc_succ2.read()), \
-            'successor sets differ'
-
 def test_matmul_closure():
     '''
     Test sequential vs parallel matrix multiplication transitive closure.
@@ -245,12 +206,7 @@ def test_closure_comb():
         ])
     res1 = mmclosure_dfs(A).toarray() # graph traversal
     res2 = mmclosure_matmul(A, maxiter=100) # matrix multiplication
-    roots, succ, path = closure(A)
-    coords = list(itermmclosure_dfs(A, xrange(len(A)), succ=succ, roots=roots))
-    I,J,W = zip(*coords)
-    res3 = sp.coo_matrix((W, (I,J)), A.shape).toarray()
     assert np.allclose(res1, res2)
-    assert np.allclose(res1, res3)
     assert np.allclose(res1, AT)
 
 def test_closure_two_paths():
@@ -270,12 +226,7 @@ def test_closure_two_paths():
         [0.0, 0.0, 0.0, 0.0]
         ])
     res1 = mmclosure_dfs(A).toarray() # graph traversal
-    roots, succ, path = closure(A)
-    coords = list(itermmclosure_dfs(A, xrange(len(A)), succ=succ, roots=roots))
-    I,J,W = zip(*coords)
-    res2 = sp.coo_matrix((W, (I,J)), A.shape).toarray()
     assert np.allclose(res1, AT)
-    assert np.allclose(res1, res2)
 
 def test_closure_cycle_path():
     '''
