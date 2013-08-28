@@ -67,9 +67,59 @@ from contextlib import closing
 from datetime import datetime
 from itertools import izip
 from operator import itemgetter
+from heapq import heappush, heappop, heapreplace
 
 from .utils import coo_dtype, dfs_items
 from .cmaxmin import c_maximum_csr # see below for other imports
+
+# Single source Dijkstra for computing bottleneck paths
+
+# we push the inverse of the similarity to fake a max-heap
+def bottleneckpaths(A, source):
+    '''
+    Finds the smallest bottleneck paths in a directed network
+    '''
+    N = A.shape[0]
+    items = {}
+    Q = []
+    for node in xrange(N):
+        if node == source:
+            sim = 1.
+        else:
+            sim = 0.0
+        dist = (1.0 + sim) ** -1
+        item = [dist, node, -1]
+        items[node] = item
+        heappush(Q, item)
+    while len(Q):
+        node_item = heappop(Q)
+        dist, node, pred = node_item
+        neighbors, = np.where(A[node])
+        for neighbor in neighbors:
+            neighbor_item = items[neighbor]
+            neigh_dist = neighbor_item[0]
+            w = (1.0 + A[node, neighbor]) ** -1
+            d = max(w, dist)
+            if d < neigh_dist:
+                neighbor_item[0] = d
+                neighbor_item[2] = node
+                heapreplace(Q, neighbor_item)
+    bott_dists = []
+    paths = []
+    for node in xrange(N):
+        item = items[node]
+        if item[2] == -1:
+            continue
+        bdist = item[0] ** -1 - 1.0
+        bott_dists.append(bdist)
+        path = []
+        i = node
+        while i != source:
+            path.insert(0, i)
+            i = items[i][2]
+        path.insert(0, source)
+        paths.append(np.asarray(path))
+    return bott_dists, paths
 
 # max-min transitive closure based on DFS
 
