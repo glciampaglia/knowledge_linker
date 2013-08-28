@@ -68,13 +68,13 @@ from datetime import datetime
 from itertools import izip
 from operator import itemgetter
 
-from .utils import coo_dtype, Cache, dfs_items
+from .utils import coo_dtype, dfs_items
 from .cmaxmin import c_maximum_csr # see below for other imports
 
 # max-min transitive closure based on DFS
 
 def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
-        progress=False, cachesize=1000):
+        progress=False):
     '''
     Max-min transitive closure (iterative). Performs a DFS search from source to
     target, caching results as they are computed.
@@ -115,9 +115,6 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
     a = sp.lil_matrix(a)
     items = dfs_items(sources, targets, n, succ, roots, progress)
     get0 = itemgetter(0) # e.g. lambda k : k[0]
-    usecache = cachesize > 0
-    if usecache:
-        cache = Cache(cachesize)
     for s, t in items:
         max_weight = -1 # the max-min over all paths so far
         max_path = None # the nodes in the path of max_weight
@@ -147,13 +144,6 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
                             (max_weight, max_path),
                             (min(min_so_far, w), path), key=get0)
                     continue
-                if usecache and (neighbor, target) in cache:
-                    cached_weight, cached_path = cache[(neighbor, target)]
-                    if not cached_path.intersection(path):
-                        max_weight, max_path = max((max_weight, max_path),\
-                                (min(min_so_far, w, cached_weight), \
-                                path.union(cached_path)), key=get0)
-                        continue
                 if neighbor not in path:
                     dfs_stack.append((neighbor, target, min(w, min_so_far), -1))
                     backtracking = False
@@ -164,16 +154,14 @@ def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
                 dfs_stack.pop()
         if max_weight > -1:
             yield s, t, max_weight
-            if usecache:
-                cache[(s,t)] = (max_weight, max_path)
 
-def mmclosure_dfs(a, succ=None, roots=None, progress=False, cachesize=1000):
+def mmclosure_dfs(a, succ=None, roots=None, progress=False):
     '''
     Max-min closure by simple DFS traversals. Returns a sparse matrix.
     '''
     A = sp.lil_matrix(a.shape)
     for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0]), succ=succ,
-            roots=roots, progress=progress, cachesize=cachesize):
+            roots=roots, progress=progress):
         A[i,j] = w
     return A
 
