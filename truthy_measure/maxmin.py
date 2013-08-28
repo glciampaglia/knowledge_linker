@@ -616,39 +616,3 @@ except ImportError:
     warnings.warn('Could not import fast C implementation!')
     maxmin_naive = _maxmin_naive
     maxmin_sparse = _maxmin_sparse
-
-# Run a quick test if ran like a script
-
-if __name__ == '__main__':
-    from time import time
-    np.random.seed(10)
-    B = sp.rand(5, 5, .2, 'csr')
-
-    print 'Testing maxmin on a matrix of shape %s with nnz = %d:' % (B.shape,
-            B.getnnz())
-
-    tic = time()
-    B1 = pmaxmin(B, 2, 2)
-    toc = time()
-    print '* parallel version executed in %.2e seconds' % (toc - tic)
-
-    tic = time()
-    B2 = maxmin(B)
-    toc = time()
-    print '* serial version executed in %.2e seconds' % (toc - tic)
-
-    print 'Testing maxmin product closure on a matrix of shape %s with'\
-            ' nnz = %d:' % (B.shape, B.getnnz())
-
-    tic = time()
-    Cl1 = mmclosure_matmul(B, splits=2, nprocs=2, maxiter=10,
-            parallel=True)
-    toc = time()
-    print '* parallel version executed in %.2e seconds' % (toc - tic)
-
-    tic = time()
-    Cl2 = mmclosure_matmul(B, maxiter=10)
-    toc = time()
-    print '* serial version executed in %.2e seconds' % (toc - tic)
-
-    assert _allclose_csr(Cl1, Cl2)
