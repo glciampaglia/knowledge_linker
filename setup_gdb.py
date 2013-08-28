@@ -13,7 +13,10 @@ setup(
         packages=['truthy_measure'],
         cmdclass={'build_ext' : build_ext},
         ext_modules=[
-            Extension("truthy_measure.cmaxmin", ["truthy_measure/cmaxmin.pyx"],
+            Extension("truthy_measure.heap", ["truthy_measure/heap.pyx",],
+                include_dirs=_incl,
+                pyrex_gdb=True),
+            Extension("truthy_measure.cmaxmin", [ "truthy_measure/cmaxmin.pyx", ],
                 include_dirs=_incl, 
                 pyrex_gdb=True) 
             ],

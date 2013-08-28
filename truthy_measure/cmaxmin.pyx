@@ -6,6 +6,7 @@ from collections import defaultdict
 from tables import BoolAtom
 from cython.parallel import parallel, prange
 from tempfile import NamedTemporaryFile
+from heapq import heappush, heappop, heapreplace
 
 # cimports
 cimport numpy as cnp
@@ -15,6 +16,76 @@ from libc.stdlib cimport realloc, malloc, abort, free
 from libc.string cimport memset
 from libc.stdio cimport printf
 from libc.float cimport DBL_MAX
+
+cpdef object bottleneckpaths(object A, int source):
+    A = sp.csr_matrix(A)
+    cdef:
+        int [:] A_indptr = A.indptr
+        int [:] A_indices = A.indices
+        double [:] A_data = A.data
+        int N = A.shape[0]
+    return _bottleneckpaths(N, A_indptr, A_indices, A_data, source)
+
+# we push the inverse of the similarity to fake a max-heap
+cdef _bottleneckpaths(
+        int N, 
+        int [:] indptr, 
+        int[:] indices, 
+        double [:] data,
+        int source):
+    cdef:
+        object items = {}, item
+        object Q = []
+        int * neighbors = NULL
+        int node, i
+        int N_neigh
+        double sim, dist, w, d, neigh_dist
+    # populate the queue
+    for node in xrange(N):
+        if node == source:
+            sim = 1.
+        else:
+            sim = 0.0
+        dist = (1.0 + sim) ** -1
+        item = [dist, node, -1]
+        items[node] = item
+        heappush(Q, item)
+    # compute bottleneck distances and predecessor information
+    while len(Q):
+        node_item = heappop(Q)
+        dist, node, pred = node_item
+        if neighbors != NULL:
+            free(<void *>neighbors)
+        neighbors = _csr_neighbors(node, indices, indptr)
+        N_neigh = indptr[node + 1] - indptr[node]
+        for i in xrange(N_neigh):
+            neighbor = neighbors[i]
+            neighbor_item = items[neighbor]
+            neigh_dist = neighbor_item[0]
+            w = data[indptr[node] + i] # i.e. A[node, neigh_node]
+            w = (1.0 + w) ** -1
+            d = max(w, dist)
+            if d < neigh_dist:
+                neighbor_item[0] = d
+                neighbor_item[2] = node
+                heapreplace(Q, neighbor_item)
+    # generate paths
+    bott_dists = []
+    paths = []
+    for node in xrange(N):
+        item = items[node]
+        if item[2] == -1: # disconnected node
+            continue
+        bdist = item[0] ** -1 - 1.0
+        bott_dists.append(bdist)
+        path = []
+        i = node
+        while i != source:
+            path.insert(0, i)
+            i = items[i][2]
+        path.insert(0, source)
+        paths.append(np.asarray(path))
+    return bott_dists, paths
 
 ctypedef struct MetricPath:
     size_t length
