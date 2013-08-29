@@ -20,13 +20,13 @@ cdef class BinaryHeap:
     cdef REFERENCE_T *_references
     cdef int _popped_ref
     
-    cdef void _add_or_remove_level(self, int add_or_remove)
-    cdef void _update(self)
-    cdef void _update_one(self, int i)
-    cdef void _remove(self, int i)
+    cdef void _add_or_remove_level(self, int add_or_remove) nogil
+    cdef void _update(self) nogil
+    cdef void _update_one(self, int i) nogil
+    cdef void _remove(self, int i) nogil
     
-    cdef int push_fast(self, double value, int reference)
-    cdef float pop_fast(self)
+    cdef int push_fast(self, double value, int reference) nogil
+    cdef double pop_fast(self) nogil
 
 cdef class FastUpdateBinaryHeap(BinaryHeap):
     cdef readonly int max_reference
@@ -34,6 +34,6 @@ cdef class FastUpdateBinaryHeap(BinaryHeap):
     cdef int _invalid_ref
     cdef int _pushed
     
-    cdef float value_of_fast(self, int reference)
-    cdef int push_if_lower_fast(self, double value, int reference)
+    cdef double value_of_fast(self, int reference) nogil
+    cdef int push_if_lower_fast(self, double value, int reference) nogil
     

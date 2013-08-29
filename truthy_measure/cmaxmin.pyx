@@ -16,76 +16,7 @@ from libc.stdlib cimport realloc, malloc, abort, free
 from libc.string cimport memset
 from libc.stdio cimport printf
 from libc.float cimport DBL_MAX
-
-cpdef object bottleneckpaths(object A, int source):
-    A = sp.csr_matrix(A)
-    cdef:
-        int [:] A_indptr = A.indptr
-        int [:] A_indices = A.indices
-        double [:] A_data = A.data
-        int N = A.shape[0]
-    return _bottleneckpaths(N, A_indptr, A_indices, A_data, source)
-
-# we push the inverse of the similarity to fake a max-heap
-cdef _bottleneckpaths(
-        int N, 
-        int [:] indptr, 
-        int[:] indices, 
-        double [:] data,
-        int source):
-    cdef:
-        object items = {}, item
-        object Q = []
-        int * neighbors = NULL
-        int node, i
-        int N_neigh
-        double sim, dist, w, d, neigh_dist
-    # populate the queue
-    for node in xrange(N):
-        if node == source:
-            sim = 1.
-        else:
-            sim = 0.0
-        dist = (1.0 + sim) ** -1
-        item = [dist, node, -1]
-        items[node] = item
-        heappush(Q, item)
-    # compute bottleneck distances and predecessor information
-    while len(Q):
-        node_item = heappop(Q)
-        dist, node, pred = node_item
-        if neighbors != NULL:
-            free(<void *>neighbors)
-        neighbors = _csr_neighbors(node, indices, indptr)
-        N_neigh = indptr[node + 1] - indptr[node]
-        for i in xrange(N_neigh):
-            neighbor = neighbors[i]
-            neighbor_item = items[neighbor]
-            neigh_dist = neighbor_item[0]
-            w = data[indptr[node] + i] # i.e. A[node, neigh_node]
-            w = (1.0 + w) ** -1
-            d = max(w, dist)
-            if d < neigh_dist:
-                neighbor_item[0] = d
-                neighbor_item[2] = node
-                heapreplace(Q, neighbor_item)
-    # generate paths
-    bott_dists = []
-    paths = []
-    for node in xrange(N):
-        item = items[node]
-        if item[2] == -1: # disconnected node
-            continue
-        bdist = item[0] ** -1 - 1.0
-        bott_dists.append(bdist)
-        path = []
-        i = node
-        while i != source:
-            path.insert(0, i)
-            i = items[i][2]
-        path.insert(0, source)
-        paths.append(np.asarray(path))
-    return bott_dists, paths
+from .heap cimport FastUpdateBinaryHeap
 
 ctypedef struct MetricPath:
     size_t length
@@ -94,6 +25,106 @@ ctypedef struct MetricPath:
     double distance
 
 ctypedef MetricPath * MetricPathPtr
+
+cpdef object bottleneckpaths(object A, int source):
+    A = sp.csr_matrix(A)
+    cdef:
+        int [:] A_indptr = A.indptr
+        int [:] A_indices = A.indices
+        double [:] A_data = A.data
+        int N = A.shape[0]
+        int i
+        MetricPathPtr paths
+        MetricPath path
+        cnp.ndarray[cnp.double_t] dists = np.empty(N, dtype=np.double)
+        object pathslist = []
+    paths = _bottleneckpaths(N, A_indptr, A_indices, A_data, source)
+    for i in xrange(N):
+        path = paths[i]
+        if path.found:
+            dists[i] = path.distance
+            pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
+        else:
+            dists[i] = -1
+            pathslist.append(np.empty(0, dtype=np.int))
+    free(<void *> paths)
+    return (dists, pathslist)
+
+# we push the inverse of the similarity to fake a max-heap
+cdef MetricPathPtr _bottleneckpaths(
+        int N, 
+        int [:] indptr, 
+        int[:] indices, 
+        double [:] data,
+        int source):
+    cdef:
+        FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)
+        int * P = init_intarray(N, -1)
+        int * tmp = init_intarray(N, -1) # stores paths in reverse order
+        double * dists = <double *> malloc(N * sizeof(double))
+        int * neighbors = NULL
+        int node, i, hopscnt
+        int N_neigh
+        double sim, dist, w, d, neigh_dist
+        MetricPathPtr paths = <MetricPathPtr> malloc(N * sizeof(MetricPath))
+        MetricPath path
+    # populate the queue
+    for node in xrange(N):
+        if node == source:
+            sim = 1.
+        else:
+            sim = 0.0
+        dists[node] = sim
+        dist = (1.0 + sim) ** -1
+        Q.push_fast(dist, node)
+    # compute bottleneck distances and predecessor information
+    while Q.count:
+        dist = Q.pop_fast()
+        node = Q._popped_ref
+        dists[node] = dist
+        if neighbors != NULL:
+            free(<void *>neighbors)
+        neighbors = _csr_neighbors(node, indices, indptr)
+        N_neigh = indptr[node + 1] - indptr[node]
+        for i in xrange(N_neigh):
+            neighbor = neighbors[i]
+            neigh_dist = Q.value_of_fast(neighbor)
+            w = data[indptr[node] + i] # i.e. A[node, neigh_node]
+            w = (1.0 + w) ** -1
+            d = max(w, dist)
+            Q.push_if_lower_fast(d, neighbor)
+            if d < neigh_dist:
+                P[neighbor] = node
+    # generate paths
+    for node in xrange(N):
+        path = paths[node]
+        if P[node] == -1:
+            path.found = 0
+            path.distance = -1
+            path.vertices = NULL
+            path.length = -1
+        else:
+            path.found = 1
+            dist = dists[node]
+            bdist = dist ** -1 - 1.0
+            path.distance = bdist
+            hopscnt = 0
+            i = node
+            while i != source:
+                tmp[hopscnt] = i
+                hopscnt += 1
+                i = P[i]
+            path.length = hopscnt + 1
+            path.vertices = init_intarray(hopscnt + 1, 0)
+            path.vertices[0] = source
+            for i in xrange(hopscnt):
+                path.vertices[hopscnt - i] = tmp[i]
+        paths[node] = path
+    free(<void *>neighbors)
+    free(<void *>tmp)
+    free(<void *>P)
+    free(<void *>dists)
+    return paths
 
 # parallel version, multiple source-target pairs
 @cython.boundscheck(False)

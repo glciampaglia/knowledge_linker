@@ -112,16 +112,18 @@ def bottleneckpaths(A, source):
     for node in xrange(N):
         item = items[node]
         if item[2] == -1: # disconnected node
-            continue
-        bdist = item[0] ** -1 - 1.0
-        bott_dists.append(bdist)
-        path = []
-        i = node
-        while i != source:
-            path.insert(0, i)
-            i = items[i][2]
-        path.insert(0, source)
-        paths.append(np.asarray(path))
+            bott_dists.append(-1)
+            paths.append(np.empty(0, dtype=np.int))
+        else:
+            bdist = item[0] ** -1 - 1.0
+            bott_dists.append(bdist)
+            path = []
+            i = node
+            while i != source:
+                path.insert(0, i)
+                i = items[i][2]
+            path.insert(0, source)
+            paths.append(np.asarray(path))
     return bott_dists, paths
 
 # max-min transitive closure based on DFS
