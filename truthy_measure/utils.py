@@ -2,7 +2,6 @@ import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
 from cStringIO import StringIO
-from tables import Filters, open_file
 from tempfile import NamedTemporaryFile
 from itertools import izip, chain, repeat, groupby, product
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
