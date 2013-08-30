@@ -60,6 +60,7 @@ cdef MetricPathPtr _bottleneckpaths(
     cdef:
         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)
         int * P = init_intarray(N, -1)
+        int * certain = init_intarray(N, 0)
         int * tmp = init_intarray(N, -1) # stores paths in reverse order
         double * dists = <double *> malloc(N * sizeof(double))
         int * neighbors = NULL
@@ -81,6 +82,7 @@ cdef MetricPathPtr _bottleneckpaths(
     while Q.count:
         dist = Q.pop_fast()
         node = Q._popped_ref
+        certain[node] = True
         dists[node] = dist
         if neighbors != NULL:
             free(<void *>neighbors)
@@ -88,13 +90,14 @@ cdef MetricPathPtr _bottleneckpaths(
         N_neigh = indptr[node + 1] - indptr[node]
         for i in xrange(N_neigh):
             neighbor = neighbors[i]
-            neigh_dist = Q.value_of_fast(neighbor)
-            w = data[indptr[node] + i] # i.e. A[node, neigh_node]
-            w = (1.0 + w) ** -1
-            d = max(w, dist)
-            Q.push_if_lower_fast(d, neighbor)
-            if d < neigh_dist:
-                P[neighbor] = node
+            if not certain[neighbor]:
+                neigh_dist = Q.value_of_fast(neighbor)
+                w = data[indptr[node] + i] # i.e. A[node, neigh_node]
+                w = (1.0 + w) ** -1
+                d = max(w, dist)
+                if d < neigh_dist:
+                    Q.push_if_lower_fast(d, neighbor) # will only update
+                    P[neighbor] = node
     # generate paths
     for node in xrange(N):
         path = paths[node]
@@ -123,6 +126,7 @@ cdef MetricPathPtr _bottleneckpaths(
     free(<void *>neighbors)
     free(<void *>tmp)
     free(<void *>P)
+    free(<void *>certain)
     free(<void *>dists)
     return paths
 

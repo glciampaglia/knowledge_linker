@@ -67,7 +67,7 @@ from contextlib import closing
 from datetime import datetime
 from itertools import izip
 from operator import itemgetter
-from heapq import heappush, heappop, heapreplace
+from heapq import heappush, heappop, heapify
 
 from .utils import coo_dtype, dfs_items
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -80,6 +80,7 @@ def bottleneckpaths(A, source):
     Finds the smallest bottleneck paths in a directed network
     '''
     N = A.shape[0]
+    certain = np.zeros(N, dtype=np.bool)
     items = {} # handles to the items inserted in the queue
     Q = [] # heap queue
     # populate the queue
@@ -96,16 +97,18 @@ def bottleneckpaths(A, source):
     while len(Q):
         node_item = heappop(Q)
         dist, node, pred = node_item
+        certain[node] = True
         neighbors, = np.where(A[node])
         for neighbor in neighbors:
-            neighbor_item = items[neighbor]
-            neigh_dist = neighbor_item[0]
-            w = (1.0 + A[node, neighbor]) ** -1
-            d = max(w, dist)
-            if d < neigh_dist:
-                neighbor_item[0] = d
-                neighbor_item[2] = node
-                heapreplace(Q, neighbor_item)
+            if not certain[neighbor]:
+                neighbor_item = items[neighbor]
+                neigh_dist = neighbor_item[0]
+                w = (1.0 + A[node, neighbor]) ** -1
+                d = max(w, dist)
+                if d < neigh_dist:
+                    neighbor_item[0] = d
+                    neighbor_item[2] = node
+                    heapify(Q)
     # generate paths
     bott_dists = []
     paths = []
