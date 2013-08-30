@@ -564,3 +564,18 @@ uses a binary heap, needed to find a C or C++ implementation of binary heaps (or
 priority queues). Tried to get Boosts's heap library to work but with no success
 (must really start to study C++ seriously) and finally found a Cython
 implementation posted on SciPy User.
+
+## Thu Aug 29 19:49:04 EDT 2013
+
+Finished cythonizing the code written yesterday and integrating the binary heap
+code by Almar Klein found on SciPy-User. This code provides a binary heap
+structure as a Cython extension type. Also discovered a silly bug in my
+implementation of Dijkstra that would update nodes after they had been popped
+from the heap. Tested on a 10^4 x 10^4 random graph with sparsity coefficient
+0\.1, which yields roughly the same number of edges of the DBPedia graph. The
+pure Python version took 5 minutes to execute, while the Cython version just 3
+seconds, a fat 100x speedup. Wrote a parallel all-pairs function reusing the
+multi-process code written for the matrix multiplication (as it turns out,
+extension types cannot fully release the GIL, so the code cannot parallelized
+using OpenMP, which requires the GIL to be released), and launched it on
+snowball.
