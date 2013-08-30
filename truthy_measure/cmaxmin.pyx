@@ -47,6 +47,9 @@ cpdef object bottleneckpaths(object A, int source):
         else:
             dists[i] = -1
             pathslist.append(np.empty(0, dtype=np.int))
+    for i in xrange(N):
+        if path.found:
+            free(<void *>paths[i].vertices)
     free(<void *> paths)
     return (dists, pathslist)
 
@@ -163,6 +166,9 @@ def maxminclosuremany(object A, int [:] sources, int [:] targets):
         else:
             pathlist.append(np.empty(0, dtype=np.int32))
             distances[i] = -1
+    for i in xrange(N):
+        if path.found:
+            free(<void *>paths[i].vertices)
     free(<void *> paths)
     return pathlist, np.asarray(distances)
 
@@ -386,6 +392,9 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         else:
             # create an empty array for disconnected vertices
             pathlist.append(np.empty(0, dtype=np.int32))
+    for i in xrange(N):
+        if path.found:
+            free(<void *>paths[i].vertices)
     free(<void *> paths)
     return pathlist
 
