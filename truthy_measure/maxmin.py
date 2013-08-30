@@ -165,7 +165,7 @@ def parallel_bottleneckpaths(A, dirtree):
     '''
     # spare 10% of processors on machines with more than one cpu/core
     nprocs = cpu_count()
-    nprocs -= nprocs // 10
+    nprocs -= int(nprocs * 0.5)
     nprocs = max(nprocs, 2)
     now = datetime.now
     N = A.shape[0]
