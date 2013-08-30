@@ -579,3 +579,17 @@ multi-process code written for the matrix multiplication (as it turns out,
 extension types cannot fully release the GIL, so the code cannot parallelized
 using OpenMP, which requires the GIL to be released), and launched it on
 snowball.
+
+## Fri Aug 30 17:22:13 EDT 2013
+
+Found this morning that a few processes had accumulated a lot of memory and had
+sent snowball into heavy swapping throught the night. After one whole night,
+only 6900 iterations had been completed, probably because of the time wasted
+into I/O wait due to the swapping. Strange pattern with a few processes with
+almost 30GBs of allocated memory and the rest in decreasing order of memory
+occupation. Perhaps due to the scheduling of the Python's multiprocessing
+module? At any rate, discovered a silly memory leak that was the probable cause.
+Fixed that, and implemented a class that manages a directory tree with
+heterogeneous arity at each level. In this way avoiding to overload one single
+working directory. Relaunched on snowball, using up 90% of the processing power,
+at 5:13PM.
