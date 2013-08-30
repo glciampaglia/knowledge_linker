@@ -1,4 +1,5 @@
 import os
+from math import log10, ceil
 
 def _dfsiter(path, *arities):
     '''
@@ -32,6 +33,8 @@ class DirTree(object):
         self.root = root
         self.prefix = prefix
         self._powers = [ n ** i for i,n in enumerate(arities) ]
+        self._digits = map(int, map(ceil, map(log10, self.arities)))
+        self._fmts = [ '{{:0{}d}}'.format(d) for d in self._digits ]
         if createdirs:
             self._mktree()
     def _treepath(self, nodes):
@@ -40,9 +43,10 @@ class DirTree(object):
         sequence `nodes`.
         '''
         path = []
+        if nodes:
+            nodes = map(lambda k : k[0].format(k[1]), zip(self._fmts, nodes))
         for i in xrange(len(nodes)):
             tmp = nodes[:i+1]
-            tmp = map(str, tmp)
             tmp = '-'.join(tmp)
             path.append(tmp)
         if path:
