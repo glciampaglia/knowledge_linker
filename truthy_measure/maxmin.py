@@ -163,6 +163,10 @@ def parallel_bottleneckpaths(A, dirtree):
     NumPy binary archive containing a distance vector and an array for each path
     length, containing all paths of that given path length.
     '''
+    # spare 10% of processors on machines with more than one cpu/core
+    nprocs = cpu_count()
+    nprocs -= nprocs // 10
+    nprocs = max(nprocs, 2)
     now = datetime.now
     N = A.shape[0]
     A = sp.csr_matrix(A)
@@ -170,8 +174,8 @@ def parallel_bottleneckpaths(A, dirtree):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (dirtree, indptr, indices, data, A.shape)
-    print '{}: launching pool of {} processors.'.format(now(), cpu_count())
-    pool = Pool(processes=cpu_count(), initializer=_init_worker_dirtree,
+    print '{}: launching pool of {} processors.'.format(now(), nprocs)
+    pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs)
     with closing(pool):
         pool.map(_bottleneck_worker, xrange(N))
@@ -508,6 +512,8 @@ def pmaxmin(A, splits=None, nprocs=None):
     N = A.shape[0]
     if nprocs is None:
         nprocs = cpu_count()
+        nprocs -= nprocs // 10
+        nprocs = max(nprocs, 2)
 
     # check splits
     if splits is None:
