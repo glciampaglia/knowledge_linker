@@ -4,7 +4,7 @@ from collections import defaultdict
 from cStringIO import StringIO
 from tables import Filters, open_file
 from tempfile import NamedTemporaryFile
-from itertools import product
+from itertools import izip, chain, repeat, groupby, product
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
 
 # dtype for saving COO sparse matrices
@@ -280,3 +280,20 @@ def loadadjcsr(path):
     if 'data' not in a.files:
         data = np.ones((n_data,), dtype=np.float64)
     return sp.csr_matrix((data, indices, indptr), shape=(n_rows, n_rows))
+
+def chainrepeat(sources, times):
+    count = sum(times)
+    c = chain(*(repeat(s, t) for s, t in izip(sources, times)))
+    return np.fromiter(c, count=count, dtype=np.int32)
+
+def group(data, key, keypattern='{}'):
+    '''
+    group unsorted data by key and return them in a dictionary mapping key
+    values to data groups. `key` is a function that applies to each element of
+    data.
+    '''
+    mapping = {}
+    for k, datagroup in groupby(sorted(data, key=key), key):
+        mapping[keypattern.format(k)] = np.asarray(list(datagroup))
+    return mapping
+
