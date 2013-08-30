@@ -59,6 +59,7 @@ traversal algorithms.
 from __future__ import division
 import os
 import sys
+import tarfile
 import numpy as np
 import scipy.sparse as sp
 from multiprocessing import Pool, Array, cpu_count
@@ -69,8 +70,9 @@ from itertools import izip
 from operator import itemgetter
 from heapq import heappush, heappop, heapify
 
-from .utils import coo_dtype, dfs_items
+from .utils import coo_dtype, dfs_items, group
 from .cmaxmin import c_maximum_csr # see below for other imports
+from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
 # Single source Dijkstra for computing bottleneck paths
 
@@ -128,6 +130,43 @@ def bottleneckpaths(A, source):
             path.insert(0, source)
             paths.append(np.asarray(path))
     return bott_dists, paths
+
+bott_pattern = 'bottlenecks_{}.npz'
+bott_tar = 'bottlenecks.tar.gz'
+
+def _bottleneck_worker(n):
+    global _A
+    dists, paths = cbottleneckpaths(_A, n)
+    np.savez(bott_pattern.format(n), dists=dists,
+            **group(paths, len))
+
+def parallel_bottleneckpaths(A):
+    '''
+    Computes the all-pairs bottleneck paths for matrix A and saves the results
+    in a compressed tar archive. Each member of the tar archive is a compressed
+    NumPy binary archive containing a distance vector and an array for each path
+    length, containing all paths of that given path length.
+    '''
+    now = datetime.now
+    N = A.shape[0]
+    A = sp.csr_matrix(A)
+    indptr = Array(c_int, A.indptr)
+    indices = Array(c_int, A.indices)
+    data = Array(c_double, A.data)
+    initargs = (indptr, indices, data, A.shape)
+    print '{}: launching pool of {} processors.'.format(now(), cpu_count())
+    pool = Pool(processes=cpu_count(), initializer=_init_worker,
+            initargs=initargs)
+    with closing(pool):
+        pool.map(_bottleneck_worker, xrange(N))
+    pool.join()
+    print '{}: creating tar archive.'.format(now())
+    with closing(tarfile.open(bott_tar, 'w:gz')) as tf:
+        for i in xrange(N):
+            fn = bott_pattern.format(i)
+            tf.add(fn)
+            os.remove(fn)
+    print '{}: done'.format(now())
 
 # max-min transitive closure based on DFS
 
