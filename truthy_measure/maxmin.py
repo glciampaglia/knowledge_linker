@@ -69,6 +69,7 @@ from datetime import datetime
 from itertools import izip
 from operator import itemgetter
 from heapq import heappush, heappop, heapify
+from subprocess import call
 
 from .utils import coo_dtype, dfs_items, group
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -76,7 +77,8 @@ from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
 # Single source Dijkstra for computing bottleneck paths
 
-# we push the inverse of the similarity to fake a max-heap
+# Python implementation using dense matrices -- just used for testing.
+# NOTE: we push the inverse of the similarity to fake a max-heap
 def bottleneckpaths(A, source):
     '''
     Finds the smallest bottleneck paths in a directed network
@@ -131,16 +133,30 @@ def bottleneckpaths(A, source):
             paths.append(np.asarray(path))
     return bott_dists, paths
 
-bott_pattern = 'bottlenecks_{}.npz'
+bott_pattern = 'bottlenecks_{{:0{}d}}.npz'
 bott_tar = 'bottlenecks.tar.gz'
 
-def _bottleneck_worker(n):
-    global _A
-    dists, paths = cbottleneckpaths(_A, n)
-    np.savez(bott_pattern.format(n), dists=dists,
-            **group(paths, len))
+_dirtree = None
 
-def parallel_bottleneckpaths(A):
+def _format_bott_fname(n, N):
+    digits = int(np.ceil(np.log10(N)))
+    return bott_pattern.format(digits).format(n)
+
+def _bottleneck_worker(n):
+    global _A, _dirtree
+    N = _A.shape[0]
+    dists, paths = cbottleneckpaths(_A, n)
+    leafpath = _dirtree.getleaf(n)
+    outname = _format_bott_fname(n, N)
+    outpath = os.path.join(leafpath, outname)
+    np.savez(outpath, dists=dists, **group(paths, len))
+
+def _init_worker_dirtree(dirtree, indptr, indices, data, shape):
+    global _dirtree
+    _dirtree = dirtree
+    _init_worker(indptr, indices, data, shape)
+
+def parallel_bottleneckpaths(A, dirtree):
     '''
     Computes the all-pairs bottleneck paths for matrix A and saves the results
     in a compressed tar archive. Each member of the tar archive is a compressed
@@ -153,9 +169,9 @@ def parallel_bottleneckpaths(A):
     indptr = Array(c_int, A.indptr)
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
-    initargs = (indptr, indices, data, A.shape)
+    initargs = (dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} processors.'.format(now(), cpu_count())
-    pool = Pool(processes=cpu_count(), initializer=_init_worker,
+    pool = Pool(processes=cpu_count(), initializer=_init_worker_dirtree,
             initargs=initargs)
     with closing(pool):
         pool.map(_bottleneck_worker, xrange(N))
@@ -163,9 +179,13 @@ def parallel_bottleneckpaths(A):
     print '{}: creating tar archive.'.format(now())
     with closing(tarfile.open(bott_tar, 'w:gz')) as tf:
         for i in xrange(N):
-            fn = bott_pattern.format(i)
-            tf.add(fn)
-            os.remove(fn)
+            fn = _format_bott_fname(i, N)
+            leafpath = dirtree.getleaf(i)
+            path = os.path.join(leafpath, fn)
+            tf.add(path)
+            os.remove(path)
+    if call("rm -rf {}".format(dirtree.root).split()) != 0:
+        print '{}: error: could not remove directory tree!'.format(now())
     print '{}: done'.format(now())
 
 # max-min transitive closure based on DFS
