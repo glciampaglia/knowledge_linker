@@ -583,13 +583,18 @@ snowball.
 ## Fri Aug 30 17:22:13 EDT 2013
 
 Found this morning that a few processes had accumulated a lot of memory and had
-sent snowball into heavy swapping throught the night. After one whole night,
-only 6900 iterations had been completed, probably because of the time wasted
-into I/O wait due to the swapping. Strange pattern with a few processes with
-almost 30GBs of allocated memory and the rest in decreasing order of memory
-occupation. Perhaps due to the scheduling of the Python's multiprocessing
-module? At any rate, discovered a silly memory leak that was the probable cause.
-Fixed that, and implemented a class that manages a directory tree with
-heterogeneous arity at each level. In this way avoiding to overload one single
-working directory. Relaunched on snowball, using up 90% of the processing power,
-at 5:13PM.
+sent snowball into heavy swapping throught the night. Terminated the job per
+Rob's request, and started investigating the source of the memory leaks. Found
+several leaks (thanks to Valgrind) and fixed them. Unfortunately, despite the
+these being fixed, memory usage on snowball would still increase, admittedly
+more slowly now, to the point of making again the machine unresponsive. Perhaps
+an undetected leak? Or too many workers at once? Decided eventually to move the
+computation on Quarry. (Disappointingly, Big Red II still does not have BLAS nor
+ATLAS installed, so impossible to install SciPy quickly via pip. Need to email
+the support team about this.) Launched a first batch of 50 jobs, each of 1000
+input nodes (of the graph, that is) each. Machines on Quarry are much less fat
+than snowball (only 8GB or 16GB of RAM), so hope that smaller chunks will finish
+before saturating the main memory of the nodes.
+
+Also implemented a class that manages a directory tree, so that the output files
+do not all cram the same inode. 
