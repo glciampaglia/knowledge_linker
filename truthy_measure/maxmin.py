@@ -135,6 +135,7 @@ def bottleneckpaths(A, source):
 
 bott_pattern = 'bottlenecks_{{:0{}d}}.npz'
 bott_tar = 'bottlenecks.tar.gz'
+bott_tar_start = 'bottlenecks_{{:0{}d}}.tar.gz'
 
 _dirtree = None
 
@@ -156,12 +157,36 @@ def _init_worker_dirtree(dirtree, indptr, indices, data, shape):
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
-def parallel_bottleneckpaths(A, dirtree):
+def parallel_bottleneckpaths(A, dirtree, start=None, offset=None):
     '''
     Computes the all-pairs bottleneck paths for matrix A and saves the results
-    in a compressed tar archive. Each member of the tar archive is a compressed
-    NumPy binary archive containing a distance vector and an array for each path
-    length, containing all paths of that given path length.
+    in a compressed tar archive called `bottlenecks.tar.gz`. Each member of the
+    tar archive is a compressed NumPy binary archive containing a distance
+    vector and an array for each path length, containing all paths of that given
+    path length. The directory tree of the TAR archive is managed by DirTree
+    instance `dirtree`. All intermediate files and directories are deleted.
+
+    If `start` and `offset` parameters are passed, then only indices between
+    `start` and `start + offset` are computed, and the resulting TAR file is
+    called `bottlenecks_<start>.tar.gz`. The directory tree used to store
+    intermediate result is NOT deleted (since other processes might still need
+    it), but the uncompressed output files are.
+
+    Parameters
+    ----------
+    A : array_like
+        NxN adjacency matrix, will be converted to CSR format
+
+    dirtree : a `truthy_measure.utils.DirTree` instance
+        The directory tree object used to generate the directory tree in which
+        the results are stored.
+
+    start : int
+        optional; see above.
+
+    offset : int
+        optional, but if `start` is passed than offset is expected too. See
+        above.
     '''
     # spare 10% of processors on machines with more than one cpu/core
     nprocs = int(0.9 * cpu_count())
@@ -173,22 +198,39 @@ def parallel_bottleneckpaths(A, dirtree):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (dirtree, indptr, indices, data, A.shape)
+    if start is None:
+        fromi = 0
+        toi = N
+    else:
+        assert offset is not None
+        assert 0 <= offset <= N
+        assert start >= 0
+        fromi = start
+        toi = start + offset
     print '{}: launching pool of {} processors.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs)
     with closing(pool):
-        pool.map(_bottleneck_worker, xrange(N))
+        pool.map(_bottleneck_worker, xrange(fromi, toi))
     pool.join()
-    print '{}: creating tar archive.'.format(now())
-    with closing(tarfile.open(bott_tar, 'w:gz')) as tf:
-        for i in xrange(N):
+    if start is None:
+        tarpath = bott_tar
+    else:
+        digits = int(np.ceil(np.log10(N / offset)))
+        tarpath = bott_tar_start.format(digits).format(start)
+    print '{}: creating tar archive {}.'.format(now(), tarpath)
+    with closing(tarfile.open(tarpath, 'w:gz')) as tf:
+        for i in xrange(fromi, toi):
             fn = _format_bott_fname(i, N)
             leafpath = dirtree.getleaf(i)
             path = os.path.join(leafpath, fn)
             tf.add(path)
             os.remove(path)
-    if call("rm -rf {}".format(dirtree.root).split()) != 0:
-        print '{}: error: could not remove directory tree!'.format(now())
+    if start is None:
+        if call("rm -rf {}".format(dirtree.root).split()) != 0:
+            print '{}: error: could not remove directory tree!'.format(now())
+    else:
+        print '{}: NOT removing directory tree.'.format(now())
     print '{}: done'.format(now())
 
 # max-min transitive closure based on DFS
