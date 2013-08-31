@@ -26,7 +26,7 @@ ctypedef struct MetricPath:
 
 ctypedef MetricPath * MetricPathPtr
 
-cpdef object bottleneckpaths(object A, int source):
+cpdef object bottleneckpaths(object A, int source, int retpaths = 0):
     A = sp.csr_matrix(A)
     cdef:
         int [:] A_indptr = A.indptr
@@ -38,16 +38,18 @@ cpdef object bottleneckpaths(object A, int source):
         MetricPath path
         cnp.ndarray[cnp.double_t] dists = np.empty(N, dtype=np.double)
         object pathslist = []
-    paths = _bottleneckpaths(N, A_indptr, A_indices, A_data, source)
+    paths = _bottleneckpaths(N, A_indptr, A_indices, A_data, source, retpaths)
     for i in xrange(N):
         path = paths[i]
         if path.found:
             dists[i] = path.distance
-            pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
-            free(<void *>path.vertices)
+            if retpaths:
+                pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
+                free(<void *>path.vertices)
         else:
             dists[i] = -1
-            pathslist.append(np.empty(0, dtype=np.int))
+            if retpaths:
+                pathslist.append(np.empty(0, dtype=np.int))
     free(<void *> paths)
     return (dists, pathslist)
 
@@ -57,7 +59,8 @@ cdef MetricPathPtr _bottleneckpaths(
         int [:] indptr, 
         int[:] indices, 
         double [:] data,
-        int source):
+        int source,
+        int retpaths):
     cdef:
         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)
         int * P = init_intarray(N, -1)
@@ -101,27 +104,28 @@ cdef MetricPathPtr _bottleneckpaths(
     # generate paths
     for node in xrange(N):
         path = paths[node]
+        path.vertices = NULL
         if P[node] == -1:
             path.found = 0
             path.distance = -1
-            path.vertices = NULL
             path.length = -1
         else:
             path.found = 1
             dist = dists[node]
             bdist = dist ** -1 - 1.0
             path.distance = bdist
-            hopscnt = 0
-            i = node
-            while i != source:
-                tmp[hopscnt] = i
-                hopscnt += 1
-                i = P[i]
-            path.length = hopscnt + 1
-            path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))
-            path.vertices[0] = source
-            for i in xrange(hopscnt):
-                path.vertices[hopscnt - i] = tmp[i]
+            if retpaths:
+                hopscnt = 0
+                i = node
+                while i != source:
+                    tmp[hopscnt] = i
+                    hopscnt += 1
+                    i = P[i]
+                path.length = hopscnt + 1
+                path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))
+                path.vertices[0] = source
+                for i in xrange(hopscnt):
+                    path.vertices[hopscnt - i] = tmp[i]
         paths[node] = path
     free(<void *>tmp)
     free(<void *>P)
