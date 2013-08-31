@@ -164,8 +164,7 @@ def parallel_bottleneckpaths(A, dirtree):
     length, containing all paths of that given path length.
     '''
     # spare 10% of processors on machines with more than one cpu/core
-    nprocs = cpu_count()
-    nprocs -= int(nprocs * 0.5)
+    nprocs = int(0.9 * cpu_count())
     nprocs = max(nprocs, 2)
     now = datetime.now
     N = A.shape[0]
