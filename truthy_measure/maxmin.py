@@ -138,6 +138,7 @@ bott_tar = 'bottlenecks.tar.gz'
 bott_tar_start = 'bottlenecks_{{:0{}d}}.tar.gz'
 
 _dirtree = None
+_retpaths = None
 
 def _format_bott_fname(n, N):
     digits = int(np.ceil(np.log10(N)))
@@ -146,18 +147,20 @@ def _format_bott_fname(n, N):
 def _bottleneck_worker(n):
     global _A, _dirtree
     N = _A.shape[0]
-    dists, paths = cbottleneckpaths(_A, n)
+    dists, paths = cbottleneckpaths(_A, n, _retpaths)
     leafpath = _dirtree.getleaf(n)
     outname = _format_bott_fname(n, N)
     outpath = os.path.join(leafpath, outname)
     np.savez(outpath, dists=dists, **group(paths, len))
 
-def _init_worker_dirtree(dirtree, indptr, indices, data, shape):
-    global _dirtree
+def _init_worker_dirtree(retpaths, dirtree, indptr, indices, data, shape):
+    global _dirtree, _retpaths
+    _retpaths = retpaths
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
-def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
+def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
+        retpaths=0):
     '''
     Computes the all-pairs bottleneck paths for matrix A and saves the results
     in a compressed tar archive called `bottlenecks.tar.gz`. Each member of the
@@ -191,6 +194,9 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     nprocs : int
         optional; number of processes to spawn. Default is 90% of available
         CPUs/cores.
+
+    retpaths : int
+        optional; if 1, return bottleneck paths. Default: 0.
     '''
     # spare 10% of processors on machines with more than one cpu/core
     if nprocs is None:
@@ -202,7 +208,7 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     indptr = Array(c_int, A.indptr)
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
-    initargs = (dirtree, indptr, indices, data, A.shape)
+    initargs = (retpaths, dirtree, indptr, indices, data, A.shape)
     if start is None:
         fromi = 0
         toi = N
