@@ -598,3 +598,7 @@ before saturating the main memory of the nodes.
 
 Also implemented a class that manages a directory tree, so that the output files
 do not all cram the same inode. 
+
+Last update: added a switch for the generation of the paths and set it off by
+default, and relaunched the job on snowball. Memory consumption seems constant
+now.
