@@ -66,6 +66,8 @@ class DirTree(object):
         Creates the directory structure
         '''
         for path in self.walk():
+            # XXX this is not safe with multiple processes creating the same
+            # tree at simultaneously
             if not os.path.exists(path):
                 os.mkdir(path)
             elif not os.path.isdir(path):
