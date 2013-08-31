@@ -12,7 +12,7 @@ from heapq import heappush, heappop, heapreplace
 cimport numpy as cnp
 cimport cython
 from libc.math cimport fmin
-from libc.stdlib cimport realloc, malloc, abort, free
+from libc.stdlib cimport malloc, abort, free, calloc
 from libc.string cimport memset
 from libc.stdio cimport printf
 from libc.float cimport DBL_MAX
@@ -44,12 +44,10 @@ cpdef object bottleneckpaths(object A, int source):
         if path.found:
             dists[i] = path.distance
             pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
+            free(<void *>path.vertices)
         else:
             dists[i] = -1
             pathslist.append(np.empty(0, dtype=np.int))
-    for i in xrange(N):
-        if path.found:
-            free(<void *>paths[i].vertices)
     free(<void *> paths)
     return (dists, pathslist)
 
@@ -87,10 +85,7 @@ cdef MetricPathPtr _bottleneckpaths(
         node = Q._popped_ref
         certain[node] = True
         dists[node] = dist
-        if neighbors != NULL:
-            free(<void *>neighbors)
-        neighbors = _csr_neighbors(node, indices, indptr)
-        N_neigh = indptr[node + 1] - indptr[node]
+        N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
         for i in xrange(N_neigh):
             neighbor = neighbors[i]
             if not certain[neighbor]:
@@ -101,6 +96,8 @@ cdef MetricPathPtr _bottleneckpaths(
                 if d < neigh_dist:
                     Q.push_if_lower_fast(d, neighbor) # will only update
                     P[neighbor] = node
+        free(<void *> neighbors)
+        neighbors = NULL
     # generate paths
     for node in xrange(N):
         path = paths[node]
@@ -121,12 +118,11 @@ cdef MetricPathPtr _bottleneckpaths(
                 hopscnt += 1
                 i = P[i]
             path.length = hopscnt + 1
-            path.vertices = init_intarray(hopscnt + 1, 0)
+            path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))
             path.vertices[0] = source
             for i in xrange(hopscnt):
                 path.vertices[hopscnt - i] = tmp[i]
         paths[node] = path
-    free(<void *>neighbors)
     free(<void *>tmp)
     free(<void *>P)
     free(<void *>certain)
@@ -389,12 +385,10 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
             # copy allocated memory to allow later to free up the paths pointer
             pathlist.append(
                     np.asarray((<int [:path.length + 1]> path.vertices).copy()))
+            free(<void *>paths.vertices)
         else:
             # create an empty array for disconnected vertices
             pathlist.append(np.empty(0, dtype=np.int32))
-    for i in xrange(N):
-        if path.found:
-            free(<void *>paths[i].vertices)
     free(<void *> paths)
     return pathlist
 
@@ -483,7 +477,7 @@ cdef Path _shortestpath(
     global neigh_buf
     cdef:
         int * P, * D, * Q, * visited  # predecessors, distance vectors, fifo queue
-        int * neigh # neighbors
+        int * neigh = NULL # neighbors
         Path path # return struct
         size_t N_neigh, Nd
         int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi, found
@@ -500,8 +494,7 @@ cdef Path _shortestpath(
         Nd = writei - readi # number of elements at distance d from source
         for i in xrange(Nd):
             nodei = Q[i + readi]
-            neigh = _csr_neighbors(nodei, A_indices, A_indptr)
-            N_neigh = A_indptr[nodei + 1] - A_indptr[nodei]
+            N_neigh = _csr_neighbors(nodei, A_indices, A_indptr, &neigh)
             for ii in xrange(N_neigh):
                 neighi = neigh[ii]
                 if not reached[neighi]: # Found new node
@@ -516,6 +509,7 @@ cdef Path _shortestpath(
                         breakflag = 1
                         break
             free(<void *>neigh)
+            neigh = NULL
             if breakflag:
                 break
         readi += Nd
@@ -558,25 +552,29 @@ cdef inline int * init_intarray(size_t n, int val) nogil:
 @cython.profile(False)
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef inline int * _csr_neighbors(int row, int [:] indices, int [:] indptr) nogil:
+cdef inline int _csr_neighbors(int node, int [:] indices, int [:] indptr, int ** ptr) nogil:
     '''
-    Returns the neighbors of a row for a CSR adjacency matrix. Caller is
-    responsible to `free` allocated memory at the end.
+    Extracts the neighbors of given node from the CSR indices and indptr
+    structures and copies them on a separate memory location, pointed by ptr.
+
+    Returns the number of neighbors. If the node has no neighbors, no memory is
+    allocated.
     '''
-    cdef size_t n
-    cdef int i, I, II
+    cdef int n, i, I, II
     cdef void * buf
     cdef int * res
-    I = indptr[row]
-    II = indptr[row + 1]
+    I = indptr[node]
+    II = indptr[node + 1]
     n = II - I
-    buf = malloc(n * sizeof(int))
-    if buf == NULL:
-        abort()
-    res = <int *> buf
-    for i in xrange(n):
-        res[i] = indices[I + i]
-    return res
+    if n > 0:
+        buf = malloc(n * sizeof(int))
+        if buf == NULL:
+            abort()
+        res = <int *> buf
+        for i in xrange(n):
+            res[i] = indices[I + i]
+        ptr[0] = res
+    return n
 
 ## Maxmin matrix multiplication
 
