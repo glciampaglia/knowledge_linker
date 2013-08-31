@@ -157,7 +157,7 @@ def _init_worker_dirtree(dirtree, indptr, indices, data, shape):
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
-def parallel_bottleneckpaths(A, dirtree, start=None, offset=None):
+def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     '''
     Computes the all-pairs bottleneck paths for matrix A and saves the results
     in a compressed tar archive called `bottlenecks.tar.gz`. Each member of the
@@ -175,7 +175,7 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None):
     Parameters
     ----------
     A : array_like
-        NxN adjacency matrix, will be converted to CSR format
+        NxN adjacency matrix, will be converted to CSR format.
 
     dirtree : a `truthy_measure.utils.DirTree` instance
         The directory tree object used to generate the directory tree in which
@@ -187,10 +187,15 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None):
     offset : int
         optional, but if `start` is passed than offset is expected too. See
         above.
+
+    nprocs : int
+        optional; number of processes to spawn. Default is 90% of available
+        CPUs/cores.
     '''
     # spare 10% of processors on machines with more than one cpu/core
-    nprocs = int(0.9 * cpu_count())
-    nprocs = max(nprocs, 2)
+    if nprocs is None:
+        nprocs = int(0.9 * cpu_count())
+        nprocs = max(nprocs, 2)
     now = datetime.now
     N = A.shape[0]
     A = sp.csr_matrix(A)
