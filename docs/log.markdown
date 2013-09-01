@@ -602,3 +602,27 @@ do not all cram the same inode.
 Last update: added a switch for the generation of the paths and set it off by
 default, and relaunched the job on snowball. Memory consumption seems constant
 now.
+
+## Sat Aug 31 20:42:54 EDT 2013
+
+This morning got an email by Rob warning that my job on snowball had filled up
+the scratch partition on snowball. This had caused the job to terminate (after
+some 27000 rows computed, btw). Moved the data (1.8TB) to the HPSS. I am not
+going to use snowball anymore for this. In the meanwhile, and predictably I have
+to admit, the job on quarry, which was still running the leaky code that
+computes the paths, had sent all nodes into heavy swapping. Had tried to delete
+the jobs in the night but had gotten only about half of them down when the queue
+manager had gone down (not sure if related to my attempts). This morning mailed
+the UITS people to fix that, and could kill the remaning jobs. Realized that by
+default the distance arrays returned by the dijkstra function have -1 for
+disconnected pairs, so the array files dumped to disk have all blocks full.
+Modified the code to pass to the frontend function in `cmaxmin` a PyTables
+chunked array, and to save only the non-negative values returned by the
+algorithm. Also, to avoid issues with writing in parallel to the same HDF5 file
+(PyTables does not support parallel writes), added some extra logic to have each
+process save to a separate `.h5` file. Chunking the job into 50 batches (the
+maximum that can be submitted at once on Quarry), each job has to compute 64000
+rows. Resubmitted the first 5 jobs only just to see how big they get with this
+new setup, and if not too big (currently I am using 25% of my 10TB quota on the
+data capacitor), should be able to launch the rest later tonight or tomorrow
+morning.
