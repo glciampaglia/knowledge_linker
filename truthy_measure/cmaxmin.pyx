@@ -26,7 +26,45 @@ ctypedef struct MetricPath:
 
 ctypedef MetricPath * MetricPathPtr
 
-cpdef object bottleneckpaths(object A, int source, int retpaths = 0):
+cpdef object bottleneckpaths(object A, int source, object D = None, int retpaths = 0):
+    '''
+    Computes the bottleneck distances from `source` on the directed graph
+    represented by adjacency matrix `A`, and optionally store them into the
+    corresponding row of distance matrix `D`. Return the distances and
+    optionally the associated bottleneck paths.
+
+    A bottleneck path corresponds to the path that maximizes the minimum weight
+    on its edges. It is also known as the max-min co-norm, or ultra-metric
+    distance.
+
+    Parameters
+    ----------
+    A : array_like
+        NxN weighted adjancency matrix, will be converted to compressed sparse
+        row format. Weights are double floats.
+
+    source : int
+        The source node.
+
+    D : array_like
+        optional; NxN distances matrix. Contrarily to standard distance matrices,
+        disconnected pairs are denoted by zero and not by infinity.
+
+    retpaths : int
+        optional; compute and return the paths to each connected node, or an
+        empty array for disconnected pairs. Default: do not compute nor return
+        paths.
+
+    Returns
+    -------
+    dists : (N,) integer ndarray
+        the bottleneck distances from source to all other nodes in the graph, or
+        -1 if the two nodes are disconnected. Note that in the distance matrix
+        `D` these are marked as zero (i.e. not marked).
+
+    paths : list of ndarrays
+        optional; the computed bottleneck paths.
+    '''
     A = sp.csr_matrix(A)
     cdef:
         int [:] A_indptr = A.indptr
@@ -50,14 +88,17 @@ cpdef object bottleneckpaths(object A, int source, int retpaths = 0):
             dists[i] = -1
             if retpaths:
                 pathslist.append(np.empty(0, dtype=np.int))
+    idx = np.where(dists != -1)
+    if D is not None:
+        D[source, idx[0]] = dists[idx]
     free(<void *> paths)
     return (dists, pathslist)
 
 # we push the inverse of the similarity to fake a max-heap
 cdef MetricPathPtr _bottleneckpaths(
-        int N, 
-        int [:] indptr, 
-        int[:] indices, 
+        int N,
+        int [:] indptr,
+        int[:] indices,
         double [:] data,
         int source,
         int retpaths):

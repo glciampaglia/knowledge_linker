@@ -62,7 +62,7 @@ import sys
 import tarfile
 import numpy as np
 import scipy.sparse as sp
-from multiprocessing import Pool, Array, cpu_count
+from multiprocessing import Pool, Array, cpu_count, current_process
 from ctypes import c_int, c_double
 from contextlib import closing
 from datetime import datetime
@@ -71,7 +71,7 @@ from operator import itemgetter
 from heapq import heappush, heappop, heapify
 from subprocess import call
 
-from .utils import coo_dtype, dfs_items, group
+from .utils import coo_dtype, dfs_items, group, mkcarray
 from .cmaxmin import c_maximum_csr # see below for other imports
 from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
@@ -133,28 +133,44 @@ def bottleneckpaths(A, source):
             paths.append(np.asarray(path))
     return bott_dists, paths
 
-bott_pattern = 'bottlenecks_{{:0{}d}}.npz'
-bott_tar = 'bottlenecks.tar.gz'
-bott_tar_start = 'bottlenecks_{{:0{}d}}.tar.gz'
+arr_name = 'bottleneck'
+maxchunksize = 100000
+max_tasks_per_worker = 500
+bott_pattern = 'paths_{start:0{width}d}.npz'
+bott_tar = 'bottleneck_paths.tar.gz'
+bott_tar_start = 'bottleneck_paths_{start:0{width}d}.tar.gz'
+dists_h5 = 'bottleneck_dists-{proc:0{width}d}.h5'
+dists_h5_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.h5'
 
+_D = None
+_h5path = None
+_h5f = None
+_arr_name = None
 _dirtree = None
 _retpaths = None
 
-def _format_bott_fname(n, N):
-    digits = int(np.ceil(np.log10(N)))
-    return bott_pattern.format(digits).format(n)
-
 def _bottleneck_worker(n):
-    global _A, _dirtree
+    global _A, _dirtree, _h5path, _h5f, _D
     N = _A.shape[0]
-    dists, paths = cbottleneckpaths(_A, n, _retpaths)
-    leafpath = _dirtree.getleaf(n)
-    outname = _format_bott_fname(n, N)
-    outpath = os.path.join(leafpath, outname)
-    np.savez(outpath, dists=dists, **group(paths, len))
+    digits = int(np.ceil(np.log10(N)))
+    worker_id, = current_process()._identity
+    if _h5f is None:
+        path = _h5path.format(proc=worker_id, width=digits)
+        print "creating {}".format(path)
+        _h5f, _D = mkcarray(path, (N, N), arr_name, max(N, maxchunksize))
+    dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
+    _D.flush()
+    if paths:
+        leafpath = _dirtree.getleaf(n)
+        outname = bott_pattern.format(start=n, width=digits)
+        outpath = os.path.join(leafpath, outname)
+        np.savez(outpath, **group(paths, len))
 
-def _init_worker_dirtree(retpaths, dirtree, indptr, indices, data, shape):
-    global _dirtree, _retpaths
+def _init_worker_dirtree(h5path, retpaths, dirtree, indptr, indices, data, shape):
+    global _dirtree, _retpaths, _h5path, _h5f
+    _h5path = h5path
+    _h5f = None
+    _arr_name = arr_name
     _retpaths = retpaths
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
@@ -198,50 +214,58 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     retpaths : int
         optional; if 1, return bottleneck paths. Default: 0.
     '''
-    # spare 10% of processors on machines with more than one cpu/core
-    if nprocs is None:
-        nprocs = int(0.9 * cpu_count())
-        nprocs = max(nprocs, 2)
     now = datetime.now
     N = A.shape[0]
-    A = sp.csr_matrix(A)
-    indptr = Array(c_int, A.indptr)
-    indices = Array(c_int, A.indices)
-    data = Array(c_double, A.data)
-    initargs = (retpaths, dirtree, indptr, indices, data, A.shape)
     if start is None:
         fromi = 0
         toi = N
+        digits = int(np.ceil(np.log10(N)))
     else:
         assert offset is not None
         assert 0 <= offset <= N
         assert start >= 0
         fromi = start
         toi = start + offset
-    print '{}: launching pool of {} processors.'.format(now(), nprocs)
+        digits = int(np.ceil(np.log10(N / offset)))
+    if nprocs is None:
+        # by default use 90% of available processors or 2, whichever the
+        # largest.
+        nprocs = max(int(0.9 * cpu_count()), 2)
+    # allocate array to be passed as shared memory
+    A = sp.csr_matrix(A)
+    indptr = Array(c_int, A.indptr)
+    indices = Array(c_int, A.indices)
+    data = Array(c_double, A.data)
+    if start is None:
+        h5path = dists_h5
+    else:
+        h5path = dists_h5_start.format(start=start, width=digits)
+    initargs = (h5path, retpaths, dirtree, indptr, indices, data, A.shape)
+    print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
-            initargs=initargs)
+            initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
         pool.map(_bottleneck_worker, xrange(fromi, toi))
     pool.join()
-    if start is None:
-        tarpath = bott_tar
-    else:
-        digits = int(np.ceil(np.log10(N / offset)))
-        tarpath = bott_tar_start.format(digits).format(start)
-    print '{}: creating tar archive {}.'.format(now(), tarpath)
-    with closing(tarfile.open(tarpath, 'w:gz')) as tf:
-        for i in xrange(fromi, toi):
-            fn = _format_bott_fname(i, N)
-            leafpath = dirtree.getleaf(i)
-            path = os.path.join(leafpath, fn)
-            tf.add(path)
-            os.remove(path)
-    if start is None:
-        if call("rm -rf {}".format(dirtree.root).split()) != 0:
-            print '{}: error: could not remove directory tree!'.format(now())
-    else:
-        print '{}: NOT removing directory tree.'.format(now())
+    if retpaths:
+        # pack all path files in a gzipped TAR archive.
+        if start is None:
+            tarpath = bott_tar
+        else:
+            tarpath = bott_tar_start.format(start=start, width=digits)
+        print '{}: creating tar archive {}.'.format(now(), tarpath)
+        with closing(tarfile.open(tarpath, 'w:gz')) as tf:
+            for i in xrange(fromi, toi):
+                fn = bott_pattern.format(start=i, width=digits)
+                leafpath = dirtree.getleaf(i)
+                path = os.path.join(leafpath, fn)
+                tf.add(path)
+                os.remove(path)
+        if start is None:
+            if call("rm -rf {}".format(dirtree.root).split()) != 0:
+                print '{}: error: could not remove directory tree!'.format(now())
+        else:
+            print '{}: NOT removing directory tree.'.format(now())
     print '{}: done'.format(now())
 
 # max-min transitive closure based on DFS

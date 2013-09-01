@@ -5,6 +5,7 @@ from cStringIO import StringIO
 from tempfile import NamedTemporaryFile
 from itertools import izip, chain, repeat, groupby, product
 from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
+from tables import Float64Atom, Filters, open_file
 
 from .dirtree import DirTree
 
@@ -298,3 +299,15 @@ def group(data, key, keypattern='{}'):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
 
+def mkcarray(fn, shape, name, chunksize, num=1):
+    '''
+    Create a HDF5 file at `fn` containing `num` compressed chunked arrays of double
+    floats,  accessible under `/<name>`. The chunks of the array have shape `(1,
+    chunksize)`. Returns the created file and the chunked array.
+    '''
+    atom = Float64Atom()
+    filters = Filters(complevel=5, complib='zlib')
+    h5f = open_file(fn, 'w')
+    a = h5f.create_carray(h5f.root, name, atom, shape, filters=filters,
+            chunkshape=(1, chunksize))
+    return h5f, a
