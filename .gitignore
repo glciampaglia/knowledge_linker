@@ -9,6 +9,9 @@
 
 *.npy
 *.npz
+*.log
+*.tar
+*.tar.gz
 
 build/
 docs/*.pdf
