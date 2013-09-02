@@ -626,3 +626,9 @@ rows. Resubmitted the first 5 jobs only just to see how big they get with this
 new setup, and if not too big (currently I am using 25% of my 10TB quota on the
 data capacitor), should be able to launch the rest later tonight or tomorrow
 morning.
+
+## Mon Sep  2 17:18:33 EDT 2013
+
+PyTables still to big. Changed to `memmap` objects but turns out that cannot
+create files larger than 2GB in this way. Will dump data to disk each row a
+separate file and a sequence of column indices and data values. Bummer.
