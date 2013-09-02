@@ -71,7 +71,7 @@ from operator import itemgetter
 from heapq import heappush, heappop, heapify
 from subprocess import call
 
-from .utils import coo_dtype, dfs_items, group, mkcarray
+from .utils import coo_dtype, dfs_items, group, arrayfile
 from .cmaxmin import c_maximum_csr # see below for other imports
 from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
@@ -139,25 +139,26 @@ max_tasks_per_worker = 500
 bott_pattern = 'paths_{start:0{width}d}.npz'
 bott_tar = 'bottleneck_paths.tar.gz'
 bott_tar_start = 'bottleneck_paths_{start:0{width}d}.tar.gz'
-dists_h5 = 'bottleneck_dists-{proc:0{width}d}.h5'
-dists_h5_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.h5'
+dists_out = 'bottleneck_dists-{proc:0{width}d}.npy'
+dists_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.npy'
 
 _D = None
-_h5path = None
-_h5f = None
+_outpath = None
+_outf = None
 _arr_name = None
 _dirtree = None
 _retpaths = None
 
 def _bottleneck_worker(n):
-    global _A, _dirtree, _h5path, _h5f, _D
+    global _A, _dirtree, _outpath, _outf, _D
     N = _A.shape[0]
     digits = int(np.ceil(np.log10(N)))
     worker_id, = current_process()._identity
-    if _h5f is None:
-        path = _h5path.format(proc=worker_id, width=digits)
+    if _outf is None:
+        path = _outpath.format(proc=worker_id, width=digits)
         print "creating {}".format(path)
-        _h5f, _D = mkcarray(path, (N, N), arr_name, max(N, maxchunksize))
+        _outf = open(path, 'w+')
+        _D = arrayfile(_outf, _A.shape, 'd8')
     dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
     _D.flush()
     if paths:
@@ -166,10 +167,10 @@ def _bottleneck_worker(n):
         outpath = os.path.join(leafpath, outname)
         np.savez(outpath, **group(paths, len))
 
-def _init_worker_dirtree(h5path, retpaths, dirtree, indptr, indices, data, shape):
-    global _dirtree, _retpaths, _h5path, _h5f
-    _h5path = h5path
-    _h5f = None
+def _init_worker_dirtree(outpath, retpaths, dirtree, indptr, indices, data, shape):
+    global _dirtree, _retpaths, _outpath, _outf
+    _outpath = outpath
+    _outf = None
     _arr_name = arr_name
     _retpaths = retpaths
     _dirtree = dirtree
@@ -237,10 +238,10 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     if start is None:
-        h5path = dists_h5
+        outpath = dists_out
     else:
-        h5path = dists_h5_start.format(start=start, width=digits)
-    initargs = (h5path, retpaths, dirtree, indptr, indices, data, A.shape)
+        outpath = dists_out_start.format(start=start, width=digits)
+    initargs = (outpath, retpaths, dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)

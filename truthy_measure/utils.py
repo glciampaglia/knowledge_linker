@@ -93,10 +93,21 @@ def arrayfile(data_file, shape, descr, fortran=False):
 
     Arguments
     ---------
-    data_file - a file-like object opened with write mode
-    shape - shape of the ndarray
-    descr - any argument that numpy.dtype() can take
-    fortran - if True, the array uses Fortran data order, otherwise C order
+    data_file :
+        a file-like object opened with write mode compatible to NumPy's
+        memory-mapped array types (see `numpy.memmap`). It is responsibility of
+        the caller to close the file.
+
+    shape : tuple
+        shape of the ndarray.
+
+    descr : str
+        a typecode str (see `array` of `numpy.dtype`). Will be converted to a
+        NumPy dtype.
+
+    fortran : bool
+        optional; if True, the array uses Fortran data order. Default: use C
+        order.
     '''
     from numpy.lib import format
     header = {
@@ -111,8 +122,8 @@ def arrayfile(data_file, shape, descr, fortran=False):
     format.write_array_header_1_0(data_file, header) # write header
     cio.seek(0)
     offset = len(preamble) + len(cio.readline()) # get offset
-    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
-            shape=shape, offset=offset)
+    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode, shape=shape,
+            offset=offset)
 
 def disttosim(x):
     '''
@@ -299,10 +310,10 @@ def group(data, key, keypattern='{}'):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
 
-def mkcarray(fn, shape, name, chunksize, num=1):
+def mkcarray(fn, shape, name, chunksize):
     '''
-    Create a HDF5 file at `fn` containing `num` compressed chunked arrays of double
-    floats,  accessible under `/<name>`. The chunks of the array have shape `(1,
+    Create a HDF5 file at `fn` containing a compressed chunked array of double
+    floats, accessible under `/<name>`. The chunks of the array have shape `(1,
     chunksize)`. Returns the created file and the chunked array.
     '''
     atom = Float64Atom()
