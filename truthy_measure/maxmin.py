@@ -59,6 +59,7 @@ traversal algorithms.
 from __future__ import division
 import os
 import sys
+import atexit
 import tarfile
 import numpy as np
 import scipy.sparse as sp
@@ -70,6 +71,8 @@ from itertools import izip
 from operator import itemgetter
 from heapq import heappush, heappop, heapify
 from subprocess import call
+
+now = datetime.now
 
 from .utils import coo_dtype, dfs_items, group, arrayfile
 from .cmaxmin import c_maximum_csr # see below for other imports
@@ -141,7 +144,11 @@ bott_tar = 'bottleneck_paths.tar.gz'
 bott_tar_start = 'bottleneck_paths_{start:0{width}d}.tar.gz'
 dists_out = 'bottleneck_dists-{proc:0{width}d}.npy'
 dists_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.npy'
+log_out = 'bottleneck_dists-{proc:0{width}d}.log'
+log_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.log'
 
+_logf = None
+_logpath = None
 _D = None
 _outpath = None
 _outf = None
@@ -149,26 +156,41 @@ _arr_name = None
 _dirtree = None
 _retpaths = None
 
+@atexit.register
+def _atexit_worker():
+    if _D is not None:
+        _D.flush()
+    if _outf is not None:
+        _outf.close()
+    if _logf is not None:
+        _logf.flush()
+        _logf.close()
+
 def _bottleneck_worker(n):
-    global _A, _dirtree, _outpath, _outf, _D
+    global _A, _dirtree, _outpath, _outf, _D, _logpath, _logf
     N = _A.shape[0]
     digits = int(np.ceil(np.log10(N)))
     worker_id, = current_process()._identity
     if _outf is None:
         path = _outpath.format(proc=worker_id, width=digits)
-        print "creating {}".format(path)
         _outf = open(path, 'w+')
         _D = arrayfile(_outf, _A.shape, 'd8')
+    if _logf is None:
+        path = _logpath.format(proc=worker_id, width=digits)
+        _logf = open(path, 'a', 1) # line buffered
     dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
-    _D.flush()
+    print >> _logf, "{now}: worker-{proc:0{width}d}: source {source} completed.".format(now=now(),
+            source=n, proc=worker_id, width=digits)
     if paths:
         leafpath = _dirtree.getleaf(n)
         outname = bott_pattern.format(start=n, width=digits)
         outpath = os.path.join(leafpath, outname)
         np.savez(outpath, **group(paths, len))
 
-def _init_worker_dirtree(outpath, retpaths, dirtree, indptr, indices, data, shape):
-    global _dirtree, _retpaths, _outpath, _outf
+def _init_worker_dirtree(logpath, outpath, retpaths, dirtree, indptr, indices,
+        data, shape):
+    global _dirtree, _retpaths, _outpath, _outf, _logpath
+    _logpath = logpath
     _outpath = outpath
     _outf = None
     _arr_name = arr_name
@@ -215,7 +237,6 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     retpaths : int
         optional; if 1, return bottleneck paths. Default: 0.
     '''
-    now = datetime.now
     N = A.shape[0]
     if start is None:
         fromi = 0
@@ -239,9 +260,11 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     data = Array(c_double, A.data)
     if start is None:
         outpath = dists_out
+        logpath = log_out
     else:
         outpath = dists_out_start.format(start=start, width=digits)
-    initargs = (outpath, retpaths, dirtree, indptr, indices, data, A.shape)
+        logpath = log_out_start.format(start=start, width=digits)
+    initargs = (logpath, outpath, retpaths, dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)
