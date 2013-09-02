@@ -142,12 +142,13 @@ max_tasks_per_worker = 500
 bott_pattern = 'paths_{start:0{width}d}.npz'
 bott_tar = 'bottleneck_paths.tar.gz'
 bott_tar_start = 'bottleneck_paths_{start:0{width}d}.tar.gz'
-dists_out = 'bottleneck_dists-{proc:0{width}d}.npy'
-dists_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.npy'
-log_out = 'bottleneck_dists-{proc:0{width}d}.log'
-log_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.log'
+dists_out = 'bottleneck_dists-{proc:0{width1}d}.npy'
+dists_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width2}}d}}.npy'
+log_out = 'bottleneck_dists-{proc:0{width1}d}.log'
+log_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width2}}d}}.log'
 logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 
+_nprocs = None
 _logf = None
 _logpath = None
 _D = None
@@ -168,29 +169,31 @@ def _atexit_worker():
         _logf.close()
 
 def _bottleneck_worker(n):
-    global _A, _dirtree, _outpath, _outf, _D, _logpath, _logf
+    global _A, _dirtree, _outpath, _outf, _D, _logpath, _logf, _nprocs
     N = _A.shape[0]
-    digits = int(np.ceil(np.log10(N)))
+    digits_procs = int(np.ceil(np.log10(_nprocs)))
+    digits_start = int(np.ceil(np.log10(N)))
     worker_id, = current_process()._identity
     if _outf is None:
-        path = _outpath.format(proc=worker_id, width=digits)
+        path = _outpath.format(proc=worker_id, width2=digits_procs)
         _outf = open(path, 'w+')
         _D = arrayfile(_outf, _A.shape, 'd8')
     if _logf is None:
-        path = _logpath.format(proc=worker_id, width=digits)
+        path = _logpath.format(proc=worker_id, width2=digits_procs)
         _logf = open(path, 'a', 1) # line buffered
     dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
     print >> _logf, logline.format(now=now(), source=n, proc=worker_id,
-            width=digits)
+            width=digits_procs)
     if paths:
         leafpath = _dirtree.getleaf(n)
-        outname = bott_pattern.format(start=n, width=digits)
+        outname = bott_pattern.format(start=n, width=digits_start)
         outpath = os.path.join(leafpath, outname)
         np.savez(outpath, **group(paths, len))
 
-def _init_worker_dirtree(logpath, outpath, retpaths, dirtree, indptr, indices,
-        data, shape):
-    global _dirtree, _retpaths, _outpath, _outf, _logpath
+def _init_worker_dirtree(nprocs, logpath, outpath, retpaths, dirtree, indptr,
+        indices, data, shape):
+    global _dirtree, _retpaths, _outpath, _outf, _logpath, _nprocs
+    _nprocs = nprocs
     _logpath = logpath
     _outpath = outpath
     _outf = None
@@ -239,17 +242,16 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
         optional; if 1, return bottleneck paths. Default: 0.
     '''
     N = A.shape[0]
+    digits = int(np.ceil(np.log10(N)))
     if start is None:
         fromi = 0
         toi = N
-        digits = int(np.ceil(np.log10(N)))
     else:
         assert offset is not None
         assert 0 <= offset <= N
         assert start >= 0
         fromi = start
         toi = start + offset
-        digits = int(np.ceil(np.log10(N / offset)))
     if nprocs is None:
         # by default use 90% of available processors or 2, whichever the
         # largest.
@@ -263,9 +265,10 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
         outpath = dists_out
         logpath = log_out
     else:
-        outpath = dists_out_start.format(start=start, width=digits)
-        logpath = log_out_start.format(start=start, width=digits)
-    initargs = (logpath, outpath, retpaths, dirtree, indptr, indices, data, A.shape)
+        outpath = dists_out_start.format(start=start, width1=digits)
+        logpath = log_out_start.format(start=start, width1=digits)
+    initargs = (nprocs, logpath, outpath, retpaths, dirtree, indptr, indices,
+            data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)
@@ -277,11 +280,11 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
         if start is None:
             tarpath = bott_tar
         else:
-            tarpath = bott_tar_start.format(start=start, width=digits)
+            tarpath = bott_tar_start.format(start=start, width1=digits)
         print '{}: creating tar archive {}.'.format(now(), tarpath)
         with closing(tarfile.open(tarpath, 'w:gz')) as tf:
             for i in xrange(fromi, toi):
-                fn = bott_pattern.format(start=i, width=digits)
+                fn = bott_pattern.format(start=i, width1=digits)
                 leafpath = dirtree.getleaf(i)
                 path = os.path.join(leafpath, fn)
                 tf.add(path)
