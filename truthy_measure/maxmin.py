@@ -146,6 +146,7 @@ dists_out = 'bottleneck_dists-{proc:0{width}d}.npy'
 dists_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.npy'
 log_out = 'bottleneck_dists-{proc:0{width}d}.log'
 log_out_start = 'bottleneck_dists_{start:0{width}d}-{{proc:0{width}d}}.log'
+logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 
 _logf = None
 _logpath = None
@@ -179,8 +180,8 @@ def _bottleneck_worker(n):
         path = _logpath.format(proc=worker_id, width=digits)
         _logf = open(path, 'a', 1) # line buffered
     dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
-    print >> _logf, "{now}: worker-{proc:0{width}d}: source {source} completed.".format(now=now(),
-            source=n, proc=worker_id, width=digits)
+    print >> _logf, logline.format(now=now(), source=n, proc=worker_id,
+            width=digits)
     if paths:
         leafpath = _dirtree.getleaf(n)
         outname = bott_pattern.format(start=n, width=digits)
