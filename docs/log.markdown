@@ -629,6 +629,21 @@ morning.
 
 ## Mon Sep  2 17:18:33 EDT 2013
 
-PyTables still to big. Changed to `memmap` objects but turns out that cannot
-create files larger than 2GB in this way. Will dump data to disk each row a
-separate file and a sequence of column indices and data values. Bummer.
+PyTables still too slow for being useful! Changed to `memmap` objects but turns
+out that cannot create files larger than 2GB in this way due to a limitation of
+Python's mmap module.. Will dump data to disk each row a separate file and a
+sequence of column indices and data values. Bummer.
+
+## Tue Sep  3 21:43:28 EDT 2013
+
+Implemented the simplest binary format for dumping data to file: one file per
+row, two long integers (source and number of non-zero elements), and then pairs of
+column coordinate and bottleneck distance value (double). Discovered a bug in
+the DirTree class, rewritten it to produce more meaningul paths. Removed all
+code that saved to file the actual paths, which for now we don't use due memory
+leak in the Cython code. Overall simplified a lot the code for handling the pool
+of workers. Launched once single job (1/50th of the whole thing) on an
+interactive node on Quarry (q0148) just too see how far it goes in 24 hours and
+how much space will it take.
+
+
