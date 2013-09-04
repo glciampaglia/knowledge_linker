@@ -646,4 +646,14 @@ of workers. Launched once single job (1/50th of the whole thing) on an
 interactive node on Quarry (q0148) just too see how far it goes in 24 hours and
 how much space will it take.
 
+## Wed Sep  4 19:42:32 EDT 2013
 
+Yesterday's computation completed at 11:53 am, roughly 14 hours, and produces
+185\.4GB of data. This means that the whole uncompressed graph would range
+around 10TB. Decided to run the computation in three main chunks of 15 jobs
+each, and modified the code to have the files added to a separate TAR archive
+(one for each worker) immediately and removed from the directory tree. Tested
+creating a gzipped TAR archive and in 3 hours it was roughly at half of the
+64,000 files of job 0000000. With pgzip it should be OK to concatenate and
+compresse all the archives generated in each chunk and finally create a single
+TAR archive with the whole data.
