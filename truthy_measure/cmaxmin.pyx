@@ -7,6 +7,7 @@ from tables import BoolAtom
 from cython.parallel import parallel, prange
 from tempfile import NamedTemporaryFile
 from heapq import heappush, heappop, heapreplace
+from struct import pack
 
 # cimports
 cimport numpy as cnp
@@ -28,7 +29,7 @@ ctypedef MetricPath * MetricPathPtr
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef object bottleneckpaths(object A, int source, object D = None, int retpaths = 0):
+cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths = 0):
     '''
     Computes the bottleneck distances from `source` on the directed graph
     represented by adjacency matrix `A`, and optionally store them into the
@@ -48,9 +49,7 @@ cpdef object bottleneckpaths(object A, int source, object D = None, int retpaths
     source : int
         The source node.
 
-    D : array_like
-        optional; NxN distances matrix. Contrarily to standard distance matrices,
-        disconnected pairs are denoted by zero and not by infinity.
+    f : open file
 
     retpaths : int
         optional; compute and return the paths to each connected node, or an
@@ -72,24 +71,25 @@ cpdef object bottleneckpaths(object A, int source, object D = None, int retpaths
         int [:] A_indptr = A.indptr
         int [:] A_indices = A.indices
         double [:] A_data = A.data
-        double [:,:] _D
-        int _Dflag = 0
         int N = A.shape[0]
         int i
+        int flag = 0
+        int cnt = 0
         MetricPathPtr paths
         MetricPath path
         cnp.ndarray[cnp.double_t] dists = np.empty(N, dtype=np.double)
         object pathslist = []
-    if D is not None:
-        _D = D
-        _Dflag = 1
+    if f is not None:
+        flag = 1
+        f.write(pack("ii", source, 0)) # provisional count
     paths = _bottleneckpaths(N, A_indptr, A_indices, A_data, source, retpaths)
     for i in xrange(N):
         path = paths[i]
         if path.found:
             dists[i] = path.distance
-            if _Dflag:
-                _D[source, i] = path.distance
+            if flag:
+                f.write(pack("id", i, path.distance))
+                cnt += 1
             if retpaths:
                 pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
                 free(<void *>path.vertices)
@@ -97,6 +97,9 @@ cpdef object bottleneckpaths(object A, int source, object D = None, int retpaths
             dists[i] = -1
             if retpaths:
                 pathslist.append(np.empty(0, dtype=np.int))
+    if flag and cnt:
+        f.seek(sizeof(int))
+        f.write(pack('i', cnt))
     free(<void *> paths)
     return (dists, pathslist)
 

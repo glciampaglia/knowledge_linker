@@ -60,7 +60,6 @@ from __future__ import division
 import os
 import sys
 import atexit
-import tarfile
 import numpy as np
 import scipy.sparse as sp
 from multiprocessing import Pool, Array, cpu_count, current_process
@@ -136,74 +135,45 @@ def bottleneckpaths(A, source):
             paths.append(np.asarray(path))
     return bott_dists, paths
 
-arr_name = 'bottleneck'
 maxchunksize = 100000
 max_tasks_per_worker = 500
-bott_pattern = 'paths_{start:0{width}d}.npz'
-bott_tar = 'bottleneck_paths.tar.gz'
-bott_tar_start = 'bottleneck_paths_{start:0{width}d}.tar.gz'
-dists_out = 'bottleneck_dists-{proc:0{width1}d}.npy'
-dists_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width2}}d}}.npy'
-log_out = 'bottleneck_dists-{proc:0{width1}d}.log'
-log_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width2}}d}}.log'
+log_out = 'bottleneck_dists-{proc:0{width}d}.log'
+log_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width}}d}}.log'
 logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 
 _nprocs = None
 _logf = None
 _logpath = None
-_D = None
-_outpath = None
-_outf = None
-_arr_name = None
 _dirtree = None
-_retpaths = None
 
 @atexit.register
 def _atexit_worker():
-    if _D is not None:
-        _D.flush()
-    if _outf is not None:
-        _outf.close()
     if _logf is not None:
         _logf.flush()
         _logf.close()
 
 def _bottleneck_worker(n):
-    global _A, _dirtree, _outpath, _outf, _D, _logpath, _logf, _nprocs
+    global _A, _dirtree, _logpath, _logf, _nprocs, digits_procs
     N = _A.shape[0]
-    digits_procs = int(np.ceil(np.log10(_nprocs)))
-    digits_start = int(np.ceil(np.log10(N)))
     worker_id, = current_process()._identity
-    if _outf is None:
-        path = _outpath.format(proc=worker_id, width2=digits_procs)
-        _outf = open(path, 'w+')
-        _D = arrayfile(_outf, _A.shape, 'd8')
     if _logf is None:
-        path = _logpath.format(proc=worker_id, width2=digits_procs)
+        path = _logpath.format(proc=worker_id, width=digits_procs)
         _logf = open(path, 'a', 1) # line buffered
-    dists, paths = cbottleneckpaths(_A, n, _D, _retpaths)
+    outpath = _dirtree.getleaf(n)
+    with closing(open(outpath, 'w')) as outf:
+        dists, paths = cbottleneckpaths(_A, n, outf)
     print >> _logf, logline.format(now=now(), source=n, proc=worker_id,
             width=digits_procs)
-    if paths:
-        leafpath = _dirtree.getleaf(n)
-        outname = bott_pattern.format(start=n, width=digits_start)
-        outpath = os.path.join(leafpath, outname)
-        np.savez(outpath, **group(paths, len))
 
-def _init_worker_dirtree(nprocs, logpath, outpath, retpaths, dirtree, indptr,
-        indices, data, shape):
-    global _dirtree, _retpaths, _outpath, _outf, _logpath, _nprocs
+def _init_worker_dirtree(nprocs, logpath, dirtree, indptr, indices, data, shape):
+    global _dirtree, _logpath, _nprocs, digits_procs, digits_rows
     _nprocs = nprocs
+    digits_procs = int(np.ceil(np.log10(_nprocs)))
     _logpath = logpath
-    _outpath = outpath
-    _outf = None
-    _arr_name = arr_name
-    _retpaths = retpaths
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
-def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
-        retpaths=0):
+def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     '''
     Computes the all-pairs bottleneck paths for matrix A and saves the results
     in a compressed tar archive called `bottlenecks.tar.gz`. Each member of the
@@ -237,9 +207,6 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     nprocs : int
         optional; number of processes to spawn. Default is 90% of available
         CPUs/cores.
-
-    retpaths : int
-        optional; if 1, return bottleneck paths. Default: 0.
     '''
     N = A.shape[0]
     digits = int(np.ceil(np.log10(N)))
@@ -262,38 +229,16 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None,
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     if start is None:
-        outpath = dists_out
         logpath = log_out
     else:
-        outpath = dists_out_start.format(start=start, width1=digits)
         logpath = log_out_start.format(start=start, width1=digits)
-    initargs = (nprocs, logpath, outpath, retpaths, dirtree, indptr, indices,
-            data, A.shape)
+    initargs = (nprocs, logpath, dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
         pool.map(_bottleneck_worker, xrange(fromi, toi))
     pool.join()
-    if retpaths:
-        # pack all path files in a gzipped TAR archive.
-        if start is None:
-            tarpath = bott_tar
-        else:
-            tarpath = bott_tar_start.format(start=start, width1=digits)
-        print '{}: creating tar archive {}.'.format(now(), tarpath)
-        with closing(tarfile.open(tarpath, 'w:gz')) as tf:
-            for i in xrange(fromi, toi):
-                fn = bott_pattern.format(start=i, width1=digits)
-                leafpath = dirtree.getleaf(i)
-                path = os.path.join(leafpath, fn)
-                tf.add(path)
-                os.remove(path)
-        if start is None:
-            if call("rm -rf {}".format(dirtree.root).split()) != 0:
-                print '{}: error: could not remove directory tree!'.format(now())
-        else:
-            print '{}: NOT removing directory tree.'.format(now())
     print '{}: done'.format(now())
 
 # max-min transitive closure based on DFS
