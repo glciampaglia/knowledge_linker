@@ -657,3 +657,17 @@ creating a gzipped TAR archive and in 3 hours it was roughly at half of the
 64,000 files of job 0000000. With pgzip it should be OK to concatenate and
 compresse all the archives generated in each chunk and finally create a single
 TAR archive with the whole data.
+
+## Thu Sep  5 21:51:03 EDT 2013
+
+This morning found 5 jobs killed for weird I/O errors. Got in touch with the
+uits people, who found it might have been a communication error with the data
+capacitor. They are investigating. In the meanwhile, discovered that the
+remaining processes did not terminate in the allotted time: analyzed the logs,
+and found that appending to TAR archives becomes progressively slower until
+basically the processes where at a grinding halt.
+So decided to ditch TAR files again and to just leave the files in the directory
+tree, and resubmitted the jobs. At this point, rather than storing the whole
+matrix, somewhere, it makes more sense to just start analyzing the data
+in batches. This makes more sense than wasting more time and energy trying to
+compress all the data.
