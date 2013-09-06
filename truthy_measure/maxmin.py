@@ -69,7 +69,6 @@ from itertools import izip
 from operator import itemgetter
 from heapq import heappush, heappop, heapify
 from subprocess import call
-from tarfile import open as opentar
 
 now = datetime.now
 
@@ -140,38 +139,29 @@ max_tasks_per_worker = 500
 log_out = 'bottleneck_dists-{proc:0{width}d}.log'
 log_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width}}d}}.log'
 logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
-tar_out = 'bp_{proc:0{{width}}d}.tar'
-tar_out_start = 'bp_{start:0{width1}d}-{{proc:0{{width}}d}}.tar'
 
 _nprocs = None
 _logpath = None
-_tarpath = None
 _dirtree = None
 
 def _bottleneck_worker(n):
     global _A, _dirtree, _logpath, _logf, _nprocs, digits_procs
-    N = _A.shape[0]
     worker_id, = current_process()._identity
     logpath = _logpath.format(proc=worker_id, width=digits_procs)
-    tarpath = _tarpath.format(proc=worker_id, width=digits_procs)
     outpath = _dirtree.getleaf(n)
     with \
             closing(open(outpath, 'w')) as outf,\
-            closing(opentar(tarpath, 'a')) as tarf,\
             closing(open(logpath, 'a', 1)) as logf:
         dists, paths = cbottleneckpaths(_A, n, outf)
-        tarf.add(outpath)
-        os.remove(outpath)
         logf.write(logline.format(now=now(), source=n, proc=worker_id,
                 width=digits_procs) + '\n')
 
-def _init_worker_dirtree(nprocs, tarpath, logpath, dirtree, indptr, indices, data,
+def _init_worker_dirtree(nprocs, logpath, dirtree, indptr, indices, data,
         shape):
-    global _dirtree, _logpath, _nprocs, digits_procs, digits_rows, _tarpath
+    global _dirtree, _logpath, _nprocs, digits_procs, digits_rows
     _nprocs = nprocs
     digits_procs = int(np.ceil(np.log10(_nprocs)))
     _logpath = logpath
-    _tarpath = tarpath
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
@@ -232,11 +222,9 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     data = Array(c_double, A.data)
     if start is None:
         logpath = log_out
-        tarpath = tar_out
     else:
         logpath = log_out_start.format(start=start, width1=digits)
-        tarpath = tar_out_start.format(start=start, width1=digits)
-    initargs = (nprocs, tarpath, logpath, dirtree, indptr, indices, data, A.shape)
+    initargs = (nprocs, logpath, dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)
