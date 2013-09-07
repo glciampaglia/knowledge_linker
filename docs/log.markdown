@@ -671,3 +671,11 @@ tree, and resubmitted the jobs. At this point, rather than storing the whole
 matrix, somewhere, it makes more sense to just start analyzing the data
 in batches. This makes more sense than wasting more time and energy trying to
 compress all the data.
+
+## Sat Sep  7 15:12:14 EDT 2013
+
+Yesterday all 16 jobs terminated, with job #0 taking considerably more time than
+the others. Disk usage is 2358.54 GB. Considered that 16 jobs accounted for
+1,024,000 sources, this means that the whole graph should not take more than
+\7.5 TB, and so it could fit on scratch without hitting the quota. Submitted
+another batch of 16 jobs. Estimated start should be in 2 days.
