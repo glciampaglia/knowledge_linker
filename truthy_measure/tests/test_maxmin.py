@@ -9,7 +9,6 @@ import warnings
 from truthy_measure.maxmin import *
 from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse 
 from truthy_measure.cmaxmin import *
-from truthy_measure.utils import dict_of_dicts_to_ndarray
 
 def test_naive():
     '''
@@ -126,7 +125,7 @@ def test_closure_cycle_2():
         [0.1, 0.1, 0.1],
         [0.2, 0.2, 0.1]
         ])
-    res = mmclosure_matmul(C2, maxiter=100)
+    res = maxmin_closure(C2, maxiter=100)
     print res
     assert np.allclose(res, C2T) 
 
@@ -138,9 +137,9 @@ def test_matmul_closure():
     with warnings.catch_warnings():
         # most likely it won't converge, so we ignore the warning
         warnings.simplefilter("ignore")
-        Cl1 = mmclosure_matmul(B, splits=2, nprocs=2, maxiter=10,
+        Cl1 = maxmin_closure(B, splits=2, nprocs=2, maxiter=10,
                 parallel=True) 
-        Cl2 = mmclosure_matmul(B, maxiter=100)
+        Cl2 = maxmin_closure(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
 
 # on simple cycles, the matrix multiplication and the graph traversal algorithms
@@ -160,10 +159,8 @@ def test_closure_c3():
         [0.1, 0.1, 0.1],
         [0.2, 0.2, 0.1]
         ])
-    res1 = mmclosure_dfs(C3).toarray() # graph traversal
-    res2 = mmclosure_matmul(C3, maxiter=100) # matrix multiplication
-    assert np.allclose(res1, res2)
-    assert np.allclose(res1, C3T)
+    res = maxmin_closure(C3, maxiter=100) # matrix multiplication
+    assert np.allclose(res, C3T)
 
 def test_closure_c4():
     '''
@@ -181,10 +178,8 @@ def test_closure_c4():
             [0.1, 0.1, 0.1, 0.4],
             [0.1, 0.1, 0.1, 0.1]
             ])
-    res1 = mmclosure_dfs(C4).toarray() # graph traversal
-    res2 = mmclosure_matmul(C4, maxiter=100) # matrix multiplication
-    assert np.allclose(res1, res2)
-    assert np.allclose(res1, C4T)
+    res = maxmin_closure(C4, maxiter=100) # matrix multiplication
+    assert np.allclose(res, C4T)
 
 def test_closure_comb():
     '''
@@ -204,10 +199,8 @@ def test_closure_comb():
         [0.0, 0.0, 0.0, 0.0, 0.0],
         [0.0, 0.0, 0.0, 0.0, 0.0]
         ])
-    res1 = mmclosure_dfs(A).toarray() # graph traversal
-    res2 = mmclosure_matmul(A, maxiter=100) # matrix multiplication
-    assert np.allclose(res1, res2)
-    assert np.allclose(res1, AT)
+    res = maxmin_closure(A, maxiter=100) # matrix multiplication
+    assert np.allclose(res, AT)
 
 def test_closure_two_paths():
     '''
@@ -225,8 +218,8 @@ def test_closure_two_paths():
         [0.0, 0.0, 0.0, 0.4],
         [0.0, 0.0, 0.0, 0.0]
         ])
-    res1 = mmclosure_dfs(A).toarray() # graph traversal
-    assert np.allclose(res1, AT)
+    res = maxmin_closure(A) # matrix multiplication
+    assert np.allclose(res, AT)
 
 def test_closure_cycle_path():
     '''
@@ -245,28 +238,5 @@ def test_closure_cycle_path():
     AT = np.array([[ 0.01,  0.09,  0.09],
                    [ 0.01,  0.61,  0.61],
                    [ 0.01,  0.98,  0.61]])
-    B = mmclosure_dfs(A).toarray()
-    C = mmclosure_dfsrec(A).toarray()
-    D = mmclosure_matmul(A)
+    B = maxmin_closure(A)
     assert np.allclose(AT, B)
-    assert np.allclose(B, C)
-    assert np.allclose(B, D)
-
-def test_dfs():
-    '''
-    Test recursive vs iterative DFS-based transitive closure (iterators).
-    '''
-    A = sp.rand(10,10,.3)
-    l1 = itermmclosure_dfs(A, xrange(A.shape[0]))
-    l2 = itermmclosure_dfsrec(A, xrange(10))
-    assert list(l1) == list(l2)
-
-def test_dfs_frontend():
-    '''
-    Test recursive vs iterative DFS-based transitive closure (frontends).
-    '''
-    A = sp.rand(10, 10, .3)
-    B = mmclosure_dfs(A).todense()
-    C = mmclosure_dfsrec(A).todense()
-    assert np.allclose(B, C)
-

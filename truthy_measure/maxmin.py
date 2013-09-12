@@ -16,23 +16,24 @@ traversal algorithms.
 
 ## Module contents
 
-### Maxmin closure
-* mmclosure_matmul
+### Maxmin closure / bottleneck path
+* maxmin_closure
     Max-min transitive closure via matrix multiplication, user function. This
     function uses the max-min multiplication function `maxmin` resp. `pmaxmin` to
     compute the transitive closure sequentially or in parallel, respectively.
-* mmclosure_dfs
-    Max-min transitive closure, based on depth-first traversal with pruning.
-    For each source, only targets that are reachable are searched. Pruning is
-    performed using the information on the successors of a node, computed with
-    `closure_recursive`.
-* mmclosure_dfsrec
-    Same as `mmclosure_dfs`, except that depth-first traversal
-    is implemented iteratively.
-* itermmclosure_dfs
-* itermmclosure_dfsrec
-    These are the actual function that computes the closure; they both return an
-    iterator over all node pairs with non-zero weight.
+* bottleneckpaths/cbottleneckpaths
+    Single source Bottleneck paths (i.e. max-min closure for a single source).
+    This is a modification of Dikstra's shortest path algorithm for computing
+    the bottleneck/maxmin paths. It works on directed graphs with cycles.
+    Returns the distance to all connected nodes and the paths. Note that this
+    function is pure Python and thus very slow. Use the Cythonized version
+    `cbottleneckpaths`, which accepts only CSR matrices.
+* parallel_bottleneckpaths
+    All-pairs Bottleneck paths. This is the parallel implementation for large
+    graphs. The job is split on a pool of worker processes, and it is also
+    possible to specify a starting index and an offset for limiting only to a
+    subset of sources. Data are written to disk in a directory tree (see
+    `truthy_measure.dirtree.DirTree`).
 
 ### Maxmin matrix multiplication
 * maxmin
@@ -66,20 +67,16 @@ from ctypes import c_int, c_double
 from contextlib import closing
 from datetime import datetime
 from itertools import izip
-from operator import itemgetter
 from heapq import heappush, heappop, heapify
-from subprocess import call
 
 now = datetime.now
 
-from .utils import coo_dtype, dfs_items, group, arrayfile
+from .utils import coo_dtype
 from .cmaxmin import c_maximum_csr # see below for other imports
 from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
-# Single source Dijkstra for computing bottleneck paths
+# Dijkstra
 
-# Python implementation using dense matrices -- just used for testing.
-# NOTE: we push the inverse of the similarity to fake a max-heap
 def bottleneckpaths(A, source):
     '''
     Finds the smallest bottleneck paths in a directed network
@@ -233,154 +230,9 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     pool.join()
     print '{}: done'.format(now())
 
-# max-min transitive closure based on DFS
-
-def itermmclosure_dfs(a, sources, targets=None, succ=None, roots=None,
-        progress=False):
-    '''
-    Max-min transitive closure (iterative). Performs a DFS search from source to
-    target, caching results as they are computed.
-
-    Parameters
-    ----------
-    a : array_like
-        an (n,n) adjacency matrix
-    sources : sequence of int
-        the source nodes
-    targets : iterable of int
-        the target nodes; optional. If not provided, for each source will test
-        all n possible targets.
-    succ : array_like
-        optional; an (n,n) boolean array (or matrix) indicating successors
-        relation succ[i, j] == True iff j is a successor of i.
-    roots : array_like
-        optional; an (n,) array of labels (roots) of strongly connected
-        components. If passed, then only the rows and columns of `succ`
-        corresponding to the elements in `roots` are consulted.
-    progress : bool
-        optional; if True, a progress bar will be shown.
-
-    Returns
-    -------
-    An iterator over source, target, max-min weight. Only pairs with non-zero
-    weight are returned.
-
-    Notes
-    -----
-    The algorithm traverses the graph in depth-first order, propagating the
-    minimum so far. The generated path does not contain duplicates (with the
-    possible exception of source and target, if they are the same). When
-    backtracking from a node, the maximum of all the minima coming from the
-    neighbors is chosen, and propagated back.
-    '''
-    n = a.shape[0]
-    a = sp.lil_matrix(a)
-    items = dfs_items(sources, targets, n, succ, roots, progress)
-    get0 = itemgetter(0) # e.g. lambda k : k[0]
-    for s, t in items:
-        max_weight = -1 # the max-min over all paths so far
-        max_path = None # the nodes in the path of max_weight
-        path = set() # nodes visited along the current path
-        # local context: current node, target node, minimum along the path, last
-        # neighbor explored at current node. Exploration starts from the source
-        # with inf and no neighbor explored (-1)
-        dfs_stack = [(s, t, np.inf, -1)]
-        path.add(s)
-        while dfs_stack:
-            node, target, min_so_far, last_neighbor = dfs_stack[-1]
-            backtracking = True
-            for neighbor in a.rows[node]:
-                # skip all neighbors already explored to pick up from where we
-                # left off
-                if neighbor <= last_neighbor:
-                    continue
-                dfs_stack[-1] = (node, target, min_so_far, neighbor)
-                # prune if target is not reachable through neighbor
-                if succ is not None:
-                    if not succ[roots[neighbor], roots[target]]:
-                        continue
-                w = float(a[node, neighbor]) # copy value
-                if neighbor == target:
-                    path.add(target) # close the path
-                    max_weight, max_path = max(
-                            (max_weight, max_path),
-                            (min(min_so_far, w), path), key=get0)
-                    continue
-                if neighbor not in path:
-                    dfs_stack.append((neighbor, target, min(w, min_so_far), -1))
-                    backtracking = False
-                    path.add(node)
-                    break
-            if backtracking:
-                path.discard(node)
-                dfs_stack.pop()
-        if max_weight > -1:
-            yield s, t, max_weight
-
-def mmclosure_dfs(a, succ=None, roots=None, progress=False):
-    '''
-    Max-min closure by simple DFS traversals. Returns a sparse matrix.
-    '''
-    A = sp.lil_matrix(a.shape)
-    for i,j,w in itermmclosure_dfs(a, xrange(a.shape[0]), succ=succ,
-            roots=roots, progress=progress):
-        A[i,j] = w
-    return A
-
-def itermmclosure_dfsrec(a, sources, targets=None, succ=None, roots=None,
-        progress=False):
-    '''
-    Recursive version of `itermmclosure_simplesearch`. Not suitable for large
-    graphs.
-    '''
-    def search(node, target, min_so_far):
-        if node != target:
-            visited.add(node)
-        if node == target and min_so_far < np.inf:
-            return min_so_far
-        max_weight = -1
-        for neighbor in a.rows[node]:
-            if succ is not None and not succ[roots[neighbor], roots[target]]:
-                continue # prune
-            if (node, neighbor) in explored or neighbor in visited:
-                # to avoid getting stuck inside cycles
-                continue
-            explored.add((node, neighbor))
-            w = float(a[node, neighbor]) # copy value
-            if w < min_so_far:
-                m = search(neighbor, target, w)
-            else:
-                m = search(neighbor, target, min_so_far)
-            if m is not None and m > max_weight:
-                max_weight = m
-        visited.discard(node)
-        if max_weight > -1:
-            if max_weight < min_so_far:
-                return max_weight
-            else:
-                return min_so_far
-    n = a.shape[0]
-    a = sp.lil_matrix(a)
-    items = dfs_items(sources, targets, n, succ, roots, progress)
-    for s, t in items:
-        explored = set() # traversed edges
-        visited = set() # nodes traversed along the path
-        m = search(s, t, np.inf) # None if t is not reachable from s
-        if m is not None:
-            yield s, t, m
-
-def mmclosure_dfsrec(a):
-    '''
-    Max-min closure by simple recursive DFS traversals. Returns a sparse matrix.
-    '''
-    A = sp.lil_matrix(a.shape)
-    for i,j,w in itermmclosure_dfsrec(a, xrange(a.shape[0])):
-        A[i,j] = w
-    return A
-
 # Matrix multiplication
 
-def mmclosure_matmul(A, parallel=False, maxiter=1000, quiet=False,
+def maxmin_closure(A, parallel=False, maxiter=1000, quiet=False,
         dumpiter=None, **kwrds):
     '''
     Computes the max-min product closure. This algorithm is based matrix

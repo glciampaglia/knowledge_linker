@@ -3,89 +3,12 @@ import scipy.sparse as sp
 from collections import defaultdict
 from cStringIO import StringIO
 from tempfile import NamedTemporaryFile
-from itertools import izip, chain, repeat, groupby, product
-from progressbar import ProgressBar, Bar, AdaptiveETA, Percentage
-from tables import Float64Atom, Filters, open_file
+from itertools import izip, chain, repeat, groupby
 
 from .dirtree import DirTree
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
-
-class ReachablePairsIter(object):
-    '''
-    Instances of this class are iterator that, for each source, yield (source,
-    target) pairs where target is reachable from source according to the succ
-    matrix.
-    '''
-    def __init__(self, sources, roots, succ):
-        '''
-        Parameters
-        ----------
-        sources : sequence of ints
-            The sources
-        roots : array_like
-            A 1D array of root labels (see `closure`)
-        succ : array_like
-            A 2D bool matrix representing the "successor" relation
-        '''
-        try:
-            len(sources)
-        except TypeError:
-            raise ValueError("sources must be a sequence")
-        self.sources = sources
-        self.roots = roots
-        self.succ = succ
-        self._len = sum([succ[roots[i],:].sum() for i in sources])
-    def __len__(self):
-        return self._len
-    def __iter__(self):
-        for s in self.sources:
-            for t in xrange(len(self.roots)):
-                if self.succ[self.roots[s], self.roots[t]]:
-                    yield s, t
-
-class ProductIter(object):
-    '''
-    Wrapper around `itertools.product` with len() method.
-    '''
-    def __init__(self, *sequences):
-        '''
-        Parameters
-        ----------
-
-        *sequences : sequence of sequences
-
-            Each sequeunce must support len().
-        '''
-        self.sequences = sequences
-        self._len = reduce(int.__mul__, map(len, self.sequences))
-    def __iter__(self):
-        return product(*self.sequences)
-    def __len__(self):
-        return self._len
-
-def dfs_items(sources, targets, n, succ, roots, progress):
-    '''
-    Produces input (source, target) pairs for DFS search and related progress
-    bar object.
-    '''
-    if succ is not None:
-        if roots is None:
-            roots = np.arange((n,), dtype=np.int32)
-        else:
-            roots = np.ravel(roots)
-        items = ReachablePairsIter(sources, roots, succ)
-    else:
-        if targets is not None:
-            items = zip(sources, targets)
-        else:
-            items = ProductIter(sources, xrange(n))
-    if progress:
-        widgets = ['[Maxmin closure] ', AdaptiveETA(), Bar(), Percentage()]
-        pbar = ProgressBar(widgets=widgets)
-        items = pbar(items)
-    return items
 
 def arrayfile(data_file, shape, descr, fortran=False):
     '''
@@ -285,6 +208,11 @@ def dict_of_dicts_to_ndarray(dd, size):
     return tmp
 
 def loadadjcsr(path):
+    '''
+    Loads a CSR matrix from a NPZ file containing `indices`, `indptr`, and
+    (optionally) `data` entries. If `data` is missing all non-zero elements are
+    set to 1
+    '''
     a = np.load(path)
     indices = a['indices']
     indptr = a['indptr']
@@ -295,6 +223,10 @@ def loadadjcsr(path):
     return sp.csr_matrix((data, indices, indptr), shape=(n_rows, n_rows))
 
 def chainrepeat(sources, times):
+    '''
+    utility function that does the same as using `chain` + `repeat` from the
+    itertools module.
+    '''
     count = sum(times)
     c = chain(*(repeat(s, t) for s, t in izip(sources, times)))
     return np.fromiter(c, count=count, dtype=np.int32)
@@ -309,16 +241,3 @@ def group(data, key, keypattern='{}'):
     for k, datagroup in groupby(sorted(data, key=key), key):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
-
-def mkcarray(fn, shape, name, chunksize):
-    '''
-    Create a HDF5 file at `fn` containing a compressed chunked array of double
-    floats, accessible under `/<name>`. The chunks of the array have shape `(1,
-    chunksize)`. Returns the created file and the chunked array.
-    '''
-    atom = Float64Atom()
-    filters = Filters(complevel=5, complib='zlib')
-    h5f = open_file(fn, 'w')
-    a = h5f.create_carray(h5f.root, name, atom, shape, filters=filters,
-            chunkshape=(1, chunksize))
-    return h5f, a
