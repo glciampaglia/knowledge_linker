@@ -683,4 +683,8 @@ another batch of 16 jobs. Estimated start should be in 2 days.
 ## Mon Sep 16 09:35:13 CEST 2013
 
 Checked jobs on Quarry. 48 out of 50 completed correctly, 2 failed again with
-I/O errors. Relaunched them this morning; ETA: 10pm Tuesday (Eastern Time)
+I/O errors. Relaunched them this morning, ETA for job start is one day.
+
+## Tue Sep 17 11:48:53 CEST 2013
+
+The two last jobs completed successfully.
