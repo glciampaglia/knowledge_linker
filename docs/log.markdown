@@ -679,3 +679,12 @@ the others. Disk usage is 2358.54 GB. Considered that 16 jobs accounted for
 1,024,000 sources, this means that the whole graph should not take more than
 \7.5 TB, and so it could fit on scratch without hitting the quota. Submitted
 another batch of 16 jobs. Estimated start should be in 2 days.
+
+## Mon Sep 16 09:35:13 CEST 2013
+
+Checked jobs on Quarry. 48 out of 50 completed correctly, 2 failed again with
+I/O errors. Relaunched them this morning, ETA for job start is one day.
+
+## Tue Sep 17 11:48:53 CEST 2013
+
+The two last jobs completed successfully.
