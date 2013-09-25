@@ -155,7 +155,7 @@ def make_weighted(path, N):
     adj = adj.tocsr()
     return adj
 
-def dict_of_dicts_to_coo(dd, num=-1):
+def dict_of_dicts_to_sparse(dd, num, shape, kind):
     '''
     Transforms a dict of dicts to a records array in COOrdinates format.
 
@@ -166,19 +166,25 @@ def dict_of_dicts_to_coo(dd, num=-1):
     num : int
         the number of coordinate entries
 
+    shape: tuple
+        the output matrix shape
+
+    kind : string
+        a `scipy.sparse` matrix code (e.g, 'csr', 'coo', etc.)
+
     Returns
     -------
-    coo : recarray
-        A records array with fields: row, col, and data. This can be used to
-        create a sparse matrix. See `coo_dtype`, `scipy.sparse.coo_matrix`.
+    A : scipy.sparse.spmatrix
+        a `scipy.sparse` matrix
     '''
 
     def coorditer(dd):
-        for irow in sorted(dd):
-            d = dd[irow]
-            for icol in sorted(d):
-                yield irow, icol, d[icol]
-    return np.fromiter(coorditer(dd), coo_dtype, count=num)
+        for s in dd:
+            for t in dd[s]:
+                yield s, t, (dd[s][t] or 1.)
+    C = np.fromiter(coorditer(dd), dtype=coo_dtype, count=num)
+    A = sp.coo_matrix((C['weight'], (C['row'], C['col'])), shape=shape)
+    return A.asformat(kind)
 
 def dict_of_dicts_to_ndarray(dd, size):
     '''
