@@ -9,7 +9,6 @@
 
 *.npy
 *.npz
-*.log
 *.tar
 *.tar.gz
 
