@@ -698,4 +698,14 @@ ideologies (including a separate subset of all -isms). There 2,392 democrats,
 
 Wrote a simple sequential script for computing the bottleneck distances between
 each politician and all ideologies, and launched it on Lenny. The plan is to see
-whether the two classes separate.
+whether the two classes separate. 
+
+## Thu Sep 26 19:07:20 EDT 2013
+
+Computed the bottleneck distances. Plotted the data using two dimensionality
+reduction techniques, PCA and LDA. Used 2 components, which for PCA explain >
+96% of the variance. The data look like a perfectly shaped parabola. Printed the
+top/bottom 10 dimensions of the two eigenvectors of the matrix, but found no
+clear pattern. Rewrote the script to also plot 1) random noise (per Sandro's
+request, to make sure there are no bugs in the code), and 2) random
+source/target pairs. Launched it on Lenny.
