@@ -688,3 +688,14 @@ I/O errors. Relaunched them this morning, ETA for job start is one day.
 ## Tue Sep 17 11:48:53 CEST 2013
 
 The two last jobs completed successfully.
+
+## Tue Sep 24 20:55:40 EDT 2013
+
+Before leaving for Barcelona (that was two weekends ago), pulled from DBPedia
+data about all U.S. democrats and republicans born after 1940, as well as all
+ideologies (including a separate subset of all -isms). There 2,392 democrats,
+1,923 republicans, and 820 ideologies -- of which 331 -isms. 
+
+Wrote a simple sequential script for computing the bottleneck distances between
+each politician and all ideologies, and launched it on Lenny. The plan is to see
+whether the two classes separate.
