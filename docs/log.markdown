@@ -709,3 +709,16 @@ top/bottom 10 dimensions of the two eigenvectors of the matrix, but found no
 clear pattern. Rewrote the script to also plot 1) random noise (per Sandro's
 request, to make sure there are no bugs in the code), and 2) random
 source/target pairs. Launched it on Lenny.
+
+## Fri Sep 27 18:07:32 EDT 2013
+
+Made also the plots for the random noise (which works as expected) and for
+random s/t pairs. The latter produces a parabola-like segment too. Also, found a
+small bug in the way the eigenvectors were printed and now there seems to be a
+more discernible pattern of ideologies, but still not very satisfactory. Why do
+the points all stay in a 1D subspace? Guess could be that either the columns are
+strongly dependent on each other, or that some other regularities imposed by the
+fact that we are looking at distances on a graph is at work. To understand this,
+the next step will be to look at the same bottleneck distances with the inverse
+in-degree weighting scheme, but computed on a random graph.
+random network.
