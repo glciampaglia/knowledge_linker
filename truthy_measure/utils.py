@@ -115,9 +115,12 @@ def recstosparse(coords, shape=None, fmt='csr'):
         icol = coords[:,1]
         w = coords[:,2]
     adj = sp.coo_matrix((w, (irow, icol)), shape=shape)
-    return adj.asformat(fmt)
+    if fmt == 'coo':
+        return adj
+    else:
+        return adj.asformat(fmt)
 
-def make_weighted(path, N):
+def weighted(m):
     '''
     Return a weighted adjacency matrix, with edge weights computed as the
     in-degree of the incoming vertex, transformed to similarity scores.
@@ -134,26 +137,34 @@ def make_weighted(path, N):
     adj : `scipy.sparse.csr_matrix`
         the weighted adjancency matrix
     '''
+    # ensure input is in COO format
+    m = sp.coo_matrix(m)
+    # compute in-degrees
+    dist = indegree(m)
+    # transform to similarity scores
+    sim = disttosim(dist)
+    # create CSR matrix
+    return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
+
+def make_weighted(path, N):
+    '''
+    Loads a (row, col, weight) records array from path and returns a weighted
+    CSR adjancency matrix.
+
+    Parameters
+    ----------
+    path : string
+        path to recarray numpy binary file.
+    N : integer
+        number of nodes in the graph
+    '''
     # load coordinates from file.
     # coords is a recarray with records (row, col, weights)
     coords = np.load(path)
-    # shortcuts
-    irow = coords['row']
-    icol = coords['col']
     shape = (N,) * 2
-    # create sparse adjacency matrix
-    adj = recstosparse(coords, shape)
-    # computes distances based on in-degrees
-    dist = indegree(adj)
-    # transform distances to similarity scores
-    sim = disttosim(dist)
-    # assign the weight to each edge (the weight of an edge is the in-degree of
-    # the incoming vertex, translated to a similarity score)
-    weights = sim[icol]
-    # recreate the sparse matrix with weights and convert to CSR format
-    adj = sp.coo_matrix((weights, (irow, icol)), shape=shape)
-    adj = adj.tocsr()
-    return adj
+    # create sparse COO matrix
+    adj = recstosparse(coords, shape, 'coo')
+    return weighted(adj)
 
 def dict_of_dicts_to_sparse(dd, num, shape, kind):
     '''
