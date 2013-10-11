@@ -36,10 +36,12 @@ def bottleneck_undir_st(G, s, t, retpath=False):
     Returns the bottleneck capacity and path between source node s and 
     target node t for a given graph G.
     """
+    def _neighbors(node, G):
+        return G.indices[G.indptr[node]:G.indptr[node+1]]
     Q = []
     path = []
     visited = set([s])
-    _,s_nbrs,_ = scp.find(G[s,:])
+    s_nbrs = _neighbors(s, G)
     if s==t or t in s_nbrs:
         if s==t:
             path = [t]
@@ -48,6 +50,7 @@ def bottleneck_undir_st(G, s, t, retpath=False):
         bottleneck = 1.0
     else:
         items = {} # contains 3-tuple: distance, node, predecessor
+        # init the heap
         for n in xrange(G.shape[0]):
             if n==s:
                 dist = 1.0
@@ -55,11 +58,9 @@ def bottleneck_undir_st(G, s, t, retpath=False):
                 dist = 0.0
             items[n] = [-dist,n,-1]
             heappush(Q,items[n])
-    
         while t not in visited:
             dist_n,n,_ = heappop(Q)
-            _,nbrs,_ = scp.find(G[n,:])
-    
+            nbrs = _neighbors(n, G)
             if len(nbrs)>0:
                 for nbr in nbrs:
                     dist_nbr,_,pred = items[nbr]
@@ -68,21 +69,26 @@ def bottleneck_undir_st(G, s, t, retpath=False):
                         if -dist_n > -dist_nbr:
                             items[nbr][2] = n
                     else:
-                        if min([-dist_n,G[n,nbr]]) > -dist_nbr:
-                            items[nbr][0] = -min([-dist_n,G[n,nbr]])
+                        if min([-dist_n, G[n,nbr]]) > -dist_nbr:
+                            items[nbr][0] = -min([-dist_n, G[n,nbr]])
                             items[nbr][2] = n
                 heapify(Q)
-            visited = visited | {n}
+            visited.add(n)
         bottleneck = -items[t][0]
-        
-        # trace the path
-        tracenode = t
-        path.insert(0,t)
-        while True:
-            path.insert(0,items[tracenode][2])
-            tracenode = items[tracenode][2]
-            if tracenode == s:
-                break
+        if retpath:
+            # trace the path
+            tracenode = t
+            path.insert(0,t)
+            while True:
+                predecessor = items[tracenode][2]
+                if predecessor >= 0:
+                    path.insert(0, predecessor)
+                    tracenode = predecessor
+                    if tracenode == s:
+                        break
+                else:
+                    path = []
+                    break
     if retpath == True:
         return bottleneck, path 
     else:
