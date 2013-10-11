@@ -92,13 +92,13 @@ def make_symmetric(A):
     Returns : CSR sparse matrix
         The symmetric matrix
     '''
-    G = scsp.csr_matrix(A)
+    G = sp.csr_matrix(A)
     n = G.shape[0]
     G2 = G.transpose()
     G3 = G+G2
-    i,j,v = scsp.find(G.multiply(G2))
+    i,j,v = sp.find(G.multiply(G2))
     v = np.sqrt(v)
-    N = scsp.csr_matrix((v,(i,j)),shape=(n,n))
+    N = sp.csr_matrix((v,(i,j)),shape=(n,n))
     Gsym = G3-N
     return Gsym
     
@@ -195,6 +195,8 @@ def weighted_undir(m):
     dist = np.asarray(m.sum(axis=1)).flatten()
     # compute similarities
     sim = disttosim(dist)
+    # transform back to COO
+    m = m.tocoo()
     return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
 
 def make_weighted(path, N, undirected=False):
