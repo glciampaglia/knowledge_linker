@@ -1,10 +1,9 @@
 import scipy.sparse as scsp
 import numpy as np
-
 from nose.tools import nottest
 
 from truthy_measure.utils import make_weighted, weighted_undir
-from truthy_measure.maxmin_undir import *
+from truthy_measure.maxmin_node import *
 
 @nottest
 def test_graph3():
@@ -20,7 +19,7 @@ def test_graph3():
         row_output = []
         for t in xrange(numVertices):
             if s!=t:
-                cap = bottleneck_undir_st(G,s,t)
+                cap = bottlenecknodest(G,s,t)
                 row_output.append(cap)
             else:
                 row_output.append(0)
@@ -28,6 +27,15 @@ def test_graph3():
     o = np.matrix(output)
     return o
     #assert np.allclose(o,expect)
+
+@nottest
+def run_test(G, expect):
+    o, _ = bottlenecknodefull(G)
+    co, _ = cbottlenecknodefull(G)
+    o = np.round(o, 2)
+    co = np.round(o, 2)
+    assert np.allclose(o, expect)
+    assert np.allclose(co, expect)
 
 def test_graph1():
     """
@@ -52,9 +60,7 @@ def test_graph1():
         [ 1.  ,  0.33,  0.25,  1.  ,  0.2 ,  1.  ,  0.25,  1.  ],
         [ 0.25,  1.  ,  0.25,  1.  ,  0.2 ,  0.25,  1.  ,  0.25],
         [ 0.25,  0.25,  0.25,  0.25,  0.2 ,  1.  ,  0.25,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 
 def test_graph2():
     """
@@ -73,9 +79,7 @@ def test_graph2():
         [ 1.  ,  0.25,  0.25,  1.  ,  0.25,  0.25],
         [ 0.25,  1.  ,  0.25,  0.25,  1.  ,  0.25],
         [ 0.25,  0.25,  1.  ,  0.25,  0.25,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
     
 def test_cycle_graph():
     """
@@ -96,9 +100,7 @@ def test_cycle_graph():
         [ 0.33,  1.  ,  1.  ,  1.  ,  0.33],
         [ 0.33,  0.33,  1.  ,  1.  ,  1.  ],
         [ 1.  ,  0.33,  0.33,  1.  ,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 
 def test_grid_graph():
     """
@@ -120,9 +122,7 @@ def test_grid_graph():
         [ 1.  ,  1.  ,  0.25,  1.  ,  0.25,  0.33],
         [ 0.33,  0.25,  1.  ,  0.25,  1.  ,  1.  ],
         [ 1.  ,  1.  ,  0.33,  0.33,  1.  ,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 
 def test_balanced_tree():
     """
@@ -159,9 +159,7 @@ def test_balanced_tree():
         [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 0.2, 0.2],
         [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 0.2],
         [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 
 def test_graph4():
     """
@@ -183,9 +181,7 @@ def test_graph4():
         [ 1.  ,  0.25,  0.25,  1.  ,  1.  ,  0.33],
         [ 0.33,  0.25,  0.25,  1.  ,  1.  ,  1.  ],
         [ 1.  ,  0.33,  1.  ,  0.33,  1.  ,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 
 def test_graph5():
     """
@@ -205,7 +201,5 @@ def test_graph5():
         [ 1.  ,  1.  ,  1.  ,  0.33,  0.25],
         [ 1.  ,  1.  ,  0.33,  1.  ,  1.  ],
         [ 1.  ,  0.25,  0.25,  1.  ,  1.  ]])
-    o, _ = bottleneck_undir_full(G)
-    o = np.round(o, 2)
-    assert np.allclose(o, expect)
+    run_test(G, expect)
 

@@ -11,9 +11,36 @@ from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 from .cmaxmin cimport _csr_neighbors, init_intarray, MetricPathPtr, MetricPath
 
+cpdef object bottlenecknodefull(object G, int retpath=0):
+    rows = []
+    paths = []
+    N = G.shape[0]
+    for s in xrange(N):
+        row, p = bottlenecknode(G, s, retpath=retpath)
+        rows.append(row)
+        paths.append(p)
+    return np.asarray(rows), paths
+
+cpdef object bottlenecknode(object G, int s, object targets=None, int retpath=0):
+    '''
+    Return the bottleneck capacity and paths from node s. If no targets are
+    specified, will return the capacities for all possible targets in the graph.
+    '''
+    N = G.shape[0]
+    if targets is None:
+        targets = xrange(N)
+    capacities = []
+    paths = []
+    for t in targets:
+        c, p = bottlenecknodest(G, s, t, retpath=retpath)
+        paths.append(p)
+        capacities.append(c)
+    capacities = np.asarray(capacities)
+    return capacities, paths
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef object bottlenecknodepath(object A, int source, int target, int retpath = 0):
+cpdef object bottlenecknodest(object A, int source, int target, int retpath = 0):
     '''
     Computes the intermediate bottleneck capacity (or distance) from `source`
     to `target` on the undirected graph represented by adjacency matrix `A`.
@@ -49,7 +76,7 @@ cpdef object bottlenecknodepath(object A, int source, int target, int retpath = 
     path : ndarray of ints
         optional; the associated path of nodes (excluding the source).
     '''
-    A = sp.csr_matrix(A)
+    A = sp.csr_matrix(A).astype(np.double)
     cdef:
         int [:] A_indptr = A.indptr
         int [:] A_indices = A.indices
@@ -59,7 +86,7 @@ cpdef object bottlenecknodepath(object A, int source, int target, int retpath = 
         MetricPath path
         double ret_cap
         object ret_path = None
-    path = _bottlenecknodepath(N, A_indptr, A_indices, A_data, source, target, retpath)
+    path = _bottlenecknodest(N, A_indptr, A_indices, A_data, source, target, retpath)
     ret_cap = path.distance
     if retpath:
         if path.found:
@@ -70,7 +97,9 @@ cpdef object bottlenecknodepath(object A, int source, int target, int retpath = 
     return ret_cap, ret_path
 
 # we push the negative of the similarities to fake a max heap
-cdef MetricPath _bottlenecknodepath(
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef MetricPath _bottlenecknodest(
         int N,
         int [:] indptr,
         int[:] indices,
@@ -98,11 +127,8 @@ cdef MetricPath _bottlenecknodepath(
         if target == neighbors[i]:
             is_neighbor = 1
             break
-    if source == target:
-        path.distance = 1.0
-        # empty path
-    elif is_neighbor:
-        path.distance = 1.0
+    if source == target or is_neighbor:
+        caps[target] = 1.0
         P[target] = source
     else:
         # populate the queue
@@ -128,7 +154,10 @@ cdef MetricPath _bottlenecknodepath(
                 if neighbor != target:
                     cap = min(w, cap)
                 if cap > neigh_cap:
-                    Q.push_if_lower_fast(- cap, neighbor)
+                    if certain[neighbor]:
+                        caps[neighbor] = cap
+                    else:
+                        Q.push_if_lower_fast(- cap, neighbor)
                     P[neighbor] = node
             free(<void *> neighbors)
             neighbors = NULL
@@ -140,7 +169,7 @@ cdef MetricPath _bottlenecknodepath(
     else:
         path.found = 1
         path.distance = caps[target]
-        if retpath:
+        if retpath and source != target:
             hopscnt = 0
             i = target
             while i != source:
