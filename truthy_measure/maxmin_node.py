@@ -1,8 +1,5 @@
-#import pyximport; pyximport.install()
-import scipy.sparse as scp
 import numpy as np
 from heapq import heappush, heappop, heapify
-
 
 def bottleneck_undir_full(G, retpath=False):
     rows = []
