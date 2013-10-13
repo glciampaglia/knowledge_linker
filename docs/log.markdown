@@ -746,3 +746,19 @@ Several updates:
   time using all ideologies) on Big Red II.
 * Will have to present on next Monday so hopefully there will be some
   interesting results.
+
+## Sun Oct 13 19:00:23 EDT 2013
+
+Found today that the queue accepts only about 20 jobs to run at the same time,
+and the majority of jobs was blocked. Of the job that had complemted, the
+results did not look particularly good: all capacities are pretty much the same,
+but could be that it computed only a few poorly connected individuals.
+
+Changed the script that generates the PBS script to use MPMD mode, essentially
+one big job that requires multiple nodes instead of many jobs each on one node.
+After wrestling with the batch system found that I could submit 70 jobs each
+with 51000 lines each using 47 hours of wall time. 51000 lines should take
+roughly 46 hours. The job is now queued and is estimated to start tomorrow. 
+
+This means that I won't have anything to present tomorrow but perhaps it's
+better like this.
