@@ -89,6 +89,8 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
 
 # we push the inverse of the similarity to fake a max-heap: this means we
 # compute the min-max.
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cdef MetricPathPtr _bottleneckpaths(
         int N,
         int [:] indptr,
