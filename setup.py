@@ -24,6 +24,14 @@ setup(
                 extra_compile_args=['-fopenmp'],
                 extra_link_args=['-fopenmp']) 
             ],
+            Extension("truthy_measure.cmaxmin_node", 
+                [
+                "truthy_measure/cmaxmin_node.pyx",
+                ],
+                include_dirs=_incl, 
+                extra_compile_args=['-fopenmp'],
+                extra_link_args=['-fopenmp']) 
+            ],
         scripts = [
             'scripts/closure.py',
             'scripts/cycles.py',
