@@ -76,7 +76,7 @@ cpdef object bottlenecknodest(object A, int source, int target, int retpath = 0)
     path : ndarray of ints
         optional; the associated path of nodes (excluding the source).
     '''
-    A = sp.csr_matrix(A).astype(np.double)
+    A = sp.csr_matrix(A)
     cdef:
         int [:] A_indptr = A.indptr
         int [:] A_indices = A.indices

@@ -49,7 +49,7 @@ def test_graph1():
         [ 0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
         [ 1.,  0.,  0.,  1.,  0.,  0.,  0.,  1.],
         [ 0.,  1.,  0.,  1.,  0.,  0.,  0.,  0.],
-        [ 0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.]])
+        [ 0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.]], dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
         [ 1.  ,  1.  ,  0.25,  0.25,  0.2 ,  1.  ,  0.25,  0.25],
@@ -66,7 +66,7 @@ def test_graph2():
     """
     Node-based Dijkstra on an arbitraty graph (ex. #2)
     """
-    data = np.ones(12)
+    data = np.ones(12, dtype=np.double)
     ptr = np.array([0,3,6,9,10,11,12])
     idx = np.array([1,2,3,0,2,4,0,1,5,0,1,2])
     N = 6
@@ -91,7 +91,7 @@ def test_cycle_graph():
                     [False,  True, False,  True, False],
                     [False, False,  True, False,  True],
                     [ True, False, False,  True, False]])
-    G = scsp.csr_matrix(G)
+    G = scsp.csr_matrix(G, dtype=np.double)
     G = weighted_undir(G)
     output = []
     expect = np.matrix([
@@ -113,7 +113,7 @@ def test_grid_graph():
         [ True,  True, False, False, False, False],
         [False, False,  True, False, False,  True],
         [ True,  True, False, False,  True, False]])
-    G = scsp.csr_matrix(G)
+    G = scsp.csr_matrix(G, dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
         [ 1.  ,  0.33,  1.  ,  1.  ,  0.33,  1.  ],
@@ -143,7 +143,7 @@ def test_balanced_tree():
         [False,False,False,True,False,False,False,False,False,False,False,False,False],
         [False,False,False,True,False,False,False,False,False,False,False,False,False]
         ])
-    G = scsp.csr_matrix(G)
+    G = scsp.csr_matrix(G, dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
         [ 1. , 1.  , 1.  , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
@@ -172,7 +172,7 @@ def test_graph4():
         [ True, False, False, False,  True, False],
         [False, False, False,  True, False,  True],
         [ True, False,  True, False,  True, False]])
-    G = scsp.csr_matrix(G)
+    G = scsp.csr_matrix(G, dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
         [ 1.  ,  0.25,  0.25,  1.  ,  0.33,  1.  ],
@@ -193,7 +193,7 @@ def test_graph5():
         [ True,  True, False, False, False],
         [ True,  True, False, False,  True],
         [ True, False, False,  True, False]])
-    G = scsp.csr_matrix(G)
+    G = scsp.csr_matrix(G, dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
         [ 1.  ,  0.33,  1.  ,  1.  ,  1.  ],
