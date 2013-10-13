@@ -9,7 +9,7 @@ cimport cython
 from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
-from .cmaxmin cimport _csr_neighbors, init_intarray, MetricPathPtr
+from .cmaxmin cimport _csr_neighbors, init_intarray, MetricPathPtr, MetricPath
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
