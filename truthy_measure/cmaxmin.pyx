@@ -2,39 +2,24 @@
 
 import numpy as np
 import scipy.sparse as sp
-from collections import defaultdict
-from tables import BoolAtom
 from cython.parallel import parallel, prange
 from tempfile import NamedTemporaryFile
-from heapq import heappush, heappop, heapreplace
 from struct import pack
 
 # cimports
 cimport numpy as cnp
 cimport cython
-from libc.math cimport fmin
-from libc.stdlib cimport malloc, abort, free, calloc
-from libc.string cimport memset
+from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
-from libc.float cimport DBL_MAX
 from .heap cimport FastUpdateBinaryHeap
-
-ctypedef struct MetricPath:
-    size_t length
-    int * vertices
-    int found
-    double distance
-
-ctypedef MetricPath * MetricPathPtr
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths = 0):
     '''
     Computes the bottleneck distances from `source` on the directed graph
-    represented by adjacency matrix `A`, and optionally store them into the
-    corresponding row of distance matrix `D`. Return the distances and
-    optionally the associated bottleneck paths.
+    represented by adjacency matrix `A`, and optionally write them to open file
+    `f`. Return the distances and optionally the associated bottleneck paths.
 
     A bottleneck path corresponds to the path that maximizes the minimum weight
     on its edges. It is also known as the max-min co-norm, or ultra-metric
@@ -58,13 +43,12 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
 
     Returns
     -------
-    dists : (N,) integer ndarray
+    dists : (N,) double float ndarray
         the bottleneck distances from source to all other nodes in the graph, or
-        -1 if the two nodes are disconnected. Note that in the distance matrix
-        `D` these are marked as zero (i.e. not marked).
+        -1 if the two nodes are disconnected. 
 
     paths : list of ndarrays
-        optional; the computed bottleneck paths.
+        optional; the associated path of nodes (excluding the source).
     '''
     A = sp.csr_matrix(A)
     cdef:
@@ -103,7 +87,10 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
     free(<void *> paths)
     return (dists, pathslist)
 
-# we push the inverse of the similarity to fake a max-heap
+# we push the inverse of the similarity to fake a max-heap: this means we
+# compute the min-max.
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cdef MetricPathPtr _bottleneckpaths(
         int N,
         int [:] indptr,
@@ -184,13 +171,6 @@ cdef MetricPathPtr _bottleneckpaths(
     return paths
 
 ## BFS for shortest path (by number of hops)
-
-ctypedef struct Path:
-    size_t length
-    int * vertices
-    int found
-
-ctypedef Path * PathPtr
 
 cpdef reachables(object A, int source):
     A = sp.csr_matrix(A)
@@ -409,51 +389,6 @@ cdef Path _shortestpath(
     free(<void *> D)
     free(<void *> Q)
     return path
-
-@cython.profile(False)
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cdef inline int * init_intarray(size_t n, int val) nogil:
-    '''
-    Allocates memory for holding n int values, and initialize them to val.
-    Caller is responsible for free-ing up the memory.
-    '''
-    cdef:
-        void * buf
-        int * ret
-    buf = malloc(n * sizeof(int))
-    if buf == NULL:
-        abort()
-    memset(buf, val, n * sizeof(int))
-    ret = <int *> buf
-    return ret
-
-@cython.profile(False)
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cdef inline int _csr_neighbors(int node, int [:] indices, int [:] indptr, int ** ptr) nogil:
-    '''
-    Extracts the neighbors of given node from the CSR indices and indptr
-    structures and copies them on a separate memory location, pointed by ptr.
-
-    Returns the number of neighbors. If the node has no neighbors, no memory is
-    allocated.
-    '''
-    cdef int n, i, I, II
-    cdef void * buf
-    cdef int * res
-    I = indptr[node]
-    II = indptr[node + 1]
-    n = II - I
-    if n > 0:
-        buf = malloc(n * sizeof(int))
-        if buf == NULL:
-            abort()
-        res = <int *> buf
-        for i in xrange(n):
-            res[i] = indices[I + i]
-        ptr[0] = res
-    return n
 
 ## Maxmin matrix multiplication
 

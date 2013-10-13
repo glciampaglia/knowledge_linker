@@ -80,6 +80,28 @@ def indegree(adj):
     indegree = adj.sum(axis=0)
     return np.asarray(indegree).flatten()
 
+def make_symmetric(A):
+    '''
+    Transforms a matrix, not necessary triangular, to symmetric
+
+    Parameters
+    ----------
+    A : array_like
+        The matrix
+
+    Returns : CSR sparse matrix
+        The symmetric matrix
+    '''
+    G = sp.csr_matrix(A)
+    n = G.shape[0]
+    G2 = G.transpose()
+    G3 = G+G2
+    i,j,v = sp.find(G.multiply(G2))
+    v = np.sqrt(v)
+    N = sp.csr_matrix((v,(i,j)),shape=(n,n))
+    Gsym = G3-N
+    return Gsym
+    
 def recstosparse(coords, shape=None, fmt='csr'):
     '''
     Returns a sparse adjancency matrix from a records array of (col, row,
@@ -120,10 +142,10 @@ def recstosparse(coords, shape=None, fmt='csr'):
     else:
         return adj.asformat(fmt)
 
-def weighted(m):
+def weighted_dir(m):
     '''
-    Return a weighted adjacency matrix, with edge weights computed as the
-    in-degree of the incoming vertex, transformed to similarity scores.
+    Return a weighted, directed, adjacency matrix, with edge weights computed as
+    the in-degree of the incoming vertex, transformed to similarity scores.
 
     Parameters
     ----------
@@ -135,7 +157,8 @@ def weighted(m):
     Returns
     -------
     adj : `scipy.sparse.csr_matrix`
-        the weighted adjancency matrix
+        the weighted adjancency matrix. The matrix represents a directed
+        network.
     '''
     # ensure input is in COO format
     m = sp.coo_matrix(m)
@@ -146,7 +169,37 @@ def weighted(m):
     # create CSR matrix
     return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
 
-def make_weighted(path, N):
+def weighted_undir(m):
+    '''
+    Return a weighted, undirected, adjacency matrix, with edge weights computed
+    as the degree of the incoming vertex, transformed to similarity scores.
+
+    Parameters
+    ----------
+    path : string
+        path to data file.
+    N : integer
+        number of nodes
+
+    Returns
+    -------
+    adj : `scipy.sparse.csr_matrix`
+        the weighted adjancency matrix. The matrix represents an undirected
+        network.
+    '''
+    # ensure input is in COO format
+    m = sp.coo_matrix(m)
+    # transform to symmetric
+    m = make_symmetric(m)
+    # compute the nodes degrees
+    dist = np.asarray(m.sum(axis=1)).flatten()
+    # compute similarities
+    sim = disttosim(dist)
+    # transform back to COO
+    m = m.tocoo()
+    return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
+
+def make_weighted(path, N, undirected=False):
     '''
     Loads a (row, col, weight) records array from path and returns a weighted
     CSR adjancency matrix.
@@ -157,6 +210,8 @@ def make_weighted(path, N):
         path to recarray numpy binary file.
     N : integer
         number of nodes in the graph
+    directed : bool
+        if True, return the weight for a directed network.
     '''
     # load coordinates from file.
     # coords is a recarray with records (row, col, weights)
@@ -164,7 +219,10 @@ def make_weighted(path, N):
     shape = (N,) * 2
     # create sparse COO matrix
     adj = recstosparse(coords, shape, 'coo')
-    return weighted(adj)
+    if undirected:
+        return weighted_undir(adj)
+    else:
+        return weighted_dir(adj)
 
 def dict_of_dicts_to_sparse(dd, num, shape, kind):
     '''

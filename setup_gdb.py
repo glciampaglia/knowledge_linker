@@ -21,6 +21,11 @@ setup(
             Extension("truthy_measure.cmaxmin", [ "truthy_measure/cmaxmin.pyx", ],
                 extra_compile_args=_args,
                 include_dirs=_incl, 
+                pyrex_gdb=True),
+            Extension("truthy_measure.cmaxmin_node", 
+                [ "truthy_measure/cmaxmin_node.pyx", ],
+                extra_compile_args=_args,
+                include_dirs=_incl, 
                 pyrex_gdb=True) 
             ],
         scripts = [
