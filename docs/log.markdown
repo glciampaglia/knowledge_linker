@@ -722,3 +722,27 @@ fact that we are looking at distances on a graph is at work. To understand this,
 the next step will be to look at the same bottleneck distances with the inverse
 in-degree weighting scheme, but computed on a random graph.
 random network.
+
+## Sun Oct 13 05:14:28 EDT 2013
+
+Several updates:
+
+* Had a long meeting with Fil, and reconsidered several tenets of the current
+  approach. In particular, moved to the undirected case and to node-based paths
+  instead of edge-based paths, and decided to include base cases so that direct
+  neighbors have alway truthy equal to 1. Also, the truth should not depend on
+  the value of the weight of the last node, but only of the weights of the
+  intermediate node. This amounts to taking an axiomatic approach for the
+  desired truth function.
+* Once we have this, we can use nearest neighbors to make classification and
+  compute F1 scores, so that we can quantify the goodness of each approach. The
+  idea, which was the original idea actuall, is to test several metrics (maxmin,
+  diffusion, etc.) and several node weights. Right still using the inverse
+  degree of the node.
+* Had Prashant implement a prototype of the node-based Dijkstra, and then
+  integrated it within the package, together with tests that he computed by
+  hand.
+* Implemented the Cython version and launched it on the politician data (this
+  time using all ideologies) on Big Red II.
+* Will have to present on next Monday so hopefully there will be some
+  interesting results.
