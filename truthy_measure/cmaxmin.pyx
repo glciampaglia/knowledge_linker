@@ -2,21 +2,15 @@
 
 import numpy as np
 import scipy.sparse as sp
-from collections import defaultdict
-from tables import BoolAtom
 from cython.parallel import parallel, prange
 from tempfile import NamedTemporaryFile
-from heapq import heappush, heappop, heapreplace
 from struct import pack
 
 # cimports
 cimport numpy as cnp
 cimport cython
-from libc.math cimport fmin
-from libc.stdlib cimport malloc, abort, free, calloc
-from libc.string cimport memset
+from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
-from libc.float cimport DBL_MAX
 from .heap cimport FastUpdateBinaryHeap
 
 @cython.boundscheck(False)
@@ -24,9 +18,8 @@ from .heap cimport FastUpdateBinaryHeap
 cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths = 0):
     '''
     Computes the bottleneck distances from `source` on the directed graph
-    represented by adjacency matrix `A`, and optionally store them into the
-    corresponding row of distance matrix `D`. Return the distances and
-    optionally the associated bottleneck paths.
+    represented by adjacency matrix `A`, and optionally write them to open file
+    `f`. Return the distances and optionally the associated bottleneck paths.
 
     A bottleneck path corresponds to the path that maximizes the minimum weight
     on its edges. It is also known as the max-min co-norm, or ultra-metric
@@ -50,13 +43,12 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
 
     Returns
     -------
-    dists : (N,) integer ndarray
+    dists : (N,) double float ndarray
         the bottleneck distances from source to all other nodes in the graph, or
-        -1 if the two nodes are disconnected. Note that in the distance matrix
-        `D` these are marked as zero (i.e. not marked).
+        -1 if the two nodes are disconnected. 
 
     paths : list of ndarrays
-        optional; the computed bottleneck paths.
+        optional; the associated path of nodes (excluding the source).
     '''
     A = sp.csr_matrix(A)
     cdef:
@@ -95,7 +87,8 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
     free(<void *> paths)
     return (dists, pathslist)
 
-# we push the inverse of the similarity to fake a max-heap
+# we push the inverse of the similarity to fake a max-heap: this means we
+# compute the min-max.
 cdef MetricPathPtr _bottleneckpaths(
         int N,
         int [:] indptr,
