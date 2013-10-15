@@ -762,3 +762,42 @@ roughly 46 hours. The job is now queued and is estimated to start tomorrow.
 
 This means that I won't have anything to present tomorrow but perhaps it's
 better like this.
+
+## Tue Oct 15 19:09:21 EDT 2013
+
+Yesterday presented the current state of the progress at the weekly NaN meeting
+and got green light from Johan about the changes agreed with Fil. Showed the
+presentation today to Sandro, who could not attend yesterday, and agreed that we
+are still doing something that just works, rather than something principled.
+Meanwhile, the job on Big Red II had started yesterday and had ran for a shorter
+time than estimated, until it terminated due to a bug in aprun. Fixed the
+problem with it and tested carefully that it works. Resubmitted the job: it
+should complete at the latest by Friday morning/early afternoon, depending on
+the estimate.
+
+As a side note, yesterday evening stumbled upon the Washington Post's [Truth
+Teller](http://www.washingtonpost.com/blogs/ask-the-post/wp/2013/09/25/announcing-truth-teller-beta-a-better-way-to-watch-political-speech/)
+, a prototype for an automatic real-time fact checker. It does speech
+recognition of a video, and then tries to match sequences of the transcript to a
+database of statements, which have been previously labeled as either true or
+false (or maybe?). [More in
+detail](http://www.knightfoundation.org/blogs/knightblog/2013/1/29/debuting-truth-teller-washington-post-real-time-lie-detection-service-your-service-not-quite-yet/):
+    
+    We are transcribing videos using Microsoft Audio Video indexing service
+    (MAVIS) technology. MAVIS is a Windows Azure application which uses Deep
+    Neural Net (DNN) based speech recognition technology to convert audio
+    signals into words. Using this service, we are extracting audio from videos
+    and saving the information in our Lucene search index as a transcript. We
+    are then looking for the facts in the transcription. Finding distinct
+    phrases to match is difficult. Instead, we are focusing on patterns.
+
+    We are using approximate string matching, or a fuzzy string searching
+    algorithm. We are implemented a modified version Rabin-Karp using
+    Levenshtein distance algorithm. This will be modified to recognize
+    paraphrasing and negative connotations in the future.
+
+The prototype they have features just two videos, but it does
+the real thing live, which is neat. At first I thought it was vaporware, but it
+appears to be legit. Whether they can actually produce and maintain a database
+of curated statements is another thing, but it makes a lot of sense to them,
+since they have so much unstructured data to use.
