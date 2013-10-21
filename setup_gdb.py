@@ -3,7 +3,7 @@ from Cython.Distutils import build_ext, Extension
 from numpy import get_include
 
 _incl = [ get_include() ]
-_args = ['-Wall', '-O']
+_args = ['-Wall', '-O0']
 
 setup(
         name="truthy_measure",
