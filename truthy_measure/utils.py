@@ -210,8 +210,8 @@ def make_weighted(path, N, undirected=False):
         path to recarray numpy binary file.
     N : integer
         number of nodes in the graph
-    directed : bool
-        if True, return the weight for a directed network.
+    undirected : bool
+        if True, return the weight for an undirected network.
     '''
     # load coordinates from file.
     # coords is a recarray with records (row, col, weights)
