@@ -801,3 +801,22 @@ the real thing live, which is neat. At first I thought it was vaporware, but it
 appears to be legit. Whether they can actually produce and maintain a database
 of curated statements is another thing, but it makes a lot of sense to them,
 since they have so much unstructured data to use.
+
+## Tue Oct 22 21:58:14 EDT 2013
+
+Upon completion of the job, discovered that the results were almost completely
+all equal to the same extremely small value (3.3e-5). This prompted
+investigatiosn and eventually led me to discover a bug, that was due to a
+misunderstanding of the algorithm's implementation. What is annoying is that the
+bug had slipped through the test suite because the test suite had itself a bug:
+a silly cut&paste bug that made all consistency checks between the Cython and
+the Python version pass by default. 
+
+Fixed that plus other, related bugs and resubmitted the job in Big Red II, this
+time limiting the number of jobs to 64 so that all job can go in the queue at
+once. Incidentally, took a look at the paths generated on the politicians data,
+and it seems that maxmin tends to create very long chains. This makes sense,
+since the hubs, have high betweenness, are bottlenecks, and so having to avoid
+them one ends up increasing the number of hops. Funny that one such path, a
+sequence of more than 100 nodes, even included nodes such as Mars Volta and the
+singer of Neurosis, two of my favorite bands.
