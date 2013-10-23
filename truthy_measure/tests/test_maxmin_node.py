@@ -30,12 +30,28 @@ def test_graph3():
 
 @nottest
 def run_test(G, expect):
-    o, _ = bottlenecknodefull(G)
-    co, _ = cbottlenecknodefull(G)
+    o, p = bottlenecknodefull(G, retpath=1)
     o = np.round(o, 2)
-    co = np.round(o, 2)
+    co, cp = cbottlenecknodefull(G, retpath=1)
+    co = np.round(co, 2)
+    # check capacities match
     assert np.allclose(o, expect)
     assert np.allclose(co, expect)
+    flags = (o > 0) & (o < 1)
+    nonemptyi = np.where(flags)
+    emptyi = np.where(np.logical_not(flags))
+    # check paths match with computed capacities
+    for s, t in np.ndindex(G.shape):
+        if (s == t) or G[s, t] > 0 or (o[s,t] == 0):
+            # path must be empty
+            assert len(p[s][t]) == 0
+            assert len(cp[s][t]) == 0
+        else:
+            # minimum on path must correspond to computed capacity
+            path = p[s][t]
+            weights = np.ravel(G[path[:-1], path[1:]])[:-1]
+            weights = np.round(weights, 2)
+            assert o[s, t] == np.min(weights)
 
 def test_graph1():
     """

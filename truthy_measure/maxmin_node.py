@@ -42,13 +42,10 @@ def bottlenecknodest(G, s, t, retpath=False):
         return G.indices[G.indptr[node]:G.indptr[node+1]]
     Q = []
     path = []
-    visited = set([s])
+    connected = set([s])
     s_nbrs = _neighbors(s, G)
     if s==t or t in s_nbrs:
-        if s==t:
-            path = [t]
-        else:
-            path = [s,t]
+        path = []
         bottleneck = 1.0
     else:
         items = {} # contains 3-tuple: distance, node, predecessor
@@ -58,29 +55,30 @@ def bottlenecknodest(G, s, t, retpath=False):
                 dist = 1.0
             else:
                 dist = 0.0
-            items[n] = [-dist,n,-1]
-            heappush(Q,items[n])
-        while t not in visited:
-            dist_n,n,_ = heappop(Q)
+            items[n] = [-dist, n, -1]
+            heappush(Q, items[n])
+        while t not in connected or len(Q) > 0:
+            dist_n, n, _ = heappop(Q)
             nbrs = _neighbors(n, G)
             if len(nbrs)>0:
                 for nbr in nbrs:
-                    dist_nbr,_,pred = items[nbr]
-                    if nbr==t:
-                        items[nbr][0] = -max([-dist_nbr,-dist_n])
-                        if -dist_n > -dist_nbr:
-                            items[nbr][2] = n
-                    else:
-                        if min([-dist_n, G[n,nbr]]) > -dist_nbr:
-                            items[nbr][0] = -min([-dist_n, G[n,nbr]])
-                            items[nbr][2] = n
+                    if nbr not in connected:
+                        dist_nbr, _, pred = items[nbr]
+                        if nbr==t:
+                            items[nbr][0] = -max([-dist_nbr, -dist_n])
+                            if -dist_n > -dist_nbr:
+                                items[nbr][2] = n
+                        else:
+                            if min([-dist_n, G[n, nbr]]) > -dist_nbr:
+                                items[nbr][0] = -min([-dist_n, G[n, nbr]])
+                                items[nbr][2] = n
                 heapify(Q)
-            visited.add(n)
+            connected.add(n)
         bottleneck = -items[t][0]
         if retpath:
             # trace the path
             tracenode = t
-            path.insert(0,t)
+            path.insert(0, t)
             while True:
                 predecessor = items[tracenode][2]
                 if predecessor >= 0:
@@ -92,6 +90,6 @@ def bottlenecknodest(G, s, t, retpath=False):
                     path = []
                     break
     if retpath == True:
-        return bottleneck, path 
+        return bottleneck, np.asarray(path)
     else:
         return bottleneck, None

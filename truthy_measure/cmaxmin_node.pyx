@@ -89,7 +89,7 @@ cpdef object bottlenecknodest(object A, int source, int target, int retpath = 0)
     path = _bottlenecknodest(N, A_indptr, A_indices, A_data, source, target, retpath)
     ret_cap = path.distance
     if retpath:
-        if path.found:
+        if path.found and path.vertices != NULL:
             ret_path = np.asarray((<int [:path.length]>path.vertices).copy())
             free(<void *>path.vertices)
         else:
@@ -111,16 +111,15 @@ cdef MetricPath _bottlenecknodest(
         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)
         int * P = init_intarray(N, -1)
         int * certain = init_intarray(N, 0)
-        int * tmp = init_intarray(N, -1) # stores paths in reverse order
+        int * tmp = init_intarray(N, -1) # stores path in reverse order
         # the bottleneck capacities
         double * caps = <double *> malloc(N * sizeof(double))
         int * neighbors = NULL
         int node, i, hopscnt
         int N_neigh
-        double cap, w, neigh_cap
+        double cap, w, neigh_cap, path_cap
         MetricPathPtr paths = <MetricPathPtr> malloc(N * sizeof(MetricPath))
         MetricPath path
-#    visited = set([s])
     N_neigh = _csr_neighbors(source, indices, indptr, &neighbors)
     cdef int is_neighbor = 0
     for i in xrange(N_neigh):
@@ -149,16 +148,16 @@ cdef MetricPath _bottlenecknodest(
             N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
             for i in xrange(N_neigh):
                 neighbor = neighbors[i]
-                neigh_cap = - Q.value_of_fast(neighbor)
-                w = data[indptr[node] + i] # i.e. A[node, neigh_node]
-                if neighbor != target:
-                    cap = min(w, cap)
-                if cap > neigh_cap:
-                    if certain[neighbor]:
-                        caps[neighbor] = cap
+                if not certain[neighbor]:
+                    neigh_cap = - Q.value_of_fast(neighbor)
+                    w = data[indptr[node] + i] # i.e. A[node, neigh_node]
+                    if neighbor != target:
+                        path_cap = min(w, cap)
                     else:
-                        Q.push_if_lower_fast(- cap, neighbor)
-                    P[neighbor] = node
+                        path_cap = cap
+                    if path_cap > neigh_cap:
+                        Q.push_if_lower_fast(- path_cap, neighbor)
+                        P[neighbor] = node
             free(<void *> neighbors)
             neighbors = NULL
     path.vertices = NULL
@@ -169,7 +168,7 @@ cdef MetricPath _bottlenecknodest(
     else:
         path.found = 1
         path.distance = caps[target]
-        if retpath and source != target:
+        if retpath and source != target and not is_neighbor:
             hopscnt = 0
             i = target
             while i != source:
@@ -181,6 +180,8 @@ cdef MetricPath _bottlenecknodest(
             path.vertices[0] = source
             for i in xrange(hopscnt):
                 path.vertices[hopscnt - i] = tmp[i]
+        elif source == target: # retpath is True
+            path.length = 0
     free(<void *>tmp)
     free(<void *>P)
     free(<void *>certain)
