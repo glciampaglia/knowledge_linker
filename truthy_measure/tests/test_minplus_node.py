@@ -31,7 +31,7 @@ def test_graph3():
     
 def test_graph1():
     """
-    Node-based Dijkstra on an arbitraty graph (ex. #1)
+    Node-based Dijkstra (min,+) on an arbitraty graph (ex. #1)
     """
     G = np.matrix([
         [ 0.,  1.,  0.,  0.,  0.,  1.,  0.,  0.],
@@ -44,19 +44,19 @@ def test_graph1():
         [ 0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.]], dtype=np.double)
     G = weighted_undir(G)
     expect = np.matrix([
-        [  1.0 ,1.0 ,0.25,0.25,0.45,1.0 ,0.25,0.25,],
-        [  1.0 ,1.0 ,1.0 ,0.33,0.53,0.33,1.0 ,0.58,],
-        [  0.25,1.0 ,1.0 ,1.0 ,0.2 ,0.2 ,0.2 ,0.45,],
-        [  0.25,0.33,1.0 ,1.0 ,1.0 ,1.0 ,1.0 ,0.25,],
-        [  0.45,0.53,0.2 ,1.0 ,1.0 ,0.2 ,0.2 ,0.45,],
-        [  1.0 ,0.33,0.2 ,1.0 ,0.2 ,1.0 ,0.2 ,1.0 ,],
-        [  0.25,1.0 ,0.2 ,1.0 ,0.2 ,0.2 ,1.0 ,0.45,],
-        [  0.25,0.58,0.45,0.25,0.45,1.0 ,0.45,1.0 ,]])
+        [ 1.0 ,1.0 ,0.25,0.25,0.45,1.0 ,0.25,0.25,],
+        [ 1.0 ,1.0 ,1.0 ,0.33,0.53,0.33,1.0 ,0.58,],
+        [ 0.25,1.0 ,1.0 ,1.0 ,0.2 ,0.2 ,0.2 ,0.45,],
+        [ 0.25,0.33,1.0 ,1.0 ,1.0 ,1.0 ,1.0 ,0.25,],
+        [ 0.45,0.53,0.2 ,1.0 ,1.0 ,0.2 ,0.2 ,0.45,],
+        [ 1.0 ,0.33,0.2 ,1.0 ,0.2 ,1.0 ,0.2 ,1.0 ,],
+        [ 0.25,1.0 ,0.2 ,1.0 ,0.2 ,0.2 ,1.0 ,0.45,],
+        [ 0.25,0.58,0.45,0.25,0.45,1.0 ,0.45,1.0 ,]])
     run_test(G, expect)
     
 def test_graph2():
     """
-    Node-based Dijkstra on an arbitraty graph (ex. #2)
+    Node-based Dijkstra (min,+) on an arbitraty graph (ex. #2)
     """
     data = np.ones(12, dtype=np.double)
     ptr = np.array([0,3,6,9,10,11,12])
@@ -65,17 +65,17 @@ def test_graph2():
     G = scsp.csr_matrix((data,idx,ptr),shape=(N,N))
     G = weighted_undir(G)
     expect = np.matrix([
-        [  1.0 ,1.0 ,1.0 ,1.0 ,0.25,0.25],
-        [  1.0 ,1.0 ,1.0 ,0.25,1.0 ,0.25],
-        [  1.0 ,1.0 ,1.0 ,0.25,0.25,1.0 ],
-        [  1.0 ,0.25,0.25,1.0 ,0.5 ,0.5 ],
-        [  0.25,1.0 ,0.25,0.5 ,1.0 ,0.5 ],
-        [  0.25,0.25,1.0 ,0.5 ,0.5 ,1.0 ]])
+        [ 1.0 ,1.0 ,1.0 ,1.0 ,0.25,0.25],
+        [ 1.0 ,1.0 ,1.0 ,0.25,1.0 ,0.25],
+        [ 1.0 ,1.0 ,1.0 ,0.25,0.25,1.0 ],
+        [ 1.0 ,0.25,0.25,1.0 ,0.5 ,0.5 ],
+        [ 0.25,1.0 ,0.25,0.5 ,1.0 ,0.5 ],
+        [ 0.25,0.25,1.0 ,0.5 ,0.5 ,1.0 ]])
     run_test(G, expect)
 
 def test_cycle_graph():
     """
-    Node-based Dijkstra on a 4-cycle
+    Node-based Dijkstra (min,+) on a 4-cycle
     """
     N = 5
     G = np.matrix([[False,  True, False, False,  True],
@@ -96,7 +96,7 @@ def test_cycle_graph():
 
 def test_grid_graph():
     """
-    Node-based Dijkstra on a grid
+    Node-based Dijkstra (min,+) on a grid
     """
     G = np.matrix([
         [False, False,  True,  True, False,  True],
@@ -118,7 +118,7 @@ def test_grid_graph():
             
 def test_balanced_tree():
     """
-    Node-based Dijkstra on a balanced tree with branching factor 3 and depth 2
+    Node-based Dijkstra (min,+) on a balanced tree with branching factor 3 and depth 2
     """
     G = np.matrix([
         [False,True,True,True,False,False,False,False,False,False,False,False,False],
@@ -155,7 +155,7 @@ def test_balanced_tree():
  
 def test_graph4():
     """
-    Node-based Dijkstra on an arbitraty graph (ex. #4)
+    Node-based Dijkstra (min,+) on an arbitraty graph (ex. #4)
     """
     G = np.matrix([
         [False, False, False,  True, False,  True],
@@ -177,7 +177,7 @@ def test_graph4():
 
 def test_graph5():
     """
-    Node-based Dijkstra on an arbitraty graph (ex. #5)
+    Node-based Dijkstra (min,+) on an arbitraty graph (ex. #5)
     """
     G = np.matrix([
         [False, False,  True,  True,  True],
