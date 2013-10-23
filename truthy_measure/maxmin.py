@@ -79,7 +79,7 @@ from .cmaxmin import bottleneckpaths as cbottleneckpaths
 
 def bottleneckpaths(A, source):
     '''
-    Finds the smallest bottleneck paths in a directed network
+    Finds the largest bottleneck paths in a directed network
     '''
     N = A.shape[0]
     certain = np.zeros(N, dtype=np.bool)
@@ -88,40 +88,39 @@ def bottleneckpaths(A, source):
     # populate the queue
     for node in xrange(N):
         if node == source:
-            sim = 1.
+            cap = 1.
         else:
-            sim = 0.0
-        dist = (1.0 + sim) ** -1
-        item = [dist, node, -1]
+            cap = 0.0
+        item = [- cap, node, -1]
         items[node] = item
         heappush(Q, item)
-    # compute bottleneck distances and predecessor information
+    # compute spanning tree
     while len(Q):
         node_item = heappop(Q)
-        dist, node, pred = node_item
+        cap, node, pred = node_item
+        cap = - cap
         certain[node] = True
         neighbors, = np.where(A[node])
         for neighbor in neighbors:
             if not certain[neighbor]:
                 neighbor_item = items[neighbor]
-                neigh_dist = neighbor_item[0]
-                w = (1.0 + A[node, neighbor]) ** -1
-                d = max(w, dist)
-                if d < neigh_dist:
-                    neighbor_item[0] = d
+                neigh_cap = - neighbor_item[0]
+                w = A[node, neighbor]
+                d = min(w, cap)
+                if d > neigh_cap:
+                    neighbor_item[0] = - d
                     neighbor_item[2] = node
                     heapify(Q)
     # generate paths
-    bott_dists = []
+    bott_caps = []
     paths = []
     for node in xrange(N):
         item = items[node]
         if item[2] == -1: # disconnected node
-            bott_dists.append(-1)
+            bott_caps.append(0)
             paths.append(np.empty(0, dtype=np.int))
         else:
-            bdist = item[0] ** -1 - 1.0
-            bott_dists.append(bdist)
+            bott_caps.append(item[0])
             path = []
             i = node
             while i != source:
@@ -129,7 +128,7 @@ def bottleneckpaths(A, source):
                 i = items[i][2]
             path.insert(0, source)
             paths.append(np.asarray(path))
-    return bott_dists, paths
+    return bott_caps, paths
 
 maxchunksize = 100000
 max_tasks_per_worker = 500
