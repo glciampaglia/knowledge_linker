@@ -16,9 +16,16 @@ setup(
         ext_modules=[
             Extension("truthy_measure.heap", ["truthy_measure/heap.pyx",],
                 include_dirs=_incl),
-            Extension("truthy_measure.cmaxmin", 
+            Extension("truthy_measure._maxmin", 
                 [
-                "truthy_measure/cmaxmin.pyx",
+                "truthy_measure/_maxmin.pyx",
+                ],
+                include_dirs=_incl, 
+                extra_compile_args=['-fopenmp'],
+                extra_link_args=['-fopenmp']),
+            Extension("truthy_measure._closure", 
+                [
+                "truthy_measure/_closure.pyx",
                 ],
                 include_dirs=_incl, 
                 extra_compile_args=['-fopenmp'],
