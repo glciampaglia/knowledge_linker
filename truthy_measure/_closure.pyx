@@ -15,7 +15,7 @@ from .heap cimport FastUpdateBinaryHeap
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths = 0):
+cpdef object cclosuress(object A, int source, object f = None, int retpaths = 0):
     '''
     Computes the bottleneck distances from `source` on the directed graph
     represented by adjacency matrix `A`, and optionally write them to open file
@@ -66,7 +66,7 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
     if f is not None:
         flag = 1
         f.write(pack("ii", source, 0)) # provisional count
-    paths = _bottleneckpaths(N, A_indptr, A_indices, A_data, source, retpaths)
+    paths = _cclosuress(N, A_indptr, A_indices, A_data, source, retpaths)
     for i in xrange(N):
         path = paths[i]
         if path.found:
@@ -78,7 +78,7 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
                 pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
                 free(<void *>path.vertices)
         else:
-            dists[i] = -1
+            dists[i] = 0.
             if retpaths:
                 pathslist.append(np.empty(0, dtype=np.int))
     if flag and cnt:
@@ -91,7 +91,7 @@ cpdef object bottleneckpaths(object A, int source, object f = None, int retpaths
 # compute the min-max.
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cdef MetricPathPtr _bottleneckpaths(
+cdef MetricPathPtr _cclosuress(
         int N,
         int [:] indptr,
         int[:] indices,
@@ -144,7 +144,7 @@ cdef MetricPathPtr _bottleneckpaths(
         path.vertices = NULL
         if P[node] == -1:
             path.found = 0
-            path.distance = -1
+            path.distance = 0.
             path.length = -1
         else:
             path.found = 1

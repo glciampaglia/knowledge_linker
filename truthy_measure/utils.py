@@ -5,7 +5,7 @@ from cStringIO import StringIO
 from tempfile import NamedTemporaryFile
 from itertools import izip, chain, repeat, groupby
 
-from .dirtree import DirTree
+from .dirtree import DirTree, fromdirtree
 
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])

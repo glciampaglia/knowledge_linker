@@ -1,6 +1,21 @@
 '''
-Dijkstra-based path finding algorithm for computing the metric closure on
-similarity/proximity graphs 
+Dijkstra-based path finding algorithm for computing the metric closure on either
+similarity/proximity graphs or distance graphs.
+
+Nomenclature
+============
+
+closure
+
+:   for source, target problems
+
+closuress
+
+:   for single-source problems
+
+closureap
+
+:   for all-pairs problems; uses multiprocessing.
 '''
 
 import os
@@ -16,16 +31,15 @@ from multiprocessing import Pool, Array, cpu_count, current_process
 now = datetime.now
 
 # package imports
-from ._closure import bottleneckpaths as cbottleneckpaths
+from ._closure import cclosuress
 from .maxmin import _init_worker
 
-def bottleneckpaths(A, source):
+def closuress(A, source):
     '''
-    Single source Bottleneck paths (i.e. max-min closure for a single source).
-    This is a modification of Dikstra's shortest path algorithm for computing
-    the bottleneck/maxmin paths. Returns the distance to all connected nodes and
-    the paths. Note that this function is pure Python and thus very slow. Use
-    the Cythonized version `cbottleneckpaths`, which accepts only CSR matrices.
+    Single source metric closure via Dijkstra path finding. 
+    
+    Note that this function is pure Python and thus very slow. Use the
+    Cythonized version `cclosuress`, which accepts only CSR matrices.
     '''
     N = A.shape[0]
     certain = np.zeros(N, dtype=np.bool)
@@ -63,10 +77,10 @@ def bottleneckpaths(A, source):
     for node in xrange(N):
         item = items[node]
         if item[2] == -1: # disconnected node
-            bott_caps.append(0)
+            bott_caps.append(0.0)
             paths.append(np.empty(0, dtype=np.int))
         else:
-            bott_caps.append(item[0])
+            bott_caps.append(- item[0])
             path = []
             i = node
             while i != source:
@@ -78,15 +92,15 @@ def bottleneckpaths(A, source):
 
 maxchunksize = 100000
 max_tasks_per_worker = 500
-log_out = 'bottleneck_dists-{proc:0{width}d}.log'
-log_out_start = 'bottleneck_dists_{start:0{width1}d}-{{proc:0{{width}}d}}.log'
+log_out = 'closure-{proc:0{width}d}.log'
+log_out_start = 'closure_{start:0{width1}d}-{{proc:0{{width}}d}}.log'
 logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 
 _nprocs = None
 _logpath = None
 _dirtree = None
 
-def _bottleneck_worker(n):
+def _closure_worker(n):
     global _A, _dirtree, _logpath, _logf, _nprocs, digits_procs
     worker_id, = current_process()._identity
     logpath = _logpath.format(proc=worker_id, width=digits_procs)
@@ -94,7 +108,7 @@ def _bottleneck_worker(n):
     with \
             closing(open(outpath, 'w')) as outf,\
             closing(open(logpath, 'a', 1)) as logf:
-        dists, paths = cbottleneckpaths(_A, n, outf)
+        dists, paths = cclosuress(_A, n, outf)
         logf.write(logline.format(now=now(), source=n, proc=worker_id,
                 width=digits_procs) + '\n')
 
@@ -107,17 +121,24 @@ def _init_worker_dirtree(nprocs, logpath, dirtree, indptr, indices, data,
     _dirtree = dirtree
     _init_worker(indptr, indices, data, shape)
 
-def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
+def _init_worker(indptr, indices, data, shape):
     '''
-    Computes the all-pairs bottleneck paths for matrix and saves the results for
-    each row in separate files organized in a directory tree (see
-    `truthy_measure.dirtree`). 
+    See `pmaxmin`. This is the worker initialization function.
+    '''
+    global _indptr, _indices, _data, _A
+    _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
+    _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
+    _data = np.frombuffer(data.get_obj())
+    _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
 
-    If `start` and `offset` parameters are passed, then only indices between
-    `start` and `start + offset` are computed, and the resulting TAR file is
-    called `bottlenecks_<start>.tar.gz`. The directory tree used to store
-    intermediate result is NOT deleted (since other processes might still need
-    it), but the uncompressed output files are.
+def closureap(A, dirtree, start=None, offset=None, nprocs=None):
+    '''
+    All-pairs metric closure via path-finding. Computes the closure of a graph
+    represented by adjacency matrix A and saves the results for each row in
+    separate files organized in a directory tree (see `truthy_measure.dirtree`). 
+
+    If `start` and `offset` parameters are passed, then only rows between
+    `start` and `start + offset` are computed. 
 
     Parameters
     ----------
@@ -128,12 +149,8 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
         The directory tree object used to generate the directory tree in which
         the results are stored.
 
-    start : int
-        optional; see above.
-
-    offset : int
-        optional, but if `start` is passed than offset is expected too. See
-        above.
+    start : int, offset : int
+        optional; compute only rows from start up to offset.
 
     nprocs : int
         optional; number of processes to spawn. Default is 90% of available
@@ -168,6 +185,7 @@ def parallel_bottleneckpaths(A, dirtree, start=None, offset=None, nprocs=None):
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
             initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
-        pool.map(_bottleneck_worker, xrange(fromi, toi))
+        pool.map(_closure_worker, xrange(fromi, toi))
     pool.join()
     print '{}: done'.format(now())
+
