@@ -820,3 +820,10 @@ since the hubs, have high betweenness, are bottlenecks, and so having to avoid
 them one ends up increasing the number of hops. Funny that one such path, a
 sequence of more than 100 nodes, even included nodes such as Mars Volta and the
 singer of Neurosis, two of my favorite bands.
+
+## Thu Oct 24 19:46:52 EDT 2013
+
+Refactoring the package to have a single function for computing the distance
+closure. Also, figured out a way to compute in just one pass the similarity for
+all targets, instead of calling Dijkstra for each target. Results are coming
+from Big Red II and they look OK. 
