@@ -72,3 +72,13 @@ def test_closureap():
     for logpath in glob('closure-*.log'):
         os.remove(logpath)
 
+def test_closure():
+    np.random.seed(20)
+    N = 10
+    A = sp.rand(N, N, 1e-2, 'csr')
+    source, target = np.random.randint(0, N, 2)
+    cap1, path1 = clo.closure(A, source, target)
+    cap2, path2 = clo.cclosure(A, source, target, retpath = 1)
+    assert cap1 == cap2
+    assert np.all(path1 == path2)
+

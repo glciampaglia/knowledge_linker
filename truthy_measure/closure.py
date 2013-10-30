@@ -31,8 +31,18 @@ from multiprocessing import Pool, Array, cpu_count, current_process
 now = datetime.now
 
 # package imports
-from ._closure import cclosuress
+from ._closure import cclosuress, cclosure
 from .maxmin import _init_worker
+
+def closure(A, source, target):
+    '''
+    Source-target metric closure via Dijkstra path finding. 
+    
+    Note that this function is pure Python and thus very slow. Use the
+    Cythonized version `cclosure`, which accepts only CSR matrices.
+    '''
+    cap, paths = closuress(A, source)
+    return cap[target], paths[target]
 
 def closuress(A, source):
     '''

@@ -13,6 +13,17 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
+cpdef object cclosure(object A, int source, int target, int retpath = 0):
+    '''
+    Source-target closure. Uses cclosuress.
+    '''
+    path = None
+    caps, paths = cclosuress(A, source, retpaths = retpath)
+    if retpath:
+        path = paths[target]
+    cap = caps[target]
+    return cap, path
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cpdef object cclosuress(object A, int source, object f = None, int retpaths = 0):
