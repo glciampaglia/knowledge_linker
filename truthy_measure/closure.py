@@ -40,6 +40,8 @@ def closure(A, source, target):
     
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosure`, which accepts only CSR matrices.
+
+    This always returns the paths.
     '''
     cap, paths = closuress(A, source)
     return cap[target], paths[target]
@@ -50,7 +52,10 @@ def closuress(A, source):
     
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosuress`, which accepts only CSR matrices.
+
+    This always returns the paths.
     '''
+    A = sp.csr_matrix(A)
     N = A.shape[0]
     certain = np.zeros(N, dtype=np.bool)
     items = {} # handles to the items inserted in the queue
@@ -70,7 +75,7 @@ def closuress(A, source):
         cap, node, pred = node_item
         cap = - cap
         certain[node] = True
-        neighbors, = np.where(A[node])
+        neighbors = A.getrow(node).indices
         for neighbor in neighbors:
             if not certain[neighbor]:
                 neighbor_item = items[neighbor]

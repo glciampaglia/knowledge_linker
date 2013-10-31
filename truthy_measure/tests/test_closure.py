@@ -4,6 +4,8 @@ from time import time
 import numpy as np
 import scipy.sparse as sp
 import truthy_measure.closure as clo
+from nose.tools import raises, nottest
+from functools import partial
 
 from truthy_measure.utils import DirTree, coo_dtype, fromdirtree
 
@@ -43,6 +45,23 @@ def test_closure_small():
     dists2, paths2 = clo.cclosuress(A, source, retpaths=1)
     assert np.allclose(dists, dists2)
     for p1, p2 in zip(paths, paths2):
+        assert np.all(p1 == p2)
+
+def test_closure_rand():
+    np.random.seed(21)
+    N = 10
+    sparsity = 0.3
+    A = sp.rand(N, N, sparsity, 'csr')
+    pyss = partial(clo.closuress, A)
+    cyss = partial(clo.cclosuress, A, retpaths = 1)
+    dists1, paths1 = zip(*map(pyss, xrange(N)))
+    dists1 = np.asarray(dists1)
+    paths1 = reduce(list.__add__, paths1)
+    dists2, paths2 = zip(*map(cyss, xrange(N)))
+    dists2 = np.asarray(dists2)
+    paths2 = reduce(list.__add__, paths2)
+    assert np.allclose(dists1, dists2)
+    for p1, p2 in zip(paths1, paths2):
         assert np.all(p1 == p2)
 
 def test_closureap():
