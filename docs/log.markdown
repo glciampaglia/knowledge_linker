@@ -827,3 +827,21 @@ Refactoring the package to have a single function for computing the distance
 closure. Also, figured out a way to compute in just one pass the similarity for
 all targets, instead of calling Dijkstra for each target. Results are coming
 from Big Red II and they look OK. 
+
+## Thu Oct 31 19:42:08 EDT 2013
+
+The job has completed and the results have been backed up on tape on the SDA.
+Took a look at the raw data, and the values now seem OK. Figured out a way to
+compute the closure restricted only on the intermediate nodes that does not
+require to launch a full Dijkstra for each target: simply launch the normal
+closure, then look at all in-neighbors of the target that are also reachable
+from the source, and take the max (or whatever it is) among those. Implemented
+this, and also started a major refactoring of the package in order to
+accommodate the min-plus (i.e. the classic Dijkstra) under the same
+implementation. The harmonic mean, on which Prashant is working is probably
+going to end up on its own implementation. 
+
+Discussed with Fil how to perform the calibration: essentially perform a simple
+classification with Nearest Neighbors, and compute the F1. Prashant asked to use
+the politicians data for his machine learning course and will implement other
+algorithms, but in R.
