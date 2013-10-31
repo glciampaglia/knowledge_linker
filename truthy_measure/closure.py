@@ -16,6 +16,14 @@ closuress
 closureap
 
 :   for all-pairs problems; uses multiprocessing.
+
+epclosure,
+epclosuress,
+epclosureap
+
+:   closure computed only on intermediate nodes, with the additional constraint
+    that direct neighbors have similarity 1.
+
 '''
 
 import os
@@ -205,3 +213,49 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
     pool.join()
     print '{}: done'.format(now())
 
+def epclosure(A, source, target):
+    '''
+    Source target "epistemic" closure. Python implementation.
+
+    Note: always returns paths.
+    '''
+    cap, paths = epclosuress(A, source)
+    return cap[target], paths[target]
+
+def epclosuress(A, source):
+    '''
+    Single-source "epistemic" closure. Python implementation.
+
+    Note: always returns paths.
+    '''
+    A = sp.csr_matrix(A)
+    B = A.tocsc()
+    N = A.shape[0]
+    _caps, _paths = closuress(A, source)
+    _caps = np.asarray(_caps)
+    caps = np.empty(N)
+    paths = []
+    s_neighbors = set(A.getrow(source).indices)
+    s_reachables = set(np.where(_caps)[0])
+    for target in xrange(N):
+        if target in s_neighbors or target == source:
+            caps[target] = 1.0
+            paths.append(np.empty(0))
+        elif _caps[target] > 0.0:
+            # target must have at least one neighbor that is also reachable from
+            # source. In case the graph is directed, we take the in-neighbors.
+            t_neighbors = set(B.getcol(target).indices)
+            t_neighbors.intersection_update(s_reachables)
+            t_neighbors = np.asarray(sorted(t_neighbors))
+            t_neighbors_cap = _caps[t_neighbors]
+            imax = t_neighbors[np.argmax(t_neighbors_cap)]
+            caps[target] = _caps[imax]
+            paths.append(_paths[imax])
+        else:
+            # target is not reachable from source
+            caps[target] = 0.0
+            paths.append(np.empty(0))
+    return caps, paths
+
+def epclosureap(A, source):
+    pass
