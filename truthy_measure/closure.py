@@ -64,9 +64,10 @@ def closuress(A, source):
     for node in xrange(N):
         if node == source:
             cap = 1.
+            item = [- cap, node, node]
         else:
             cap = 0.0
-        item = [- cap, node, -1]
+            item = [- cap, node, -1]
         items[node] = item
         heappush(Q, item)
     # compute spanning tree

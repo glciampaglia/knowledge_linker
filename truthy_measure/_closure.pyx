@@ -125,6 +125,7 @@ cdef MetricPathPtr _cclosuress(
     for node in xrange(N):
         if node == source:
             sim = 1.
+            P[node] = node
         else:
             sim = 0.0
         dists[node] = sim
