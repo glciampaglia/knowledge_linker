@@ -278,7 +278,7 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
             t_neighbors_cap = _caps[t_neighbors]
             imax = t_neighbors[np.argmax(t_neighbors_cap)]
             caps[target] = _caps[imax]
-            paths.append(_paths[imax])
+            paths.append(np.hstack([_paths[imax], target]))
         else:
             # target is not reachable from source
             caps[target] = 0.0
