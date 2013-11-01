@@ -213,25 +213,52 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
     pool.join()
     print '{}: done'.format(now())
 
-def epclosure(A, source, target):
+def epclosure(A, source, target, B=None, closurefunc=None):
     '''
     Source target "epistemic" closure. Python implementation.
 
+    See `epclosuress` for parameters.
+
     Note: always returns paths.
     '''
-    cap, paths = epclosuress(A, source)
+    cap, paths = epclosuress(A, source, B=B, closurefunc=closurefunc)
     return cap[target], paths[target]
 
-def epclosuress(A, source):
+def epclosuress(A, source, B=None, closurefunc=None):
     '''
     Single-source "epistemic" closure. Python implementation.
 
+    Parameters
+    ----------
+
+    A : array_like 
+        Adjacency matrix. Will be converted to CSR
+
+    source : int
+        The source node
+
+    B : array_like
+        Optional; a copy of A in CSC format. Useful in loops to avoid
+        converting A at every iteration.
+
+    closurefunc : func
+        Optional; an alternative closure function. By default,
+        `truthy_measure.closure.closuress` will be used.
+
     Note: always returns paths.
     '''
+    # ensure A is CSR
     A = sp.csr_matrix(A)
-    B = A.tocsc()
+    if B is None:
+        B = A.tocsc()
+    else:
+        # ensure B is CSC
+        B = sp.csc_matrix(B)
     N = A.shape[0]
-    _caps, _paths = closuress(A, source)
+    if closurefunc:
+        _caps, _paths = closurefunc(A, source)
+    else:
+        _caps, _paths = closuress(A, source)
     _caps = np.asarray(_caps)
     caps = np.empty(N)
     paths = []
