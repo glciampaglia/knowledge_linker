@@ -3,15 +3,18 @@ from glob import glob
 from time import time
 import numpy as np
 import scipy.sparse as sp
-import truthy_measure.closure as clo
 from nose.tools import raises, nottest
 from functools import partial
 
+import truthy_measure.closure as clo
 from truthy_measure.utils import DirTree, coo_dtype, fromdirtree
+from truthy_measure.utils import make_weighted, weighted_undir
+
+## tests for normal closure
 
 def test_closure_big():
     '''
-    Speed test Python/Cython on large matrix
+    closure on large graph + speed test
     '''
     np.random.seed(100)
     N = 500
@@ -34,6 +37,9 @@ def test_closure_big():
             'python: {:.2g} s, cython: {:.2g} s.'.format(py_time, cy_time)
 
 def test_closure_small():
+    '''
+    closure on small graph
+    '''
     A = np.asarray([
         [0.0, 0.1, 0.0, 0.2],
         [0.0, 0.0, 0.3, 0.0],
@@ -48,6 +54,9 @@ def test_closure_small():
         assert np.all(p1 == p2)
 
 def test_closure_rand():
+    '''
+    closure on E-R random graph
+    '''
     np.random.seed(21)
     N = 10
     sparsity = 0.3
@@ -100,4 +109,200 @@ def test_closure():
     cap2, path2 = clo.cclosure(A, source, target, retpath = 1)
     assert cap1 == cap2
     assert np.all(path1 == path2)
+
+## test for epclosure* functions
+
+@nottest
+def run_test(G, expect):
+    N = G.shape[0]
+    pyfunc = partial(clo.epclosuress, G)
+    cyfunc = partial(clo.epclosuress, G, closurefunc=clo.cclosuress, retpaths=1)
+    o, p = zip(*map(pyfunc, xrange(N)))
+    o = np.round(o, 2)
+    co, cp = zip(*map(cyfunc, xrange(N)))
+    co = np.round(co, 2)
+    # check capacities match
+    assert np.allclose(o, expect)
+    assert np.allclose(co, expect)
+    flags = (o > 0) & (o < 1)
+    nonemptyi = np.where(flags)
+    emptyi = np.where(np.logical_not(flags))
+    # check paths match with computed capacities
+    for s, t in np.ndindex(G.shape):
+        if (s == t) or G[s, t] > 0 or (o[s,t] == 0):
+            # path must be empty
+            assert len(p[s][t]) == 0
+            assert len(cp[s][t]) == 0
+        else:
+            # minimum on path must correspond to computed capacity
+            path = p[s][t]
+            weights = np.ravel(G[path[:-1], path[1:]])[:-1]
+            weights = np.round(weights, 2)
+            assert o[s, t] == np.min(weights)
+
+def test_graph1_maxmin():
+    """
+    max-min epistemic closure on an arbitraty graph (ex. #1)
+    """
+    G = np.matrix([
+        [ 0.,  1.,  0.,  0.,  0.,  1.,  0.,  0.],
+        [ 1.,  0.,  1.,  0.,  0.,  0.,  1.,  0.],
+        [ 0.,  1.,  0.,  1.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  1.,  0.,  1.,  1.,  1.,  0.],
+        [ 0.,  0.,  0.,  1.,  0.,  0.,  0.,  0.],
+        [ 1.,  0.,  0.,  1.,  0.,  0.,  0.,  1.],
+        [ 0.,  1.,  0.,  1.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.]], dtype=np.double)
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1.  ,  1.  ,  0.25,  0.25,  0.2 ,  1.  ,  0.25,  0.25],
+        [ 1.  ,  1.  ,  1.  ,  0.33,  0.2 ,  0.33,  1.  ,  0.25],
+        [ 0.25,  1.  ,  1.  ,  1.  ,  0.2 ,  0.25,  0.25,  0.25],
+        [ 0.25,  0.33,  1.  ,  1.  ,  1.  ,  1.  ,  1.  ,  0.25],
+        [ 0.2 ,  0.2 ,  0.2 ,  1.  ,  1.  ,  0.2 ,  0.2 ,  0.2 ],
+        [ 1.  ,  0.33,  0.25,  1.  ,  0.2 ,  1.  ,  0.25,  1.  ],
+        [ 0.25,  1.  ,  0.25,  1.  ,  0.2 ,  0.25,  1.  ,  0.25],
+        [ 0.25,  0.25,  0.25,  0.25,  0.2 ,  1.  ,  0.25,  1.  ]])
+    run_test(G, expect)
+
+def test_graph2_maxmin():
+    """
+    max-min epistemic closure on an arbitraty graph (ex. #2)
+    """
+    data = np.ones(12, dtype=np.double)
+    ptr = np.array([0,3,6,9,10,11,12])
+    idx = np.array([1,2,3,0,2,4,0,1,5,0,1,2])
+    N = 6
+    G = sp.csr_matrix((data,idx,ptr),shape=(N,N))
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1.  ,  1.  ,  1.  ,  1.  ,  0.25,  0.25],
+        [ 1.  ,  1.  ,  1.  ,  0.25,  1.  ,  0.25],
+        [ 1.  ,  1.  ,  1.  ,  0.25,  0.25,  1.  ],
+        [ 1.  ,  0.25,  0.25,  1.  ,  0.25,  0.25],
+        [ 0.25,  1.  ,  0.25,  0.25,  1.  ,  0.25],
+        [ 0.25,  0.25,  1.  ,  0.25,  0.25,  1.  ]])
+    run_test(G, expect)
+    
+def test_cycle_graph_maxmin():
+    """
+    max-min epistemic closure on a 4-cycle
+    """
+    N = 5
+    G = np.matrix([[False,  True, False, False,  True],
+                    [ True, False,  True, False, False],
+                    [False,  True, False,  True, False],
+                    [False, False,  True, False,  True],
+                    [ True, False, False,  True, False]])
+    G = sp.csr_matrix(G, dtype=np.double)
+    G = weighted_undir(G)
+    output = []
+    expect = np.matrix([
+        [ 1.  ,  1.  ,  0.33,  0.33,  1.  ],
+        [ 1.  ,  1.  ,  1.  ,  0.33,  0.33],
+        [ 0.33,  1.  ,  1.  ,  1.  ,  0.33],
+        [ 0.33,  0.33,  1.  ,  1.  ,  1.  ],
+        [ 1.  ,  0.33,  0.33,  1.  ,  1.  ]])
+    run_test(G, expect)
+
+def test_grid_graph_maxmin():
+    """
+    max-min epistemic closure on a grid
+    """
+    G = np.matrix([
+        [False, False,  True,  True, False,  True],
+        [False, False, False,  True, False,  True],
+        [ True, False, False, False,  True, False],
+        [ True,  True, False, False, False, False],
+        [False, False,  True, False, False,  True],
+        [ True,  True, False, False,  True, False]])
+    G = sp.csr_matrix(G, dtype=np.double)
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1.  ,  0.33,  1.  ,  1.  ,  0.33,  1.  ],
+        [ 0.33,  1.  ,  0.25,  1.  ,  0.25,  1.  ],
+        [ 1.  ,  0.25,  1.  ,  0.25,  1.  ,  0.33],
+        [ 1.  ,  1.  ,  0.25,  1.  ,  0.25,  0.33],
+        [ 0.33,  0.25,  1.  ,  0.25,  1.  ,  1.  ],
+        [ 1.  ,  1.  ,  0.33,  0.33,  1.  ,  1.  ]])
+    run_test(G, expect)
+
+def test_balanced_tree_maxmin():
+    """
+    max-min epistemic closure on a balanced tree with branching factor 3 and depth 2
+    """
+    G = np.matrix([
+        [False,True,True,True,False,False,False,False,False,False,False,False,False],
+        [True,False,False,False,True,True,True,False,False,False,False,False,False],
+        [True,False,False,False,False,False,False,True,True,True,False,False,False],
+        [True,False,False,False,False,False,False,False,False,False,True,True,True],
+        [False,True,False,False,False,False,False,False,False,False,False,False,False],
+        [False,True,False,False,False,False,False,False,False,False,False,False,False],
+        [False,True,False,False,False,False,False,False,False,False,False,False,False],
+        [False,False,True,False,False,False,False,False,False,False,False,False,False],
+        [False,False,True,False,False,False,False,False,False,False,False,False,False],
+        [False,False,True,False,False,False,False,False,False,False,False,False,False],
+        [False,False,False,True,False,False,False,False,False,False,False,False,False],
+        [False,False,False,True,False,False,False,False,False,False,False,False,False],
+        [False,False,False,True,False,False,False,False,False,False,False,False,False]
+        ])
+    G = sp.csr_matrix(G, dtype=np.double)
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1. , 1.  , 1.  , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 1. , 1.  , 0.25, 0.25, 1. , 1. , 1. , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 1. , 0.25, 1.  , 0.25, 0.2, 0.2, 0.2, 1. , 1. , 1. , 0.2, 0.2, 0.2],
+        [ 1. , 0.25, 0.25, 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 1. , 1. ],
+        [ 0.2, 1.  , 0.2 , 0.2 , 1. , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 0.2, 1.  , 0.2 , 0.2 , 0.2, 1. , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 0.2, 1.  , 0.2 , 0.2 , 0.2, 0.2, 1. , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 0.2, 0.2 , 1.  , 0.2 , 0.2, 0.2, 0.2, 1. , 0.2, 0.2, 0.2, 0.2, 0.2],
+        [ 0.2, 0.2 , 1.  , 0.2 , 0.2, 0.2, 0.2, 0.2, 1. , 0.2, 0.2, 0.2, 0.2],
+        [ 0.2, 0.2 , 1.  , 0.2 , 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 0.2, 0.2, 0.2],
+        [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 0.2, 0.2],
+        [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. , 0.2],
+        [ 0.2, 0.2 , 0.2 , 1.  , 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 1. ]])
+    run_test(G, expect)
+
+def test_graph4_maxmin():
+    """
+    max-min epistemic closure on an arbitraty graph (ex. #4)
+    """
+    G = np.matrix([
+        [False, False, False,  True, False,  True],
+        [False, False,  True, False, False, False],
+        [False,  True, False, False, False,  True],
+        [ True, False, False, False,  True, False],
+        [False, False, False,  True, False,  True],
+        [ True, False,  True, False,  True, False]])
+    G = sp.csr_matrix(G, dtype=np.double)
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1.  ,  0.25,  0.25,  1.  ,  0.33,  1.  ],
+        [ 0.25,  1.  ,  1.  ,  0.25,  0.25,  0.33],
+        [ 0.25,  1.  ,  1.  ,  0.25,  0.25,  1.  ],
+        [ 1.  ,  0.25,  0.25,  1.  ,  1.  ,  0.33],
+        [ 0.33,  0.25,  0.25,  1.  ,  1.  ,  1.  ],
+        [ 1.  ,  0.33,  1.  ,  0.33,  1.  ,  1.  ]])
+    run_test(G, expect)
+
+def test_graph5_maxmin():
+    """
+    max-min epistemic closure on an arbitraty graph (ex. #5)
+    """
+    G = np.matrix([
+        [False, False,  True,  True,  True],
+        [False, False,  True,  True, False],
+        [ True,  True, False, False, False],
+        [ True,  True, False, False,  True],
+        [ True, False, False,  True, False]])
+    G = sp.csr_matrix(G, dtype=np.double)
+    G = weighted_undir(G)
+    expect = np.matrix([
+        [ 1.  ,  0.33,  1.  ,  1.  ,  1.  ],
+        [ 0.33,  1.  ,  1.  ,  1.  ,  0.25],
+        [ 1.  ,  1.  ,  1.  ,  0.33,  0.25],
+        [ 1.  ,  1.  ,  0.33,  1.  ,  1.  ],
+        [ 1.  ,  0.25,  0.25,  1.  ,  1.  ]])
+    run_test(G, expect)
 
