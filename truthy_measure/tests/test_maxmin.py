@@ -8,7 +8,7 @@ import warnings
 # local imports
 from truthy_measure.maxmin import *
 from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse 
-from truthy_measure.cmaxmin import *
+from truthy_measure._maxmin import *
 
 def test_naive():
     '''
@@ -83,22 +83,6 @@ def test_parallel():
     AP = maxmin(A)
     AP2 = pmaxmin(A, nprocs=2)
     assert np.array_equal(AP.todense(), AP2.todense())
-
-@nottest
-def test_parallel_is_faster():
-    from time import time
-    B = sp.rand(4000, 4000, 1e-4, 'csr')
-
-    tic = time()
-    C = pmaxmin(B, 10, 10)
-    toc = time()
-    time_parallel = toc - tic
-
-    tic = time()
-    D = maxmin(B)
-    toc = time()
-    time_serial = toc - tic
-    assert time_serial > time_parallel, "parallel version slower than serial!"
 
 def test_maximum_csr():
     '''

@@ -1,3 +1,5 @@
+from contextlib import closing
+from struct import unpack, calcsize
 import numpy as np
 import os
 
@@ -127,3 +129,33 @@ class DirTree(object):
         returns the path of the leaf associated to value in the directory tree
         '''
         return self._treepath(self._logicalpath(value))
+
+def fromdirtree(dt, N):
+    '''
+    Reads data stored in a directory hierarchy created with a DirTree instance
+    and returns a list of (row, col, value) tuples.
+
+    Parameters
+    ----------
+    dt : DirTree instance
+
+    N : the size of the matrix
+    '''
+    coords = []
+    for row in xrange(N):
+        path = dt.getleaf(row)
+        with closing(open(path)) as f:
+            f.seek(calcsize('i'))
+            nnz, = unpack('i', f.read(calcsize('i')))
+            for k in xrange(nnz):
+                col, val = unpack('id', f.read(calcsize('id')))
+                coords.append((row, col, val))
+        os.remove(path)
+        try:
+            os.removedirs(os.path.dirname(path))
+        except OSError, e:
+            if e.errno == os.errno.ENOTEMPTY:
+                pass
+            else:
+                raise
+    return coords
