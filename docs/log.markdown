@@ -845,3 +845,11 @@ Discussed with Fil how to perform the calibration: essentially perform a simple
 classification with Nearest Neighbors, and compute the F1. Prashant asked to use
 the politicians data for his machine learning course and will implement other
 algorithms, but in R.
+
+## Thu Nov  7 12:50:14 EST 2013
+
+Implemented the one-pass method for computing what now I call "epistemic"
+closure (as opposed to the normal metric closure), which is essentially the
+normal closure computed only on intermediate nodes and with the additional
+constraint that direct neighbors (i.e. available knowledge) have maximal
+similarity (or minimal distance).
