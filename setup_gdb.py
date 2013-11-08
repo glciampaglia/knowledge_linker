@@ -1,4 +1,4 @@
-""" Setup script -- debugging mode (no OpenMP, no optimizations, etc.). """
+""" distutils script for debugging (no OpenMP, optimizations, etc.). """
 
 from distutils.core import setup
 from Cython.Distutils import build_ext, Extension
