@@ -16,3 +16,6 @@ build/
 docs/*.pdf
 cython_debug
 *.prof
+.ropeproject/globalnames
+.ropeproject/history
+.ropeproject/objectdb
