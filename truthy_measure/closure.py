@@ -1,6 +1,7 @@
-'''
-Dijkstra-based path finding algorithm for computing the metric closure on either
-similarity/proximity graphs or distance graphs.
+""" Dijkstra-based path finding algorithms for epistemic closures.
+
+Dijkstra-based path finding algorithm for computing the metric closure on
+either similarity/proximity graphs or distance graphs.
 
 Nomenclature
 ============
@@ -24,10 +25,8 @@ epclosureap
 :   closure computed only on intermediate nodes, with the additional constraint
     that direct neighbors have similarity 1.
 
-'''
+"""
 
-import os
-import sys
 import numpy as np
 import scipy.sparse as sp
 from ctypes import c_int, c_double
@@ -42,32 +41,34 @@ now = datetime.now
 from ._closure import cclosuress, cclosure
 from .maxmin import _init_worker
 
+
 def closure(A, source, target):
-    '''
-    Source-target metric closure via Dijkstra path finding. 
-    
+    """ Source-target metric closure via Dijkstra path finding.
+
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosure`, which accepts only CSR matrices.
 
     This always returns the paths.
-    '''
+
+    """
     cap, paths = closuress(A, source)
     return cap[target], paths[target]
 
+
 def closuress(A, source):
-    '''
-    Single source metric closure via Dijkstra path finding. 
-    
+    """ Single source metric closure via Dijkstra path finding.
+
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosuress`, which accepts only CSR matrices.
 
     This always returns the paths.
-    '''
+
+    """
     A = sp.csr_matrix(A)
     N = A.shape[0]
     certain = np.zeros(N, dtype=np.bool)
-    items = {} # handles to the items inserted in the queue
-    Q = [] # heap queue
+    items = {}  # handles to the items inserted in the queue
+    Q = []  # heap queue
     # populate the queue
     for node in xrange(N):
         if node == source:
@@ -81,7 +82,7 @@ def closuress(A, source):
     # compute spanning tree
     while len(Q):
         node_item = heappop(Q)
-        cap, node, pred = node_item
+        cap, node, _ = node_item
         cap = - cap
         certain[node] = True
         neighbors = A.getrow(node).indices
@@ -100,7 +101,7 @@ def closuress(A, source):
     paths = []
     for node in xrange(N):
         item = items[node]
-        if item[2] == -1: # disconnected node
+        if item[2] == -1:  # disconnected node
             bott_caps.append(0.0)
             paths.append(np.empty(0, dtype=np.int))
         else:
@@ -123,6 +124,8 @@ logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 _nprocs = None
 _logpath = None
 _dirtree = None
+digits_procs = 2
+
 
 def _closure_worker(n):
     global _A, _dirtree, _logpath, _logf, _nprocs, digits_procs
@@ -146,9 +149,9 @@ def _init_worker_dirtree(nprocs, logpath, dirtree, indptr, indices, data,
     _init_worker(indptr, indices, data, shape)
 
 def _init_worker(indptr, indices, data, shape):
-    '''
+    """
     See `pmaxmin`. This is the worker initialization function.
-    '''
+    """
     global _indptr, _indices, _data, _A
     _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
     _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
@@ -156,13 +159,13 @@ def _init_worker(indptr, indices, data, shape):
     _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
 
 def closureap(A, dirtree, start=None, offset=None, nprocs=None):
-    '''
+    """
     All-pairs metric closure via path-finding. Computes the closure of a graph
     represented by adjacency matrix A and saves the results for each row in
-    separate files organized in a directory tree (see `truthy_measure.dirtree`). 
+    separate files organized in a directory tree (see `truthy_measure.dirtree`).
 
     If `start` and `offset` parameters are passed, then only rows between
-    `start` and `start + offset` are computed. 
+    `start` and `start + offset` are computed.
 
     Parameters
     ----------
@@ -179,7 +182,7 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
     nprocs : int
         optional; number of processes to spawn. Default is 90% of available
         CPUs/cores.
-    '''
+    """
     N = A.shape[0]
     digits = int(np.ceil(np.log10(N)))
     if start is None:
@@ -214,24 +217,24 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
     print '{}: done'.format(now())
 
 def epclosure(A, source, target, B=None, closurefunc=None, **kwargs):
-    '''
+    """
     Source target "epistemic" closure. Python implementation.
 
     See `epclosuress` for parameters.
 
     Note: always returns paths.
-    '''
+    """
     cap, paths = epclosuress(A, source, B=B, closurefunc=closurefunc, **kwargs)
     return cap[target], paths[target]
 
 def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
-    '''
+    """
     Single-source "epistemic" closure. Python implementation.
 
     Parameters
     ----------
 
-    A : array_like 
+    A : array_like
         Adjacency matrix. Will be converted to CSR
 
     source : int
@@ -247,7 +250,7 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
         arguments are passed to closurefunc.
 
     Note: always returns paths.
-    '''
+    """
     # ensure A is CSR
     A = sp.csr_matrix(A)
     if B is None:
