@@ -1,5 +1,4 @@
 """ Dijkstra-based path finding algorithms for epistemic closures.
-
 Dijkstra-based path finding algorithm for computing the metric closure on
 either similarity/proximity graphs or distance graphs.
 
@@ -34,16 +33,47 @@ from contextlib import closing
 from datetime import datetime
 from heapq import heappush, heappop, heapify
 from multiprocessing import Pool, Array, cpu_count, current_process
-from operator import add, itemgetter
+from operator import itemgetter
 
 now = datetime.now
 
 # package imports
 from ._closure import cclosuress, cclosure
-from .maxmin import _init_worker
 
 
-def closure(A, source, target):
+def dombit1(a, b):
+    """ Dombi T-conorm with lambda = 1.
+
+    Returns a float between 0 and 1.
+
+    >>> dombit1(0, 0)
+    0.0
+    >>> dombit1(1, 1)
+    1.0
+    >>> dombit1(0.5, 0.5)
+    0.3333333333333333
+
+    """
+    if (a < 0) or (a > 1) or (b < 0) or (b > 1):
+        raise ValueError('not in unit interval: {}, {}'.format(a, b))
+    if a == b == 0:
+        return 0.0
+    else:
+        return float(a * b) / (a + b - a * b)
+
+# This dictionary maps metric kinds to pairs (conjf, disjf) where:
+#
+# 1. conjf takes two inputs, a and b, and a `key` callable argument and return
+#    one of the two arguments based on the values key(a) and key(b).
+# 2. disjf takes two float inputs and returns a float.
+
+_metricfuncs = {
+    'ultrametric': (max, min),
+    'metric': (max, dombit1)
+}
+
+
+def closure(A, source, target, kind='ultrametric'):
     """ Source-target metric closure via Dijkstra path finding.
 
     Note that this function is pure Python and thus very slow. Use the
@@ -52,12 +82,25 @@ def closure(A, source, target):
     This always returns the paths.
 
     """
-    cap, paths = closuress(A, source)
+    cap, paths = closuress(A, source, kind=kind)
     return cap[target], paths[target]
 
 
-def closuress(A, source):
+def closuress(A, source, kind='ultrametric'):
     """ Single source metric closure via Dijkstra path finding.
+
+    Parameters
+    ----------
+
+    A : array_like
+        NxN adjacency matrix
+
+    source : int
+        the source node
+
+    kind : str
+        the kind of closure to compute; either 'metric' or 'ultrametric'
+        (default).
 
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosuress`, which accepts only CSR matrices.
@@ -73,6 +116,10 @@ def closuress(A, source):
     [1.0, 0.10000000000000001, 0.10000000000000001]
 
     """
+    keyf = itemgetter(0)
+    if kind not in _metricfuncs:
+        raise ValueError('unknown metric: {}'.format(kind))
+    disjf, conjf = _metricfuncs[kind]
     A = sp.csr_matrix(A)
     N = A.shape[0]
     certain = np.zeros(N, dtype=np.bool)
@@ -98,14 +145,21 @@ def closuress(A, source):
         for neighbor in neighbors:
             if not certain[neighbor]:
                 neighbor_item = items[neighbor]
-                neigh_cap = - neighbor_item[0]
-                w = A[node, neighbor]
-                d = min(w, cap)
-                if d > neigh_cap:
-                    neighbor_item[0] = - d
-                    neighbor_item[2] = node
+                neigh_curr_cap = - neighbor_item[0]
+                neigh_curr_pred = neighbor_item[2]
+                current = (neigh_curr_cap, neigh_curr_pred)
+                neigh_cand_cap = conjf(A[node, neighbor], cap)
+                neigh_cand_pred = node
+                candidate = (neigh_cand_cap, neigh_cand_pred)
+                try:
+                    new_cap, new_pred = disjf(candidate, current, key=keyf)
+                except TypeError:
+                    raise ValueError('disjunction must accept `key` param.')
+                if new_cap != neigh_curr_cap:
+                    neighbor_item[0] = - new_cap
+                    neighbor_item[2] = new_pred
                     heapify(Q)
-    # generate paths
+    # generate paths based on the spanning tree
     bott_caps = []
     paths = []
     for node in xrange(N):
@@ -130,48 +184,53 @@ log_out = 'closure-{proc:0{width}d}.log'
 log_out_start = 'closure_{start:0{width1}d}-{{proc:0{{width}}d}}.log'
 logline = "{now}: worker-{proc:0{width}d}: source {source} completed."
 
+_A = None
 _nprocs = None
 _logpath = None
 _dirtree = None
+_kind = None
 digits_procs = 2
 
 
 def _closure_worker(n):
-    global _A, _dirtree, _logpath, _logf, _nprocs, digits_procs
+    global _A, _dirtree, _logpath, _logf, _nprocs, _kind, digits_procs
     worker_id, = current_process()._identity
     logpath = _logpath.format(proc=worker_id, width=digits_procs)
     outpath = _dirtree.getleaf(n)
     with \
-            closing(open(outpath, 'w')) as outf,\
+            closing(open(outpath, 'w')) as outf, \
             closing(open(logpath, 'a', 1)) as logf:
-        dists, paths = cclosuress(_A, n, outf)
+        cclosuress(_A, n, outf, kind=_kind)
         logf.write(logline.format(now=now(), source=n, proc=worker_id,
-                width=digits_procs) + '\n')
+                                  width=digits_procs) + '\n')
 
-def _init_worker_dirtree(nprocs, logpath, dirtree, indptr, indices, data,
-        shape):
+
+def _init_worker_dirtree(kind, nprocs, logpath, dirtree, indptr, indices, data,
+                         shape):
     global _dirtree, _logpath, _nprocs, digits_procs, digits_rows
     _nprocs = nprocs
     digits_procs = int(np.ceil(np.log10(_nprocs)))
     _logpath = logpath
     _dirtree = dirtree
-    _init_worker(indptr, indices, data, shape)
+    _init_worker(kind, indptr, indices, data, shape)
 
-def _init_worker(indptr, indices, data, shape):
-    """
-    See `pmaxmin`. This is the worker initialization function.
-    """
-    global _indptr, _indices, _data, _A
+
+def _init_worker(kind, indptr, indices, data, shape):
+    """ See `pmaxmin`. This is the worker initialization function.  """
+    global _kind, _indptr, _indices, _data, _A
+    _kind = kind
     _indptr = np.frombuffer(indptr.get_obj(), dtype=np.int32)
     _indices = np.frombuffer(indices.get_obj(), dtype=np.int32)
     _data = np.frombuffer(data.get_obj())
     _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
 
-def closureap(A, dirtree, start=None, offset=None, nprocs=None):
+
+def closureap(A, dirtree, start=None, offset=None, nprocs=None, kind='ultrametric'):
     """
     All-pairs metric closure via path-finding. Computes the closure of a graph
     represented by adjacency matrix A and saves the results for each row in
-    separate files organized in a directory tree (see `truthy_measure.dirtree`).
+    separate files organized in a directory tree (see
+    `truthy_measure.dirtree`).
 
     If `start` and `offset` parameters are passed, then only rows between
     `start` and `start + offset` are computed.
@@ -191,6 +250,10 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
     nprocs : int
         optional; number of processes to spawn. Default is 90% of available
         CPUs/cores.
+
+    kind : str
+        the kind of closure, either 'ultrametric' (default) or 'metric'.
+
     """
     N = A.shape[0]
     digits = int(np.ceil(np.log10(N)))
@@ -216,14 +279,15 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None):
         logpath = log_out
     else:
         logpath = log_out_start.format(start=start, width1=digits)
-    initargs = (nprocs, logpath, dirtree, indptr, indices, data, A.shape)
+    initargs = (kind, nprocs, logpath, dirtree, indptr, indices, data, A.shape)
     print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker_dirtree,
-            initargs=initargs, maxtasksperchild=max_tasks_per_worker)
+                initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
         pool.map(_closure_worker, xrange(fromi, toi))
     pool.join()
     print '{}: done'.format(now())
+
 
 def epclosure(A, source, target, B=None, closurefunc=None, **kwargs):
     """
@@ -232,9 +296,11 @@ def epclosure(A, source, target, B=None, closurefunc=None, **kwargs):
     See `epclosuress` for parameters.
 
     Note: always returns paths.
+
     """
     cap, paths = epclosuress(A, source, B=B, closurefunc=closurefunc, **kwargs)
     return cap[target], paths[target]
+
 
 def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
     """
@@ -259,6 +325,7 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
         arguments are passed to closurefunc.
 
     Note: always returns paths.
+
     """
     # ensure A is CSR
     A = sp.csr_matrix(A)
@@ -282,8 +349,9 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
             caps[target] = 1.0
             paths.append(np.empty(0))
         elif _caps[target] > 0.0:
-            # target must have at least one neighbor that is also reachable from
-            # source. In case the graph is directed, we take the in-neighbors.
+            # target must have at least one neighbor that is also reachable
+            # from source. In case the graph is directed, we take the
+            # in-neighbors.
             t_neighbors = set(B.getcol(target).indices)
             t_neighbors.intersection_update(s_reachables)
             t_neighbors = np.asarray(sorted(t_neighbors))
@@ -296,6 +364,3 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
             caps[target] = 0.0
             paths.append(np.empty(0))
     return caps, paths
-
-def epclosureap(A, source):
-    pass
