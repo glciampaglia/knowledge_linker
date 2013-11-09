@@ -1,6 +1,6 @@
 """ Dijkstra-based path finding algorithms for epistemic closures.
-Dijkstra-based path finding algorithm for computing the metric closure on
-either similarity/proximity graphs or distance graphs.
+Dijkstra-based path finding algorithm for computing the transitive closure on
+similarity/proximity graphs.
 
 Nomenclature
 ============
