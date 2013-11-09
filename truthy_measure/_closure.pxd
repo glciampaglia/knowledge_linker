@@ -2,7 +2,7 @@ cimport cython
 from libc.stdlib cimport malloc, abort
 from libc.string cimport memset
 
-## Return types for shortest_path/bottleneck_path functions
+## Return types for closure functions
 
 ctypedef struct Path:
     size_t length
@@ -15,7 +15,7 @@ ctypedef struct MetricPath:
     size_t length
     int * vertices
     int found
-    double distance
+    double proximity
 
 ctypedef MetricPath * MetricPathPtr
 
