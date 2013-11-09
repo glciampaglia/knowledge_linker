@@ -34,6 +34,7 @@ from contextlib import closing
 from datetime import datetime
 from heapq import heappush, heappop, heapify
 from multiprocessing import Pool, Array, cpu_count, current_process
+from operator import add, itemgetter
 
 now = datetime.now
 
@@ -62,6 +63,14 @@ def closuress(A, source):
     Cythonized version `cclosuress`, which accepts only CSR matrices.
 
     This always returns the paths.
+
+    >>> A = np.asarray([
+    ...     [0., .1, .0],
+    ...     [0., 0., .2],
+    ...     [0., 0., 0.]])
+    >>> c, _ = closuress(A, 0)
+    >>> c
+    [1.0, 0.10000000000000001, 0.10000000000000001]
 
     """
     A = sp.csr_matrix(A)
