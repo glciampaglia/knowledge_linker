@@ -13,12 +13,13 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
-cpdef object cclosure(object A, int source, int target, int retpath = 0):
+cpdef object cclosure(object A, int source, int target, int retpath = 0,
+                      kind='ultrametric'):
     '''
     Source-target closure. Uses cclosuress.
     '''
     path = None
-    caps, paths = cclosuress(A, source, retpaths = retpath)
+    caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)
     if retpath:
         path = paths[target]
     cap = caps[target]
@@ -26,15 +27,39 @@ cpdef object cclosure(object A, int source, int target, int retpath = 0):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef object cclosuress(object A, int source, object f = None, int retpaths = 0):
+cpdef object cclosuress(
+    object A,
+    int source,
+    object f = None,
+    int retpaths = 0,
+    object kind='ultrametric'):
     '''
-    Computes the bottleneck distances from `source` on the directed graph
-    represented by adjacency matrix `A`, and optionally write them to open file
-    `f`. Return the distances and optionally the associated bottleneck paths.
+    Computes the transitive closure from `source` on the proximity graph
+    represented by adjacency matrix `A`, and optionally writes it to open file
+    `f`. Returns the proximity values and optionally the associated bottleneck
+    paths.
 
-    A bottleneck path corresponds to the path that maximizes the minimum weight
-    on its edges. It is also known as the max-min co-norm, or ultra-metric
-    distance.
+    Two nodes are connected in the closure graph if there exists a path between
+    them in the original proximity graph. This function computes closures
+    according to two possible metrics in the proximity space: the ultra-metric
+    (or max-min), and the metric corresponding, in the the distance space, to
+    the (min, +) distance associated to the classic Dijkstra algorithm. In the
+    proximity space, this "standard" metric corresponds to the operators (max,
+    DT1), where DT1 is the Dombi t-conorm with lambda = 1. See Simas, Dravid
+    and Rocha (forthcoming) for more information on transitive closures on
+    proximity graphs.
+
+    Depending on the metric notion used, the returned paths are optimal in the
+    sense that they correspond the the "shortest" paths in the isomorphic
+    distance graph of the given proximity graph. For example, if the metric
+    chosen is the ultrametric (max,min), the returned path is the so-called
+    bottleneck paths, i.e, the path that maximizes the minimum edge (or node)
+    weight, where the weight, is a quantity between 0 and 1 and is understood
+    to represent a similarity of proximity value between the source and the
+    target.
+
+    Computes the "single-source" Dijkstra, i.e. for a given source returns the
+    closure to all possible target nodes.
 
     Parameters
     ----------
@@ -52,11 +77,14 @@ cpdef object cclosuress(object A, int source, object f = None, int retpaths = 0)
         empty array for disconnected pairs. Default: do not compute nor return
         paths.
 
+    kind : str
+        the kind of closure to compute: 'ultrametric' (default) or 'metric'.
+
     Returns
     -------
-    dists : (N,) double float ndarray
-        the bottleneck distances from source to all other nodes in the graph, or
-        -1 if the two nodes are disconnected. 
+    prox : (N,) double float ndarray
+        the proximities from source to all other nodes in the graph, or -1 if
+        the two nodes are disconnected.
 
     paths : list of ndarrays
         optional; the associated path of nodes (excluding the source).
@@ -72,37 +100,47 @@ cpdef object cclosuress(object A, int source, object f = None, int retpaths = 0)
         int cnt = 0
         MetricPathPtr paths
         MetricPath path
-        cnp.ndarray[cnp.double_t] dists = np.empty(N, dtype=np.double)
+        Closure closure
+        cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)
         object pathslist = []
     if f is not None:
         flag = 1
         f.write(pack("ii", source, 0)) # provisional count
-    paths = _cclosuress(N, A_indptr, A_indices, A_data, source, retpaths)
+    if kind == 'metric':
+        closure.disjf = fmax
+        closure.conjf = _dombit1
+    elif kind == 'ultrametric':
+        closure.disjf = fmax
+        closure.conjf = fmin
+    else:
+        raise ValueError('unknown metric kind: {}'.format(kind))
+    paths = _cclosuress(closure, N, A_indptr, A_indices, A_data, source, retpaths)
     for i in xrange(N):
         path = paths[i]
         if path.found:
-            dists[i] = path.distance
+            proxs[i] = path.proximity
             if flag:
-                f.write(pack("id", i, path.distance))
+                f.write(pack("id", i, path.proximity))
                 cnt += 1
             if retpaths:
                 pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
                 free(<void *>path.vertices)
         else:
-            dists[i] = 0.
+            proxs[i] = 0.
             if retpaths:
                 pathslist.append(np.empty(0, dtype=np.int))
     if flag and cnt:
         f.seek(sizeof(int))
         f.write(pack('i', cnt))
     free(<void *> paths)
-    return (dists, pathslist)
+    return (proxs, pathslist)
 
-# we push the inverse of the similarity to fake a max-heap: this means we
+# we push the negative of the similarity to fake a max-heap: this means we
 # compute the min-max.
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef MetricPathPtr _cclosuress(
+        Closure closure,
         int N,
         int [:] indptr,
         int[:] indices,
@@ -110,43 +148,41 @@ cdef MetricPathPtr _cclosuress(
         int source,
         int retpaths):
     cdef:
-        FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)
+        FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)  # min-heap
         int * P = init_intarray(N, -1)
         int * certain = init_intarray(N, 0)
         int * tmp = init_intarray(N, -1) # stores paths in reverse order
-        double * dists = <double *> malloc(N * sizeof(double))
+        double * proxs = <double *> malloc(N * sizeof(double))
         int * neighbors = NULL
         int node, i, hopscnt
         int N_neigh
-        double sim, dist, w, d, neigh_dist
+        double prox, w, d, neigh_prox
         MetricPathPtr paths = <MetricPathPtr> malloc(N * sizeof(MetricPath))
         MetricPath path
     # populate the queue
     for node in xrange(N):
         if node == source:
-            sim = 1.
+            prox = 1.0
             P[node] = node
         else:
-            sim = 0.0
-        dists[node] = sim
-        dist = (1.0 + sim) ** -1
-        Q.push_fast(dist, node)
-    # compute bottleneck distances and predecessor information
+            prox = 0.0
+        proxs[node] = prox
+        Q.push_fast(- prox, node)
+    # compute proximity and predecessor information
     while Q.count:
-        dist = Q.pop_fast()
+        prox = - Q.pop_fast()
         node = Q._popped_ref
         certain[node] = True
-        dists[node] = dist
+        proxs[node] = prox
         N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
         for i in xrange(N_neigh):
             neighbor = neighbors[i]
             if not certain[neighbor]:
-                neigh_dist = Q.value_of_fast(neighbor)
+                neigh_prox = - Q.value_of_fast(neighbor)
                 w = data[indptr[node] + i] # i.e. A[node, neigh_node]
-                w = (1.0 + w) ** -1
-                d = max(w, dist)
-                if d < neigh_dist:
-                    Q.push_if_lower_fast(d, neighbor) # will only update
+                d = closure.disjf(closure.conjf(w, prox), neigh_prox)
+                if d != neigh_prox:
+                    Q.push_if_lower_fast(- d, neighbor) # will only update
                     P[neighbor] = node
         free(<void *> neighbors)
         neighbors = NULL
@@ -156,13 +192,11 @@ cdef MetricPathPtr _cclosuress(
         path.vertices = NULL
         if P[node] == -1:
             path.found = 0
-            path.distance = 0.
+            path.proximity = 0.
             path.length = -1
         else:
             path.found = 1
-            dist = dists[node]
-            bdist = dist ** -1 - 1.0
-            path.distance = bdist
+            path.proximity = proxs[node]
             if retpaths:
                 hopscnt = 0
                 i = node
@@ -179,7 +213,7 @@ cdef MetricPathPtr _cclosuress(
     free(<void *>tmp)
     free(<void *>P)
     free(<void *>certain)
-    free(<void *>dists)
+    free(<void *>proxs)
     return paths
 
 ## BFS for shortest path (by number of hops)
