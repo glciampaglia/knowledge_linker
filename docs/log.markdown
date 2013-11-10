@@ -872,7 +872,7 @@ Submitted three job arrays, each consisting of an array of 64 simple jobs:
 
 ## Sun Nov 10 15:41:29 EST 2013
 
-Update on jobs launched:
+__Update__ on jobs launched:
 
 1. (id = 185915) all jobs except #55 terminated. Job #55 was canceled.
 2. (id = 185916) jobs exceeded walltime (5h) and were all terminated; some
@@ -890,5 +890,10 @@ Some jobs that started late were still appearing in the queue with status
 	189517[2]
 	189517[8]
 
-I terminated them.
+I terminated them. 
+
+__Update #2__: I relaunched job 189515[55] as 191513[55].
+__Update #3 (17:33:36)__: job 191513[55] terminated, renamed as 189515[55] and
+added to TAR file. Moved tar file to
+`~/data/dbpedia/politicians/dbpedia-189515.tar.gz`
 
