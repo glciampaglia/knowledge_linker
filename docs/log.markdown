@@ -777,6 +777,7 @@ the estimate.
 
 As a side note, yesterday evening stumbled upon the Washington Post's [Truth
 Teller](http://www.washingtonpost.com/blogs/ask-the-post/wp/2013/09/25/announcing-truth-teller-beta-a-better-way-to-watch-political-speech/)
+uu
 , a prototype for an automatic real-time fact checker. It does speech
 recognition of a video, and then tries to match sequences of the transcript to a
 database of statements, which have been previously labeled as either true or
@@ -868,4 +869,26 @@ Submitted three job arrays, each consisting of an array of 64 simple jobs:
 1. (id = 185915): metric closure, directed graph
 2. (id = 185916): ultrametric closure, undirected graph
 3. (id = 185917): metric closure, undirected graph
+
+## Sun Nov 10 15:41:29 EST 2013
+
+Update on jobs launched:
+
+1. (id = 185915) all jobs except #55 terminated. Job #55 was canceled.
+2. (id = 185916) jobs exceeded walltime (5h) and were all terminated; some
+   late-starters were canceled.
+3. (id = 185917) jobs exceeded walltime (5h) and were all terminated; some
+   late-starters were canceled.
+
+Some jobs that started late were still appearing in the queue with status
+"Canceled":
+
+	189515[55]
+	189516[35]
+	189516[38]
+	189516[46]
+	189517[2]
+	189517[8]
+
+I terminated them.
 
