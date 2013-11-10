@@ -896,4 +896,8 @@ __Update #2__: I relaunched job 189515[55] as 191513[55].
 __Update #3 (17:33:36)__: job 191513[55] terminated, renamed as 189515[55] and
 added to TAR file. Moved tar file to
 `~/data/dbpedia/politicians/dbpedia-189515.tar.gz`
+__Update #4 (17:37)__: launched: 
+
+* ultrametric undirected, job 191538[],
+* metric undirected as, job 191538[].
 
