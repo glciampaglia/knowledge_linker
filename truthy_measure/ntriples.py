@@ -7,6 +7,33 @@ from gzip import GzipFile
 from itertools import imap
 from operator import methodcaller
 
+class NodesIndex(object):
+    '''
+    Class that translates from numeric node ID# to URI and viceversa
+    '''
+    def __init__(self, path):
+        with closing(path) as f:
+            lines = imap(str.strip, f)
+            self.uri2node = OrderedDict((uri, node) for node, uri in enumerate(lines))
+        self.uris = uri2node.keys()
+    def uri2node(self, uri):
+        return self.uri2node[uri]
+    def node2uri(self, node):
+        return self.uris[node]
+
+def abbreviated(uris, ns):
+    '''
+    Return an abbreviated list of uris according to given namespace
+    abbreviations `ns`
+    '''
+    x = re.compile('({})'.format('|'.join(ns.keys())))
+    for uri in uris:
+        m = x.match(uri)
+        if m is not None:
+            matchedns = m.group()
+            abbrvns = ns[matchedns]
+            yield x.sub(abbrvns + ':', uri)
+
 def readns(path):
     '''
     Returns a dictionary mapping full namespaces URIs to abbreviated names
