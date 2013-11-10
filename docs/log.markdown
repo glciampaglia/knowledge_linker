@@ -853,3 +853,19 @@ closure (as opposed to the normal metric closure), which is essentially the
 normal closure computed only on intermediate nodes and with the additional
 constraint that direct neighbors (i.e. available knowledge) have maximal
 similarity (or minimal distance).
+
+## Sat Nov  9 23:01:55 EST 2013
+
+Integrated the one-pass algorithm into the package and implemented also the
+metric version, using the Dombi t-conorm with $\lambda = 1$, which is the
+equivalent of the classic Dijkstra algorithm, but on proximity graphs. Tested
+it on Big Red II and to compute one single-source problem, (i.e. one row) it
+takes approximately 3 minutes, which means that the wall time is cut down from
+more than 3 days to just 3h30'! 
+
+Submitted three job arrays, each consisting of an array of 64 simple jobs:
+
+1. (id = 185915): metric closure, directed graph
+2. (id = 185916): ultrametric closure, undirected graph
+3. (id = 185917): metric closure, undirected graph
+
