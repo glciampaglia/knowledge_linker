@@ -141,22 +141,16 @@ def test_closure():
 @nottest
 def run_test(G, expect):
     N = G.shape[0]
-    pyfunc = partial(clo.epclosuress, G)
-    cyfunc = partial(clo.epclosuress, G, closurefunc=clo.cclosuress,
-                     retpaths=1)
-    o, p = zip(*map(pyfunc, xrange(N)))
+    clofunc = partial(clo.epclosuress, G, retpaths=True)
+    o, p = zip(*map(clofunc, xrange(N)))
     o = np.round(o, 2)
-    co, cp = zip(*map(cyfunc, xrange(N)))
-    co = np.round(co, 2)
     # check capacities match
     assert np.allclose(o, expect)
-    assert np.allclose(co, expect)
     # check paths match with computed capacities
     for s, t in np.ndindex(G.shape):
         if (s == t) or G[s, t] > 0 or (o[s, t] == 0):
             # path must be empty
             assert len(p[s][t]) == 0
-            assert len(cp[s][t]) == 0
         else:
             # minimum on path must correspond to computed capacity
             path = p[s][t]

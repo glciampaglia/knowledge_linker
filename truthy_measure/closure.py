@@ -289,20 +289,21 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None, kind='ultrametri
     print '{}: done'.format(now())
 
 
-def epclosure(A, source, target, B=None, closurefunc=None, **kwargs):
+def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
     """
     Source target "epistemic" closure. Python implementation.
 
     See `epclosuress` for parameters.
 
-    Note: always returns paths.
-
     """
-    cap, paths = epclosuress(A, source, B=B, closurefunc=closurefunc, **kwargs)
-    return cap[target], paths[target]
+    cap, paths = epclosuress(A, source, B=B, retpath=retpath, kind=kind)
+    if retpath:
+        return cap[target], paths[target]
+    else:
+        return cap[target], None
 
 
-def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
+def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
     """
     Single-source "epistemic" closure. Python implementation.
 
@@ -319,12 +320,11 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
         Optional; a copy of A in CSC format. Useful in loops to avoid
         converting A at every iteration.
 
-    closurefunc : func
-        Optional; an alternative closure function. By default,
-        `truthy_measure.closure.closuress` will be used. Additional keyword
-        arguments are passed to closurefunc.
+    retpaths : bool
+        if True, return paths, else, and empty list. Default: False.
 
-    Note: always returns paths.
+    kind : str the type of closure to compute: either 'metric' or 'ultrametric'
+        (default).
 
     """
     # ensure A is CSR
@@ -335,10 +335,7 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
         # ensure B is CSC
         B = sp.csc_matrix(B)
     N = A.shape[0]
-    if closurefunc:
-        _caps, _paths = closurefunc(A, source, **kwargs)
-    else:
-        _caps, _paths = cclosuress(A, source)
+    _caps, _paths = cclosuress(A, source, kind=kind, retpaths=retpaths)
     _caps = np.asarray(_caps)
     caps = np.empty(N)
     paths = []
@@ -347,7 +344,8 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
     for target in xrange(N):
         if target in s_neighbors or target == source:
             caps[target] = 1.0
-            paths.append(np.empty(0))
+            if retpaths:
+                paths.append(np.empty(0))
         elif _caps[target] > 0.0:
             # target must have at least one neighbor that is also reachable
             # from source. In case the graph is directed, we take the
@@ -358,9 +356,11 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
             t_neighbors_cap = _caps[t_neighbors]
             imax = t_neighbors[np.argmax(t_neighbors_cap)]
             caps[target] = _caps[imax]
-            paths.append(np.hstack([_paths[imax], target]))
+            if retpaths:
+                paths.append(np.hstack([_paths[imax], target]))
         else:
             # target is not reachable from source
             caps[target] = 0.0
-            paths.append(np.empty(0))
+            if retpaths:
+                paths.append(np.empty(0))
     return caps, paths
