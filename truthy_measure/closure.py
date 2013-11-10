@@ -338,7 +338,7 @@ def epclosuress(A, source, B=None, closurefunc=None, **kwargs):
     if closurefunc:
         _caps, _paths = closurefunc(A, source, **kwargs)
     else:
-        _caps, _paths = closuress(A, source)
+        _caps, _paths = cclosuress(A, source)
     _caps = np.asarray(_caps)
     caps = np.empty(N)
     paths = []

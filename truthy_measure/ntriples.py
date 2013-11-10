@@ -6,16 +6,17 @@ from codecs import EncodedFile
 from gzip import GzipFile
 from itertools import imap
 from operator import methodcaller
+from collections import OrderedDict
 
 class NodesIndex(object):
     '''
     Class that translates from numeric node ID# to URI and viceversa
     '''
     def __init__(self, path):
-        with closing(path) as f:
+        with closing(open(path)) as f:
             lines = imap(str.strip, f)
             self.uri2node = OrderedDict((uri, node) for node, uri in enumerate(lines))
-        self.uris = uri2node.keys()
+        self.uris = self.uri2node.keys()
     def uri2node(self, uri):
         return self.uri2node[uri]
     def node2uri(self, node):
