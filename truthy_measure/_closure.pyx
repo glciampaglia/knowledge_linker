@@ -13,12 +13,13 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
-cpdef object cclosure(object A, int source, int target, int retpath = 0):
+cpdef object cclosure(object A, int source, int target, int retpath = 0,
+                      kind='ultrametric'):
     '''
     Source-target closure. Uses cclosuress.
     '''
     path = None
-    caps, paths = cclosuress(A, source, retpaths = retpath)
+    caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)
     if retpath:
         path = paths[target]
     cap = caps[target]
@@ -99,12 +100,21 @@ cpdef object cclosuress(
         int cnt = 0
         MetricPathPtr paths
         MetricPath path
+        Closure closure
         cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)
         object pathslist = []
     if f is not None:
         flag = 1
         f.write(pack("ii", source, 0)) # provisional count
-    paths = _cclosuress(N, A_indptr, A_indices, A_data, source, retpaths)
+    if kind == 'metric':
+        closure.disjf = fmax
+        closure.conjf = _dombit1
+    elif kind == 'ultrametric':
+        closure.disjf = fmax
+        closure.conjf = fmin
+    else:
+        raise ValueError('unknown metric kind: {}'.format(kind))
+    paths = _cclosuress(closure, N, A_indptr, A_indices, A_data, source, retpaths)
     for i in xrange(N):
         path = paths[i]
         if path.found:
@@ -130,6 +140,7 @@ cpdef object cclosuress(
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cdef MetricPathPtr _cclosuress(
+        Closure closure,
         int N,
         int [:] indptr,
         int[:] indices,
@@ -169,8 +180,8 @@ cdef MetricPathPtr _cclosuress(
             if not certain[neighbor]:
                 neigh_prox = - Q.value_of_fast(neighbor)
                 w = data[indptr[node] + i] # i.e. A[node, neigh_node]
-                d = min(w, prox)
-                if d > neigh_prox:
+                d = closure.disjf(closure.conjf(w, prox), neigh_prox)
+                if d != neigh_prox:
                     Q.push_if_lower_fast(- d, neighbor) # will only update
                     P[neighbor] = node
         free(<void *> neighbors)
