@@ -898,7 +898,31 @@ added to TAR file. Moved tar file to
 `~/data/dbpedia/politicians/dbpedia-189515.tar.gz`
 __Update #4 (17:37)__: launched: 
 
-* ultrametric undirected, job 191538[],
-* metric undirected as, job 191539[].
+* ultrametric undirected, job 191538[], walltime 12h,
+* metric undirected as, job 191539[], walltime 12h.
 
 __Update #5__: wrote Nearest Neighbors script for calibration.
+
+## Mon Nov 11 11:53:33 EST 2013
+
+Killed jobs 191538 and 191539 for multiple issues: 
+
+* jobs were failing at startup
+* not enough walltime (!)
+
+__Postmortem__: Yesterday I uninstalled the local build of scipy on Quarry
+because it would fail importing `scipy.spatial` (which was required by the
+`scikits-learn.neighbor`, the nearest neighbors module), and reverted to the
+system installation provided in the system's `python` module. Unfortunately on
+BigRedII the `python` module does not include scipy, which caused the jobs
+submitted yesterday to crash at startup b/c.
+
+__Update 14:50__: Resubmitted on BR2 after recompiling numpy and scipy (but
+still `scipy.spatial` does not work):
+
+* metric, undirected, job array 192597[], walltime 24h,
+* ultrametric, undirected, job array 192598[], walltime 24h.
+
+__Update 19:23__: Resubmitted jobs in the serial queue:
+* metric, undirected, job array 192647[], walltime 24h,
+* ultrametric, undirected, job array 192649[], walltime 24h.
