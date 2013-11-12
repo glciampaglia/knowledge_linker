@@ -316,3 +316,35 @@ def group(data, key, keypattern='{}'):
     for k, datagroup in groupby(sorted(data, key=key), key):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
+
+def delete_col_csr(A,i):
+    """
+    Returns a CSR matrix with the i'th column removed.
+    """
+    return delete_row_csr(sp.csr_matrix(A.transpose()),i)
+    
+def delete_row_csr(A, i):
+    """
+    Returns a CSR matrix with the i'th row removed.
+    """
+    mat = A.copy()
+    if not sp.isspmatrix_csr(mat):
+        raise ValueError("Works only for CSR format -- use .tocsr() first")
+    n = mat.indptr[i+1] - mat.indptr[i]
+    if n > 0:
+        mat.data[mat.indptr[i]:-n] = mat.data[mat.indptr[i+1]:]
+        mat.data = mat.data[:-n]
+        mat.indices[mat.indptr[i]:-n] = mat.indices[mat.indptr[i+1]:]
+        mat.indices = mat.indices[:-n]
+    mat.indptr[i:-1] = mat.indptr[i+1:]
+    mat.indptr[i:] -= n
+    mat.indptr = mat.indptr[:-1]
+    mat._shape = (mat._shape[0]-1, mat._shape[1])
+    return mat
+
+def delete_row_col_csr(A,(i,j)):
+    """
+    Returns a CSR matrix with the i'th row and j'th column removed.
+    """
+    A = delete_row_csr(A,i)
+    return delete_col_csr(A,j)
