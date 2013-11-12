@@ -924,5 +924,24 @@ still `scipy.spatial` does not work):
 * ultrametric, undirected, job array 192598[], walltime 24h.
 
 __Update 19:23__: Resubmitted jobs in the serial queue:
-* metric, undirected, job array 192647[], walltime 24h,
+* metric, undirected, job array 192648[], walltime 24h,
 * ultrametric, undirected, job array 192649[], walltime 24h.
+
+## Tue Nov 12 10:22:57 EST 2013
+
+Jobs still in queue on Br2, the first job should start soon.
+
+__10:51__: Went to open the tar archive with the results of job
+189515, and discovered that I had only added the error log, not the output;
+also, I had removed the original files. *Bummer!1#%}$~!*
+
+Relaunched the job (metric closure, directed graph on BigRed2 (id = 192833[],
+array -t 0-64).
+
+__13:40__: BR2 had issues with starting jobs and the was not launching them. Now
+apparently the issue was fixed.
+
+__17:00__: The first 28 jobs from 192648[] have started.
+
+__17:06__: Computed classification accuracy using NN (k=20, uniform weights,
+10-fold CV). Directed ultrametric F1 = 0.38 +/- 0.07
