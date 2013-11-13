@@ -951,3 +951,6 @@ __17:06__: Computed classification accuracy using NN (k=20, uniform weights,
 Jobs are running but BR2 is still somehow congested. Hopefully 192648[]
 (undirected metric) shall be end of this week. Also: on the undirected graph the
 walltime is approximately 16h.
+
+__12:29__: Completed presentation for CASCI group meeting, adding result about
+ultrametric.
