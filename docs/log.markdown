@@ -945,3 +945,9 @@ __17:00__: The first 28 jobs from 192648[] have started.
 
 __17:06__: Computed classification accuracy using NN (k=20, uniform weights,
 10-fold CV). Directed ultrametric F1 = 0.38 +/- 0.07
+
+## Wed Nov 13 10:09:38 EST 2013
+
+Jobs are running but BR2 is still somehow congested. Hopefully 192648[]
+(undirected metric) shall be end of this week. Also: on the undirected graph the
+walltime is approximately 16h.
