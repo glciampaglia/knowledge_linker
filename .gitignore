@@ -19,3 +19,5 @@ cython_debug
 .ropeproject/globalnames
 .ropeproject/history
 .ropeproject/objectdb
+
+presentations/*.pdf
