@@ -954,3 +954,16 @@ walltime is approximately 16h.
 
 __12:29__: Completed presentation for CASCI group meeting, adding result about
 ultrametric.
+
+## Thu Nov 14 14:49:11 EST 2013
+
+__14:54__: checked progress of jobs on BigRed2. Two jobs still running (192648
+and 192833), ETA for the last one in the queue is Saturday afternoon/evening.
+Job 192649 completed, but found three jobs (ARRAYID=8,9,10) to have been killed
+by the OOM. They were among the earliest to start after the scheduler had been
+restarted (see entry 11-12), so perhaps there was some sort of congestion
+problem. 
+
+__15:07__: Restarted job with -t 8-10, -l ppn=1:nodes=32 and walltime = 18h
+Job ID: 197498 (ultrametric, undirected). Job running right away, skipping rest
+of queue (perhaps b/c of lower walltime?).
