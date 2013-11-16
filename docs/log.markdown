@@ -943,8 +943,8 @@ apparently the issue was fixed.
 
 __17:00__: The first 28 jobs from 192648[] have started.
 
-__17:06__: Computed classification accuracy using NN (k=20, uniform weights,
-10-fold CV). Directed ultrametric F1 = 0.38 +/- 0.07
+__17:06__: Computed F1 using NN (k=20, uniform weights, 10-fold CV). Directed
+ultrametric F1 = 0.38 +/- 0.07
 
 ## Wed Nov 13 10:09:38 EST 2013
 
@@ -967,3 +967,22 @@ problem.
 __15:07__: Restarted job with -t 8-10, -l ppn=1:nodes=32 and walltime = 18h
 Job ID: 197498 (ultrametric, undirected). Job running right away, skipping rest
 of queue (perhaps b/c of lower walltime?).
+
+## Fri Nov 15 10:04:38 EST 2013
+
+Job 197498 completed. Check file size (OK) and added the files to the TAR
+archive for 192649 (renamed).
+
+Job 192833 completed. Seen several jobs failing. Will check into this after the
+twitter-truthy meeting.
+
+__19:33__: updated with Fil and Sandro (and Onur and Emilio). Reported about F1
+score (which is not the accuracy, as previously thought) and seems the result
+doesn't look bad, but need to compute precision and recall separately. Several
+suggestions (use random forests instead of NN, establish baseline, compare other
+characteristics of the sample to see if task is too easy, compute within- and
+between-class similarity, start thinking of case study for validation).
+
+All jobs on BR2 completed, will check how many failed and need to be restarted
+later in the w/e. 
+
