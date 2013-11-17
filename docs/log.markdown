@@ -986,3 +986,22 @@ between-class similarity, start thinking of case study for validation).
 All jobs on BR2 completed, will check how many failed and need to be restarted
 later in the w/e. 
 
+## Sun Nov 17 17:26:24 EST 2013
+
+Recap of jobs:
+
+* 192648[] -t 0-63 (undirected, metric): jobs 16,32,36-40,47-49 aborted for
+  various reasons. Average walltime for other jobs: 16h.
+* 192649[] -t 0-63 (undirected, ultrametric): all jobs completed.
+* 192833[] -t 0-63 (directed, metric); jobs 3,32,35-37,41,45,47,5,51,52,57,60
+  failed for various reasons (OOM killer among others). Average walltime for
+  other jobs: 1h23'.
+* 197498[] -t 8-10 (undirected, ultrametric -- repost of 192649[], files have
+  been renamed and integrated into the TAR archive for 192649)
+
+__18:00__: relaunched failed jobs,
+
+* Undirected, metric: 198733[] -t 16,32,36-40,47-49, walltime 18h. ETA start:
+  1d from now (Monday evening).
+* Directed, metric: 198735[] -t 3,32,35-37,41,45,47,5,51,52,57,60, walltime 4h.
+  Jobs are running.
