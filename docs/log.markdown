@@ -1005,3 +1005,13 @@ __18:00__: relaunched failed jobs,
   1d from now (Monday evening).
 * Directed, metric: 198735[] -t 3,32,35-37,41,45,47,5,51,52,57,60, walltime 4h.
   Jobs are running.
+
+## Mon Nov 18 11:32:58 EST 2013
+All jobs in 198735[] completed regularly. Array 198733[] has still three job
+running, which should complete soon, and has one job (198733[32]) which has been
+put on hold. Opened a ticket to have it released.
+
+__12:19__: the three jobs in 198733[] have completed. Only 198733[32] still to
+go.
+
+__16:12__: heard back for HPS: job is now in queue.
