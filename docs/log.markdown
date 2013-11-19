@@ -1015,3 +1015,7 @@ __12:19__: the three jobs in 198733[] have completed. Only 198733[32] still to
 go.
 
 __16:12__: heard back for HPS: job is now in queue.
+
+## Tue Nov 19 10:25:01 EST 2013
+
+Job 198733[32] completed.
