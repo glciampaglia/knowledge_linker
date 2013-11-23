@@ -19,7 +19,6 @@ closureap
 
 epclosure,
 epclosuress,
-epclosureap
 
 :   closure computed only on intermediate nodes, with the additional constraint
     that direct neighbors have similarity 1.

@@ -1,46 +1,88 @@
-''' Utilities for dealing with nt files '''
-
+""" Utilities for dealing with nt files and RDF URIs. """
 import re
 from contextlib import closing
 from codecs import EncodedFile
 from gzip import GzipFile
-from itertools import imap
-from operator import methodcaller
 from collections import OrderedDict
 
-class NodesIndex(object):
-    '''
-    Class that translates from numeric node ID# to URI and viceversa
-    '''
-    def __init__(self, path):
-        with closing(open(path)) as f:
-            lines = imap(str.strip, f)
-            self.uri2node = OrderedDict((uri, node) for node, uri in enumerate(lines))
-        self.uris = self.uri2node.keys()
-    def uri2node(self, uri):
-        return self.uri2node[uri]
-    def node2uri(self, node):
-        return self.uris[node]
 
-def abbreviated(uris, ns):
-    '''
-    Return an abbreviated list of uris according to given namespace
-    abbreviations `ns`
-    '''
-    x = re.compile('({})'.format('|'.join(ns.keys())))
-    for uri in uris:
-        m = x.match(uri)
+class NodesIndex(object):
+
+    """ URI to node mapping, URI abbreviation, etc.  """
+
+    def __init__(self, path, nspath):
+        """ Instantiate a NodesIndex object.
+
+        Arguments
+        ---------
+        path : str
+            path to a file with the a list of abbreviated URIs
+
+        nspath : str
+            path to a file with a list of namespace abbreviation mappings
+
+        """
+        with closing(open(path)) as f:
+            # do not use csv.reader, it might mess up with commas!
+            lines = (line.strip() for line in f)
+            self.uri2node = OrderedDict(((u, n) for n, u in enumerate(lines)))
+        self.ns = self.readns(nspath)
+        self.x = re.compile('({})'.format('|'.join(self.ns.keys())))
+
+    def __len__(self):
+        return len(self.uri2node)
+
+    def tonodeone(self, fulluri):
+        """ Return int node ID from full URI. """
+        try:
+            u = self.abbreviateone(fulluri)
+        except ValueError:
+            raise KeyError(fulluri)
+        return self.uri2node[u]
+
+    def tonodemany(self, fulluris):
+        """ Convert sequence of full URIs to iterator over node IDs. """
+        for uri in fulluris:
+            yield self.tonodeone(uri)
+
+    def tonodefile(self, path):
+        """ Convert URIs from file to node IDs.
+
+        Parameters
+        ----------
+        path : str
+            path to a file with a list of URIs
+
+        Returns
+        -------
+        a list of node IDs.
+
+        """
+        with closing(open(path)) as f:
+            return list(self.tonodemany((l.strip() for l in f)))
+
+    def abbreviateone(self, fulluri):
+        """ Return abbreviated URI. """
+        m = self.x.match(fulluri)
         if m is not None:
             matchedns = m.group()
-            abbrvns = ns[matchedns]
-            yield x.sub(abbrvns + ':', uri)
+            abbrvns = self.ns[matchedns]
+            return self.x.sub(abbrvns + ':', fulluri)
+        else:
+            raise ValueError('No abbreviation: {}'.format(fulluri))
 
-def readns(path):
-    '''
-    Returns a dictionary mapping full namespaces URIs to abbreviated names
-    '''
-    with closing(open(path)) as f:
-        return dict(imap(methodcaller('split','\t'), imap(str.strip, f)))
+    def abbreviatemany(self, fulluris):
+        """ Iterator over abbreviated URIs. """
+        for uri in fulluris:
+            yield self.abbreviateone(uri)
+
+    @staticmethod
+    def readns(path):
+        """ Read a file with abbreviation mappings and return a dict. """
+        with closing(open(path)) as f:
+            items = (tuple(l.strip().split()) for l in f)
+            return dict(items)
+
 
 def itertriples(path):
     '''
@@ -60,7 +102,7 @@ def itertriples(path):
             ntfile = open(path)
     ntfile = EncodedFile(ntfile, 'utf-8')
     with closing(ntfile):
-        for line_no, line in enumerate(ntfile):
+        for line in ntfile:
             if line.startswith('#'):
                 continue
             # remove trailing newline and dot
@@ -72,6 +114,7 @@ def itertriples(path):
             s2 = line.find(' ', s1 + 1)
             triple = line[:s1], line[s1 + 1:s2], line[s2 + 1:]
             yield triple
+
 
 def iterabbrv(triples, abbreviations, properties=False):
     '''
@@ -99,8 +142,8 @@ def iterabbrv(triples, abbreviations, properties=False):
                 # abbreviate it
                 item = item[1:-1]
             elif item.endswith('>'):
-                # typed property: property^^<URI>, where <URI> is same as above,
-                # try to abbreviate URI and then recompose with ^^
+                # typed property: property^^<URI>, where <URI> is same as
+                # above, try to abbreviate URI and then recompose with ^^
                 is_property = True
                 triple_has_property = True
                 prop, item = item.split('^^')
@@ -124,4 +167,3 @@ def iterabbrv(triples, abbreviations, properties=False):
         if triple_has_property and not properties:
             continue
         yield tuple(abbrvtriple)
-

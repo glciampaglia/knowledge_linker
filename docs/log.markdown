@@ -924,5 +924,98 @@ still `scipy.spatial` does not work):
 * ultrametric, undirected, job array 192598[], walltime 24h.
 
 __Update 19:23__: Resubmitted jobs in the serial queue:
-* metric, undirected, job array 192647[], walltime 24h,
+* metric, undirected, job array 192648[], walltime 24h,
 * ultrametric, undirected, job array 192649[], walltime 24h.
+
+## Tue Nov 12 10:22:57 EST 2013
+
+Jobs still in queue on Br2, the first job should start soon.
+
+__10:51__: Went to open the tar archive with the results of job
+189515, and discovered that I had only added the error log, not the output;
+also, I had removed the original files. *Bummer!1#%}$~!*
+
+Relaunched the job (metric closure, directed graph on BigRed2 (id = 192833[],
+array -t 0-64).
+
+__13:40__: BR2 had issues with starting jobs and the was not launching them. Now
+apparently the issue was fixed.
+
+__17:00__: The first 28 jobs from 192648[] have started.
+
+__17:06__: Computed F1 using NN (k=20, uniform weights, 10-fold CV). Directed
+ultrametric F1 = 0.38 +/- 0.07
+
+## Wed Nov 13 10:09:38 EST 2013
+
+Jobs are running but BR2 is still somehow congested. Hopefully 192648[]
+(undirected metric) shall be end of this week. Also: on the undirected graph the
+walltime is approximately 16h.
+
+__12:29__: Completed presentation for CASCI group meeting, adding result about
+ultrametric.
+
+## Thu Nov 14 14:49:11 EST 2013
+
+__14:54__: checked progress of jobs on BigRed2. Two jobs still running (192648
+and 192833), ETA for the last one in the queue is Saturday afternoon/evening.
+Job 192649 completed, but found three jobs (ARRAYID=8,9,10) to have been killed
+by the OOM. They were among the earliest to start after the scheduler had been
+restarted (see entry 11-12), so perhaps there was some sort of congestion
+problem. 
+
+__15:07__: Restarted job with -t 8-10, -l ppn=1:nodes=32 and walltime = 18h
+Job ID: 197498 (ultrametric, undirected). Job running right away, skipping rest
+of queue (perhaps b/c of lower walltime?).
+
+## Fri Nov 15 10:04:38 EST 2013
+
+Job 197498 completed. Check file size (OK) and added the files to the TAR
+archive for 192649 (renamed).
+
+Job 192833 completed. Seen several jobs failing. Will check into this after the
+twitter-truthy meeting.
+
+__19:33__: updated with Fil and Sandro (and Onur and Emilio). Reported about F1
+score (which is not the accuracy, as previously thought) and seems the result
+doesn't look bad, but need to compute precision and recall separately. Several
+suggestions (use random forests instead of NN, establish baseline, compare other
+characteristics of the sample to see if task is too easy, compute within- and
+between-class similarity, start thinking of case study for validation).
+
+All jobs on BR2 completed, will check how many failed and need to be restarted
+later in the w/e. 
+
+## Sun Nov 17 17:26:24 EST 2013
+
+Recap of jobs:
+
+* 192648[] -t 0-63 (undirected, metric): jobs 16,32,36-40,47-49 aborted for
+  various reasons. Average walltime for other jobs: 16h.
+* 192649[] -t 0-63 (undirected, ultrametric): all jobs completed.
+* 192833[] -t 0-63 (directed, metric); jobs 3,32,35-37,41,45,47,5,51,52,57,60
+  failed for various reasons (OOM killer among others). Average walltime for
+  other jobs: 1h23'.
+* 197498[] -t 8-10 (undirected, ultrametric -- repost of 192649[], files have
+  been renamed and integrated into the TAR archive for 192649)
+
+__18:00__: relaunched failed jobs,
+
+* Undirected, metric: 198733[] -t 16,32,36-40,47-49, walltime 18h. ETA start:
+  1d from now (Monday evening).
+* Directed, metric: 198735[] -t 3,32,35-37,41,45,47,5,51,52,57,60, walltime 4h.
+  Jobs are running.
+
+## Mon Nov 18 11:32:58 EST 2013
+All jobs in 198735[] completed regularly. Array 198733[] has still three job
+running, which should complete soon, and has one job (198733[32]) which has been
+put on hold. Opened a ticket to have it released.
+
+__12:19__: the three jobs in 198733[] have completed. Only 198733[32] still to
+go.
+
+__16:12__: heard back for HPS: job is now in queue.
+
+## Tue Nov 19 10:25:01 EST 2013
+
+Job 198733[32] completed.
