@@ -1022,7 +1022,7 @@ Job 198733[32] completed.
 
 ## Sat Nov 23 17:51:20 EST 2013
 
-Archive output of 198733[] and 198735[].
+Archived output of 198733[] and 198735[].
 
 Archived output of 198733[] and 198735[] as tar.gz files in
 ~/data/dbpedia/politicians.
@@ -1031,6 +1031,6 @@ Updated files for jobs 16,32,36-40,47-49 in dbpedia.192648.tar.gz using those
 from dbpedia.198733.tar.gz and archived updated file in
 ~/data/dbpedia/politicians.
 
-Update files for jobs 3,32,35-37,41,45,47,5,51,52,57,60 in dbpedia.192833.tar.gz
-using thos in dbpedia.198735.tar.gz and archived file in
-~/data/dbpeia/politicians. 
+Updated files for jobs 3,32,35-37,41,45,47,5,51,52,57,60 in
+dbpedia.192833.tar.gz using those in dbpedia.198735.tar.gz and archived file in
+~/data/dbpedia/politicians. 
