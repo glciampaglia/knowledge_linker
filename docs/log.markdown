@@ -1034,3 +1034,10 @@ from dbpedia.198733.tar.gz and archived updated file in
 Updated files for jobs 3,32,35-37,41,45,47,5,51,52,57,60 in
 dbpedia.192833.tar.gz using those in dbpedia.198735.tar.gz and archived file in
 ~/data/dbpedia/politicians. 
+
+__18:34__. Double-checked actual files in the archive. The data are thus stored
+as follows:
+
+* ultrametric, undirected: ~/data/dbpedia/politicians/192649.tar.gz
+* metric, directed ~/data/dbpedia/politicians/192833.tar.gz
+* metric, undirected: ~/data/dbpedia/politicians/192648.tar.gz
