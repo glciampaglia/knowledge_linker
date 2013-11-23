@@ -1041,3 +1041,5 @@ as follows:
 * ultrametric, undirected: ~/data/dbpedia/politicians/192649.tar.gz
 * metric, directed ~/data/dbpedia/politicians/192833.tar.gz
 * metric, undirected: ~/data/dbpedia/politicians/192648.tar.gz
+
+__18:36__. Launched backup to SDA.
