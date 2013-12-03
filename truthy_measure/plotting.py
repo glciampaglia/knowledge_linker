@@ -1,5 +1,9 @@
+""" Plotting tools. """
+
 import numpy as np
 import matplotlib.pyplot as plt
+from itertools import groupby
+from operator import itemgetter
 
 
 def plot_cdf(x, **kwargs):
@@ -20,15 +24,14 @@ def plot_cdf(x, **kwargs):
     """
     N = float(len(x))
     x.sort()
-    r0 = np.arange(1, N + 1)
-    xu = np.unique(x)
-    ru = []
-    for xi in xu:
-        rs = r0[x == xi]
-        ru.append(rs.min() + rs.ptp() / 2.)
-    ru = np.asarray(ru)
+    t = []
+    for x, chunk in groupby(enumerate(x, 1), itemgetter(1)):
+        xranks, _ = zip(*list(chunk))
+        t.append((float(x), xranks[0] + len(xranks) / 2.))
+    t = np.asarray(t)
+    fig = plt.gcf()
     ax = plt.gca()
-    ax.loglog(xu, (N - ru) / N, 'ow', **kwargs)
+    ax.loglog(t[:, 0], (N - t[:, 1]) / N, 'ow', **kwargs)
     return ax
 
 def plot_pdf_log2(x, nbins=10, **kwargs):
