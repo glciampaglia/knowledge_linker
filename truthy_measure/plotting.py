@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def plot_cdf(x, **kwargs):
-    '''
-    Adds a log-log CDF plot to the current axes.
+    """
+    Add a log-log CDF plot to the current axes.
 
     Arguments
     ---------
@@ -11,13 +12,23 @@ def plot_cdf(x, **kwargs):
         The data to plot
 
     Additional keyword arguments are passed to `matplotlib.pyplot.loglog`.
-    '''
-    N = len(x)
+    Returns a matplotlib axes object.
+
+    This version tries collapse the ranks from multiple, identical observations
+    into their midpoint. This produces smaller figures.
+
+    """
+    N = float(len(x))
     x.sort()
-    r = np.arange(N, 0, -1, dtype=float) / N
-    fig = plt.gcf()
+    r0 = np.arange(1, N + 1)
+    xu = np.unique(x)
+    ru = []
+    for xi in xu:
+        rs = r0[x == xi]
+        ru.append(rs.min() + rs.ptp() / 2.)
+    ru = np.asarray(ru)
     ax = plt.gca()
-    ax.loglog(x, r, 'ow', **kwargs)
+    ax.loglog(xu, (N - ru) / N, 'ow', **kwargs)
     return ax
 
 def plot_pdf_log2(x, nbins=10, **kwargs):
