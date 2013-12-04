@@ -1043,3 +1043,8 @@ as follows:
 * metric, undirected: ~/data/dbpedia/politicians/192648.tar.gz
 
 __18:36__. Launched backup to SDA.
+
+## Tue Dec  3 14:34:35 EST 2013
+
+Worked to make the data prep script compatible with the new input format
+(single-source vs previous source-target).
