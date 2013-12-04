@@ -1038,7 +1038,7 @@ dbpedia.192833.tar.gz using those in dbpedia.198735.tar.gz and archived file in
 __18:34__. Double-checked actual files in the archive. The data are thus stored
 as follows:
 
-* ultrametric, directed: ~/data/dbpieda/politicians/165353.tar.gz
+* ultrametric, directed: ~/data/dbpedia/politicians/165353.tar.gz
   (source-target format)
 * ultrametric, undirected: ~/data/dbpedia/politicians/192649.tar.gz
 * metric, directed ~/data/dbpedia/politicians/192833.tar.gz
