@@ -1038,6 +1038,8 @@ dbpedia.192833.tar.gz using those in dbpedia.198735.tar.gz and archived file in
 __18:34__. Double-checked actual files in the archive. The data are thus stored
 as follows:
 
+* ultrametric, directed: ~/data/dbpieda/politicians/165353.tar.gz
+  (source-target format)
 * ultrametric, undirected: ~/data/dbpedia/politicians/192649.tar.gz
 * metric, directed ~/data/dbpedia/politicians/192833.tar.gz
 * metric, undirected: ~/data/dbpedia/politicians/192648.tar.gz
@@ -1048,3 +1050,24 @@ __18:36__. Launched backup to SDA.
 
 Worked to make the data prep script compatible with the new input format
 (single-source vs previous source-target).
+
+## Wed Dec  4 11:13:46 EST 2013
+
+Computed F1, precision, and recall scores for all data:
+
++-------------+-----------+---------------+------------+----------+
+| Metric      | Edge type | Precision (%) | Recall (%) | F1 (%)   |
++-------------+-----------+---------------+------------+----------+
+| ultrametric | directed  | 50 +/- 6      | 31 +/- 8   | 38 +/- 7 |
++-------------+-----------+---------------+------------+----------+
+| ultrametric | undirected| 50 +/- 8      | 34 +/- 15  | 40 +/- 11|
++-------------+-----------+---------------+------------+----------+
+| metric      | directed  | 71 +/- 9      | 44 +/- 9   | 54 +/- 9 |
++-------------+-----------+---------------+------------+----------+
+| metric      | undirected| 56 +/- 7      | 43 +/- 6   | 49 +/- 5 |
++-------------+-----------+---------------+------------+----------+
+
+All scores are computed from a nearest-neighbors classified with $k=20$
+neighbors using 10-fold cross-validation.
+
+Wrote script for computing within-class and between class cosine similarity.
