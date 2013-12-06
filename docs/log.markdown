@@ -1080,3 +1080,16 @@ about how to take into account predicates that is based on edge removal.
 Informally, characterize a predicate by the predicates that you find on the
 shortest path (or $k$ shortest paths) that you obtain after having removed that
 edge from the graph.
+
+## Fri Dec  6 13:42:41 EST 2013
+
+Compute baseline on the original graph:
+
+Precision: 0.10 (+/- 0.60)
+Recall: 0.00 (+/- 0.00)
+F1: 0.00 (+/- 0.01)
+
+(These are proportions, not percentages). Note also that this done without
+considering the epistemic axiom about direct connection, that is, I am not
+ceiling the weights, but using them as computed. Rounding them up to 1 would
+likely result in worse performances.
