@@ -1071,3 +1071,12 @@ All scores are computed from a nearest-neighbors classified with $k=20$
 neighbors using 10-fold cross-validation.
 
 Wrote script for computing within-class and between class cosine similarity.
+
+## Thu Dec  5 19:07:49 EST 2013
+
+Implemented function for computing the distances on the original graph, i.e.,
+extract only the feature vectors in the original graph. Also, sketched an idea
+about how to take into account predicates that is based on edge removal.
+Informally, characterize a predicate by the predicates that you find on the
+shortest path (or $k$ shortest paths) that you obtain after having removed that
+edge from the graph.
