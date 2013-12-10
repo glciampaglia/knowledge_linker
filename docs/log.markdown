@@ -1093,3 +1093,7 @@ F1: 0.00 (+/- 0.01)
 considering the epistemic axiom about direct connection, that is, I am not
 ceiling the weights, but using them as computed. Rounding them up to 1 would
 likely result in worse performances.
+
+## Mon Dec  9 19:28:30 EST 2013
+
+Implemented backbone function.
