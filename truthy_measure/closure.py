@@ -224,7 +224,30 @@ def _init_worker(kind, indptr, indices, data, shape):
     _A = sp.csr_matrix((_data, _indices.astype('int32'), _indptr), shape)
 
 
-def closureap(A, dirtree, start=None, offset=None, nprocs=None, kind='ultrametric'):
+def _fromto(start, offset, N):
+    if start is None:
+        fromi = 0
+        toi = N
+    else:
+        assert offset is not None
+        assert 0 <= offset <= N
+        assert start >= 0
+        fromi = start
+        toi = start + offset
+    return fromi, toi
+
+
+def _nprocs(nprocs):
+    if nprocs is None:
+        # by default use 90% of available processors or 2, whichever the
+        # largest.
+        return max(int(0.9 * cpu_count()), 2)
+    else:
+        return nprocs
+
+
+def closureap(A, dirtree, start=None, offset=None, nprocs=None,
+              kind='ultrametric'):
     """
     All-pairs metric closure via path-finding. Computes the closure of a graph
     represented by adjacency matrix A and saves the results for each row in
@@ -256,19 +279,8 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None, kind='ultrametri
     """
     N = A.shape[0]
     digits = int(np.ceil(np.log10(N)))
-    if start is None:
-        fromi = 0
-        toi = N
-    else:
-        assert offset is not None
-        assert 0 <= offset <= N
-        assert start >= 0
-        fromi = start
-        toi = start + offset
-    if nprocs is None:
-        # by default use 90% of available processors or 2, whichever the
-        # largest.
-        nprocs = max(int(0.9 * cpu_count()), 2)
+    fromi, toi = _fromto(start, offset, N)
+    nprocs = _nprocs(nprocs)
     # allocate array to be passed as shared memory
     A = sp.csr_matrix(A)
     indptr = Array(c_int, A.indptr)
@@ -363,3 +375,37 @@ def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
             if retpaths:
                 paths.append(np.empty(0))
     return caps, paths
+
+
+def _backbone_worker(n):
+    global _A, _nprocs, _kind
+    d0 = np.ravel(_A[n].todense())  # original
+    d1 = cclosuress(_A, n, kind=_kind)  # closed
+    b = np.where((d0 > 0.0) & (d0 == d1))
+    return (n,) + b
+
+
+# TODO: add test function.
+def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
+    """ Compute the graph backbone.
+
+    The graph backbone is the set of edges whose weight does not change after
+    the closure operation.
+
+    """
+    A = sp.csr_matrix(A)
+    N = A.shape[0]
+    fromi, toi = _fromto(start, offset, N)
+    nprocs = _nprocs(nprocs)
+    indptr = Array(c_int, A.indptr)
+    indices = Array(c_int, A.indices)
+    data = Array(c_double, A.data)
+    initargs = (kind, indptr, indices, data, A.shape)
+    print '{}: launching pool of {} workers.'.format(now(), nprocs)
+    pool = Pool(processes=nprocs, initializer=_init_worker,
+                initargs=initargs, maxtasksperchild=max_tasks_per_worker)
+    with closing(pool):
+        D = pool.map(_backbone_worker, xrange(fromi, toi))
+    pool.join()
+    print '{}: done'.format(now())
+    return dict(D)
