@@ -1097,3 +1097,11 @@ likely result in worse performances.
 ## Mon Dec  9 19:28:30 EST 2013
 
 Implemented backbone function.
+
+## Thu Dec 12 20:47:58 EST 2013
+
+Backbone job for the full graph launched on one node for 2 days did not complete
+-- obviously. Added start/offset to PBS script and using array of 50 jobs, each
+with 64000 SS. Made some tests and ETA for a SS is 6s, which gives roughly 3hrs
+total walltime. Launched test with only 32 sources to check that everything
+works, and later will launch full job.
