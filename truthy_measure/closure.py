@@ -25,6 +25,7 @@ epclosuress,
 
 """
 
+import sys
 import numpy as np
 import scipy.sparse as sp
 from ctypes import c_int, c_double
@@ -401,7 +402,8 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (kind, indptr, indices, data, A.shape)
-    print >> sys.stderr, '{}: launching pool of {} workers.'.format(now(), nprocs)
+    print >> sys.stderr, '{}: launching pool of {} workers.'.format(now(),
+                                                                    nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker,
                 initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
