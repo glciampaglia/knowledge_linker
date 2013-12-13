@@ -1105,3 +1105,5 @@ Backbone job for the full graph launched on one node for 2 days did not complete
 with 64000 SS. Made some tests and ETA for a SS is 6s, which gives roughly 3hrs
 total walltime. Launched test with only 32 sources to check that everything
 works, and later will launch full job.
+
+__21:07__: fixed typo in PBS script, launched job (id: 239068).
