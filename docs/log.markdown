@@ -1110,3 +1110,12 @@ works, and later will launch full job.
 
 Job was killed because it exceeded walltime limit. Bumped walltime to 2 days and
 resubmitted the job array (id: 239284).
+
+__21:07__: fixed typo in PBS script, launched job (id: 239068).
+
+## Mon Dec 16 18:12:32 EST 2013
+
+Job failed due to ongoing problems with BR2's scheduler including several jobs
+hitting the walltime limit. Estimated again walltime on a longer batch and it
+takes 5.4s per job, so not bumping walltime any higher. Moved computation to
+Quarry: job array ID is 2238053.
