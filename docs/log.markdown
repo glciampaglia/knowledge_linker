@@ -1119,3 +1119,9 @@ Job failed due to ongoing problems with BR2's scheduler including several jobs
 hitting the walltime limit. Estimated again walltime on a longer batch and it
 takes 5.4s per job, so not bumping walltime any higher. Moved computation to
 Quarry: job array ID is 2238053.
+
+__18:44__: forgot that Quarry allocates resources to the virtual processor
+level, so multiple jobs were being allocated on the same host, and would fail
+due to out of memory. Also, forgot that nodes on Quarry have only 8 CPUs, and
+not 32. Fixed PBS script doubling the offset and halving the array size, and
+increasing the walltime to 36 hours. Job id: 2238288.
