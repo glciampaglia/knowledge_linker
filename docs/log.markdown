@@ -1130,3 +1130,11 @@ increasing the walltime to 36 hours. Job id: 2238288.
 
 Backbone terminated with only one failure (-t 24), due to an error with terminal
 indices. Inspected the results for the other jobs, and they are all empty.
+
+__20:06__: met with Sandro and Fil, showed results from calibration. It was
+noted that the within-class and between-class similarity is almost the same,
+which is difficult to reconcile with the 71% precision for the NN classifier.
+But NN does not use cosine, it uses L2, so need to re-plot the similarity
+histograms with L2, but no big improvements appear. Will compute the
+classification precision and recall with cosine, just to see whether things
+change dramatically or not.
