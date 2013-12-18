@@ -1125,3 +1125,8 @@ level, so multiple jobs were being allocated on the same host, and would fail
 due to out of memory. Also, forgot that nodes on Quarry have only 8 CPUs, and
 not 32. Fixed PBS script doubling the offset and halving the array size, and
 increasing the walltime to 36 hours. Job id: 2238288.
+
+## Tue Dec 17 19:37:39 EST 2013
+
+Backbone terminated with only one failure (-t 24), due to an error with terminal
+indices. Inspected the results for the other jobs, and they are all empty.
