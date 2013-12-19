@@ -1138,3 +1138,19 @@ But NN does not use cosine, it uses L2, so need to re-plot the similarity
 histograms with L2, but no big improvements appear. Will compute the
 classification precision and recall with cosine, just to see whether things
 change dramatically or not.
+
+## Thu Dec 19 11:33:22 EST 2013
+
+Fixed problem in backbone that was causing no result to be returned, and
+resubmitted the job on BR2 (id: 242507).
+
+Discussed yesterday with Prashant workplan for KDD paper (yes, we are trying the
+impossible). Calibration: need to get precision, recall, F1 and confusion matrix
+for both NN (my code) and random forests (his code). Validation: we will collect
+a few hundred tweets from Twitter containing mentions of the pattern:
+
+	<a World Leader> is a <something> 
+	
+map them to entities in DBPedia by hand and code them for their truth value.
+Then we will run the closure machinery and run a rank correlation coefficient
+between the two sequences.
