@@ -226,15 +226,20 @@ def _init_worker(kind, indptr, indices, data, shape):
 
 
 def _fromto(start, offset, N):
+    """
+    Translate start and offset to slice indices.
+
+    If offset overflows the axis lenght N, it is capped to N.
+    """
     if start is None:
         fromi = 0
         toi = N
     else:
         assert offset is not None
-        assert 0 <= offset <= N
+        assert offset >= 0
         assert start >= 0
         fromi = start
-        toi = start + offset
+        toi = min(start + offset, N)
     return fromi, toi
 
 
@@ -379,9 +384,9 @@ def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
 
 
 def _backbone_worker(n):
-    global _A, _nprocs, _kind
+    global _A, _kind
     d0 = np.ravel(_A[n].todense())  # original
-    d1 = cclosuress(_A, n, kind=_kind)  # closed
+    d1, _ = cclosuress(_A, n, kind=_kind)  # closed
     b = np.where((d0 > 0.0) & (d0 == d1))
     return (n,) + b
 
@@ -409,5 +414,5 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     with closing(pool):
         D = pool.map(_backbone_worker, xrange(fromi, toi))
     pool.join()
-    print '{}: done'.format(now())
+    print >> sys.stderr, '{}: done'.format(now())
     return dict(D)

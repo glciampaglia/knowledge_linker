@@ -135,6 +135,19 @@ def test_closure():
     assert np.all(path1 == path2)
 
 
+def test_backbone():
+    N = 10
+    A = np.zeros((N, N))
+    center = 0
+    A[center, :] = 1.0
+    A[:, center] = 1.0
+    Bdict = clo.backbone(A)
+    AB = np.zeros(A.shape)
+    for i in Bdict:
+        for j in Bdict[i]:
+            AB[i, j] = 1.0
+    assert np.allclose(AB, A)
+
 ## test for epclosure* functions
 
 
@@ -318,3 +331,4 @@ def test_graph5_maxmin():
         [1.,   1.,   0.33, 1.,   1.00],
         [1.,   0.25, 0.25, 1.,   1.00]])
     run_test(G, expect)
+
