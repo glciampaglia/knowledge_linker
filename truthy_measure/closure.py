@@ -407,12 +407,12 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (kind, indptr, indices, data, A.shape)
-    print >> sys.stderr, '{}: launching pool of {} workers.'.format(now(),
+    print '{}: launching pool of {} workers.'.format(now(),
                                                                     nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker,
                 initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
         D = pool.map(_backbone_worker, xrange(fromi, toi))
     pool.join()
-    print >> sys.stderr, '{}: done'.format(now())
+    print '{}: done'.format(now())
     return dict(D)

@@ -136,6 +136,7 @@ def test_closure():
 
 
 def test_backbone():
+    """ (ultra)metric backbone extraction. """
     N = 10
     A = np.zeros((N, N))
     center = 0
