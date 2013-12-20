@@ -1161,3 +1161,9 @@ this amounts to a 3 hours walltime, and yet it would not finish after 6. But on
 Quarry this same estimate was accurate. Am I running on a single CPU only?
 Specified the number of processors per node, in the PBS scripts though this
 should not be even needed by aprun.  Resubmitted the job (id: 243413).
+
+## Fri Dec 20 16:16:30 EST 2013
+
+Job terminated with nodes 19-48 failed. Bumped up walltime to 1 day and
+resubmitted (id: 246144[]).
+
