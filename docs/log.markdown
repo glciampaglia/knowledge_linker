@@ -1167,3 +1167,7 @@ should not be even needed by aprun.  Resubmitted the job (id: 243413).
 Job terminated with nodes 19-48 failed. Bumped up walltime to 1 day and
 resubmitted (id: 246144[]).
 
+## Sun Dec 22 14:45:29 EST 2013
+
+Jobs still failing due max walltime reached. Bumping walltime to 1 week and
+resubmitting whole array (Id: 250317)
