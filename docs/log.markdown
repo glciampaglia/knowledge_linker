@@ -1098,4 +1098,79 @@ likely result in worse performances.
 
 Implemented backbone function.
 
+<<<<<<< HEAD
 __23:51__: launched backbone job on BR2 (JOB ID: 230121).
+=======
+## Thu Dec 12 20:47:58 EST 2013
+
+Backbone job for the full graph launched on one node for 2 days did not complete
+-- obviously. Added start/offset to PBS script and using array of 50 jobs, each
+with 64000 SS. Made some tests and ETA for a SS is 6s, which gives roughly 3hrs
+total walltime. Launched test with only 32 sources to check that everything
+works, and later will launch full job.
+
+## Fri Dec 13 10:13:49 EST 2013
+
+Job was killed because it exceeded walltime limit. Bumped walltime to 2 days and
+resubmitted the job array (id: 239284).
+
+__21:07__: fixed typo in PBS script, launched job (id: 239068).
+
+## Mon Dec 16 18:12:32 EST 2013
+
+Job failed due to ongoing problems with BR2's scheduler including several jobs
+hitting the walltime limit. Estimated again walltime on a longer batch and it
+takes 5.4s per job, so not bumping walltime any higher. Moved computation to
+Quarry: job array ID is 2238053.
+
+__18:44__: forgot that Quarry allocates resources to the virtual processor
+level, so multiple jobs were being allocated on the same host, and would fail
+due to out of memory. Also, forgot that nodes on Quarry have only 8 CPUs, and
+not 32. Fixed PBS script doubling the offset and halving the array size, and
+increasing the walltime to 36 hours. Job id: 2238288.
+
+## Tue Dec 17 19:37:39 EST 2013
+
+Backbone terminated with only one failure (-t 24), due to an error with terminal
+indices. Inspected the results for the other jobs, and they are all empty.
+
+__20:06__: met with Sandro and Fil, showed results from calibration. It was
+noted that the within-class and between-class similarity is almost the same,
+which is difficult to reconcile with the 71% precision for the NN classifier.
+But NN does not use cosine, it uses L2, so need to re-plot the similarity
+histograms with L2, but no big improvements appear. Will compute the
+classification precision and recall with cosine, just to see whether things
+change dramatically or not.
+
+## Thu Dec 19 11:33:22 EST 2013
+
+Fixed problem in backbone that was causing no result to be returned, and
+resubmitted the job on BR2 (id: 242507).
+
+Discussed yesterday with Prashant workplan for KDD paper (yes, we are trying the
+impossible). Calibration: need to get precision, recall, F1 and confusion matrix
+for both NN (my code) and random forests (his code). Validation: we will collect
+a few hundred tweets from Twitter containing mentions of the pattern:
+
+	<a World Leader> is a <something> 
+	
+map them to entities in DBPedia by hand and code them for their truth value.
+Then we will run the closure machinery and run a rank correlation coefficient
+between the two sequences.
+
+__17:48__: backbone jobs failed due to exceeded walltime. Still not
+understanding how: at 5.4s per row, 64000 row per node, and 32 cpus per node,
+this amounts to a 3 hours walltime, and yet it would not finish after 6. But on
+Quarry this same estimate was accurate. Am I running on a single CPU only?
+Specified the number of processors per node, in the PBS scripts though this
+should not be even needed by aprun.  Resubmitted the job (id: 243413).
+
+## Fri Dec 20 16:16:30 EST 2013
+
+Job terminated with nodes 19-48 failed. Bumped up walltime to 1 day and
+resubmitted (id: 246144[]).
+
+## Sun Dec 22 14:45:29 EST 2013
+
+Jobs still failing due max walltime reached. Bumping walltime to 1 week and
+resubmitting whole array (Id: 250317)

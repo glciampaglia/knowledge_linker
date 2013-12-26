@@ -25,6 +25,7 @@ epclosuress,
 
 """
 
+import sys
 import numpy as np
 import scipy.sparse as sp
 from ctypes import c_int, c_double
@@ -225,15 +226,20 @@ def _init_worker(kind, indptr, indices, data, shape):
 
 
 def _fromto(start, offset, N):
+    """
+    Translate start and offset to slice indices.
+
+    If offset overflows the axis lenght N, it is capped to N.
+    """
     if start is None:
         fromi = 0
         toi = N
     else:
         assert offset is not None
-        assert 0 <= offset <= N
+        assert offset >= 0
         assert start >= 0
         fromi = start
-        toi = start + offset
+        toi = min(start + offset, N)
     return fromi, toi
 
 
@@ -378,9 +384,9 @@ def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
 
 
 def _backbone_worker(n):
-    global _A, _nprocs, _kind
+    global _A, _kind
     d0 = np.ravel(_A[n].todense())  # original
-    d1 = cclosuress(_A, n, kind=_kind)  # closed
+    d1, _ = cclosuress(_A, n, kind=_kind)  # closed
     b = np.where((d0 > 0.0) & (d0 == d1))
     return (n,) + b
 
@@ -401,7 +407,8 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (kind, indptr, indices, data, A.shape)
-    print '{}: launching pool of {} workers.'.format(now(), nprocs)
+    print '{}: launching pool of {} workers.'.format(now(),
+                                                                    nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker,
                 initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     with closing(pool):
