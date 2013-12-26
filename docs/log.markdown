@@ -1098,6 +1098,9 @@ likely result in worse performances.
 
 Implemented backbone function.
 
+<<<<<<< HEAD
+__23:51__: launched backbone job on BR2 (JOB ID: 230121).
+=======
 ## Thu Dec 12 20:47:58 EST 2013
 
 Backbone job for the full graph launched on one node for 2 days did not complete
