@@ -1171,3 +1171,9 @@ resubmitted (id: 246144[]).
 
 Jobs still failing due max walltime reached. Bumping walltime to 1 week and
 resubmitting whole array (Id: 250317)
+
+## Thu Dec 26 08:11:50 EST 2013
+
+Job terminated yesterday around 7-8pm. Walltime is thus > 36h. Weird: did not
+receive email notifications from BR2. Backbone contains approx 10M edges, down
+from 23M (>50% compression).
