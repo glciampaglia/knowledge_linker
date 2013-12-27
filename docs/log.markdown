@@ -1180,3 +1180,8 @@ resubmitting whole array (Id: 250317)
 Job terminated yesterday around 7-8pm. Walltime is thus > 36h. Weird: did not
 receive email notifications from BR2. Backbone contains approx 10M edges, down
 from 23M (>50% compression).
+
+## Fri Dec 27 10:37:11 EST 2013
+
+Launched ultrametric directed (262305), metric undirected (262306), and
+ultrametric undirected (262307).
