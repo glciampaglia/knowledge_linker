@@ -1185,3 +1185,12 @@ from 23M (>50% compression).
 
 Launched ultrametric directed (262305), metric undirected (262306), and
 ultrametric undirected (262307).
+
+## Sun Jan  5 10:31:29 CET 2014
+
+Discovered bug in PBS script that made multiple jobs use the same settings for
+output files. Fixed that and restarted jobs:
+
+metric, undirected: 268157[]
+ultrametric, directed: 268158[]
+ultrametric, undirected: 268159[]
