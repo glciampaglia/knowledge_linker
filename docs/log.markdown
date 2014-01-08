@@ -1194,3 +1194,10 @@ output files. Fixed that and restarted jobs:
 metric, undirected: 268157[]
 ultrametric, directed: 268158[]
 ultrametric, undirected: 268159[]
+
+## Tue Jan  7 23:34:45 PST 2014
+
+Tagged statements collected by Prashant with source/target entities. Spoke with
+Lada Adamic at #socl2014 @IPAM about fact checking and data from snopes.com. She
+said crawling it is OK. Also suggested paper on conductance method applied to
+Netflix challenge, which I think is similar to diffusion closure.
