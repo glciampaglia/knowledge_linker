@@ -1201,3 +1201,8 @@ Tagged statements collected by Prashant with source/target entities. Spoke with
 Lada Adamic at #socl2014 @IPAM about fact checking and data from snopes.com. She
 said crawling it is OK. Also suggested paper on conductance method applied to
 Netflix challenge, which I think is similar to diffusion closure.
+
+## Sat Jan 18 13:47:56 EST 2014
+
+Job 268157 completed. Other two jobs still running. A problem with the scheduler
+node caused 268158[34,35,42,43] to abort. Resubmitted as 279967.
