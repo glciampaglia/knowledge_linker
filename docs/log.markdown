@@ -1206,3 +1206,7 @@ Netflix challenge, which I think is similar to diffusion closure.
 
 Job 268157 completed. Other two jobs still running. A problem with the scheduler
 node caused 268158[34,35,42,43] to abort. Resubmitted as 279967.
+
+## Sun Jan 19 15:44:00 EST 2014
+
+Jobs 268158[29,30,38,39] aborted by PBS server again: resubmitted as 281062.
