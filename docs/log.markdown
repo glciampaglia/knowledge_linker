@@ -1210,3 +1210,7 @@ node caused 268158[34,35,42,43] to abort. Resubmitted as 279967.
 ## Sun Jan 19 15:44:00 EST 2014
 
 Jobs 268158[29,30,38,39] aborted by PBS server again: resubmitted as 281062.
+
+## Mon Jan 20 23:10:28 EST 2014
+
+Launched closure with 2014 house/senate data.
