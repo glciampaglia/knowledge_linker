@@ -1214,3 +1214,8 @@ Jobs 268158[29,30,38,39] aborted by PBS server again: resubmitted as 281062.
 ## Mon Jan 20 23:10:28 EST 2014
 
 Launched closure with 2014 house/senate data.
+
+## Tue Jan 21 15:07:03 EST 2014
+
+Closure terminated. Was only for ultrametric/directed. Launched all jobs +
+baselines.
