@@ -1219,3 +1219,9 @@ Launched closure with 2014 house/senate data.
 
 Closure terminated. Was only for ultrametric/directed. Launched all jobs +
 baselines.
+
+## Sat Jan 25 18:18:02 EST 2014
+
+Closure job aborted due to walltime limit. Split input files to 50 lines each
+and resubmitted on 11 nodes instead of 4. Average ETA per line is 1'30s, so set
+job walltime for 50 lines overall to 2h. Resubmitted.
