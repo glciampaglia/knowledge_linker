@@ -1225,3 +1225,30 @@ baselines.
 Closure job aborted due to walltime limit. Split input files to 50 lines each
 and resubmitted on 11 nodes instead of 4. Average ETA per line is 1'30s, so set
 job walltime for 50 lines overall to 2h. Resubmitted.
+
+
+## Wed Feb  5 19:03:24 EST 2014
+
+Prashant redid the classification with random forests and the results are very
+good, almost 90% precision in the house for the metric closure on the directed
+graph, and basically random baseline. Also, he plotted the data embedded in a
+two-dimensional space with coordinates computed with MDS, and turns out the two
+classes separate very well. I computed the nearest neighbor classifier and it
+didn't give results as good as RF, though it seems that the metric graph is
+still the best performing on the house data (k=20 and uniform weights), but the
+baseline is almost comparable. I tried reproducing the MDS plots using
+scikits-learn but I got very different embeddings. I guess R's implementation of
+MDS should be trusted more, being older that scikit. The other good news is that
+when removing the so-called [blue dog
+democrats](//en.wikipedia.org/wiki/Blue_Dog_Coalition), which are notoriously
+conservative dems, the results get even better (the 90% quoted above should be
+the precision on that task actually). So it seems like the signal is there and
+it is strong.
+
+Did some bibliographical search and found that the start of the art for
+predicting the political orientation of congressmen is
+[DW-NOMINATE](//voteview.com) by Poole and Rosenthal, which is based on the
+actual voting records. Data about an ideological score synthensized with
+DW-NOMINATE are available for download, so we could use the posterior
+probabilities computed by the forest to rank the politicians and see how well
+the two approaches agree.
