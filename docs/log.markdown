@@ -1098,9 +1098,8 @@ likely result in worse performances.
 
 Implemented backbone function.
 
-<<<<<<< HEAD
 __23:51__: launched backbone job on BR2 (JOB ID: 230121).
-=======
+
 ## Thu Dec 12 20:47:58 EST 2013
 
 Backbone job for the full graph launched on one node for 2 days did not complete
@@ -1252,3 +1251,9 @@ actual voting records. Data about an ideological score synthensized with
 DW-NOMINATE are available for download, so we could use the posterior
 probabilities computed by the forest to rank the politicians and see how well
 the two approaches agree.
+
+## Mon Feb 10 16:17:05 EST 2014
+
+Restarted missing job for the backbone: 
+* ultrametric, directed: 316528[29]. 
+* ultrametric, undirected: 316533[28,31,32,36,37,40,41,44,45].
