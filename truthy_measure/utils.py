@@ -1,14 +1,17 @@
 import numpy as np
 import scipy.sparse as sp
-from collections import defaultdict
 from cStringIO import StringIO
-from tempfile import NamedTemporaryFile
 from itertools import izip, chain, repeat, groupby
 
+# these imports are needed
 from .dirtree import DirTree, fromdirtree
 
 # dtype for saving COO sparse matrices
-coo_dtype = np.dtype([('row', np.int32), ('col', np.int32), ('weight', np.float)])
+coo_dtype = np.dtype([
+    ('row', np.int32),
+    ('col', np.int32),
+    ('weight', np.float)])
+
 
 def arrayfile(data_file, shape, descr, fortran=False):
     '''
@@ -34,24 +37,26 @@ def arrayfile(data_file, shape, descr, fortran=False):
     '''
     from numpy.lib import format
     header = {
-        'descr' : descr,
-        'fortran_order' : fortran,
-        'shape' : shape
-        }
+        'descr': descr,
+        'fortran_order': fortran,
+        'shape': shape
+    }
     preamble = '\x93NUMPY\x01\x00'
     data_file.write(preamble)
     cio = StringIO()
-    format.write_array_header_1_0(cio, header) # write header here first
-    format.write_array_header_1_0(data_file, header) # write header
+    format.write_array_header_1_0(cio, header)  # write header here first
+    format.write_array_header_1_0(data_file, header)  # write header
     cio.seek(0)
-    offset = len(preamble) + len(cio.readline()) # get offset
-    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode, shape=shape,
-            offset=offset)
+    offset = len(preamble) + len(cio.readline())  # get offset
+    return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
+                     shape=shape,
+                     offset=offset)
+
 
 def disttosim(x):
     '''
-    Transforms a vector non-negative integer distances x to proximity/similarity
-    weights in the [0,1] interval:
+    Transforms a vector non-negative integer distances x to
+    proximity/similarity weights in the [0,1] interval:
                                          1
                                    s = -----
                                        x + 1
@@ -61,6 +66,7 @@ def disttosim(x):
         an array of non-negative distances.
     '''
     return (x + 1) ** -1
+
 
 def indegree(adj):
     '''
@@ -80,6 +86,25 @@ def indegree(adj):
     indegree = adj.sum(axis=0)
     return np.asarray(indegree).flatten()
 
+
+def logindegree(adj):
+    '''
+    Computes the log(in-degree + 1) of each node.
+
+    Parameters
+    ----------
+    adj : sparse matrix
+        the adjacency matrix, in sparse format (see `scipy.sparse`).
+
+    Returns
+    -------
+    indeg : 1-D array
+        the log(in-degree + 1) of each node
+    '''
+    d = indegree(adj)
+    return np.log(d + 1)
+
+
 def make_symmetric(A):
     '''
     Transforms a matrix, not necessary triangular, to symmetric
@@ -95,13 +120,14 @@ def make_symmetric(A):
     G = sp.csr_matrix(A)
     n = G.shape[0]
     G2 = G.transpose()
-    G3 = G+G2
-    i,j,v = sp.find(G.multiply(G2))
+    G3 = G + G2
+    i, j, v = sp.find(G.multiply(G2))
     v = np.sqrt(v)
-    N = sp.csr_matrix((v,(i,j)),shape=(n,n))
-    Gsym = G3-N
+    N = sp.csr_matrix((v, (i, j)), shape=(n, n))
+    Gsym = G3 - N
     return Gsym
-    
+
+
 def recstosparse(coords, shape=None, fmt='csr'):
     '''
     Returns a sparse adjancency matrix from a records array of (col, row,
@@ -133,26 +159,29 @@ def recstosparse(coords, shape=None, fmt='csr'):
             raise ValueError('expecting a 2-d array or a recarray')
         if coords.shape[1] != 3:
             raise ValueError('expecting three columns (row, col, weights)')
-        irow = coords[:,0]
-        icol = coords[:,1]
-        w = coords[:,2]
+        irow = coords[:, 0]
+        icol = coords[:, 1]
+        w = coords[:, 2]
     adj = sp.coo_matrix((w, (irow, icol)), shape=shape)
     if fmt == 'coo':
         return adj
     else:
         return adj.asformat(fmt)
 
-def weighted_dir(m):
+
+def weighted_dir(m, weightfunc=indegree):
     '''
-    Return a weighted, directed, adjacency matrix, with edge weights computed as
-    the in-degree of the incoming vertex, transformed to similarity scores.
+    Transform a directed adjancency matrix to a weighted, directed, adjacency
+    matrix, with edge weights computed as the in-degree of the incoming vertex
+    (default), transformed to similarity scores.
 
     Parameters
     ----------
-    path : string
-        path to data file.
-    N : integer
-        number of nodes
+    m : `scipy.sparse.spmatrix`
+        the input adjancency matrix
+    weightfunc : function object
+        a function that take an adjancency matrix and returns an array of
+        weights.
 
     Returns
     -------
@@ -163,23 +192,26 @@ def weighted_dir(m):
     # ensure input is in COO format
     m = sp.coo_matrix(m)
     # compute in-degrees
-    dist = indegree(m)
+    dist = weightfunc(m)
     # transform to similarity scores
     sim = disttosim(dist)
     # create CSR matrix
     return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
 
-def weighted_undir(m):
+
+def weighted_undir(m, weightfunc=indegree):
     '''
-    Return a weighted, undirected, adjacency matrix, with edge weights computed
-    as the degree of the incoming vertex, transformed to similarity scores.
+    Transform an adjacency matrix to a weighted, undirected, adjacency matrix,
+    with edge weights computed as the degree of the incoming vertex (default),
+    transformed to similarity scores.
 
     Parameters
     ----------
-    path : string
-        path to data file.
-    N : integer
-        number of nodes
+    m : `scipy.sparse.spmatrix`
+        the input adjancency matrix
+    weightfunc : function object
+        a function that take an adjancency matrix and returns an array of
+        weights.
 
     Returns
     -------
@@ -192,14 +224,29 @@ def weighted_undir(m):
     # transform to symmetric
     m = make_symmetric(m)
     # compute the nodes degrees
-    dist = np.asarray(m.sum(axis=1)).flatten()
+    dist = weightfunc(m)
     # compute similarities
     sim = disttosim(dist)
     # transform back to COO
     m = m.tocoo()
     return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
 
-def make_weighted(path, N, undirected=False):
+
+def delete_row_col_csr(A, (i, j)):
+    """
+    Returns a CSR matrix with the i'th row and j'th column removed.
+    """
+    A = delete_row_csr(A, i)
+    return delete_col_csr(A, j)
+
+
+WEIGHT_FUNCTIONS = {
+    'degree': indegree,
+    'logdegree': logindegree
+}
+
+
+def make_weighted(path, N, weight='degree', undirected=False):
     '''
     Loads a (row, col, weight) records array from path and returns a weighted
     CSR adjancency matrix.
@@ -219,10 +266,12 @@ def make_weighted(path, N, undirected=False):
     shape = (N,) * 2
     # create sparse COO matrix
     adj = recstosparse(coords, shape, 'coo')
+    weightfunc = WEIGHT_FUNCTIONS[weight]
     if undirected:
-        return weighted_undir(adj)
+        return weighted_undir(adj, weightfunc)
     else:
-        return weighted_dir(adj)
+        return weighted_dir(adj, weightfunc)
+
 
 def dict_of_dicts_to_sparse(dd, num, shape, kind):
     '''
@@ -255,6 +304,7 @@ def dict_of_dicts_to_sparse(dd, num, shape, kind):
     A = sp.coo_matrix((C['weight'], (C['row'], C['col'])), shape=shape)
     return A.asformat(kind)
 
+
 def dict_of_dicts_to_ndarray(dd, size):
     '''
     Transforms a dict of dicts to 2-D array
@@ -282,6 +332,7 @@ def dict_of_dicts_to_ndarray(dd, size):
             tmp[irow, icol] = d[icol]
     return tmp
 
+
 def loadadjcsr(path):
     '''
     Loads a CSR matrix from a NPZ file containing `indices`, `indptr`, and
@@ -297,6 +348,7 @@ def loadadjcsr(path):
         data = np.ones((n_data,), dtype=np.float64)
     return sp.csr_matrix((data, indices, indptr), shape=(n_rows, n_rows))
 
+
 def chainrepeat(sources, times):
     '''
     utility function that does the same as using `chain` + `repeat` from the
@@ -305,6 +357,7 @@ def chainrepeat(sources, times):
     count = sum(times)
     c = chain(*(repeat(s, t) for s, t in izip(sources, times)))
     return np.fromiter(c, count=count, dtype=np.int32)
+
 
 def group(data, key, keypattern='{}'):
     '''
@@ -317,12 +370,14 @@ def group(data, key, keypattern='{}'):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
 
-def delete_col_csr(A,i):
+
+def delete_col_csr(A, i):
     """
     Returns a CSR matrix with the i'th column removed.
     """
-    return delete_row_csr(sp.csr_matrix(A.transpose()),i)
-    
+    return delete_row_csr(sp.csr_matrix(A.transpose()), i)
+
+
 def delete_row_csr(A, i):
     """
     Returns a CSR matrix with the i'th row removed.
@@ -330,21 +385,16 @@ def delete_row_csr(A, i):
     mat = A.copy()
     if not sp.isspmatrix_csr(mat):
         raise ValueError("Works only for CSR format -- use .tocsr() first")
-    n = mat.indptr[i+1] - mat.indptr[i]
+    n = mat.indptr[i + 1] - mat.indptr[i]
     if n > 0:
-        mat.data[mat.indptr[i]:-n] = mat.data[mat.indptr[i+1]:]
+        mat.data[mat.indptr[i]:-n] = mat.data[mat.indptr[i + 1]:]
         mat.data = mat.data[:-n]
-        mat.indices[mat.indptr[i]:-n] = mat.indices[mat.indptr[i+1]:]
+        mat.indices[mat.indptr[i]:-n] = mat.indices[mat.indptr[i + 1]:]
         mat.indices = mat.indices[:-n]
-    mat.indptr[i:-1] = mat.indptr[i+1:]
+    mat.indptr[i:-1] = mat.indptr[i + 1:]
     mat.indptr[i:] -= n
     mat.indptr = mat.indptr[:-1]
-    mat._shape = (mat._shape[0]-1, mat._shape[1])
+    mat._shape = (mat._shape[0] - 1, mat._shape[1])
     return mat
 
-def delete_row_col_csr(A,(i,j)):
-    """
-    Returns a CSR matrix with the i'th row and j'th column removed.
-    """
-    A = delete_row_csr(A,i)
-    return delete_col_csr(A,j)
+
