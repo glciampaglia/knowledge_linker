@@ -1257,3 +1257,7 @@ the two approaches agree.
 Restarted missing job for the backbone: 
 * ultrametric, directed: 316528[29]. 
 * ultrametric, undirected: 316533[28,31,32,36,37,40,41,44,45].
+
+## Fri Feb 14 00:07:38 EST 2014
+
+Added log weights. Launched jobs: 318985 (directed), 318986 (undirected).
