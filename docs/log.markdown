@@ -1260,4 +1260,21 @@ Restarted missing job for the backbone:
 
 ## Fri Feb 14 00:07:38 EST 2014
 
-Added log weights. Launched jobs: 318985 (directed), 318986 (undirected).
+Added log weights. Launched jobs: 318985 (directed), 318986 (undirected).  Met
+with Sandro and Fil, revised validation methodology and decided not to go for
+the annotated tweets, but rather for simpler tasks like computing degree of
+association between pairs of mutually exclusive sets of entities, e.g. NFL teams
+and their cities, capitals of the world and their countries, presidents and
+their spouses. Agreed not to try to do a full-blown analysis of the is-a
+statements from Twitter, but rather to pick a few examples for illustrative
+purposes.
+
+## Mon Feb 17 12:04:03 EST 2014
+
+Log job terminated, sent data to Prashant for computing classification scores
+with random forests and found performance improvement, especially for the
+undirected case, (AUC=1!), which is interesting. Taking the log of the
+(in-)degree mimicks a random-walk weighted by the amount of specificity of each
+entity -- the amount of information it has, if taken as a category. Then we see
+that information can do without the syntactical structure imposed by the edge
+directionality. 
