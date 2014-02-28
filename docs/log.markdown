@@ -1278,3 +1278,7 @@ undirected case, (AUC=1!), which is interesting. Taking the log of the
 entity -- the amount of information it has, if taken as a category. Then we see
 that information can do without the syntactical structure imposed by the edge
 directionality. 
+
+## Fri Feb 28 18:07:56 EST 2014
+
+Wrote PBS script for validation, launched on BR2 (job id: 356300)
