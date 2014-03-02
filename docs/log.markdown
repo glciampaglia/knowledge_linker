@@ -1301,3 +1301,10 @@ Relaunched without -N switch:
 
 metric, undirected, degree: 360825
 metric, undirected, logdegree: 360826
+
+Also fixed some entries: 
+* Washington_(U.S._state) -> Washington
+* Removed Bahamas (missing in 3.8?)
+* Dallas,_Texas -> Dallas
+
+
