@@ -1289,3 +1289,15 @@ Job failed due to way batch script handles input. Fixed problem and resubmitted 
 
 metric, undirected: degree: 357760
 metric, undirected, logdegree: 357761
+
+## Sun Mar  2 13:11:50 EST 2014
+
+Jobs terminated, realized the -N switch for computing the baseline was still in
+place, so found mostly empty matrices (only for the couples the diagonal was
+non-zero). Also, a number of resources cannot be found, and the jobs aborted
+because of that.
+
+Relaunched without -N switch:
+
+metric, undirected, degree: 360825
+metric, undirected, logdegree: 360826
