@@ -1282,3 +1282,10 @@ directionality.
 ## Fri Feb 28 18:07:56 EST 2014
 
 Wrote PBS script for validation, launched on BR2 (job id: 356300)
+
+## Sat Mar  1 19:13:03 EST 2014
+
+Job failed due to way batch script handles input. Fixed problem and resubmitted job: 
+
+metric, undirected: degree: 357760
+metric, undirected, logdegree: 357761
