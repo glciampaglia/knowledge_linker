@@ -1305,6 +1305,11 @@ metric, undirected, logdegree: 360826
 Also fixed some entries: 
 * Washington_(U.S._state) -> Washington
 * Removed Bahamas (missing in 3.8?)
-* Dallas,_Texas -> Dallas
+* Dallas,\_Texas -> Dallas
 
+## Wed Mar  5 16:11:10 EST 2014
 
+Job completed but stills some crashes on some missing world countries capitals. Fixed all of them and manually checked that everything works, relaunched jobs:
+
+metric, undirected, degree: 364989
+metric, undirected, degree: 364990
