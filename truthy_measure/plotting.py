@@ -29,8 +29,10 @@ def plot_cdf(x, **kwargs):
         xranks, _ = zip(*list(chunk))
         t.append((float(x), xranks[0] + len(xranks) / 2.))
     t = np.asarray(t)
-    fig = plt.gcf()
-    ax = plt.gca()
+    if 'ax' not in kwargs:
+        ax = plt.gca()
+    else:
+        ax = kwargs.pop('ax')
     ax.loglog(t[:, 0], (N - t[:, 1]) / N, 'ow', **kwargs)
     return ax
 
