@@ -1313,3 +1313,9 @@ Job completed but stills some crashes on some missing world countries capitals. 
 
 metric, undirected, degree: 364989
 metric, undirected, degree: 364990
+
+## Wed Mar 12 19:17:34 EDT 2014
+
+Created link prediction script and submitted job for logdegree, metric,
+directed (375578), undirected (375646) on 70 nodes each on BigRed2. Jobs will
+start in one day. Scheduler is currently paused. Emailed UITS.
