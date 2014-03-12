@@ -313,7 +313,7 @@ def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
     See `epclosuress` for parameters.
 
     """
-    cap, paths = epclosuress(A, source, B=B, retpath=retpath, kind=kind)
+    cap, paths = epclosuress(A, source, B=B, retpaths=retpath, kind=kind)
     if retpath:
         return cap[target], paths[target]
     else:
