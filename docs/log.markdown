@@ -1309,7 +1309,8 @@ Also fixed some entries:
 
 ## Wed Mar  5 16:11:10 EST 2014
 
-Job completed but stills some crashes on some missing world countries capitals. Fixed all of them and manually checked that everything works, relaunched jobs:
+Job completed but stills some crashes on some missing world countries capitals.
+Fixed all of them and manually checked that everything works, relaunched jobs:
 
 metric, undirected, degree: 364989
 metric, undirected, degree: 364990
@@ -1319,3 +1320,14 @@ metric, undirected, degree: 364990
 Created link prediction script and submitted job for logdegree, metric,
 directed (375578), undirected (375646) on 70 nodes each on BigRed2. Jobs will
 start in one day. Scheduler is currently paused. Emailed UITS.
+
+## Thu Mar 13 14:32:18 EDT 2014
+
+Checked jobs on Big Red2. The undirected one was for some reason scheduled but
+had forgotten to copy the files over the DC2 so failed. The directed was still
+blocked. Fixed the problem, moved to Quarry, where DC2 is offline but still
+schedules jobs. So adapted the PBS script, copied the input files into the home
+folder, and submitted there the directed job (2565915), which has started.
+
+Resubmitted both jobs (376010 for directed, 376012 for undirected) on Big Red
+II, waiting for when the scheduler will be resumed.
