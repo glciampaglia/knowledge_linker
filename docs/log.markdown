@@ -1332,6 +1332,8 @@ folder, and submitted there the directed job (2565915), which has started.
 Resubmitted both jobs (376010 for directed, 376012 for undirected) on Big Red
 II, waiting for when the scheduler will be resumed.
 
+_18:28_: job failed due to silly bug in Torque. Fixed it and resubmitted (2566507)
+
 ## Fri Mar 28 16:16:50 EDT 2014
 
 Reviewed the result of the jobs. Some jobs completed on quarry but most were
