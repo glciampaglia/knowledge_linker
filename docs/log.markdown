@@ -1331,3 +1331,16 @@ folder, and submitted there the directed job (2565915), which has started.
 
 Resubmitted both jobs (376010 for directed, 376012 for undirected) on Big Red
 II, waiting for when the scheduler will be resumed.
+
+## Fri Mar 28 16:16:50 EDT 2014
+
+Reviewed the result of the jobs. Some jobs completed on quarry but most were
+killed by the OOM. Modified PBS script to request 3GB of memory per job and
+resubmitted everything:
+
+2583601 log-degree, metric, directed
+2583602 log-degree, metric, undirected
+
+Jobs on Big Red II terminated due to wallclock time. Looks execution times on
+BRII are consistently off my estimates, while on quarry they run faster. Maybe a
+library problem?
