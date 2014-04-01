@@ -1346,3 +1346,10 @@ resubmitted everything:
 Jobs on Big Red II terminated due to wallclock time. Looks execution times on
 BRII are consistently off my estimates, while on quarry they run faster. Maybe a
 library problem?
+
+## Tue Apr  1 18:49:32 EDT 2014
+
+Jobs still hitting the walltime limit. Disabled the computation of the paths
+(the code had still a memory leak somewhere). Resubmitted job on directed
+network and all completed in 4 hours. Submitted for undirected bumping walltime
+to 18 hours.
