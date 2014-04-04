@@ -1353,3 +1353,16 @@ Jobs still hitting the walltime limit. Disabled the computation of the paths
 (the code had still a memory leak somewhere). Resubmitted job on directed
 network and all completed in 4 hours. Submitted for undirected bumping walltime
 to 18 hours.
+
+## Thu Apr  3 20:24:59 EDT 2014
+
+Discovered silly bug in link prediction script that was causing the edge removal
+to be ineffective. Also discovered that PBS script was not using all workers,
+thus an explanation of the slowness. Submitted directed job *with computation of
+paths* to test that the fix on the link prediction works, and that the
+computation times are indeed down now. Because the function on a single
+source-target pairs compute the distances and paths using the single-source
+version, a lot of time is wasted computing a lot of paths that are not going to
+be returned. So either need to include an additional parameter to limit the
+number of paths to compute, or just decouple the two functions, but that would
+require a major overhaul of the API.
