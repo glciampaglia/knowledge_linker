@@ -4,6 +4,7 @@ from contextlib import closing
 from codecs import EncodedFile
 from gzip import GzipFile
 from collections import OrderedDict
+import numpy as np
 
 
 class NodesIndex(object):
@@ -41,9 +42,14 @@ class NodesIndex(object):
         return self.uri2node[u]
 
     def tonodemany(self, fulluris):
-        """ Convert sequence of full URIs to iterator over node IDs. """
+        """ Convert sequence of full URIs to iterator over node IDs.
+        Yield NaN for missing uris
+        """
         for uri in fulluris:
-            yield self.tonodeone(uri)
+            try:
+                yield self.tonodeone(uri)
+            except KeyError:
+                yield np.nan
 
     def tonodefile(self, path):
         """ Convert URIs from file to node IDs.
