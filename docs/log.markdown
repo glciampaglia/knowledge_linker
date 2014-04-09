@@ -1366,3 +1366,17 @@ version, a lot of time is wasted computing a lot of paths that are not going to
 be returned. So either need to include an additional parameter to limit the
 number of paths to compute, or just decouple the two functions, but that would
 require a major overhaul of the API.
+
+## Wed Apr  9 18:42:07 EDT 2014
+
+Decided not to fix the problem for now, and instead just gave up with computing
+the paths. Resubmitted jobs on Big Red 2 for both directed and undirected and 
+terminated both. Started writing IPython notebook for analysis. Aggregated
+raters scores and plotted histograms, and it seems that there is an overwhelming
+majority of positive instances. Plotted also histogram of the similarity scores,
+and it seems that the undirected graph is much better at connecting stuff,
+compared with the directed. From the few preliminary plots of the average
+similarity score by rating the results do not look encouraging, but will need to
+compute rank correlation coefficients to see that. Still, in the end even a
+feeble correlation could be a good result -- in the end the DBPedia graph is
+orders orders of magnitude smaller than the full Wikipedia graph.
