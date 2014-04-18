@@ -1380,3 +1380,28 @@ similarity score by rating the results do not look encouraging, but will need to
 compute rank correlation coefficients to see that. Still, in the end even a
 feeble correlation could be a good result -- in the end the DBPedia graph is
 orders orders of magnitude smaller than the full Wikipedia graph.
+
+## Thu Apr 17 21:43:15 EDT 2014
+
+Computed rank-order correlation coefficients for the validation datasets,
+together with area under the ROC curve, and found indeed a very feeble, but
+significant signal in the data. The undirected graph works better than the
+directed graph, presumably because dropping directionality makes the graph
+connected. Similarities here are computing as in a link prediction task, so any
+edge connecting source and target is removed before launching Dijkstra. Adding
+back the direct edges (which are anyway just a fraction of the cases), improves
+the results, but only slightly. Using the similarities obtained from
+the sole direct connection (i.e. no closure is performed), the results are also
+slightly better than random, and are actually better (in terms of both
+Spearman's $\rho$ and Kendall $\tau$) than the closure for the place of birth
+and the place of death relations. Institution is equally bad (i.e. not better
+than random) in both cases, while for the degree of education we actually
+improve over no closure by about 13%. Now it would be interesting to compare
+with other methods like Adamic-Adar, Jaccard's coefficient, etc.
+
+Also recomputed the confusion matrix data using the same edge removal trick and
+found good results for presidents, countries, and US states.
+
+Presented all these results to Fil and Sandro, who found them very encouraging.
+Agreed that we may try to go for a WWW submission (WWW'15 is in Florence,
+incidentally).  
