@@ -1405,3 +1405,18 @@ found good results for presidents, countries, and US states.
 Presented all these results to Fil and Sandro, who found them very encouraging.
 Agreed that we may try to go for a WWW submission (WWW'15 is in Florence,
 incidentally).  
+
+## Wed Jul  2 18:16:36 EDT 2014
+
+Stopped for a while to add entries to this log as I moved to the weekly lab
+notebook on Drive, but better to keep the two in sync.
+
+In April, showed the results to Johan and Luis and agreed on publication
+strategy. Started working on a short submission for Nature (again!) and
+completed a draft after having gotten back from Italy to renew the visa in June.
+Relaunched a closure job to recompute the calibration data with the full
+DW-NOMINATE data and also launched computed an additional confusion matrix with
+data about Best Movie Oscar awards and their directors. 
+
+Today relaunched the closure to complete the last jobs that took too long on the
+previous run and were killed by the queue manager. 
