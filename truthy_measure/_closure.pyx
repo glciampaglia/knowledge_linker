@@ -13,6 +13,8 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
+# TODO: retpath=1 leaks memory. See XXX comments.
+
 cpdef object cclosure(object A, int source, int target, int retpath = 0,
                       kind='ultrametric'):
     '''
@@ -123,6 +125,7 @@ cpdef object cclosuress(
                 f.write(pack("id", i, path.proximity))
                 cnt += 1
             if retpaths:
+                # XXX is this leaking memory?
                 pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
                 free(<void *>path.vertices)
         else:
@@ -288,6 +291,7 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         path = paths[i]
         if path.found:
             # copy allocated memory to allow later to free up the paths pointer
+            # XXX is this leaking memory?
             pathlist.append(
                     np.asarray((<int [:path.length + 1]> path.vertices).copy()))
             free(<void *>paths.vertices)
