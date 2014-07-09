@@ -13,8 +13,6 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
-# TODO: retpath=1 leaks memory. See XXX comments.
-
 cpdef object cclosure(object A, int source, int target, int retpath = 0,
                       kind='ultrametric'):
     '''
@@ -96,6 +94,7 @@ cpdef object cclosuress(
         int [:] A_indptr = A.indptr
         int [:] A_indices = A.indices
         double [:] A_data = A.data
+        int [:] tmp
         int N = A.shape[0]
         int i
         int flag = 0
@@ -125,8 +124,8 @@ cpdef object cclosuress(
                 f.write(pack("id", i, path.proximity))
                 cnt += 1
             if retpaths:
-                # XXX is this leaking memory?
-                pathslist.append(np.asarray((<int [:path.length]>path.vertices).copy()))
+                tmp = <int [:path.length]>path.vertices
+                pathslist.append(np.array(tmp, copy=True))
                 free(<void *>path.vertices)
         else:
             proxs[i] = 0.
@@ -278,6 +277,7 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
         int [:] A_indptr = A.indptr
         int i, j
         int [:] reachable = np.zeros((N,), dtype=np.int32)
+        int [:] tmp
     paths = <PathPtr> malloc(M * sizeof(Path))
     # parallel part
     with nogil, parallel():
@@ -290,10 +290,8 @@ def shortestpathmany(object A, int [:] sources, int [:] targets):
     for i in xrange(M):
         path = paths[i]
         if path.found:
-            # copy allocated memory to allow later to free up the paths pointer
-            # XXX is this leaking memory?
-            pathlist.append(
-                    np.asarray((<int [:path.length + 1]> path.vertices).copy()))
+            tmp = <int [:path.length + 1]> path.vertices
+            pathlist.append(np.array(tmp, copy=True))
             free(<void *>paths.vertices)
         else:
             # create an empty array for disconnected vertices
@@ -339,7 +337,8 @@ cpdef cnp.ndarray shortestpath(object A, int source, int target):
         int [:] reachable = np.zeros((N,), dtype=np.int32)
     path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)
     if path.found:
-        retpath = np.asarray(<int [:path.length + 1]> path.vertices)
+        retpath = np.array(<int [:path.length + 1]> path.vertices, copy=True)
+        free(<void *>path.vertices)
     else:
         retpath = np.empty(0, dtype=np.int32)
     return retpath
@@ -383,7 +382,6 @@ cdef Path _shortestpath(
     -------
     path : a Path struct
     '''
-    global neigh_buf
     cdef:
         int * P, * D, * Q, * visited  # predecessors, distance vectors, fifo queue
         int * neigh = NULL # neighbors
