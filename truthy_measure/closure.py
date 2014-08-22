@@ -396,8 +396,35 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     """ Compute the graph backbone.
 
     The graph backbone is the set of edges whose weight does not change after
-    the closure operation.
+    the closure operation. These edges respect the triangular inequality (kind
+    = 'metric') or the maxmin inequality (kind = 'ultrametric'). And are
+    therefore part of the shortest/bottleneck paths of the graph.
 
+    Parameters
+    ----------
+
+    A : array_like
+        Adjacency matrix. Will be converted to CSR
+
+    kind : str
+        the type of closure to compute: either 'metric' or 'ultrametric'
+        (default).
+
+    start : int
+        Optional; only compute the closure on the submatrix starting at this
+        index. Default is 0.
+
+    offset : int
+        Optional; only compute the closure on the submatrix ending at this
+        offset. The default up to N, where A is an (N, N) matrix.
+
+    nprocs : int
+        Optional; distribute the computation over `nprocs` workers. Default is
+        90% of the available CPUs/cores.
+
+    Returns
+    -------
+    A scipy.sparse.coo_matrix.
     """
     A = sp.csr_matrix(A)
     N = A.shape[0]
