@@ -387,8 +387,8 @@ def _backbone_worker(n):
     global _A, _kind
     d0 = np.ravel(_A[n].todense())  # original
     d1, _ = cclosuress(_A, n, kind=_kind)  # closed
-    b = np.where((d0 > 0.0) & (d0 == d1))
-    return (n,) + b
+    B, = np.where((d0 > 0.0) & (d0 == d1))
+    return [(n, b) for b in B]
 
 
 # TODO: add test function.
@@ -396,8 +396,35 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     """ Compute the graph backbone.
 
     The graph backbone is the set of edges whose weight does not change after
-    the closure operation.
+    the closure operation. These edges respect the triangular inequality (kind
+    = 'metric') or the maxmin inequality (kind = 'ultrametric'). And are
+    therefore part of the shortest/bottleneck paths of the graph.
 
+    Parameters
+    ----------
+
+    A : array_like
+        Adjacency matrix. Will be converted to CSR
+
+    kind : str
+        the type of closure to compute: either 'metric' or 'ultrametric'
+        (default).
+
+    start : int
+        Optional; only compute the closure on the submatrix starting at this
+        index. Default is 0.
+
+    offset : int
+        Optional; only compute the closure on the submatrix ending at this
+        offset. The default up to N, where A is an (N, N) matrix.
+
+    nprocs : int
+        Optional; distribute the computation over `nprocs` workers. Default is
+        90% of the available CPUs/cores.
+
+    Returns
+    -------
+    A scipy.sparse.coo_matrix.
     """
     A = sp.csr_matrix(A)
     N = A.shape[0]
@@ -407,12 +434,26 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (kind, indptr, indices, data, A.shape)
-    print '{}: launching pool of {} workers.'.format(now(),
-                                                                    nprocs)
+    print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker,
                 initargs=initargs, maxtasksperchild=max_tasks_per_worker)
-    with closing(pool):
-        D = pool.map(_backbone_worker, xrange(fromi, toi))
-    pool.join()
+    try:
+        with closing(pool):
+            result = pool.map_async(_backbone_worker, xrange(fromi, toi))
+            while not result.ready():
+                result.wait(1)
+        pool.join()
+        if result.successful():
+            coords = result.get()
+        else:
+            print >> sys.stderr, "There was an error in the pool."
+            sys.exit(2)  # ERROR occurred
+    except KeyboardInterrupt:
+        print "^C"
+        pool.terminate()
+        sys.exit(1)  # SIGINT received
     print '{}: done'.format(now())
-    return dict(D)
+    coords = np.asarray(reduce(list.__add__, coords))
+    d = np.ones(len(coords))
+    B = sp.coo_matrix((d, (coords[:, 0], coords[:, 1])), shape=A.shape)
+    return B
