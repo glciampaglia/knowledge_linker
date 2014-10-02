@@ -89,7 +89,7 @@ def indegree(adj):
 
 def logindegree(adj):
     '''
-    Computes the log(in-degree + 1) of each node.
+    Computes the log(in-degree) of each node.
 
     Parameters
     ----------
@@ -102,7 +102,7 @@ def logindegree(adj):
         the log(in-degree + 1) of each node
     '''
     d = indegree(adj)
-    return np.log(d + 1)
+    return np.log(d)
 
 
 def make_symmetric(A):
