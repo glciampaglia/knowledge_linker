@@ -169,7 +169,7 @@ def recstosparse(coords, shape=None, fmt='csr'):
         return adj.asformat(fmt)
 
 
-def weighted_dir(m, weightfunc=indegree):
+def weighted(m, weightfunc=indegree, undirected=False):
     '''
     Transform a directed adjancency matrix to a weighted, directed, adjacency
     matrix, with edge weights computed as the in-degree of the incoming vertex
@@ -191,6 +191,9 @@ def weighted_dir(m, weightfunc=indegree):
     '''
     # ensure input is in COO format
     m = sp.coo_matrix(m)
+    if undirected:
+        # transform to symmetric
+        m = make_symmetric(m).tocoo()
     # compute in-degrees
     dist = weightfunc(m)
     # transform to similarity scores
@@ -199,52 +202,10 @@ def weighted_dir(m, weightfunc=indegree):
     return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
 
 
-def weighted_undir(m, weightfunc=indegree):
-    '''
-    Transform an adjacency matrix to a weighted, undirected, adjacency matrix,
-    with edge weights computed as the degree of the incoming vertex (default),
-    transformed to similarity scores.
-
-    Parameters
-    ----------
-    m : `scipy.sparse.spmatrix`
-        the input adjancency matrix
-    weightfunc : function object
-        a function that take an adjancency matrix and returns an array of
-        weights.
-
-    Returns
-    -------
-    adj : `scipy.sparse.csr_matrix`
-        the weighted adjancency matrix. The matrix represents an undirected
-        network.
-    '''
-    # ensure input is in COO format
-    m = sp.coo_matrix(m)
-    # transform to symmetric
-    m = make_symmetric(m)
-    # compute the nodes degrees
-    dist = weightfunc(m)
-    # compute similarities
-    sim = disttosim(dist)
-    # transform back to COO
-    m = m.tocoo()
-    return sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()
-
-
-def delete_row_col_csr(A, (i, j)):
-    """
-    Returns a CSR matrix with the i'th row and j'th column removed.
-    """
-    A = delete_row_csr(A, i)
-    return delete_col_csr(A, j)
-
-
 WEIGHT_FUNCTIONS = {
     'degree': indegree,
     'logdegree': logindegree
 }
-
 
 def make_weighted(path, N, weight='degree', undirected=False):
     '''
@@ -267,10 +228,7 @@ def make_weighted(path, N, weight='degree', undirected=False):
     # create sparse COO matrix
     adj = recstosparse(coords, shape, 'coo')
     weightfunc = WEIGHT_FUNCTIONS[weight]
-    if undirected:
-        return weighted_undir(adj, weightfunc)
-    else:
-        return weighted_dir(adj, weightfunc)
+    return weighted(adj, weightfunc, undirected=undirected)
 
 
 def dict_of_dicts_to_sparse(dd, num, shape, kind):
@@ -369,32 +327,3 @@ def group(data, key, keypattern='{}'):
     for k, datagroup in groupby(sorted(data, key=key), key):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
-
-
-def delete_col_csr(A, i):
-    """
-    Returns a CSR matrix with the i'th column removed.
-    """
-    return delete_row_csr(sp.csr_matrix(A.transpose()), i)
-
-
-def delete_row_csr(A, i):
-    """
-    Returns a CSR matrix with the i'th row removed.
-    """
-    mat = A.copy()
-    if not sp.isspmatrix_csr(mat):
-        raise ValueError("Works only for CSR format -- use .tocsr() first")
-    n = mat.indptr[i + 1] - mat.indptr[i]
-    if n > 0:
-        mat.data[mat.indptr[i]:-n] = mat.data[mat.indptr[i + 1]:]
-        mat.data = mat.data[:-n]
-        mat.indices[mat.indptr[i]:-n] = mat.indices[mat.indptr[i + 1]:]
-        mat.indices = mat.indices[:-n]
-    mat.indptr[i:-1] = mat.indptr[i + 1:]
-    mat.indptr[i:] -= n
-    mat.indptr = mat.indptr[:-1]
-    mat._shape = (mat._shape[0] - 1, mat._shape[1])
-    return mat
-
-

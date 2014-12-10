@@ -10,10 +10,9 @@ from functools import partial
 
 import truthy_measure.closure as clo
 from truthy_measure.utils import DirTree, coo_dtype, fromdirtree
-from truthy_measure.utils import weighted_undir
+from truthy_measure.utils import weighted
 
-## tests for normal closure
-
+# tests for normal closure
 
 def test_closure_big():
     """ closure on large graph + speed test. """
@@ -33,7 +32,7 @@ def test_closure_big():
     cy_time = toc - tic
     assert np.allclose(proxs, proxs2)
     assert py_time > cy_time, \
-            'python: {:.2g} s, cython: {:.2g} s.'.format(py_time, cy_time)
+        'python: {:.2g} s, cython: {:.2g} s.'.format(py_time, cy_time)
 
 
 def test_closure_small():
@@ -142,15 +141,11 @@ def test_backbone():
     center = 0
     A[center, :] = 1.0
     A[:, center] = 1.0
-    Bdict = clo.backbone(A)
-    AB = np.zeros(A.shape)
-    for i in Bdict:
-        for j in Bdict[i]:
-            AB[i, j] = 1.0
-    assert np.allclose(AB, A)
+    B = clo.backbone(A).todense()
+    assert np.allclose(B, A)
 
-## test for epclosure* functions
 
+# test for epclosure* functions
 
 @nottest
 def run_test(G, expect):
@@ -184,7 +179,7 @@ def test_graph1_maxmin():
         [1.,  0.,  0.,  1.,  0.,  0.,  0.,  1.],
         [0.,  1.,  0.,  1.,  0.,  0.,  0.,  0.],
         [0.,  0.,  0.,  0.,  0.,  1.,  0.,  0.]], dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,    1.,    0.25,  0.25,  0.2,   1.,    0.25,  0.25],
         [1.,    1.,    1.,    0.33,  0.2,   0.33,  1.,    0.25],
@@ -204,7 +199,7 @@ def test_graph2_maxmin():
     idx = np.array([1, 2, 3, 0, 2, 4, 0, 1, 5, 0, 1, 2])
     N = 6
     G = sp.csr_matrix((data, idx, ptr), shape=(N, N))
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,    1.,    1.,    1.,    0.25,  0.25],
         [1.,    1.,    1.,    0.25,  1.,    0.25],
@@ -223,7 +218,7 @@ def test_cycle_graph_maxmin():
                    [False, False,  True, False,  True],
                    [True,  False, False,  True, False]])
     G = sp.csr_matrix(G, dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,    1.,    0.33,  0.33,  1.00],
         [1.,    1.,    1.,    0.33,  0.33],
@@ -243,7 +238,7 @@ def test_grid_graph_maxmin():
         [False, False, True,  False, False,  True],
         [True,  True,  False, False, True,  False]])
     G = sp.csr_matrix(G, dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,   0.33, 1.,   1.,   0.33, 1.00],
         [0.33, 1.,   0.25, 1.,   0.25, 1.00],
@@ -275,7 +270,7 @@ def test_balanced_tree_maxmin():
         [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
     G = sp.csr_matrix(G, dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,  1.,   1.,   1.,   0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
         [1.,  1.,   0.25, 0.25, 1.,  1.,  1.,  0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
@@ -304,7 +299,7 @@ def test_graph4_maxmin():
         [0, 0, 0, 1, 0, 1],
         [1, 0, 1, 0, 1, 0]])
     G = sp.csr_matrix(G, dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,    0.25,  0.25,  1.,    0.33,  1.00],
         [0.25,  1.,    1.,    0.25,  0.25,  0.33],
@@ -324,7 +319,7 @@ def test_graph5_maxmin():
         [1, 1, 0, 0, 1],
         [1, 0, 0, 1, 0]])
     G = sp.csr_matrix(G, dtype=np.double)
-    G = weighted_undir(G)
+    G = weighted(G, undirected=True)
     expect = np.matrix([
         [1.,   0.33, 1.,   1.,   1.00],
         [0.33, 1.,   1.,   1.,   0.25],
@@ -332,4 +327,3 @@ def test_graph5_maxmin():
         [1.,   1.,   0.33, 1.,   1.00],
         [1.,   0.25, 0.25, 1.,   1.00]])
     run_test(G, expect)
-
