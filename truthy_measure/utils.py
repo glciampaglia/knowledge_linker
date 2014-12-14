@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import scipy.sparse as sp
 from cStringIO import StringIO
@@ -327,3 +328,28 @@ def group(data, key, keypattern='{}'):
     for k, datagroup in groupby(sorted(data, key=key), key):
         mapping[keypattern.format(k)] = np.asarray(list(datagroup))
     return mapping
+
+
+def load_csr(path):
+    """
+    Return as CSR matrix with data structures memory-mapped onto disk.
+
+    Parameters
+    ==========
+
+    path : str
+        Path to a location on disk under which to find the
+        {data/indices/indptr/shape}.npy files.
+
+    Returns
+    =======
+
+    adj : `scipy.sparse.csr_matrix`
+        An adjancency matrix. The structures data/indices/indptr and
+        `numpy.amemmap` objects open in r+ mode.
+    """
+    data = np.load(os.path.join(path, 'data.npy'), mmap_mode='r+')
+    indices = np.load(os.path.join(path, 'indices.npy'), mmap_mode='r+')
+    indptr = np.load(os.path.join(path, 'indptr.npy'), mmap_mode='r+')
+    shape = np.load(os.path.join(path, 'shape.npy'))
+    return sp.csr_matrix((data, indices, indptr), shape=shape)
