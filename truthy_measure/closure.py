@@ -164,6 +164,7 @@ def closuress(A, source, kind='ultrametric'):
     paths = []
     for node in xrange(N):
         item = items[node]
+        print item
         if item[2] == -1:  # disconnected node
             bott_caps.append(0.0)
             paths.append(np.empty(0, dtype=np.int))
