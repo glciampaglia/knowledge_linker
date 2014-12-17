@@ -387,7 +387,7 @@ def _backbone_worker(n):
     global _A, _kind
     d0 = np.ravel(_A[n].todense())  # original
     d1, _ = cclosuress(_A, n, kind=_kind)  # closed
-    B, = np.where((d0 > 0.0) | (d0 == d1))
+    B, = np.where((d0 > 0.0) & (d0 == d1))
     return [(n, b) for b in B]
 
 
