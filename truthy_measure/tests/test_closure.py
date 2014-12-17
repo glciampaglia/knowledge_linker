@@ -8,6 +8,9 @@ import scipy.sparse as sp
 from nose.tools import nottest
 from functools import partial
 
+import networkx as nx
+from itertools import combinations
+
 import truthy_measure.closure as clo
 from truthy_measure.utils import DirTree, coo_dtype, fromdirtree
 from truthy_measure.utils import weighted
@@ -329,24 +332,21 @@ def test_graph5_maxmin():
     run_test(G, expect)
 
 def test_closure_and_cclosure_against_networkx():
-    """ Test 'clusure' and 'cclosure' on 'metric' againt the NetworkX shortest_path """
-    import networkx as nx
-    from itertools import combinations
+    """ Test 'clusure' and 'cclosure' on 'metric' againt the NetworkX shortest_path (Rion's testing) """
 
     G = nx.Graph()
     G.add_nodes_from([0,1,2,3,4])
     G.add_edges_from([(0,1), (1,2), (2,3), (3,4)], weight=0.1)
     G.add_edges_from([(0,4)], weight=0.8)
 
-    results_nx = []
-    results_closure = []
+    # Extract Adjacency Matrix from G
+    A = nx.adjacency_matrix(G)
+    # Transform distance into a similarity
+    x = np.ravel(A[A > 0])
+    A[A > 0] = (1.0 / (x + 1.0))
 
     for n1, n2 in combinations(G.nodes(),2):
 
-        A = nx.adjacency_matrix(G)
-        x = np.ravel(A[A > 0])
-        # transform distance into a similarity
-        A[A > 0] = (1.0 / (x + 1.0))
         # Tests all three methods of computing all shortest paths ('closure','cclosure', and 'nx.all_shortest_paths')
         c_dist, c_paths = clo.closure(A, source=n1, target=n2, kind='metric')
         c_paths = [n for n in c_paths] # convers numbers to letters
@@ -359,4 +359,69 @@ def test_closure_and_cclosure_against_networkx():
         assert nx_paths == c_paths, "NetworkX and Python 'closure' differ"
         assert nx_paths == cc_paths, "NetworkX and Cython 'cclosure' differ"
         assert c_paths == cc_paths, "Python 'closure' and Cython 'cclosure' differ"
+
+
+def test_backbone_metric():
+    """ Test 'backbone' metric againt NetworkX (Rion's testing) """
+
+    # Creates a simple graph that will have distance edges that are Equal OR Bigger than original edges
+    G = nx.Graph()
+    G.add_nodes_from([0,1,2,3,4,5,6,7])
+    G.add_edges_from([ (0,1), (0,2), (0,3), (1,2), (1,3), (2,3) ], weight=1. )
+    G.add_edges_from([ (4,5), (4,6), (4,7), (5,6), (5,7), (6,7) ], weight=1. )
+    G.add_edges_from([ (0,4) ], weight=4. )
+    G.add_edges_from([ (2,6) ], weight=0.5 )
+
+    # Instanciates a Distance Graph
+    DG = nx.Graph()
+    DG.add_nodes_from(G.nodes())
+
+    # Instanciantes the Backbone SubGraph
+    BG = nx.Graph()
+    BG.add_nodes_from(G.nodes())
+
+    # Extract Adjacency Matrix from G
+    A = nx.adjacency_matrix(G)
+    # Transform distance into a similarity
+    x = np.ravel(A[A > 0])
+    A[A > 0] = (1.0 / (x + 1.0))
+
+    # Calculate Distance Graph
+    for n1, n2 in combinations(G.nodes(),2):
+        # Computes all possible shortest paths
+        paths = [p for p in nx.all_shortest_paths(G, source=n1, target=n2, weight='weight')]
+
+        # Calculate segment weights (min, sum)
+        for path in paths:
+            path_weights = []
+            for seg1,seg2 in zip(path[:-1], path[1:]):
+
+                seg_weight = G[seg1][seg2]['weight']
+                if seg_weight > 0:
+                    path_weights.append(seg_weight)
+
+            sum_path_weights = sum(path_weights)
+            DG.add_edge(n1, n2, {'weight_sum':sum_path_weights})
+    
+    # Build Backbone SubGraph
+    for n1,n2, data in DG.edges(data=True):
+        dm_sum_weight = data['weight_sum']
+
+        try:
+            g_weight = G[n1][n2]['weight']
+        except:
+            pass
+        else:
+
+            # Identify backbone SubGraph
+            if (g_weight >= dm_sum_weight):
+                BG.add_edge(n1, n2, {'weight_sum':1.})
+    
+    # Adjacency Matrix of the Backbone SubGraph
+    M_BG = nx.adjacency_matrix(BG, weight='weight_sum')
+
+    # Calculate Backbone to compare
+    B = clo.backbone(A, kind='metric', start=None, offset=None, nprocs=None)
+
+    assert np.all(M_BG.todense() == B.todense()).all(), "Backbone and NetworkX Backbone differ"
 
