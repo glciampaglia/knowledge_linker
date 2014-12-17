@@ -327,3 +327,36 @@ def test_graph5_maxmin():
         [1.,   1.,   0.33, 1.,   1.00],
         [1.,   0.25, 0.25, 1.,   1.00]])
     run_test(G, expect)
+
+def test_closure_and_cclosure_against_networkx():
+    """ Test 'clusure' and 'cclosure' on 'metric' againt the NetworkX shortest_path """
+    import networkx as nx
+    from itertools import combinations
+
+    G = nx.Graph()
+    G.add_nodes_from([0,1,2,3,4])
+    G.add_edges_from([(0,1), (1,2), (2,3), (3,4)], weight=0.1)
+    G.add_edges_from([(0,4)], weight=0.8)
+
+    results_nx = []
+    results_closure = []
+
+    for n1, n2 in combinations(G.nodes(),2):
+
+        A = nx.adjacency_matrix(G)
+        x = np.ravel(A[A > 0])
+        # transform distance into a similarity
+        A[A > 0] = (1.0 / (x + 1.0))
+        # Tests all three methods of computing all shortest paths ('closure','cclosure', and 'nx.all_shortest_paths')
+        c_dist, c_paths = clo.closure(A, source=n1, target=n2, kind='metric')
+        c_paths = [n for n in c_paths] # convers numbers to letters
+        
+        cc_dist, cc_paths = clo.cclosure(A, source=n1, target=n2, retpath=1, kind='metric')
+        cc_paths = [n for n in cc_paths] if cc_paths is not None else ''
+        
+        nx_paths = list(nx.all_shortest_paths(G, source=n1, target=n2, weight='weight'))[0]
+        
+        assert nx_paths == c_paths, "NetworkX and Python 'closure' differ"
+        assert nx_paths == cc_paths, "NetworkX and Cython 'cclosure' differ"
+        assert c_paths == cc_paths, "Python 'closure' and Cython 'cclosure' differ"
+
