@@ -353,3 +353,51 @@ def load_csr(path):
     indptr = np.load(os.path.join(path, 'indptr.npy'), mmap_mode='r+')
     shape = np.load(os.path.join(path, 'shape.npy'))
     return sp.csr_matrix((data, indices, indptr), shape=shape)
+
+
+def tocsc_memmap(A, dir='/tmp'):
+    """
+    Same as `scipy.sparse.csr.csr_matrix.tocsc` but using memory-mapped arrays.
+
+    Parameters
+    ----------
+    A : scipy.sparse.csr_matrix
+        The input CSR matrix
+
+    dir : string
+        The {data/indices/indptr}.npy files will be created under this path
+
+    Returns
+    -------
+    B : scipy.sparse.csc_matrix
+        The input matrix in CSC format
+
+    Notes
+    -----
+    The files `{data/indices/indptr}.npy` will be created under `dir` (default:
+    `/tmp`), together with file `shape.npy`. This file contains the value of
+    B.shape. This is for compatibility purpose with `load_csr`.
+
+    The returned matrix B has memmaps open in read-write mode and it is your
+    responsibility to close them.
+    """
+    path = os.path.join(dir, 'indptr.npy')
+    indptr = np.memmap(path, shape=(A.shape[1] + 1,), dtype=np.intc, mode='w+')
+
+    path = os.path.join(dir, 'indices.npy')
+    indices = np.memmap(path, shape=(A.nnz,), dtype=np.intc, mode='w+')
+
+    path = os.path.join(dir, 'data.npy')
+    data = np.memmap(path, shape=(A.nnz,), dtype=sp.csr.upcast(A.dtype),
+                     mode='w+')
+
+    sp.csr.csr_tocsc(A.shape[0], A.shape[1],
+                     A.indptr, A.indices, A.data,
+                     indptr, indices, data)
+
+    from scipy.sparse.csc import csc_matrix
+    B = csc_matrix((data, indices, indptr), shape=A.shape)
+    B.has_sorted_indices = True
+    np.save(os.path.join(dir, 'shape.npy'), B.shape)
+    return B
+
