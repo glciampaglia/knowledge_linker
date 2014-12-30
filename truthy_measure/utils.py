@@ -3,6 +3,7 @@ import numpy as np
 import scipy.sparse as sp
 from cStringIO import StringIO
 from itertools import izip, chain, repeat, groupby
+from contextlib import closing
 
 # these imports are needed
 from .dirtree import DirTree, fromdirtree
@@ -42,13 +43,11 @@ def arrayfile(data_file, shape, descr, fortran=False):
         'fortran_order': fortran,
         'shape': shape
     }
-    preamble = '\x93NUMPY\x01\x00'
-    data_file.write(preamble)
     cio = StringIO()
     format.write_array_header_1_0(cio, header)  # write header here first
     format.write_array_header_1_0(data_file, header)  # write header
     cio.seek(0)
-    offset = len(preamble) + len(cio.readline())  # get offset
+    offset = len(cio.readline())  # get offset
     return np.memmap(data_file, dtype=np.dtype(descr), mode=data_file.mode,
                      shape=shape,
                      offset=offset)
@@ -330,9 +329,9 @@ def group(data, key, keypattern='{}'):
     return mapping
 
 
-def load_csr(path):
+def load_csmatrix(path, fmt='csr'):
     """
-    Return as CSR matrix with data structures memory-mapped onto disk.
+    Return as CSR/CSC matrix with data structures memory-mapped onto disk.
 
     Parameters
     ==========
@@ -341,18 +340,28 @@ def load_csr(path):
         Path to a location on disk under which to find the
         {data/indices/indptr/shape}.npy files.
 
+    fmt : str
+        any of 'csr' or 'csc'. Default: csr.
+
     Returns
     =======
 
-    adj : `scipy.sparse.csr_matrix`
-        An adjancency matrix. The structures data/indices/indptr and
-        `numpy.amemmap` objects open in r+ mode.
+    adj : `scipy.sparse.csr_matrix` or `scipy.sparse.csc_matrix` A compressed
+    sparse row/column matrix. The structures data/indices/indptr and
+    `numpy.amemmap` objects open in r+ mode.
     """
+    if fmt not in ['csc', 'csr']:
+        raise ValueError("expecting either csc or csr: {}".format(fmt))
     data = np.load(os.path.join(path, 'data.npy'), mmap_mode='r+')
     indices = np.load(os.path.join(path, 'indices.npy'), mmap_mode='r+')
     indptr = np.load(os.path.join(path, 'indptr.npy'), mmap_mode='r+')
     shape = np.load(os.path.join(path, 'shape.npy'))
-    return sp.csr_matrix((data, indices, indptr), shape=shape)
+    if fmt == 'csr':
+        A = sp.csr_matrix((data, indices, indptr), shape=shape)
+    else:
+        A = sp.csc_matrix((data, indices, indptr), shape=shape)
+    A.has_sorted_indices = True
+    return A
 
 
 def tocsc_memmap(A, dir='/tmp'):
@@ -381,23 +390,18 @@ def tocsc_memmap(A, dir='/tmp'):
     The returned matrix B has memmaps open in read-write mode and it is your
     responsibility to close them.
     """
-    path = os.path.join(dir, 'indptr.npy')
-    indptr = np.memmap(path, shape=(A.shape[1] + 1,), dtype=np.intc, mode='w+')
-
-    path = os.path.join(dir, 'indices.npy')
-    indices = np.memmap(path, shape=(A.nnz,), dtype=np.intc, mode='w+')
-
-    path = os.path.join(dir, 'data.npy')
-    data = np.memmap(path, shape=(A.nnz,), dtype=sp.csr.upcast(A.dtype),
-                     mode='w+')
-
-    sp.csr.csr_tocsc(A.shape[0], A.shape[1],
-                     A.indptr, A.indices, A.data,
-                     indptr, indices, data)
-
-    from scipy.sparse.csc import csc_matrix
-    B = csc_matrix((data, indices, indptr), shape=A.shape)
-    B.has_sorted_indices = True
-    np.save(os.path.join(dir, 'shape.npy'), B.shape)
-    return B
-
+    indptr_path = os.path.join(dir, 'indptr.npy')
+    indices_path = os.path.join(dir, 'indices.npy')
+    data_path = os.path.join(dir, 'data.npy')
+    indptr_f = open(indptr_path, 'w+')
+    indices_f = open(indices_path, 'w+')
+    data_f = open(data_path, 'w+')
+    with closing(indptr_f), closing(indices_f), closing(data_f):
+        indptr = arrayfile(indptr_f, (A.shape[1] + 1,), '<i4')
+        indices = arrayfile(indices_f, (A.nnz,), '<i4')
+        data = arrayfile(data_f, (A.nnz,), '<f8')
+        sp.csr.csr_tocsc(A.shape[0], A.shape[1],
+                         A.indptr, A.indices, A.data,
+                         indptr, indices, data)
+    np.save(os.path.join(dir, 'shape.npy'), A.shape)
+    return load_csmatrix(dir, 'csc')
