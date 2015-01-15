@@ -455,6 +455,10 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
         sys.exit(1)  # SIGINT received
     print '{}: done'.format(now())
     coords = np.asarray(reduce(list.__add__, coords))
-    d = np.ones(len(coords))
-    B = sp.coo_matrix((d, (coords[:, 0], coords[:, 1])), shape=A.shape)
+    if len(coords) > 0:
+        d = np.ones(len(coords))
+        B = sp.coo_matrix((d, (coords[:, 0], coords[:, 1])), shape=A.shape)
+    else:
+        # empty matrix
+        B = sp.coo_matrix(A.shape)
     return B
