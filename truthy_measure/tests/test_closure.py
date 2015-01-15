@@ -350,12 +350,12 @@ def test_closure_and_cclosure_against_networkx():
         # Tests all three methods of computing all shortest paths ('closure','cclosure', and 'nx.all_shortest_paths')
         c_dist, c_paths = clo.closure(A, source=n1, target=n2, kind='metric')
         c_paths = [n for n in c_paths] # convers numbers to letters
-        
+
         cc_dist, cc_paths = clo.cclosure(A, source=n1, target=n2, retpath=1, kind='metric')
         cc_paths = [n for n in cc_paths] if cc_paths is not None else ''
-        
+
         nx_paths = list(nx.all_shortest_paths(G, source=n1, target=n2, weight='weight'))[0]
-        
+
         assert nx_paths == c_paths, "NetworkX and Python 'closure' differ"
         assert nx_paths == cc_paths, "NetworkX and Cython 'cclosure' differ"
         assert c_paths == cc_paths, "Python 'closure' and Cython 'cclosure' differ"
@@ -402,7 +402,7 @@ def test_backbone_metric():
 
             sum_path_weights = sum(path_weights)
             DG.add_edge(n1, n2, {'weight_sum':sum_path_weights})
-    
+
     # Build Backbone SubGraph
     for n1,n2, data in DG.edges(data=True):
         dm_sum_weight = data['weight_sum']
@@ -416,7 +416,7 @@ def test_backbone_metric():
             # Identify backbone SubGraph
             if (g_weight >= dm_sum_weight):
                 BG.add_edge(n1, n2, {'weight_sum':1.})
-    
+
     # Adjacency Matrix of the Backbone SubGraph
     M_BG = nx.adjacency_matrix(BG, weight='weight_sum')
 
