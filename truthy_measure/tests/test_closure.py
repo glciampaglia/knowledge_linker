@@ -12,7 +12,7 @@ import networkx as nx
 from itertools import combinations
 
 import truthy_measure.closure as clo
-from truthy_measure.utils import DirTree, coo_dtype, fromdirtree
+from truthy_measure.utils import DirTree, coo_dtype, fromdirtree, disttosim
 from truthy_measure.utils import weighted
 
 # tests for normal closure
@@ -364,6 +364,9 @@ def test_closure_and_cclosure_against_networkx():
 def test_backbone_metric():
     """ Test 'backbone' metric againt NetworkX (Rion's testing) """
 
+    #
+
+
     # Creates a simple graph that will have distance edges that are Equal OR Bigger than original edges
     G = nx.Graph()
     G.add_nodes_from([0,1,2,3,4,5,6,7])
@@ -383,8 +386,7 @@ def test_backbone_metric():
     # Extract Adjacency Matrix from G
     A = nx.adjacency_matrix(G)
     # Transform distance into a similarity
-    x = np.ravel(A[A > 0])
-    A[A > 0] = (1.0 / (x + 1.0))
+    A.data = disttosim(A.data)
 
     # Calculate Distance Graph
     for n1, n2 in combinations(G.nodes(),2):
@@ -414,14 +416,16 @@ def test_backbone_metric():
         else:
 
             # Identify backbone SubGraph
-            if (g_weight >= dm_sum_weight):
+            if (g_weight == dm_sum_weight):
                 BG.add_edge(n1, n2, {'weight_sum':1.})
 
     # Adjacency Matrix of the Backbone SubGraph
     M_BG = nx.adjacency_matrix(BG, weight='weight_sum')
 
-    # Calculate Backbone to compare
-    B = clo.backbone(A, kind='metric', start=None, offset=None, nprocs=None)
+    print M_BG.todense()
 
-    assert np.all(M_BG.todense() == B.todense()).all(), "Backbone and NetworkX Backbone differ"
+    # Calculate Backbone to compare
+    M_B = clo.backbone(A, kind='metric', start=None, offset=None, nprocs=1)
+
+    assert np.all(M_BG.todense() == M_B.todense()).all(), "Backbone and NetworkX Backbone differ"
 
