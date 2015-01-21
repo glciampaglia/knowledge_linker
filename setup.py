@@ -35,7 +35,7 @@ setup(
     ],
     scripts=[
         'scripts/closure.py',
-        'scripts/cycles.py',
+        #'scripts/cycles.py',
         'scripts/ontoparse.py',
         'scripts/prep.py',
     ]
