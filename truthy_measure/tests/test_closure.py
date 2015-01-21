@@ -385,6 +385,7 @@ def test_backbone_metric():
 
     # Extract Adjacency Matrix from G
     A = nx.adjacency_matrix(G)
+    A = sp.csr_matrix(A)
     # Transform distance into a similarity
     A.data = disttosim(A.data)
 
@@ -422,10 +423,8 @@ def test_backbone_metric():
     # Adjacency Matrix of the Backbone SubGraph
     M_BG = nx.adjacency_matrix(BG, weight='weight_sum')
 
-    print M_BG.todense()
-
     # Calculate Backbone to compare
     M_B = clo.backbone(A, kind='metric', start=None, offset=None, nprocs=1)
 
-    assert np.all(M_BG.todense() == M_B.todense()).all(), "Backbone and NetworkX Backbone differ"
+    assert np.all(M_BG == M_B.todense()).all(), "Backbone and NetworkX Backbone differ"
 
