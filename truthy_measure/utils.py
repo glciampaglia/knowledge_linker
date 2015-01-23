@@ -347,14 +347,20 @@ def load_csmatrix(path, fmt='csr'):
     =======
 
     adj : `scipy.sparse.csr_matrix` or `scipy.sparse.csc_matrix` A compressed
-    sparse row/column matrix. The structures data/indices/indptr and
-    `numpy.amemmap` objects open in r+ mode.
+    sparse row/column matrix.
+
+    Notes
+    =====
+    The structures data/indices/indptr and
+    `numpy.memmap` objects open in copy-on-write mode (changes take place in
+    memory but are not written back to disk, see `numpy.memmap`).
     """
     if fmt not in ['csc', 'csr']:
         raise ValueError("expecting either csc or csr: {}".format(fmt))
-    data = np.load(os.path.join(path, 'data.npy'), mmap_mode='r+')
-    indices = np.load(os.path.join(path, 'indices.npy'), mmap_mode='r+')
-    indptr = np.load(os.path.join(path, 'indptr.npy'), mmap_mode='r+')
+    # one
+    data = np.load(os.path.join(path, 'data.npy'), mmap_mode='c')
+    indices = np.load(os.path.join(path, 'indices.npy'), mmap_mode='c')
+    indptr = np.load(os.path.join(path, 'indptr.npy'), mmap_mode='c')
     shape = np.load(os.path.join(path, 'shape.npy'))
     if fmt == 'csr':
         A = sp.csr_matrix((data, indices, indptr), shape=shape)
