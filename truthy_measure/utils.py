@@ -411,3 +411,25 @@ def tocsc_memmap(A, dir='/tmp'):
                          indptr, indices, data)
     np.save(os.path.join(dir, 'shape.npy'), A.shape)
     return load_csmatrix(dir, 'csc')
+
+
+def save_to_npy(A, dir):
+    """
+    Save a CSR to NPY format
+
+    Parameters
+    ==========
+
+    A : scipy.sparse.csr_matrix
+
+    dir : string
+        path to a folder
+    """
+    A = sp.csr_matrix(A)
+    np.save(os.path.join(dir, 'data.npy'), A.data)
+    np.save(os.path.join(dir, 'indices.npy'), A.indices)
+    np.save(os.path.join(dir, 'indptr.npy'), A.indptr)
+    np.save(os.path.join(dir, 'shape.npy'), A.shape)
+    print 'CSR matrix saved to {}/{{data,indices,indptr,shape}}.npy'.format(dir)
+
+
