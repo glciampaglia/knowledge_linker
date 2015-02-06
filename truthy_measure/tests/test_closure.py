@@ -331,6 +331,7 @@ def test_graph5_maxmin():
         [1.,   0.25, 0.25, 1.,   1.00]])
     run_test(G, expect)
 
+
 def test_closure_and_cclosure_against_networkx():
     """ Test 'clusure' and 'cclosure' on 'metric' againt the NetworkX shortest_path (Rion's testing) """
 
