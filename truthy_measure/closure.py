@@ -393,7 +393,8 @@ def _backbone_worker(n):
 
 
 # TODO: add test function.
-def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
+def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None,
+             quiet=False):
     """ Compute the graph backbone.
 
     The graph backbone is the set of edges whose weight does not change after
@@ -435,7 +436,8 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
     indices = Array(c_int, A.indices)
     data = Array(c_double, A.data)
     initargs = (kind, indptr, indices, data, A.shape)
-    print '{}: launching pool of {} workers.'.format(now(), nprocs)
+    if not quiet:
+        print '{}: launching pool of {} workers.'.format(now(), nprocs)
     pool = Pool(processes=nprocs, initializer=_init_worker,
                 initargs=initargs, maxtasksperchild=max_tasks_per_worker)
     try:
@@ -453,7 +455,8 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None):
         print "^C"
         pool.terminate()
         sys.exit(1)  # SIGINT received
-    print '{}: done'.format(now())
+    if not quiet:
+        print '{}: done'.format(now())
     coords = np.asarray(reduce(list.__add__, coords))
     if len(coords) > 0:
         d = np.ones(len(coords))
