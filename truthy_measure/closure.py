@@ -82,11 +82,11 @@ def closure(A, source, target, kind='ultrametric'):
     This always returns the paths.
 
     """
-    cap, paths = closuress(A, source, kind=kind)
-    return cap[target], paths[target]
+    cap, path = closuress(A, source, kind=kind, target=target)
+    return cap, path
 
 
-def closuress(A, source, kind='ultrametric'):
+def closuress(A, source, kind='ultrametric', target=None):
     """ Single source metric closure via Dijkstra path finding.
 
     Parameters
@@ -101,6 +101,10 @@ def closuress(A, source, kind='ultrametric'):
     kind : str
         the kind of closure to compute; either 'metric' or 'ultrametric'
         (default).
+
+    target : int
+        optional; stop when target is extracted from the queue. Only the
+        capacity and the path associated to target are returned.
 
     Note that this function is pure Python and thus very slow. Use the
     Cythonized version `cclosuress`, which accepts only CSR matrices.
@@ -140,6 +144,9 @@ def closuress(A, source, kind='ultrametric'):
         node_item = heappop(Q)
         cap, node, _ = node_item
         cap = - cap
+        if node == target:
+            # break when target has been extracted from the heap
+            break
         certain[node] = True
         neighbors = A.getrow(node).indices
         for neighbor in neighbors:
@@ -176,6 +183,8 @@ def closuress(A, source, kind='ultrametric'):
                 i = items[i][2]
             path.insert(0, source)
             paths.append(np.asarray(path))
+        if node == target:
+            return bott_caps[-1], paths[-1]
     return bott_caps, paths
 
 maxchunksize = 100000
@@ -313,11 +322,42 @@ def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
     See `epclosuress` for parameters.
 
     """
-    cap, paths = epclosuress(A, source, B=B, retpaths=retpath, kind=kind)
-    if retpath:
-        return cap[target], paths[target]
+    # ensure A is CSR
+    A = sp.csr_matrix(A)
+    if B is None:
+        B = A.tocsc()
     else:
-        return cap[target], None
+        # ensure B is CSC
+        B = sp.csc_matrix(B)
+    _caps, _paths = cclosuress(A, source, retpaths=retpath, kind=kind)
+    s_neighbors = set(A.getrow(source).indices)
+    s_reachables = set(np.where(_caps)[0])
+    if target in s_neighbors or target == source:
+        if retpath:
+            return 1.0, np.empty(0)
+        else:
+            return 1.0, None
+    elif _caps[target] > 0.0:
+        # target must have at least one neighbor that is also reachable
+        # from source. In case the graph is directed, we take the
+        # in-neighbors.
+        t_neighbors = set(B.getcol(target).indices)
+        t_neighbors.intersection_update(s_reachables)
+        t_neighbors = np.asarray(sorted(t_neighbors))
+        t_neighbors_cap = _caps[t_neighbors]
+        imax = t_neighbors[np.argmax(t_neighbors_cap)]
+        cap = _caps[imax]
+        if retpath:
+            path = np.hstack([_paths[imax], target])
+            return cap, path
+        else:
+            return cap, None
+    else:
+        # target is not reachable from source
+        if retpath:
+            return 0.0, np.empty(0)
+        else:
+            return 0.0, None
 
 
 def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
