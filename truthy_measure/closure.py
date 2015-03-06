@@ -148,8 +148,13 @@ def closuress(A, source, kind='ultrametric', target=None):
             # break when target has been extracted from the heap
             break
         certain[node] = True
-        neighbors = A.getrow(node).indices
+        row = A.getrow(node)
+        neighbors = row.indices
         for neighbor in neighbors:
+            # skip zeros regardless of sparsity structure (useful when doing
+            # link prediction on copy-on-write memmaps
+            if row[0, neighbor] == 0:
+                continue
             if not certain[neighbor]:
                 neighbor_item = items[neighbor]
                 neigh_curr_cap = - neighbor_item[0]
