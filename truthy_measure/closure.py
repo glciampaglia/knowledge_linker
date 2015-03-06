@@ -315,23 +315,12 @@ def closureap(A, dirtree, start=None, offset=None, nprocs=None,
     print '{}: done'.format(now())
 
 
-def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
+def _epclosureone(A, source, target, B, retpath, _caps, _paths, s_neighbors,
+                  s_reachables):
     """
-    Source target "epistemic" closure. Python implementation.
-
-    See `epclosuress` for parameters.
-
+    The actual function that computes the epistemic closure for a source/target
+    pair. Returns capacity and path.
     """
-    # ensure A is CSR
-    A = sp.csr_matrix(A)
-    if B is None:
-        B = A.tocsc()
-    else:
-        # ensure B is CSC
-        B = sp.csc_matrix(B)
-    _caps, _paths = cclosuress(A, source, retpaths=retpath, kind=kind)
-    s_neighbors = set(A.getrow(source).indices)
-    s_reachables = set(np.where(_caps)[0])
     if target in s_neighbors or target == source:
         if retpath:
             return 1.0, np.empty(0)
@@ -358,6 +347,27 @@ def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
             return 0.0, np.empty(0)
         else:
             return 0.0, None
+
+
+def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
+    """
+    Source target "epistemic" closure. Python implementation.
+
+    See `epclosuress` for parameters.
+
+    """
+    # ensure A is CSR
+    A = sp.csr_matrix(A)
+    if B is None:
+        B = A.tocsc()
+    else:
+        # ensure B is CSC
+        B = sp.csc_matrix(B)
+    _caps, _paths = cclosuress(A, source, retpaths=retpath, kind=kind)
+    s_neighbors = set(A.getrow(source).indices)
+    s_reachables = set(np.where(_caps)[0])
+    return _epclosureone(A, source, target, B, retpath, _caps, _paths,
+                         s_neighbors, s_reachables)
 
 
 def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
@@ -399,27 +409,10 @@ def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
     s_neighbors = set(A.getrow(source).indices)
     s_reachables = set(np.where(_caps)[0])
     for target in xrange(N):
-        if target in s_neighbors or target == source:
-            caps[target] = 1.0
-            if retpaths:
-                paths.append(np.empty(0))
-        elif _caps[target] > 0.0:
-            # target must have at least one neighbor that is also reachable
-            # from source. In case the graph is directed, we take the
-            # in-neighbors.
-            t_neighbors = set(B.getcol(target).indices)
-            t_neighbors.intersection_update(s_reachables)
-            t_neighbors = np.asarray(sorted(t_neighbors))
-            t_neighbors_cap = _caps[t_neighbors]
-            imax = t_neighbors[np.argmax(t_neighbors_cap)]
-            caps[target] = _caps[imax]
-            if retpaths:
-                paths.append(np.hstack([_paths[imax], target]))
-        else:
-            # target is not reachable from source
-            caps[target] = 0.0
-            if retpaths:
-                paths.append(np.empty(0))
+        c, p = _epclosureone(A, source, target, B, retpaths, _caps, _paths,
+                             s_neighbors, s_reachables)
+        caps[target] = c
+        paths.append(p)
     return caps, paths
 
 
