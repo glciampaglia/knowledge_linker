@@ -13,6 +13,7 @@ from libc.stdlib cimport malloc, free, calloc
 from libc.stdio cimport printf
 from .heap cimport FastUpdateBinaryHeap
 
+
 cpdef object cclosure(object A, int source, int target, int retpath = 0,
                       kind='ultrametric'):
     '''
@@ -178,10 +179,14 @@ cdef MetricPathPtr _cclosuress(
         proxs[node] = prox
         N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
         for i in xrange(N_neigh):
+            w = data[indptr[node] + i] # i.e. A[node, neigh_node]
+            if w == 0:
+                # skip zeros regardless of sparsity structure (useful when
+                # doing link prediction on copy-on-write memmaps
+                continue
             neighbor = neighbors[i]
             if not certain[neighbor]:
                 neigh_prox = - Q.value_of_fast(neighbor)
-                w = data[indptr[node] + i] # i.e. A[node, neigh_node]
                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)
                 if d != neigh_prox:
                     Q.push_if_lower_fast(- d, neighbor) # will only update
