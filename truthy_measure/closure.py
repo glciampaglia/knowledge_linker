@@ -335,7 +335,8 @@ def _epclosureone(A, source, target, B, retpath, _caps, _paths, s_neighbors,
         # target must have at least one neighbor that is also reachable
         # from source. In case the graph is directed, we take the
         # in-neighbors.
-        t_neighbors = set(B.getcol(target).indices)
+        col = B.getcol(target)
+        t_neighbors = set(col.indices[col.data > 0])
         t_neighbors.intersection_update(s_reachables)
         t_neighbors = np.asarray(sorted(t_neighbors))
         t_neighbors_cap = _caps[t_neighbors]
@@ -369,7 +370,8 @@ def epclosure(A, source, target, B=None, retpath=False, kind='ultrametric'):
         # ensure B is CSC
         B = sp.csc_matrix(B)
     _caps, _paths = cclosuress(A, source, retpaths=retpath, kind=kind)
-    s_neighbors = set(A.getrow(source).indices)
+    row = A.getrow(source)
+    s_neighbors = row.indices[row.data > 0]
     s_reachables = set(np.where(_caps)[0])
     return _epclosureone(A, source, target, B, retpath, _caps, _paths,
                          s_neighbors, s_reachables)
@@ -411,7 +413,8 @@ def epclosuress(A, source, B=None, kind='ultrametric', retpaths=False):
     _caps = np.asarray(_caps)
     caps = np.empty(N)
     paths = []
-    s_neighbors = set(A.getrow(source).indices)
+    row = A.getrow(source)
+    s_neighbors = row.indices[row.data > 0]
     s_reachables = set(np.where(_caps)[0])
     for target in xrange(N):
         c, p = _epclosureone(A, source, target, B, retpaths, _caps, _paths,
