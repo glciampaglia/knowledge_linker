@@ -490,7 +490,7 @@ def backbone(A, kind='ultrametric', start=None, offset=None, nprocs=None,
         if result.successful():
             coords = result.get()
         else:
-            print >> sys.stderr, "There was an error in the pool."
+            print >> sys.stderr, "There was an error in the pool: `%s`" % (result._value)
             sys.exit(2)  # ERROR occurred
     except KeyboardInterrupt:
         print "^C"
