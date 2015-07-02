@@ -41,7 +41,6 @@ def plot_cdf(x, copy=True, fractional=True, **kwargs):
         t = np.asarray(t)
     else:
         t = np.c_[np.asfarray(x), np.arange(N) + 1]
-    print t[-2:]
     if 'ax' not in kwargs:
         ax = plt.gca()
     else:
