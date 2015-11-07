@@ -7,12 +7,20 @@ For details, please see:
 "A three-way model for collective learning on multi-relational data."
 by Maximilian Nickel et. al (ICML 2011).
 
+Usage notes:
+There are two choices: 1) Compute factorization on entire data (full), 
+2) Perform model selection by cross-validation. To perform model 
+selection by cross_validation, use the '-nFold' option. If '-full' is specified,
+'-nFold' is ignored. By default, models are NOT saved during cross-validation. 
+If you want to save them, add '-savemodel'. By default, all models are saved 
+when '-full' is specified.
+
+
 """
 
 import os
 import sys
 import argparse
-import types
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -189,20 +197,17 @@ def run_rescal(T, dataset, rank, outpath=os.path.curdir,
         base = dataset + '_rank' + str(r)
         A_path = os.path.join(outpath, base + '_A.npy')
         Rks_path = os.path.join(outpath, base + '_Rk.npy')
-        frontal_Rk = np.array([rk.ravel() for rk in frontal_Rk])
         print "Saving RESCAL.."
         print "-> 'A' matrix {} at: {}".format(A.shape, A_path)
         print "-> 'R' core tensor {}, one relation per row at: {}"\
-                    .format(frontal_Rk.shape, Rks_path)
+                    .format((len(frontal_Rk), frontal_Rk[0].shape[0] ** 2), 
+                                Rks_path)
         np.save(A_path, A)
-        np.save(Rks_path, frontal_Rk)   
-
-        return {'rank': r, 'A': A_path, 'Rks': Rks_path, 
-            'iter': itr, 'fit': fval}
+        np.save(Rks_path, np.array([rk.ravel() for rk in frontal_Rk]))   
 
     return {'rank': r, 'A': A, 'Rks': frontal_Rk, 'iter': itr, 'fit': fval}
 
-def model_selection(rank, nFold=5, save_plot=True):
+def model_selection(rank, nFold=5, save_model=False):
     """
     Performs RESCAL model selection by cross-validation (CV).
     
@@ -215,7 +220,11 @@ def model_selection(rank, nFold=5, save_plot=True):
         Rank of desired RESCAL factorization. It could be an integer or a
         list/tuple containing the distinct ranks to try.
 
+    save_model: bool
+        Whether to save the model matrix A and core tensor R.
+
     """
+
     def _cross_validation(r):
         precision = dict()
         recall = dict()
@@ -228,9 +237,9 @@ def model_selection(rank, nFold=5, save_plot=True):
         # perform K-Fold cross-validation
         for fold, (Train, Test) in enumerate(tensor_gen):
             ret = run_rescal(Train, DATASET, outpath=OUTPATH, 
-                                rank=r, save=False, display=True)
+                                rank=r, save=save_model, display=True)
             A, Rks, ranks[fold] = ret['A'], ret['Rks'], ret['rank']
-
+            print type(A)
             # test on test set
             print "Testing peformance...",
             pred_scores = np.empty(len(Test.subs[0]), dtype=np.float64)
@@ -308,7 +317,7 @@ def compute_full_rescal(rank):
     print "RESCAL factorization complete."
 
 if __name__ == '__main__':
-    """ e.g. cmd call
+    """  e.g. cmd call
 
     -> (No model selection, full factorization)
     python rescal_wrapper.py 
@@ -331,7 +340,7 @@ if __name__ == '__main__':
     python rescal_wrapper.py -name iudata 
         -path ../../truthy_data/iudata/edges.txt 
         -outpath ../../truthy_data/iudata/ 
-        -full True -rank 4 5 6 -nFold 2
+        -full True -rank 4 5 6 -nFold 2 -savemodel
 
     -> (Multiple ranks: FOAF)
     python rescal_wrapper.py -name foaf 
@@ -359,11 +368,12 @@ if __name__ == '__main__':
         parser.add_argument('-delim', metavar='', type=str, 
                             dest='delim', help='Input file delimiter', 
                             default=' ')
-        parser.add_argument('-full', metavar='True', type=bool, 
-                            dest='full', help='Factorization of complete data?', 
-                            default=True)
+        parser.add_argument('-full', action='store_true',
+                            dest='full', help='Factorization of complete data?')
+        parser.add_argument('-savemodel', action='store_true',
+                            dest='savemodel', help='Save model (A & Rk)?')
         parser.add_argument('-outpath', metavar='', type=str, 
-                            dest='outpath', help='Index of class column', 
+                            dest='outpath', help='Path for storing model', 
                             required=True)
                             
         args = parser.parse_args()
@@ -377,7 +387,8 @@ if __name__ == '__main__':
         
         if args.nFold is not None:
             t1 = time()
-            model_selection(args.rank, nFold=args.nFold)
+            model_selection(args.rank, nFold=args.nFold, 
+                            save_model=args.savemodel)
             print "\nTime taken: {} secs.".format(time() - t1)
         else:
             for r in args.rank:
