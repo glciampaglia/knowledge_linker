@@ -12,6 +12,7 @@ by Maximilian Nickel et. al (ICML 2011).
 import os
 import sys
 import argparse
+import types
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,8 +29,10 @@ MULTIGRAPH_PATH = "../../truthy_data/iudata/edges.txt"
 DATASET = 'iudata'
 OUTPATH = '../../truthy_data/iudata/'
 DELIM = ' '
+NETWORK = None
 
 def sptensor_to_list(X):
+    "Converts a 'sptensor' in a list of matrices."
     from scipy.sparse import lil_matrix
     if X.ndim != 3:
         raise ValueError('Only third-order tensors are supported \
@@ -82,7 +85,12 @@ def create_sptensor(path, full=False, nFold=5):
     Otherwise, train and test sparse tensors are returned on each call. 'nFold'
     specifies how many test sets to create for cross-validation.
     """
-    coo, shpe, edge_count = readNetwork(path) 
+    global NETWORK
+    if NETWORK is None:
+        NETWORK = readNetwork(path) 
+    else:
+        print "** Note: Using cached network."
+    coo, shpe, edge_count = NETWORK
     if full:
         print "Creating FULL sparse tensor.."
         S = sptensor(tuple(coo), np.ones(edge_count), 
@@ -97,7 +105,7 @@ def create_sptensor(path, full=False, nFold=5):
     else:
         kf = KFold(edge_count, n_folds=nFold, shuffle=True)
         for i, (train, test) in enumerate(kf):
-            print "Fold %d" % (i + 1)
+            print "\nFold %d" % (i + 1)
             print "Creating Train, Test sparse tensors..."
             train_coo = []
             test_coo = []
@@ -116,7 +124,7 @@ def create_sptensor(path, full=False, nFold=5):
                     len(S_test.vals))
             yield S_train, S_test
 
-def run_rescal(T, dataset, rank=None, outpath=os.path.curdir, 
+def run_rescal(T, dataset, rank, outpath=os.path.curdir, 
                 save=True, display=False):
     """
     Performs RESCAL factorization on the input sparse tensor and 
@@ -137,11 +145,7 @@ def run_rescal(T, dataset, rank=None, outpath=os.path.curdir,
     dataset: str
         Name of the dataset represented by tensor T.
 
-    rank: None, int or list
-        If None, "right" rank is chosen based on the quality of fit (expensive)
-        by doing a grid search between 1 and number of nodes. 
-        (for small data)
-        
+    rank: int or list
         If rank is an 'int', a factorization of that rank is obtained. 
         (for large data)
 
@@ -172,35 +176,11 @@ def run_rescal(T, dataset, rank=None, outpath=os.path.curdir,
         And the values include absolute path to the files saved on disk. 
         This applies only for matrix A and Rks. 
     """
+    print "Converting to list of frontal slices.."
     frontal_slices = sptensor_to_list(T)
-    if (rank is None) or isinstance(rank, list):
-        print "** Rank not supplied. Model for 'best' rank will be saved."
-        if rank is None:
-            r_trials = np.arange(T.shape[0]-1) + 1
-        else:
-            r_trials = rank
-        best_rank = 1
-        best_fit = -1.0
-        best_A = None
-        best_frontal_Rk = None
-        best_itr = None
-        for r in r_trials:
-            A, frontal_Rk, fval, itr, exectimes = rescal.als(frontal_slices, r)
-            if display:
-                print "Rank: {}, Fit: {}, Iter: {}".format(r, fval, itr)
-            if fval >= best_fit:
-                best_fit = fval
-                best_rank = r
-                best_A = A
-                best_frontal_Rk = frontal_Rk
-                best_itr = itr
-        print "**Best: Rank: {}, Fit: {}, Iter: {}".format(best_rank, 
-                                                            best_fit, best_itr)
-        r, A, frontal_Rk, fval, itr = best_rank, best_A, \
-                    best_frontal_Rk, best_fit, best_itr
-    else:
-        r = rank
-        A, frontal_Rk, fval, itr, exectimes = rescal.als(frontal_slices, r)
+    print "Rank: ", rank
+    r = rank
+    A, frontal_Rk, fval, itr, exectimes = rescal.als(frontal_slices, r)
     
     # save RESCAL model
     if save:
@@ -222,7 +202,7 @@ def run_rescal(T, dataset, rank=None, outpath=os.path.curdir,
 
     return {'rank': r, 'A': A, 'Rks': frontal_Rk, 'iter': itr, 'fit': fval}
 
-def model_selection(nFold=5, rank=None, save_plot=True):
+def model_selection(rank, nFold=5, save_plot=True):
     """
     Performs RESCAL model selection by cross-validation (CV).
     
@@ -231,69 +211,81 @@ def model_selection(nFold=5, rank=None, save_plot=True):
     nFold: int
         Number of cross_validation folds. Default: 5.
 
-    rank: int
-        Rank of desired RESCAL factorization.
-
-    save_plot: bool
-        Whether to save (Precision-Recall) curve plots while testing each folds.
+    rank: int or iterable
+        Rank of desired RESCAL factorization. It could be an integer or a
+        list/tuple containing the distinct ranks to try.
 
     """
-    tensor_gen = create_sptensor(MULTIGRAPH_PATH, nFold=nFold)
-    precision = dict()
-    recall = dict()
-    auc_pr = dict()
+    def _cross_validation(r):
+        precision = dict()
+        recall = dict()
+        auc_prs = dict()
+        ranks = dict()
+        best_fold = -1
+        tensor_gen = create_sptensor(MULTIGRAPH_PATH, nFold=nFold)
+        print "Computing RESCAL factorization for rank {}".format(r)
 
-    # perform K-Fold cross-validation
-    for fold, (Train, Test) in enumerate(tensor_gen):
-        print "Computing RESCAL factorization.."
-        ret = run_rescal(Train, DATASET, outpath=OUTPATH, 
-                            rank=rank, save=False, display=True)
-        A, Rks = ret['A'], ret['Rks']
-        print "RESCAL factorization complete."
+        # perform K-Fold cross-validation
+        for fold, (Train, Test) in enumerate(tensor_gen):
+            ret = run_rescal(Train, DATASET, outpath=OUTPATH, 
+                                rank=r, save=False, display=True)
+            A, Rks, ranks[fold] = ret['A'], ret['Rks'], ret['rank']
 
-        # test predictions
-        print "Testing.."
-        predictions = np.empty(len(Test.subs[0]), dtype=np.float64)
-        subs, objs, preds = Test.subs
-        test_triples = izip(subs, objs, preds)
-        for i, (s, o, p) in enumerate(test_triples):
-            A_sub = A[s,].reshape((1, len(A[s,])))
-            A_obj = A[o,].reshape((len(A[o,]), 1))
-            predictions[i] = np.dot(np.dot(A_sub, Rks[p]), A_obj)
-        print "True labels: ", Test.vals
-        print "Prediction scores: ", predictions
+            # test on test set
+            print "Testing peformance...",
+            pred_scores = np.empty(len(Test.subs[0]), dtype=np.float64)
+            subs, objs, preds = Test.subs
+            test_triples = izip(subs, objs, preds)
+            for i, (s, o, p) in enumerate(test_triples):
+                A_sub = A[s,].reshape((1, len(A[s,])))
+                A_obj = A[o,].reshape((len(A[o,]), 1))
+                pred_scores[i] = np.dot(np.dot(A_sub, Rks[p]), A_obj)
+            # print "True labels: ", Test.vals
+            # print "Prediction scores: ", pred_scores
 
-        # compute precision-recall, and AUC-PR
-        print "Computing performance stats.."
-        precision[fold], recall[fold], _ = precision_recall_curve(Test.vals, 
-                                                                predictions)
-        auc_pr[fold] = average_precision_score(Test.vals, predictions)
-
-        print "--------------------\n"
-
-    # Performance stats
-    print "\nOverall performance:"
-    print "AUC-PRs: ", auc_pr.values()
-    print "Average AUC-PR: {}".format(np.mean(auc_pr.values()))
-
-    # Save plot
-    if save_plot is not None:
-        plot_path = os.path.join(OUTPATH, DATASET + '_pr.pdf')
-        pdf = PdfPages(plot_path)
-        print "\nSaving PR-curve at '{}'..".format(plot_path)
-        plt.clf()
+            # compute precision-recall, and AUC-PR
+            precision[fold], recall[fold], _ = precision_recall_curve(Test.vals, 
+                                                                    pred_scores)
+            auc_prs[fold] = average_precision_score(Test.vals, pred_scores)
+            if auc_prs.get(best_fold) is None \
+                or auc_prs[best_fold] < auc_prs[fold]:
+                best_fold = fold
+            print "Done."
+        
+        avg_auc_pr = np.mean(auc_prs.values())
+        print "\nAUC-PR @rank {}:".format(r)
+        print "fold\tAUC-PR(fold)"
         for fold in xrange(nFold):
-            plt.plot(recall[fold], precision[fold],
-                 label='Fold %d (AUC-PR = %0.3f)' % (fold + 1, auc_pr[fold]))
+            print "{}\t{}".format(fold + 1, auc_prs[fold])
+        print "Average AUC-PR @rank {}: {}".format(r, avg_auc_pr)
+        print "Cross-validation complete for rank {}.".format(r)
+        print "--------------------\n"
+        return avg_auc_pr
 
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
-        plt.title("'{}': Precision-Recall curves for each fold.".format(DATASET))
-        plt.legend(loc="lower left")
-        plt.savefig(pdf, format='pdf')
-        pdf.close()
+    if isinstance(rank, list): # search best_rank from among the input list
+        performance = []
+        for rk in rank:
+            perf = _cross_validation(rk)
+            if perf is None:
+                break
+            performance.append((rk, perf))
+
+        # Performance stats
+        best = sorted(performance, key=lambda x: x[1])[::-1][0]
+        best_rank, best_auc_pr = best
+        metrics_path = os.path.join(OUTPATH, DATASET \
+                        + '_bestrank_' + str(best_rank) + '_metrics.txt')
+        print "Saving metrics at '{}'".format(metrics_path)
+        with open(metrics_path, 'w') as f:
+            f.write('Rank, AUC-PR\n')
+            print "Rank AUC-PR"
+            for r, avg_auc_pr in performance:
+                print r, avg_auc_pr
+                f.write('{},{}\n'.format(r, avg_auc_pr))
+        print "Best (rank, AUC-PR): ({}, {})".format(best_rank, best_auc_pr)
+    else: # fixed rank
+        auc_pr = _cross_validation(rank)
+        print "Rank: {}, AUC-PR: {}".format(rank, auc_pr)
 
 def compute_full_rescal(rank):
     """
@@ -302,9 +294,9 @@ def compute_full_rescal(rank):
     
     Parameters:
     -----------
-    rank: int
-        Rank of factorization. An integer between 1 and number of nodes.
-        If None, a grid search is performed to select the 'best' rank.
+    rank: int or iterable
+        Rank of factorization. Usually, an integer between 1 and number of nodes.
+        If iterable, the values in it are tried.
     
     """
     tensor_gen = create_sptensor(MULTIGRAPH_PATH, full=True)
@@ -318,23 +310,40 @@ def compute_full_rescal(rank):
 if __name__ == '__main__':
     """ e.g. cmd call
 
-    -> python rescal_wrapper.py 
+    -> (No model selection, full factorization)
+    python rescal_wrapper.py 
         -name iudata -path ../../truthy_data/iudata/edges.txt 
         -rank 3 -outpath ../../truthy_data/iudata/
 
-    -> python rescal_wrapper.py -name foaf 
+    -> (Model selection: FOAF)
+    python rescal_wrapper.py -name foaf 
         -path ~/Projects/truthy_data/foafpub-umbc-2005-feb/adjacency.txt 
         -outpath ~/Projects/truthy_data/foafpub-umbc-2005-feb/rescal/ 
-        -nFold 5
+        -nFold 5 -rank 5
 
-    -> python rescal_wrapper.py -name iudata 
+    -> (Model selection: iudata)
+    python rescal_wrapper.py -name iudata 
         -path ../../truthy_data/iudata/edges.txt 
         -outpath ../../truthy_data/iudata/ 
         -full True -rank 4 -nFold 2
 
+    -> (Multiple ranks: iudata)
+    python rescal_wrapper.py -name iudata 
+        -path ../../truthy_data/iudata/edges.txt 
+        -outpath ../../truthy_data/iudata/ 
+        -full True -rank 4 5 6 -nFold 2
+
+    -> (Multiple ranks: FOAF)
+    python rescal_wrapper.py -name foaf 
+        -path ~/Projects/truthy_data/foafpub-umbc-2005-feb/adjacency.txt 
+        -outpath ~/Projects/truthy_data/foafpub-umbc-2005-feb/rescal/ 
+        -nFold 5
+        -rank 10  20  30  40  50  60  70  80  90 100
+
     """
     if len(sys.argv) == 1:
-        model_selection()
+        ranks = list(np.arange(7) + 1) # maxrank = 8-1 = 7 for iudata
+        model_selection(ranks)
     else:
         parser = argparse.ArgumentParser(description=__doc__)
         parser.add_argument('-name', metavar=DATASET, type=str, 
@@ -342,8 +351,9 @@ if __name__ == '__main__':
         parser.add_argument('-path', metavar=MULTIGRAPH_PATH, type=str,
                             dest='path', help='Path to input graph file',
                             required=True)
-        parser.add_argument('-rank', metavar='5', type=int,
-                            dest='rank', help='Factorization rank')
+        parser.add_argument('-rank', metavar='5', nargs='+', type=int,
+                            dest='rank', help='Factorization rank', 
+                            required=True)
         parser.add_argument('-nFold', metavar='5', type=int, 
                             dest='nFold', help='#Folds for CV')
         parser.add_argument('-delim', metavar='', type=str, 
@@ -364,12 +374,16 @@ if __name__ == '__main__':
         OUTPATH = args.outpath
         DELIM = args.delim.decode('string_escape')
 
-        t1 = time()
+        
         if args.nFold is not None:
-            model_selection(nFold=args.nFold, rank=args.rank)
+            t1 = time()
+            model_selection(args.rank, nFold=args.nFold)
+            print "\nTime taken: {} secs.".format(time() - t1)
         else:
-            compute_full_rescal(args.rank)
-        print "\nTime taken: {} secs.".format(time() - t1)
+            for r in args.rank:
+                t1 = time()
+                compute_full_rescal(r)
+                print "Time taken: {} secs.\n".format(time() - t1)
 
     print "\nDone!\n"
         
