@@ -289,10 +289,10 @@ def run_rescal(T, dataset, rank, outpath=os.path.curdir,
 								conv=1e-3, lambda_A=10, lambda_R=10)
 			break
 		except Exception, e:
-			print "Error: {}".format(sys.exc_info()[0]) 
-		finally:
-			print "Max trials ({}) complete. Stopping execution.".format(MAX_TRIALS)
-	
+			print "Trial {} failed. Error: {}".format(i+1, sys.exc_info()[0]) 
+			if i + 1 == MAX_TRIALS:
+				print "Max trials ({}) complete. Stopping execution.".format(MAX_TRIALS)
+				sys.exit()
 	
 	# save RESCAL model
 	if save:
