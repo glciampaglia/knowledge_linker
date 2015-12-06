@@ -83,12 +83,14 @@ class csr_tensor(object):
 					if k != prev_k:
 						prev_k = k
 						indptr[prev_i + 1:] = nnz - 1
-						M = csr_matrix((data, indices, indptr), shape=self.shape[:2], dtype=np.float64)
+						M = csr_matrix((data, indices, indptr), \
+								shape=self.shape[:2], dtype=np.float64)
 						self.csr_list.append(M)
 						self.nnz += M.nnz
 
 						# reset
-						data, indices, indptr = [], [], np.zeros(self.shape[0] + 1, dtype=np.int8)
+						data, indices, indptr = [], [], np.zeros(self.shape[0] + 1, \
+												dtype=np.int8)
 						prev_i = 0
 						nnz = 1
 
@@ -100,7 +102,8 @@ class csr_tensor(object):
 
 				# add last frontal slice
 				indptr[prev_i + 1:] = nnz
-				M = csr_matrix((data, indices, indptr), shape=self.shape[:2], dtype=np.float64)
+				M = csr_matrix((data, indices, indptr), \
+						shape=self.shape[:2], dtype=np.float64)
 				self.csr_list.append(M)
 				self.nnz += M.nnz
 		else:
@@ -148,35 +151,43 @@ class csr_tensor(object):
 		# check bounds
 		if axis == 0:
 			if not (slice >= 0 and slice < self.shape[2]):
-				raise IndexError('Slice out of bounds. Should be less than %d' % self.shape[2])
+				raise IndexError('Slice out of bounds. Should be less than %d' 
+						% self.shape[2])
 			if not (idx >= 0 and idx < self.shape[0]):
-				raise IndexError('Index out of bounds: Should be less than %d' % self.shape[0])
+				raise IndexError('Index out of bounds: Should be less than %d' 
+						% self.shape[0])
 			return self.csr_list[slice].getrow(idx)
 		elif axis == 1:
 			if not (slice >= 0 and slice < self.shape[0]):
-				raise IndexError('Slice out of bounds. Should be less than %d' % self.shape[0])
+				raise IndexError('Slice out of bounds. Should be less than %d' 
+						% self.shape[0])
 			if not (idx >= 0 and idx < self.shape[1]):
-				raise IndexError('Index out of bounds. Should be less than %d' % self.shape[1])
+				raise IndexError('Index out of bounds. Should be less than %d' 
+						% self.shape[1])
 			data, indices, indptr = [], [], []
 			for i, mat in enumerate(self.csr_list):
 				if mat[slice, idx] != 0:
 					data.append(mat[slice, idx])
 					indices.append(i)
 			indptr = [0, len(indices)]
-			ret = csr_matrix((np.array(data), np.array(indices), np.array(indptr)), shape=(1, self.shape[2]), dtype=np.float64)
+			ret = csr_matrix((np.array(data), np.array(indices), np.array(indptr)), \
+					shape=(1, self.shape[2]), dtype=np.float64)
 			return ret
 		elif axis == 2:
 			if not (slice >= 0 and slice < self.shape[1]):
-				raise IndexError('Slice out of bounds. Should be less than %d' % self.shape[1])
+				raise IndexError('Slice out of bounds. Should be less than %d' 
+						% self.shape[1])
 			if not (idx >= 0 and idx < self.shape[0]):
-				raise IndexError('Index out of bounds. Should be less than %d' % self.shape[0])
+				raise IndexError('Index out of bounds. Should be less than %d' 
+						% self.shape[0])
 			data, indices, indptr = [], [], []
 			for i, mat in enumerate(self.csr_list):
 				if mat[idx, slice] != 0:
 					data.append(mat[idx, slice])
 					indices.append(i)
 			indptr = [0, len(indices)]
-			ret = csr_matrix((np.array(data), np.array(indices), np.array(indptr)), shape=(1, self.shape[2]), dtype=np.float64)
+			ret = csr_matrix((np.array(data), np.array(indices), 
+				np.array(indptr)), shape=(1, self.shape[2]), dtype=np.float64)
 			return ret
 		else:
 			raise ValueError('Incorrect value for axis. It can be 0, 1 or 2.')
@@ -214,7 +225,8 @@ class csr_tensor(object):
 				res += mat.getnnz(0) # j'th column of each matrix
 			return res
 		else:
-			raise ValueError('Only third order tensors supported. Try axis=None, 0, 1 or 2.')
+			raise ValueError('Only third order tensors supported. \
+				Try axis=None, 0, 1 or 2.')
 
 	def getslice(self, idx, axis=0):
 		"""
@@ -235,7 +247,8 @@ class csr_tensor(object):
 			A sparse CSR matrix representing the slice.
 		"""
 		if not (axis in (0, 1, 2)):
-			raise ValueError('Incorrect axis specified. Valid values include 0, 1, or 2.')
+			raise ValueError('Incorrect axis specified. \
+				Valid values include 0, 1, or 2.')
 		if axis == 0:
 			if not (idx >= 0 and idx < self.shape[2]):
 				raise IndexError('Index out of bounds.')
@@ -243,9 +256,16 @@ class csr_tensor(object):
 		else:
 			raise NotImplementedError('Slicing for axis 1 and 2 not implemented.')
 
+	def set_shape(self, shape):
+		if self.shape is not None:
+			raise NotImplementedError('Did you mean reshape? Tensor reshaping \
+				not implemented.')
+		self.shape = shape
+
 	def setslice(self, idx, mat, axis=0):
 		"""
-		Sets the slice specified by mat as the idx'th slice in the tensor, along 'axis'.
+		Sets the slice specified by mat as the idx'th slice 
+		in the tensor, along 'axis'.
 
 		Parameters:
 		-----------
@@ -261,11 +281,12 @@ class csr_tensor(object):
 		
 		"""
 		if not (axis in (0, 1, 2)):
-			raise ValueError('Incorrect axis specified. Valid values include 0, 1, or 2.')
+			raise ValueError('Incorrect axis specified. Valid values \
+				include 0, 1, or 2.')
 		if axis == 0:
 			if not (idx >= 0 and idx < self.shape[2]):
 				raise IndexError('Index out of bounds.')
-			self.csr_list[idx] = csr_matrix(mat)
+			self.csr_list.insert(idx, csr_matrix(mat))
 		else:
 			raise NotImplementedError('Slicing for axis 1 and 2 not implemented.')
 
