@@ -33,6 +33,17 @@ class csr_tensor(object):
 			raise IndexError('Index out of bounds. Check specified indices.')
 		return self.csr_list[k][i, j]
 
+	def __setitem__(self, idx, val):
+		if len(idx) != 3:
+			raise ValueError('Incorrect number of indices provided.')
+		i, j, k = idx
+		if not ((i >= 0 and i < self.shape[0])
+			and (j >= 0 and j < self.shape[1])
+			and (k >= 0 and k < self.shape[2])):
+			raise IndexError('Index out of bounds. Check specified indices.')
+		self.csr_list[k][i, j] = val
+
+
 	def fromRecs(self, path, shape=None, delim=' ', valued=False):
 		"""
 		Reads records from file specified by 'path' 
@@ -291,7 +302,7 @@ class csr_tensor(object):
 			raise NotImplementedError('Slicing for axis 1 and 2 not implemented.')
 
 def main():
-	path = '../../../truthy_data/iudata/edges.txt'
+	path = '../../truthy_data/iudata/edges.txt'
 	shape = (8, 8, 6)
 
 	# path = '../../../truthy_data/Sample_graphs/example_graph.txt'
@@ -302,6 +313,8 @@ def main():
 	# print T.getslice(4).todense()
 	T.setslice(0, T.getslice(1))
 	print T
+	T[2,3,4] = 5
+	print T[2,3,4]
 
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ from itertools import izip
 from sktensor import sptensor
 from sktensor import rescal
 from sklearn.cross_validation import KFold
-from sklearn.metrics import auc, average_precision_score, precision_recall_curve
+from sklearn.metrics import auc, average_precision_score, precision_recall_curve, roc_auc_score
 from matplotlib.backends.backend_pdf import PdfPages
 
 MULTIGRAPH_PATH = "../../truthy_data/iudata/edges.txt"
@@ -193,7 +193,6 @@ def create_sptensor(path, nFold=None, mode='CWA'):
 	
 	if nFold is not None:
 		if mode == 'CWA':
-			print "Before pos."
 			t1 = time()
 			pos = np.empty(edge_count, dtype=np.int64)
 			off = 0
@@ -203,7 +202,7 @@ def create_sptensor(path, nFold=None, mode='CWA'):
 							+ k*np.prod(cur.shape)
 				pos[off:off+len(sk_idx)] = sk_idx
 				off += len(sk_idx)
-			print "after pos. ", (time() - t1)
+			assert edge_count == off
 			kf = get_test(nFold, pos, shpe, int(len(pos)/nFold))
 		elif mode == 'LCWA':
 			pass
@@ -337,8 +336,8 @@ def model_selection(rank, nFold=5, save_model=False, parallel=False):
 		precision = dict()
 		recall = dict()
 		auc_prs = dict()
+		auc_roc = dict()
 		ranks = dict()
-		best_fold = -1
 		tensor_gen = create_sptensor(MULTIGRAPH_PATH, nFold=nFold)
 		print "Computing RESCAL factorization for rank {}".format(r)
 
@@ -388,20 +387,21 @@ def model_selection(rank, nFold=5, save_model=False, parallel=False):
 			precision[fold], recall[fold], _ = precision_recall_curve(GT[:, 3], 
 																	pred_scores)
 			auc_prs[fold] = average_precision_score(GT[:, 3], pred_scores)
-			if auc_prs.get(best_fold) is None \
-				or auc_prs[best_fold] < auc_prs[fold]:
-				best_fold = fold
-			print "AUC: {}\n".format(auc_prs[fold])
+			auc_roc[fold] = roc_auc_score(GT[:, 3], pred_scores)
+			print "AUC-PR: {}, AUC-ROC: {}\n".format(auc_prs[fold], auc_roc[fold])
 		
+		# AUC
 		avg_auc_pr = np.mean(auc_prs.values())
-		print "\nAUC-PR @rank {}:".format(r)
-		print "fold\tAUC-PR(fold)"
+		avg_auc_roc = np.mean(auc_roc.values())
+		print "\nAUC @rank {}:".format(r)
+		print "fold\tAUC-PR(fold)\tAUC-ROC(fold)"
 		for fold in xrange(nFold):
-			print "{}\t{}".format(fold + 1, auc_prs[fold])
-		print "Avg. AUC-PR @rank {}: {}".format(r, avg_auc_pr)
+			print "{}\t{}\t{}".format(fold + 1, auc_prs[fold], auc_roc[fold])
+		print "@rank {}, Avg. AUC-PR: {}, Avg. AUC-ROC: {}".format(r, avg_auc_pr, avg_auc_roc)
+
 		print "Cross-validation complete for rank {}.".format(r)
 		print "--------------------\n"
-		return avg_auc_pr
+		return avg_auc_pr, avg_auc_roc
 
 	if isinstance(rank, list): # search best_rank from among the input list
 		performance = []
@@ -415,27 +415,31 @@ def model_selection(rank, nFold=5, save_model=False, parallel=False):
 			#     print result.get()
 		else:
 			for rk in rank:
-				perf = _cross_validation(rk)
-				if perf is None:
+				auc_pr, auc_roc = _cross_validation(rk)
+				if (auc_pr is None) or (auc_roc is None):
 					break
-				performance.append((rk, perf))
+				performance.append((rk, auc_pr, auc_roc))
 
 		# Performance stats
-		best = sorted(performance, key=lambda x: x[1])[::-1][0]
-		best_rank, best_auc_pr = best
+		best_pr = sorted(performance, key=lambda x: x[1])[::-1][0] # as per AUC-PR
+		best_roc = sorted(performance, key=lambda x: x[2])[::-1][0] # as per AUC-ROC
+		best_auc_pr_rank, best_auc_pr, _ = best_pr
+		best_auc_roc_rank, _, best_auc_roc = best_roc
+		best_rank = 'AUCPR_{}_AUCROC_{}'.format(best_auc_pr_rank, best_auc_roc_rank)
 		metrics_path = os.path.join(OUTPATH, DATASET \
 						+ '_bestrank_' + str(best_rank) + '_metrics.txt')
 		print "Saving metrics at '{}'".format(metrics_path)
 		with open(metrics_path, 'w') as f:
-			f.write('Rank, AUC-PR\n')
-			print "Rank AUC-PR"
-			for r, avg_auc_pr in performance:
-				print r, avg_auc_pr
-				f.write('{},{}\n'.format(r, avg_auc_pr))
-		print "Best (rank, AUC-PR): ({}, {})".format(best_rank, best_auc_pr)
+			f.write('Rank, AUC-PR, AUC-ROC\n')
+			print "Rank AUC-PR AUC-ROC"
+			for r, avg_auc_pr, avg_auc_roc in performance:
+				print r, avg_auc_pr, avg_auc_roc
+				f.write('{},{},{}\n'.format(r, avg_auc_pr, avg_auc_roc))
+		print "Best (rank, AUC-PR): ({}, {})".format(best_auc_pr_rank, best_auc_pr)
+		print "Best (rank, AUC-ROC): ({}, {})".format(best_auc_roc_rank, best_auc_roc)
 	else: # fixed rank
-		auc_pr = _cross_validation(rank)
-		print "Rank: {}, AUC-PR: {}".format(rank, auc_pr)
+		auc_pr, auc_roc = _cross_validation(rank)
+		print "Rank: {}, AUC-PR: {}, AUC-ROC: {}".format(rank, auc_pr, auc_roc)
 	print ""
 
 def compute_full_rescal(rank):
