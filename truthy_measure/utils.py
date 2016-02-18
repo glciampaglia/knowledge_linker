@@ -237,7 +237,7 @@ def weighted_tensor(T, weight='degree', undirected=False):
     Tw.set_shape(T.shape)
     for i in xrange(T.get_shape()[2]):
         # ensure input is in COO format
-        m = sp.coo_matrix(T.getslice(i))
+        m = T.getslice(i).copy().tocoo()
         if undirected:
             # transform to symmetric
             m = make_symmetric(m).tocoo()

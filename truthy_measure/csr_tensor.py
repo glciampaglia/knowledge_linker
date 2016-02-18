@@ -43,7 +43,6 @@ class csr_tensor(object):
 			raise IndexError('Index out of bounds. Check specified indices.')
 		self.csr_list[k][i, j] = val
 
-
 	def fromRecs(self, path, shape=None, delim=' ', valued=False):
 		"""
 		Reads records from file specified by 'path' 
@@ -72,7 +71,7 @@ class csr_tensor(object):
 			raise ValueError('Shape not provided.')
 		self.shape = shape
 		if os.path.exists(path):
-			data, indices, indptr = [], [], np.zeros(self.shape[0] + 1, dtype=np.int8)
+			data, indices, indptr = [], [], np.zeros(self.shape[0] + 1, dtype=np.int64)
 			prev_i = 0
 			nnz = 0
 			prev_k = 0
@@ -101,7 +100,7 @@ class csr_tensor(object):
 
 						# reset
 						data, indices, indptr = [], [], np.zeros(self.shape[0] + 1, \
-												dtype=np.int8)
+												dtype=np.int64)
 						prev_i = 0
 						nnz = 1
 
@@ -311,9 +310,9 @@ def main():
 	T = csr_tensor()
 	T.fromRecs(path, shape=shape)
 	# print T.getslice(4).todense()
-	T.setslice(0, T.getslice(1))
-	print T
-	T[2,3,4] = 5
+	# T.setslice(0, T.getslice(1))
+	# print dir(T)
+	T[2,3,4] = 5 # item assignment
 	print T[2,3,4]
 
 
