@@ -1,0 +1,14 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=5,walltime=30:00
+#PBS -M pshiralk@indiana.edu
+#PBS -m abe 
+#PBS -N rescal
+#PBS -j oe
+
+DATASET='dbpedia_2015-04'
+PATH='../../truthy_data/dbpedia/version2/processed/adjacency.npy'
+OUTPATH='../../truthy_data/dbpedia/version2/'
+RANK='3'
+
+cd /N/u/pshiralk/BigRed2/Projects/truthy_measure/scripts/
+aprun -n 5 python rescal_wrapper.py -name $DATASET -path $PATH -rank $RANK -outpath $OUTPATH

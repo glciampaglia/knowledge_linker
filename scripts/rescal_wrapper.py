@@ -70,20 +70,28 @@ def readNetwork(path):
     coo = []
     nodes = set()
     relations = set()
-    with open(path) as f:
-        for line in f:
-            coo_item = [int(x) for x in line.strip().split(DELIM)]
-            if not coo:
-                dim = len(coo_item)
-                coo = [[] for i in xrange(dim)]
+    if os.path.splitext(path)[1] == '.npy':
+        d = np.load(path)
+        print "File '{}' read complete.".format(os.path.basename(path))
+        coo = [list(d[:,0]), list(d[:,1]), list(d[:,2])]
+        relations = set(d[:,2])
+        nodes = set(d[:,0]) | set(d[:,1])
+        edge_count = d.shape[0]
+    else:
+        with open(path) as f:
+            for line in f:
+                coo_item = [int(x) for x in line.strip().split(DELIM)]
+                if not coo:
+                    dim = len(coo_item)
+                    coo = [[] for i in xrange(dim)]
 
-            for i, item in enumerate(coo_item):
-                coo[i].append(item)
-                if i in (0, 1) and item not in nodes:
-                    nodes.add(item)
-                if i == 2 and item not in relations:
-                    relations.add(item)
-    edge_count = len(coo[0]) # No. of entries/triples
+                for i, item in enumerate(coo_item):
+                    coo[i].append(item)
+                    if i in (0, 1) and item not in nodes:
+                        nodes.add(item)
+                    if i == 2 and item not in relations:
+                        relations.add(item)
+        edge_count = len(coo[0]) # No. of entries/triples
     node_count = len(nodes) # No. of nodes
     relations_count = len(relations) # No. of relations
     shape = (node_count, node_count, relations_count)
@@ -284,8 +292,11 @@ def run_rescal(T, dataset, rank, outpath=os.path.curdir,
     for i in xrange(MAX_TRIALS):
         try:
             # A, frontal_Rk, fval, itr, exectimes = rescal.als(T, rank, conv=1e-3)
+            print "Trial {}.. Factorizing..".format(i+1)
+            t1 = time()
             A, frontal_Rk, fval, itr, exectimes = rescal.als(T, rank, 
                                 conv=1e-3, lambda_A=10, lambda_R=10)
+            print "Time taken: {} secs".format(time()-t1)
             break
         except Exception, e:
             print "Trial {} failed. Error: {}".format(i+1, sys.exc_info()[0]) 
@@ -344,7 +355,6 @@ def model_selection(rank, nFold=5, save_model=False, parallel=False):
         # perform K-Fold cross-validation
         for fold, (T, GT) in enumerate(tensor_gen):
             print "Fold {}..".format(fold + 1)
-            print "Factorization.."
             ret = run_rescal(T, DATASET, outpath=OUTPATH, 
                                 rank=r, save=save_model, display=True)
             A, Rks, ranks[fold] = ret['A'], ret['Rks'], ret['rank']
