@@ -7,3 +7,8 @@ python rescal_wrapper.py -name foaf -path ../../truthy_data/foafpub-umbc-2005-fe
 nohup python -u rescal_wrapper.py -name foaf -path ../../truthy_data/foafpub-umbc-2005-feb/adjacency.txt -outpath ../../truthy_data/foafpub-umbc-2005-feb/rescal/ -nFold 5 -rank 70 80  90 100 -savemodel > foaf_70-100_log.txt 2>&1 &
 
 python rescal_wrapper.py -name iudata -path ../../truthy_data/iudata/edges.txt -outpath ../../truthy_data/iudata/rescal/ -nFold 5 -rank 1 2 3 4 5 6 7 -savemodel
+
+## on lenny
+nohup nice python rescal_wrapper.py -name dbpedia_2015-04 -path ../../truthy_data/dbpedia/version2/processed/adjacency.npy -outpath ../../truthy_data/dbpedia/version2/rescal/ -nFold 5 -rank 10 20 30 > dbpedia_2015-04.log &
+
+stdbuf -oL nohup nice python rescal_wrapper.py -name dbpedia_2015-04 -path ../../truthy_data/dbpedia/version2/processed/adjacency.npy -outpath ../../truthy_data/dbpedia/version2/rescal/ -rank 10 &> dbpedia_2015-04.log &

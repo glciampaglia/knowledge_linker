@@ -23,7 +23,6 @@ import sys
 import argparse
 import numpy as np
 import scipy.sparse as sp
-import matplotlib.pyplot as plt
 import multiprocessing as mp
 
 from numpy.linalg import norm
@@ -92,8 +91,8 @@ def readNetwork(path):
                     if i == 2 and item not in relations:
                         relations.add(item)
         edge_count = len(coo[0]) # No. of entries/triples
-    node_count = len(nodes) # No. of nodes
-    relations_count = len(relations) # No. of relations
+    node_count = max(nodes) + 1 # No. of nodes
+    relations_count = max(relations) + 1 # No. of relations
     shape = (node_count, node_count, relations_count)
     print "Network read complete.\n"
     return coo, shape, edge_count
@@ -180,6 +179,7 @@ def create_sptensor(path, nFold=None, mode='CWA'):
         coo, shpe, edge_count = readNetwork(path) 
         T = sptensor(tuple(coo), np.ones(edge_count), 
                     shape=shpe, dtype=np.float64)
+        print "Size of tensor: {}, nnz: {}".format(T.shape, len(T.vals))
         print "Converting to list of frontal LIL slices.."
         t1 = time()
         S = sptensor_to_list(T)
@@ -509,6 +509,12 @@ if __name__ == '__main__':
         -outpath ../../truthy_data/foafpub-umbc-2005-feb/rescal/ 
         -nFold 5
         -rank 10  20  30  40  50  60  70  80  90 100
+
+    -> (Multiple ranks: politicians DBpedia)
+    python rescal_wrapper.py -name politicians 
+        -path ../../truthy_data/dbpedia/version2/politicians/politicians_dbpedia_adjacency.npy 
+        -outpath ../../truthy_data/dbpedia/version2/politicians/rescal/ 
+        -nFold 5 -rank 10  20  30  40  50  60  70  80  90 100 120 140
 
     """
     if len(sys.argv) == 1:
