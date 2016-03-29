@@ -535,9 +535,9 @@ if __name__ == '__main__':
         parser.add_argument('-delim', metavar='', type=str, 
                             dest='delim', help='Input file delimiter', 
                             default=' ')
-        parser.add_argument('-full', action='store_true',
+        parser.add_argument('-full', action='store_true', default=True,
                             dest='full', help='Factorization of complete data?')
-        parser.add_argument('-savemodel', action='store_true',
+        parser.add_argument('-savemodel', action='store_true', default=True,
                             dest='savemodel', help='Save model (A & Rk)?')
         parser.add_argument('-outpath', metavar='', type=str, 
                             dest='outpath', help='Path for storing model', 
