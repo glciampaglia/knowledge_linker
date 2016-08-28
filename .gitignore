@@ -1,16 +1,9 @@
 .*.swp
 *.html
-
 *.c
 *.o
-
 *.so
 *.pyc
-
-*.npy
-*.npz
-*.tar
-*.tar.gz
 
 build/
 docs/*.pdf
@@ -20,10 +13,8 @@ cython_debug
 .ropeproject/history
 .ropeproject/objectdb
 
-presentations/*.pdf
+*.pdf
 
-# PBS output files
-experiments/*/*.[oe][0-9][0-9]*-[0-9]*
 .ropeproject
 
 # IPython notebook checkpoints
