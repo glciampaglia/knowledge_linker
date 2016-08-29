@@ -6,9 +6,9 @@ from nose.tools import raises, nottest
 import warnings
 
 # local imports
-from truthy_measure.maxmin import *
-from truthy_measure.maxmin import _maxmin_naive, _maxmin_sparse 
-from truthy_measure._maxmin import *
+from knowledge_linker.maxmin import *
+from knowledge_linker.maxmin import _maxmin_naive, _maxmin_sparse
+from knowledge_linker._maxmin import *
 
 def test_naive():
     '''
@@ -16,7 +16,7 @@ def test_naive():
     '''
     A = np.random.rand(5, 5)
     AP = _maxmin_naive(A)
-    AP2 = c_maxmin_naive(A) 
+    AP2 = c_maxmin_naive(A)
     assert np.array_equal(AP, AP2)
 
 def test_naive_subset():
@@ -27,7 +27,7 @@ def test_naive_subset():
     b = 3
     A = np.random.rand(5, 5)
     AP = _maxmin_naive(A, a, b)
-    AP2 = c_maxmin_naive(A, a, b) 
+    AP2 = c_maxmin_naive(A, a, b)
     assert np.array_equal(AP, AP2)
 
 @raises(ValueError)
@@ -100,18 +100,18 @@ def test_closure_cycle_2():
     '''
     # length 2 cycle
     C2 = np.array([
-        [0.0, 0.5, 0.0], 
-        [0.0, 0.0, 0.1], 
+        [0.0, 0.5, 0.0],
+        [0.0, 0.0, 0.1],
         [0.2, 0.0, 0.0]
         ])
-    C2T = np.array([    
+    C2T = np.array([
         [0.1, 0.5, 0.1],
         [0.1, 0.1, 0.1],
         [0.2, 0.2, 0.1]
         ])
     res = maxmin_closure(C2, maxiter=100)
     print res
-    assert np.allclose(res, C2T) 
+    assert np.allclose(res, C2T)
 
 def test_matmul_closure():
     '''
@@ -122,7 +122,7 @@ def test_matmul_closure():
         # most likely it won't converge, so we ignore the warning
         warnings.simplefilter("ignore")
         Cl1 = maxmin_closure(B, splits=2, nprocs=2, maxiter=10,
-                parallel=True) 
+                parallel=True)
         Cl2 = maxmin_closure(B, maxiter=100)
         assert np.allclose(Cl1.todense(), Cl2.todense())
 
@@ -134,9 +134,9 @@ def test_closure_c3():
     Test correctedness of transitive closure on length 3 cycle.
     '''
     C3 = np.array([
-        [0.0, 0.5, 0.0], 
-        [0.0, 0.0, 0.1], 
-        [0.2, 0.0, 0.0] 
+        [0.0, 0.5, 0.0],
+        [0.0, 0.0, 0.1],
+        [0.2, 0.0, 0.0]
         ])
     C3T = np.array([
         [0.1, 0.5, 0.1],
@@ -151,13 +151,13 @@ def test_closure_c4():
     Test correctedness of transitive closure on length 4 cycle.
     '''
     C4 = np.array([
-            [0.0, 0.5, 0.0, 0.0], 
+            [0.0, 0.5, 0.0, 0.0],
             [0.0, 0.0, 0.2, 0.0],
             [0.0, 0.0, 0.0, 0.4],
             [0.1, 0.0, 0.0, 0.0]
             ])
     C4T = np.array([
-            [0.1, 0.5, 0.2, 0.2], 
+            [0.1, 0.5, 0.2, 0.2],
             [0.1, 0.1, 0.2, 0.2],
             [0.1, 0.1, 0.1, 0.4],
             [0.1, 0.1, 0.1, 0.1]

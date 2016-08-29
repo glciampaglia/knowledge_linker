@@ -11,9 +11,9 @@ from functools import partial
 import networkx as nx
 from itertools import combinations
 
-import truthy_measure.closure as clo
-from truthy_measure.utils import DirTree, coo_dtype, fromdirtree, disttosim
-from truthy_measure.utils import weighted
+import knowledge_linker.closure as clo
+from knowledge_linker.utils import DirTree, coo_dtype, fromdirtree, disttosim
+from knowledge_linker.utils import weighted
 
 # tests for normal closure
 
