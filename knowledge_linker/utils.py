@@ -212,12 +212,12 @@ WEIGHT_FUNCTIONS = {
 def weighted_tensor(T, weight='degree', undirected=False):
     """
     Creates a weighted tensor based on the input adjacency tensor.
-    
+
     Parameters:
     -----------
     T: `csr_tensor`
         A third order tensor represented by a list of frontal CSR matrices.
-    
+
     weight: str
         The weight scheme to be used to construct weights for edges.
         Options include 'degree' and 'logdegree'.
@@ -246,8 +246,9 @@ def weighted_tensor(T, weight='degree', undirected=False):
         # transform to similarity scores
         sim = disttosim(dist)
         # create CSR matrix and add to the new tensor
-        Tw.setslice(i, sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr()) 
+        Tw.setslice(i, sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr())
     return Tw
+
 
 def make_weighted(path, N, weight='degree', undirected=False):
     '''
