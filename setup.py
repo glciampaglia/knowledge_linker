@@ -64,6 +64,7 @@ if __name__ == '__main__':
     args, rest = parser.parse_known_args()
     kwargs['script_args'] = rest
 
+    # Run Cython on the .pyx files
     if args.cython:
         try:
             import Cython.Build
