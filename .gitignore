@@ -1,21 +1,14 @@
+# VIM swap files
 .*.swp
-*.html
-*.c
+
+# object code files, shared libraries, compiled bytecode
 *.o
 *.so
 *.pyc
 
+# distutils/setuptools
 build/
-docs/*.pdf
-cython_debug
-*.prof
-.ropeproject/globalnames
-.ropeproject/history
-.ropeproject/objectdb
+*.egg-info
 
-*.pdf
-
-.ropeproject
-
-# IPython notebook checkpoints
+# IPython Notebook checkpoint files
 .ipynb_checkpoints

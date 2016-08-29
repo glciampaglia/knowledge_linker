@@ -1,42 +1,77 @@
-""" Standard distutils script. """
+""" Knowledge Linker Setup Script """
 
-from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
+import os
+import argparse
+from setuptools import setup, Extension
 from numpy import get_include
 
 _incl = [get_include()]
 
-setup(
-    name="truthy_measure",
-    description='Graph-theoretic measures of truthiness',
-    version='0.0.1pre',
-    author='Giovanni Luca Ciampaglia',
+kwargs = dict(
+    name="knowledge_linker",
+    description='Computational fact-checking from knowledge networks',
+    version='0.1rc0',
+    author='Giovanni Luca Ciampaglia and others (see CONTRIBUTORS.md)',
     author_email='gciampag@indiana.edu',
-    packages=['truthy_measure'],
-    cmdclass={'build_ext': build_ext},
+    packages=['knowledge_linker'],
     ext_modules=[
-        Extension("truthy_measure.heap", ["truthy_measure/heap.pyx", ],
+        Extension("knowledge_linker.heap",
+                  ["knowledge_linker/heap.c"],
                   include_dirs=_incl),
-        Extension("truthy_measure._maxmin",
-                  [
-                      "truthy_measure/_maxmin.pyx",
-                  ],
+        Extension("knowledge_linker._maxmin",
+                  ["knowledge_linker/_maxmin.c"],
                   include_dirs=_incl,
                   extra_compile_args=['-fopenmp'],
                   extra_link_args=['-fopenmp']),
-        Extension("truthy_measure._closure",
-                  [
-                      "truthy_measure/_closure.pyx",
-                  ],
+        Extension("knowledge_linker._closure",
+                  ["knowledge_linker/_closure.c"],
                   include_dirs=_incl,
                   extra_compile_args=['-fopenmp'],
                   extra_link_args=['-fopenmp']),
     ],
-    scripts=[
-        'scripts/closure.py',
-        #'scripts/cycles.py',
-        'scripts/ontoparse.py',
-        'scripts/prep.py',
-    ]
+#    scripts=[
+#        'scripts/closure.py',
+#        'scripts/ontoparse.py',
+#        'scripts/prep.py',
+#    ]
 )
+
+parser = argparse.ArgumentParser(description=__file__,
+                                 add_help=False)
+parser.add_argument('--cython', action='store_true',
+                    help='Run Cython')
+
+
+def replaceext(s, a='c', b='pyx'):
+    """
+    If the extension of the filename s is a, replace it with b.
+
+    E.g. hello_world.c -> hello_world.pyx
+
+    Note that comparison is case-insensitive.
+    """
+    sep = os.path.extsep
+    fn, ext = os.path.splitext(s)
+    # splitext leaves the separator `.`
+    if ext.lower() == (sep + a).lower():
+        return fn + sep + b
+    else:
+        return s
+
+if __name__ == '__main__':
+    args, rest = parser.parse_known_args()
+    kwargs['script_args'] = rest
+
+    if args.cython:
+        try:
+            import Cython.Build
+        except ImportError:
+            import sys
+            print >> sys.stderr, "Could not import Cython." \
+                " Check that it is installed properly!"
+            sys.exit(1)
+        for x in kwargs['ext_modules']:
+            x.sources = map(replaceext, x.sources)
+        kwargs['ext_modules'] = Cython.Build.cythonize(kwargs['ext_modules'])
+
+    setup(**kwargs)
