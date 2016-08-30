@@ -8,7 +8,8 @@
 
 # distutils/setuptools
 build/
-*.egg-info
+dist/
+*.egg-info/
 
 # IPython Notebook checkpoint files
 .ipynb_checkpoints
