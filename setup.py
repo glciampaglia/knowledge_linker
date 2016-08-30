@@ -31,6 +31,16 @@ kwargs = dict(
     ],
     test_suite='nose.collector',
     tests_require='nose',
+    include_package_data=True,
+    install_requires=[
+        'numpy',
+        'scipy',
+        'matplotlib',
+        'networkx',
+        'nose >= 1.3.7',
+        'scikit-learn',
+        'scikit-tensor'
+    ]
 #    scripts=[
 #        'scripts/closure.py',
 #        'scripts/ontoparse.py',
