@@ -6,7 +6,7 @@ include requirements.txt
 include setup.cfg
 
 # code
-recursive-include knowledge_linker *.pyx
+recursive-include knowledge_linker *.pyx *.pxd
 recursive-include scripts *
 
 # goodies
