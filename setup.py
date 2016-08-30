@@ -15,16 +15,16 @@ kwargs = dict(
     author_email='gciampag@indiana.edu',
     packages=['knowledge_linker'],
     ext_modules=[
-        Extension("knowledge_linker.heap",
-                  ["knowledge_linker/heap.c"],
+        Extension("knowledge_linker.algorithms.heap",
+                  ["knowledge_linker/algorithms/heap.c"],
                   include_dirs=_incl),
-        Extension("knowledge_linker._maxmin",
-                  ["knowledge_linker/_maxmin.c"],
+        Extension("knowledge_linker.algorithms._maxmin",
+                  ["knowledge_linker/algorithms/_maxmin.c"],
                   include_dirs=_incl,
                   extra_compile_args=['-fopenmp'],
                   extra_link_args=['-fopenmp']),
-        Extension("knowledge_linker._closure",
-                  ["knowledge_linker/_closure.c"],
+        Extension("knowledge_linker.algorithms._closure",
+                  ["knowledge_linker/algorithms/_closure.c"],
                   include_dirs=_incl,
                   extra_compile_args=['-fopenmp'],
                   extra_link_args=['-fopenmp']),
@@ -38,7 +38,7 @@ kwargs = dict(
         'networkx',
         'nose >= 1.3.7',
     ],
-    extra_require={
+    extras_require={
         'plotting': ['matplotlib'],
         'tensor': ['scikit-tensor','scikit-learn']
     }

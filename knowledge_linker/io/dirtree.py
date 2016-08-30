@@ -3,6 +3,11 @@ from struct import unpack, calcsize
 import numpy as np
 import os
 
+__all__ = [
+    'DirTree',
+    'fromdirtree'
+]
+
 def _dfsiter(path, *children):
     '''
     Traverses the tree in the depth-first order and yields the node path to each

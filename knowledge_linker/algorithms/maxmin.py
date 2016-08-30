@@ -1,6 +1,6 @@
 '''
 Ultra-metric (max-min) closure for similarity/proximity graphs via matrix
-multiplication 
+multiplication
 '''
 
 from __future__ import division
@@ -15,8 +15,17 @@ from itertools import izip
 from multiprocessing import Pool, Array, cpu_count, current_process
 
 # package imports
-from .utils import coo_dtype
+from ..utils import coo_dtype
 from ._maxmin import c_maximum_csr # see below for other imports
+
+
+__all__ = [
+    'maxmin_closure',
+    'maxmin',
+    'pmaxmin',
+    'maxmin_naive',
+    'maxmin_sparse'
+]
 
 def maxmin_closure(A, parallel=False, maxiter=1000, quiet=False,
         dumpiter=None, **kwrds):

@@ -248,8 +248,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__knowledge_linker__heap
-#define __PYX_HAVE_API__knowledge_linker__heap
+#define __PYX_HAVE__knowledge_linker__algorithms__heap
+#define __PYX_HAVE_API__knowledge_linker__algorithms__heap
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -485,8 +485,8 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "knowledge_linker/heap.pyx",
-  "knowledge_linker/heap.pxd",
+  "knowledge_linker/algorithms/heap.pyx",
+  "knowledge_linker/algorithms/heap.pxd",
   "__init__.pxd",
   "type.pxd",
 };
@@ -680,23 +680,23 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "knowledge_linker/heap.pxd":13
+/* "knowledge_linker/algorithms/heap.pxd":13
  * 
  * # determine datatypes for heap
  * ctypedef double VALUE_T             # <<<<<<<<<<<<<<
  * ctypedef int REFERENCE_T
  * 
  */
-typedef double __pyx_t_16knowledge_linker_4heap_VALUE_T;
+typedef double __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T;
 
-/* "knowledge_linker/heap.pxd":14
+/* "knowledge_linker/algorithms/heap.pxd":14
  * # determine datatypes for heap
  * ctypedef double VALUE_T
  * ctypedef int REFERENCE_T             # <<<<<<<<<<<<<<
  * 
  * 
  */
-typedef int __pyx_t_16knowledge_linker_4heap_REFERENCE_T;
+typedef int __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     typedef ::std::complex< float > __pyx_t_float_complex;
@@ -719,8 +719,8 @@ typedef int __pyx_t_16knowledge_linker_4heap_REFERENCE_T;
 
 
 /*--- Type declarations ---*/
-struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap;
-struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
 
 /* "../../anaconda2/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":764
  * ctypedef npy_longdouble longdouble_t
@@ -758,43 +758,43 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "knowledge_linker/heap.pxd":17
+/* "knowledge_linker/algorithms/heap.pxd":17
  * 
  * 
  * cdef class BinaryHeap:             # <<<<<<<<<<<<<<
  *     cdef readonly int count, levels, min_levels
  *     cdef VALUE_T *_values
  */
-struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap {
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap {
   PyObject_HEAD
-  struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtab;
+  struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_vtab;
   int count;
   int levels;
   int min_levels;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *_references;
   int _popped_ref;
 };
 
 
-/* "knowledge_linker/heap.pxd":31
+/* "knowledge_linker/algorithms/heap.pxd":31
  *     cdef double pop_fast(self) nogil
  * 
  * cdef class FastUpdateBinaryHeap(BinaryHeap):             # <<<<<<<<<<<<<<
  *     cdef readonly int max_reference
  *     cdef REFERENCE_T *_crossref
  */
-struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap {
-  struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap __pyx_base;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap {
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap __pyx_base;
   int max_reference;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *_crossref;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *_crossref;
   int _invalid_ref;
   int _pushed;
 };
 
 
 
-/* "knowledge_linker/heap.pyx":48
+/* "knowledge_linker/algorithms/heap.pyx":48
  * 
  * 
  * cdef class BinaryHeap:             # <<<<<<<<<<<<<<
@@ -802,18 +802,18 @@ struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap {
  * 
  */
 
-struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap {
-  void (*_add_or_remove_level)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  void (*_update)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *);
-  void (*_update_one)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  void (*_remove)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  int (*push_fast)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, double, int);
-  double (*pop_fast)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *);
+struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap {
+  void (*_add_or_remove_level)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  void (*_update)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *);
+  void (*_update_one)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  void (*_remove)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  int (*push_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, double, int);
+  double (*pop_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *);
 };
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap;
 
 
-/* "knowledge_linker/heap.pyx":419
+/* "knowledge_linker/algorithms/heap.pyx":419
  * 
  * 
  * cdef class FastUpdateBinaryHeap(BinaryHeap):             # <<<<<<<<<<<<<<
@@ -821,12 +821,12 @@ static struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtabpt
  * 
  */
 
-struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap {
-  struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap __pyx_base;
-  double (*value_of_fast)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, int);
-  int (*push_if_lower_fast)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, double, int);
+struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap {
+  struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap __pyx_base;
+  double (*value_of_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, int);
+  int (*push_if_lower_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, double, int);
 };
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
 
 /* --- Runtime support code (head) --- */
 #ifndef CYTHON_REFNANNY
@@ -1229,16 +1229,16 @@ static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class
 
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_add_or_remove); /* proto*/
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto*/
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i); /* proto*/
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i1); /* proto*/
-static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
-static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto*/
-static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_i1); /* proto*/
-static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
-static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
-static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference); /* proto*/
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__add_or_remove_level(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_add_or_remove); /* proto*/
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto*/
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update_one(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i); /* proto*/
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__remove(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i1); /* proto*/
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
+static double __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_pop_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto*/
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap__remove(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_i1); /* proto*/
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_if_lower_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto*/
+static double __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_value_of_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference); /* proto*/
 
 /* Module declarations from 'cpython.buffer' */
 
@@ -1271,15 +1271,15 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 
 /* Module declarations from 'cython' */
 
-/* Module declarations from 'knowledge_linker.heap' */
-static PyTypeObject *__pyx_ptype_16knowledge_linker_4heap_BinaryHeap = 0;
-static PyTypeObject *__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap = 0;
-static __pyx_t_16knowledge_linker_4heap_VALUE_T __pyx_v_16knowledge_linker_4heap_inf;
-static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_min(int, int); /*proto*/
-#define __Pyx_MODULE_NAME "knowledge_linker.heap"
-int __pyx_module_is_main_knowledge_linker__heap = 0;
+/* Module declarations from 'knowledge_linker.algorithms.heap' */
+static PyTypeObject *__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap = 0;
+static PyTypeObject *__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = 0;
+static __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
+static CYTHON_INLINE int __pyx_f_16knowledge_linker_10algorithms_4heap_int_min(int, int); /*proto*/
+#define __Pyx_MODULE_NAME "knowledge_linker.algorithms.heap"
+int __pyx_module_is_main_knowledge_linker__algorithms__heap = 0;
 
-/* Implementation of 'knowledge_linker.heap' */
+/* Implementation of 'knowledge_linker.algorithms.heap' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_IndexError;
 static PyObject *__pyx_builtin_ValueError;
@@ -1338,14 +1338,14 @@ static char __pyx_k_max_reference[] = "max_reference";
 static char __pyx_k_error_in_order[] = "error in order!";
 static char __pyx_k_initial_capacity[] = "initial_capacity";
 static char __pyx_k_invalid_reference[] = "invalid reference";
-static char __pyx_k_knowledge_linker_heap[] = "knowledge_linker.heap";
 static char __pyx_k_pop_from_an_empty_heap[] = "pop from an empty heap";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
-static char __pyx_k_home_giovanni_repos_truthy_meas[] = "/home/giovanni/repos/truthy_measure/knowledge_linker/heap.pyx";
+static char __pyx_k_home_giovanni_repos_knowledge_l[] = "/home/giovanni/repos/knowledge_linker/knowledge_linker/algorithms/heap.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_Cython_implementation_of_a_binar[] = "Cython implementation of a binary min heap.\n\nOriginal author: Almar Klein\nModified by: Zachary Pincus\n\nLicense: BSD\n\nCopyright 2009 Almar Klein\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions\nare met:\n\n1. Redistributions of source code must retain the above copyright\n   notice, this list of conditions and the following disclaimer.\n2. Redistributions in binary form must reproduce the above copyright\n   notice, this list of conditions and the following disclaimer in the\n   documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\nIMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\nOF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\nIN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\nINCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\nNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\nDATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\nTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\nTHIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n";
 static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
+static char __pyx_k_knowledge_linker_algorithms_heap[] = "knowledge_linker.algorithms.heap";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static char __pyx_k_reference_outside_of_range_0_max[] = "reference outside of range [0, max_reference]";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
@@ -1367,13 +1367,13 @@ static PyObject *__pyx_n_s_fast_update;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_kp_s_g;
 static PyObject *__pyx_n_s_h;
-static PyObject *__pyx_kp_s_home_giovanni_repos_truthy_meas;
+static PyObject *__pyx_kp_s_home_giovanni_repos_knowledge_l;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_s_initial_capacity;
 static PyObject *__pyx_kp_s_invalid_reference;
-static PyObject *__pyx_n_s_knowledge_linker_heap;
+static PyObject *__pyx_n_s_knowledge_linker_algorithms_heap;
 static PyObject *__pyx_kp_s_level_i;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_reference;
@@ -1399,31 +1399,31 @@ static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_n_s_uniform;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_value;
-static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_8push(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_5count___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6levels___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self); /* proto */
-static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity, int __pyx_v_max_reference); /* proto */
-static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_if_lower(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10value_of(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cross_references(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference___get__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_n, PyObject *__pyx_v_fast_update); /* proto */
+static int __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_2reset(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static void __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_4__dealloc__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6__str__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_8push(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_val(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_12values(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_14references(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_16pop(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self); /* proto */
+static int __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity, int __pyx_v_max_reference); /* proto */
+static void __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_2__dealloc__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_4reset(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_6push(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_8push_if_lower(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_10value_of(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_12cross_references(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_test(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_n, PyObject *__pyx_v_fast_update); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
-static PyObject *__pyx_tp_new_16knowledge_linker_4heap_BinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tp_new_16knowledge_linker_4heap_FastUpdateBinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_16knowledge_linker_10algorithms_4heap_BinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static __Pyx_CachedCFunction __pyx_umethod_PyList_Type_pop = {0, &__pyx_n_s_pop, 0, 0, 0};
 static PyObject *__pyx_float_1_0;
 static PyObject *__pyx_float_100_0;
@@ -1451,7 +1451,7 @@ static PyObject *__pyx_tuple__16;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_codeobj__18;
 
-/* "knowledge_linker/heap.pyx":44
+/* "knowledge_linker/algorithms/heap.pyx":44
  * 
  * # this is handy
  * cdef inline int int_max(int a, int b) nogil: return a if a >= b else b             # <<<<<<<<<<<<<<
@@ -1459,7 +1459,7 @@ static PyObject *__pyx_codeobj__18;
  * 
  */
 
-static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_max(int __pyx_v_a, int __pyx_v_b) {
+static CYTHON_INLINE int __pyx_f_16knowledge_linker_10algorithms_4heap_int_max(int __pyx_v_a, int __pyx_v_b) {
   int __pyx_r;
   int __pyx_t_1;
   if (((__pyx_v_a >= __pyx_v_b) != 0)) {
@@ -1475,7 +1475,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_max(int __pyx_v_a,
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":45
+/* "knowledge_linker/algorithms/heap.pyx":45
  * # this is handy
  * cdef inline int int_max(int a, int b) nogil: return a if a >= b else b
  * cdef inline int int_min(int a, int b) nogil: return a if a <= b else b             # <<<<<<<<<<<<<<
@@ -1483,7 +1483,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_max(int __pyx_v_a,
  * 
  */
 
-static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_min(int __pyx_v_a, int __pyx_v_b) {
+static CYTHON_INLINE int __pyx_f_16knowledge_linker_10algorithms_4heap_int_min(int __pyx_v_a, int __pyx_v_b) {
   int __pyx_r;
   int __pyx_t_1;
   if (((__pyx_v_a <= __pyx_v_b) != 0)) {
@@ -1499,7 +1499,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_min(int __pyx_v_a,
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":118
+/* "knowledge_linker/algorithms/heap.pyx":118
  * 
  * 
  *     def __init__(self, int initial_capacity=128):             # <<<<<<<<<<<<<<
@@ -1508,12 +1508,12 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_4heap_int_min(int __pyx_v_a,
  */
 
 /* Python wrapper */
-static int __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap___init__[] = "__init__(initial_capacity=128)\n        \n        Constructor: takes an optional parameter 'initial_capacity' so that\n        if the required heap capacity is known or can be estimated in advance,\n        there will need to be fewer resize operations on the heap.";
+static int __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__[] = "__init__(initial_capacity=128)\n        \n        Constructor: takes an optional parameter 'initial_capacity' so that\n        if the required heap capacity is known or can be estimated in advance,\n        there will need to be fewer resize operations on the heap.";
 #if CYTHON_COMPILING_IN_CPYTHON
-struct wrapperbase __pyx_wrapperbase_16knowledge_linker_4heap_10BinaryHeap___init__;
+struct wrapperbase __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__;
 #endif
-static int __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_initial_capacity;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -1560,25 +1560,25 @@ static int __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_1__init__(PyObject *__
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 118; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_initial_capacity);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_initial_capacity);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity) {
+static int __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity) {
   int __pyx_v_levels;
   int __pyx_v_number;
-  CYTHON_UNUSED __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+  CYTHON_UNUSED __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_2;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
@@ -1587,7 +1587,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "knowledge_linker/heap.pyx":126
+  /* "knowledge_linker/algorithms/heap.pyx":126
  * 
  *         # calc levels from the default capacity
  *         cdef int levels = 0             # <<<<<<<<<<<<<<
@@ -1596,7 +1596,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
  */
   __pyx_v_levels = 0;
 
-  /* "knowledge_linker/heap.pyx":127
+  /* "knowledge_linker/algorithms/heap.pyx":127
  *         # calc levels from the default capacity
  *         cdef int levels = 0
  *         while 2**levels < initial_capacity:             # <<<<<<<<<<<<<<
@@ -1607,7 +1607,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
     __pyx_t_1 = ((__Pyx_pow_long(2, ((long)__pyx_v_levels)) < __pyx_v_initial_capacity) != 0);
     if (!__pyx_t_1) break;
 
-    /* "knowledge_linker/heap.pyx":128
+    /* "knowledge_linker/algorithms/heap.pyx":128
  *         cdef int levels = 0
  *         while 2**levels < initial_capacity:
  *             levels += 1             # <<<<<<<<<<<<<<
@@ -1617,7 +1617,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
     __pyx_v_levels = (__pyx_v_levels + 1);
   }
 
-  /* "knowledge_linker/heap.pyx":130
+  /* "knowledge_linker/algorithms/heap.pyx":130
  *             levels += 1
  *         # set levels
  *         self.min_levels = self.levels = levels             # <<<<<<<<<<<<<<
@@ -1627,7 +1627,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
   __pyx_v_self->min_levels = __pyx_v_levels;
   __pyx_v_self->levels = __pyx_v_levels;
 
-  /* "knowledge_linker/heap.pyx":133
+  /* "knowledge_linker/algorithms/heap.pyx":133
  * 
  *         # we start with 0 values
  *         self.count = 0             # <<<<<<<<<<<<<<
@@ -1636,7 +1636,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
  */
   __pyx_v_self->count = 0;
 
-  /* "knowledge_linker/heap.pyx":136
+  /* "knowledge_linker/algorithms/heap.pyx":136
  * 
  *         # allocate arrays
  *         cdef int number = 2**self.levels             # <<<<<<<<<<<<<<
@@ -1645,27 +1645,27 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
  */
   __pyx_v_number = __Pyx_pow_long(2, ((long)__pyx_v_self->levels));
 
-  /* "knowledge_linker/heap.pyx":138
+  /* "knowledge_linker/algorithms/heap.pyx":138
  *         cdef int number = 2**self.levels
  *         cdef VALUE_T *values
  *         values = self._values = <VALUE_T *>malloc( 2*number * sizeof(VALUE_T))             # <<<<<<<<<<<<<<
  *         self._references = <REFERENCE_T *>malloc(number * sizeof(REFERENCE_T))
  * 
  */
-  __pyx_t_2 = ((__pyx_t_16knowledge_linker_4heap_VALUE_T *)malloc(((2 * __pyx_v_number) * (sizeof(__pyx_t_16knowledge_linker_4heap_VALUE_T)))));
+  __pyx_t_2 = ((__pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *)malloc(((2 * __pyx_v_number) * (sizeof(__pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T)))));
   __pyx_v_values = __pyx_t_2;
   __pyx_v_self->_values = __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":139
+  /* "knowledge_linker/algorithms/heap.pyx":139
  *         cdef VALUE_T *values
  *         values = self._values = <VALUE_T *>malloc( 2*number * sizeof(VALUE_T))
  *         self._references = <REFERENCE_T *>malloc(number * sizeof(REFERENCE_T))             # <<<<<<<<<<<<<<
  * 
  *         self.reset()
  */
-  __pyx_v_self->_references = ((__pyx_t_16knowledge_linker_4heap_REFERENCE_T *)malloc((__pyx_v_number * (sizeof(__pyx_t_16knowledge_linker_4heap_REFERENCE_T)))));
+  __pyx_v_self->_references = ((__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *)malloc((__pyx_v_number * (sizeof(__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T)))));
 
-  /* "knowledge_linker/heap.pyx":141
+  /* "knowledge_linker/algorithms/heap.pyx":141
  *         self._references = <REFERENCE_T *>malloc(number * sizeof(REFERENCE_T))
  * 
  *         self.reset()             # <<<<<<<<<<<<<<
@@ -1694,7 +1694,7 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "knowledge_linker/heap.pyx":118
+  /* "knowledge_linker/algorithms/heap.pyx":118
  * 
  * 
  *     def __init__(self, int initial_capacity=128):             # <<<<<<<<<<<<<<
@@ -1709,14 +1709,14 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":143
+/* "knowledge_linker/algorithms/heap.pyx":143
  *         self.reset()
  * 
  *     def reset(self):             # <<<<<<<<<<<<<<
@@ -1725,31 +1725,31 @@ static int __pyx_pf_16knowledge_linker_4heap_10BinaryHeap___init__(struct __pyx_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_2reset[] = "Reset the heap to default, empty state.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_2reset[] = "Reset the heap to default, empty state.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("reset (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_2reset(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_2reset(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   int __pyx_v_number;
   int __pyx_v_i;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_1;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_1;
   long __pyx_t_2;
   int __pyx_t_3;
   __Pyx_RefNannySetupContext("reset", 0);
 
-  /* "knowledge_linker/heap.pyx":145
+  /* "knowledge_linker/algorithms/heap.pyx":145
  *     def reset(self):
  *         """Reset the heap to default, empty state."""
  *         cdef int number = 2**self.levels             # <<<<<<<<<<<<<<
@@ -1758,7 +1758,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __
  */
   __pyx_v_number = __Pyx_pow_long(2, ((long)__pyx_v_self->levels));
 
-  /* "knowledge_linker/heap.pyx":147
+  /* "knowledge_linker/algorithms/heap.pyx":147
  *         cdef int number = 2**self.levels
  *         cdef int i
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -1768,7 +1768,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __
   __pyx_t_1 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":148
+  /* "knowledge_linker/algorithms/heap.pyx":148
  *         cdef int i
  *         cdef VALUE_T *values = self._values
  *         for i in range(number*2):             # <<<<<<<<<<<<<<
@@ -1779,17 +1779,17 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":149
+    /* "knowledge_linker/algorithms/heap.pyx":149
  *         cdef VALUE_T *values = self._values
  *         for i in range(number*2):
  *             values[i] = inf             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    (__pyx_v_values[__pyx_v_i]) = __pyx_v_16knowledge_linker_4heap_inf;
+    (__pyx_v_values[__pyx_v_i]) = __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
   }
 
-  /* "knowledge_linker/heap.pyx":143
+  /* "knowledge_linker/algorithms/heap.pyx":143
  *         self.reset()
  * 
  *     def reset(self):             # <<<<<<<<<<<<<<
@@ -1804,7 +1804,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":152
+/* "knowledge_linker/algorithms/heap.pyx":152
  * 
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1813,22 +1813,22 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_2reset(struct __
  */
 
 /* Python wrapper */
-static void __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5__dealloc__(PyObject *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_4__dealloc__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static void __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_4__dealloc__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "knowledge_linker/heap.pyx":153
+  /* "knowledge_linker/algorithms/heap.pyx":153
  * 
  *     def __dealloc__(self):
  *         if self._values is not NULL:             # <<<<<<<<<<<<<<
@@ -1838,7 +1838,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
   __pyx_t_1 = ((__pyx_v_self->_values != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":154
+    /* "knowledge_linker/algorithms/heap.pyx":154
  *     def __dealloc__(self):
  *         if self._values is not NULL:
  *             free(self._values)             # <<<<<<<<<<<<<<
@@ -1847,7 +1847,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
  */
     free(__pyx_v_self->_values);
 
-    /* "knowledge_linker/heap.pyx":153
+    /* "knowledge_linker/algorithms/heap.pyx":153
  * 
  *     def __dealloc__(self):
  *         if self._values is not NULL:             # <<<<<<<<<<<<<<
@@ -1856,7 +1856,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
  */
   }
 
-  /* "knowledge_linker/heap.pyx":155
+  /* "knowledge_linker/algorithms/heap.pyx":155
  *         if self._values is not NULL:
  *             free(self._values)
  *         if self._references is not NULL:             # <<<<<<<<<<<<<<
@@ -1866,7 +1866,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
   __pyx_t_1 = ((__pyx_v_self->_references != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":156
+    /* "knowledge_linker/algorithms/heap.pyx":156
  *             free(self._values)
  *         if self._references is not NULL:
  *             free(self._references)             # <<<<<<<<<<<<<<
@@ -1875,7 +1875,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
  */
     free(__pyx_v_self->_references);
 
-    /* "knowledge_linker/heap.pyx":155
+    /* "knowledge_linker/algorithms/heap.pyx":155
  *         if self._values is not NULL:
  *             free(self._values)
  *         if self._references is not NULL:             # <<<<<<<<<<<<<<
@@ -1884,7 +1884,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
  */
   }
 
-  /* "knowledge_linker/heap.pyx":152
+  /* "knowledge_linker/algorithms/heap.pyx":152
  * 
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1896,7 +1896,7 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
   __Pyx_RefNannyFinishContext();
 }
 
-/* "knowledge_linker/heap.pyx":160
+/* "knowledge_linker/algorithms/heap.pyx":160
  * 
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -1905,19 +1905,19 @@ static void __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_4__dealloc__(struct _
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_7__str__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_7__str__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_7__str__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_7__str__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__str__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6__str__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6__str__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   int __pyx_v_i0;
   int __pyx_v_i;
   int __pyx_v_level;
@@ -1935,7 +1935,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "knowledge_linker/heap.pyx":162
+  /* "knowledge_linker/algorithms/heap.pyx":162
  *     def __str__(self):
  *         cdef int i0, i, n, level
  *         s = ''             # <<<<<<<<<<<<<<
@@ -1945,7 +1945,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   __Pyx_INCREF(__pyx_kp_s_);
   __pyx_v_s = __pyx_kp_s_;
 
-  /* "knowledge_linker/heap.pyx":163
+  /* "knowledge_linker/algorithms/heap.pyx":163
  *         cdef int i0, i, n, level
  *         s = ''
  *         for level in range(1,self.levels+1):             # <<<<<<<<<<<<<<
@@ -1956,7 +1956,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   for (__pyx_t_2 = 1; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_level = __pyx_t_2;
 
-    /* "knowledge_linker/heap.pyx":164
+    /* "knowledge_linker/algorithms/heap.pyx":164
  *         s = ''
  *         for level in range(1,self.levels+1):
  *             i0 = 2**level-1 # LevelStart             # <<<<<<<<<<<<<<
@@ -1965,7 +1965,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
  */
     __pyx_v_i0 = (__Pyx_pow_long(2, ((long)__pyx_v_level)) - 1);
 
-    /* "knowledge_linker/heap.pyx":165
+    /* "knowledge_linker/algorithms/heap.pyx":165
  *         for level in range(1,self.levels+1):
  *             i0 = 2**level-1 # LevelStart
  *             s+= 'level %i: ' % level             # <<<<<<<<<<<<<<
@@ -1983,7 +1983,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
     __Pyx_DECREF_SET(__pyx_v_s, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "knowledge_linker/heap.pyx":166
+    /* "knowledge_linker/algorithms/heap.pyx":166
  *             i0 = 2**level-1 # LevelStart
  *             s+= 'level %i: ' % level
  *             for i in range(i0,i0+2**level):             # <<<<<<<<<<<<<<
@@ -1994,7 +1994,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
     for (__pyx_t_6 = __pyx_v_i0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_i = __pyx_t_6;
 
-      /* "knowledge_linker/heap.pyx":167
+      /* "knowledge_linker/algorithms/heap.pyx":167
  *             s+= 'level %i: ' % level
  *             for i in range(i0,i0+2**level):
  *                 s += '%g, ' % self._values[i]             # <<<<<<<<<<<<<<
@@ -2013,7 +2013,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
       __pyx_t_3 = 0;
     }
 
-    /* "knowledge_linker/heap.pyx":168
+    /* "knowledge_linker/algorithms/heap.pyx":168
  *             for i in range(i0,i0+2**level):
  *                 s += '%g, ' % self._values[i]
  *             s = s[:-1] + '\n'             # <<<<<<<<<<<<<<
@@ -2029,7 +2029,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
     __pyx_t_4 = 0;
   }
 
-  /* "knowledge_linker/heap.pyx":169
+  /* "knowledge_linker/algorithms/heap.pyx":169
  *                 s += '%g, ' % self._values[i]
  *             s = s[:-1] + '\n'
  *         return s             # <<<<<<<<<<<<<<
@@ -2041,7 +2041,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   __pyx_r = __pyx_v_s;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":160
+  /* "knowledge_linker/algorithms/heap.pyx":160
  * 
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -2053,7 +2053,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.__str__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.__str__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_s);
@@ -2062,7 +2062,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":174
+/* "knowledge_linker/algorithms/heap.pyx":174
  *     ## C Maintanance methods
  * 
  *     cdef void _add_or_remove_level(self, int add_or_remove) nogil:             # <<<<<<<<<<<<<<
@@ -2070,25 +2070,25 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6__str__(struct 
  *         cdef int i, i1, i2, n
  */
 
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_add_or_remove) {
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__add_or_remove_level(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_add_or_remove) {
   int __pyx_v_i;
   int __pyx_v_i1;
   int __pyx_v_i2;
   int __pyx_v_n;
   int __pyx_v_new_levels;
   int __pyx_v_number;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_v_references;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_old_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_v_old_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_v_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_old_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_v_old_references;
   long __pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_4;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_t_5;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_4;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_t_5;
   int __pyx_t_6;
 
-  /* "knowledge_linker/heap.pyx":179
+  /* "knowledge_linker/algorithms/heap.pyx":179
  * 
  *         # new amount of levels
  *         cdef int new_levels = self.levels + add_or_remove             # <<<<<<<<<<<<<<
@@ -2097,7 +2097,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   __pyx_v_new_levels = (__pyx_v_self->levels + __pyx_v_add_or_remove);
 
-  /* "knowledge_linker/heap.pyx":182
+  /* "knowledge_linker/algorithms/heap.pyx":182
  * 
  *         # allocate new arrays
  *         cdef int number = 2**new_levels             # <<<<<<<<<<<<<<
@@ -2106,25 +2106,25 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   __pyx_v_number = __Pyx_pow_long(2, ((long)__pyx_v_new_levels));
 
-  /* "knowledge_linker/heap.pyx":185
+  /* "knowledge_linker/algorithms/heap.pyx":185
  *         cdef VALUE_T *values
  *         cdef REFERENCE_T *references
  *         values = <VALUE_T *>malloc(number*2 * sizeof(VALUE_T))             # <<<<<<<<<<<<<<
  *         references = <REFERENCE_T *>malloc(number * sizeof(REFERENCE_T))
  * 
  */
-  __pyx_v_values = ((__pyx_t_16knowledge_linker_4heap_VALUE_T *)malloc(((__pyx_v_number * 2) * (sizeof(__pyx_t_16knowledge_linker_4heap_VALUE_T)))));
+  __pyx_v_values = ((__pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *)malloc(((__pyx_v_number * 2) * (sizeof(__pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T)))));
 
-  /* "knowledge_linker/heap.pyx":186
+  /* "knowledge_linker/algorithms/heap.pyx":186
  *         cdef REFERENCE_T *references
  *         values = <VALUE_T *>malloc(number*2 * sizeof(VALUE_T))
  *         references = <REFERENCE_T *>malloc(number * sizeof(REFERENCE_T))             # <<<<<<<<<<<<<<
  * 
  *         # init arrays
  */
-  __pyx_v_references = ((__pyx_t_16knowledge_linker_4heap_REFERENCE_T *)malloc((__pyx_v_number * (sizeof(__pyx_t_16knowledge_linker_4heap_REFERENCE_T)))));
+  __pyx_v_references = ((__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *)malloc((__pyx_v_number * (sizeof(__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T)))));
 
-  /* "knowledge_linker/heap.pyx":189
+  /* "knowledge_linker/algorithms/heap.pyx":189
  * 
  *         # init arrays
  *         for i in range(number*2):             # <<<<<<<<<<<<<<
@@ -2135,17 +2135,17 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "knowledge_linker/heap.pyx":190
+    /* "knowledge_linker/algorithms/heap.pyx":190
  *         # init arrays
  *         for i in range(number*2):
  *             values[i] = inf             # <<<<<<<<<<<<<<
  *         for i in range(number):
  *             references[i] = -1
  */
-    (__pyx_v_values[__pyx_v_i]) = __pyx_v_16knowledge_linker_4heap_inf;
+    (__pyx_v_values[__pyx_v_i]) = __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
   }
 
-  /* "knowledge_linker/heap.pyx":191
+  /* "knowledge_linker/algorithms/heap.pyx":191
  *         for i in range(number*2):
  *             values[i] = inf
  *         for i in range(number):             # <<<<<<<<<<<<<<
@@ -2156,7 +2156,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":192
+    /* "knowledge_linker/algorithms/heap.pyx":192
  *             values[i] = inf
  *         for i in range(number):
  *             references[i] = -1             # <<<<<<<<<<<<<<
@@ -2166,7 +2166,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
     (__pyx_v_references[__pyx_v_i]) = -1;
   }
 
-  /* "knowledge_linker/heap.pyx":195
+  /* "knowledge_linker/algorithms/heap.pyx":195
  * 
  *         # copy data
  *         cdef VALUE_T *old_values = self._values             # <<<<<<<<<<<<<<
@@ -2176,7 +2176,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   __pyx_t_4 = __pyx_v_self->_values;
   __pyx_v_old_values = __pyx_t_4;
 
-  /* "knowledge_linker/heap.pyx":196
+  /* "knowledge_linker/algorithms/heap.pyx":196
  *         # copy data
  *         cdef VALUE_T *old_values = self._values
  *         cdef REFERENCE_T *old_references = self._references             # <<<<<<<<<<<<<<
@@ -2186,7 +2186,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   __pyx_t_5 = __pyx_v_self->_references;
   __pyx_v_old_references = __pyx_t_5;
 
-  /* "knowledge_linker/heap.pyx":197
+  /* "knowledge_linker/algorithms/heap.pyx":197
  *         cdef VALUE_T *old_values = self._values
  *         cdef REFERENCE_T *old_references = self._references
  *         if self.count:             # <<<<<<<<<<<<<<
@@ -2196,7 +2196,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   __pyx_t_6 = (__pyx_v_self->count != 0);
   if (__pyx_t_6) {
 
-    /* "knowledge_linker/heap.pyx":198
+    /* "knowledge_linker/algorithms/heap.pyx":198
  *         cdef REFERENCE_T *old_references = self._references
  *         if self.count:
  *             i1 = 2**new_levels-1 # LevelStart             # <<<<<<<<<<<<<<
@@ -2205,7 +2205,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
     __pyx_v_i1 = (__Pyx_pow_long(2, ((long)__pyx_v_new_levels)) - 1);
 
-    /* "knowledge_linker/heap.pyx":199
+    /* "knowledge_linker/algorithms/heap.pyx":199
  *         if self.count:
  *             i1 = 2**new_levels-1 # LevelStart
  *             i2 = 2**self.levels-1 # LevelStart             # <<<<<<<<<<<<<<
@@ -2214,16 +2214,16 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
     __pyx_v_i2 = (__Pyx_pow_long(2, ((long)__pyx_v_self->levels)) - 1);
 
-    /* "knowledge_linker/heap.pyx":200
+    /* "knowledge_linker/algorithms/heap.pyx":200
  *             i1 = 2**new_levels-1 # LevelStart
  *             i2 = 2**self.levels-1 # LevelStart
  *             n = int_min(2**new_levels, 2**self.levels)             # <<<<<<<<<<<<<<
  *             for i in range(n):
  *                 values[i1+i] = old_values[i2+i]
  */
-    __pyx_v_n = __pyx_f_16knowledge_linker_4heap_int_min(__Pyx_pow_long(2, ((long)__pyx_v_new_levels)), __Pyx_pow_long(2, ((long)__pyx_v_self->levels)));
+    __pyx_v_n = __pyx_f_16knowledge_linker_10algorithms_4heap_int_min(__Pyx_pow_long(2, ((long)__pyx_v_new_levels)), __Pyx_pow_long(2, ((long)__pyx_v_self->levels)));
 
-    /* "knowledge_linker/heap.pyx":201
+    /* "knowledge_linker/algorithms/heap.pyx":201
  *             i2 = 2**self.levels-1 # LevelStart
  *             n = int_min(2**new_levels, 2**self.levels)
  *             for i in range(n):             # <<<<<<<<<<<<<<
@@ -2234,7 +2234,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
     for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_i = __pyx_t_3;
 
-      /* "knowledge_linker/heap.pyx":202
+      /* "knowledge_linker/algorithms/heap.pyx":202
  *             n = int_min(2**new_levels, 2**self.levels)
  *             for i in range(n):
  *                 values[i1+i] = old_values[i2+i]             # <<<<<<<<<<<<<<
@@ -2244,7 +2244,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
       (__pyx_v_values[(__pyx_v_i1 + __pyx_v_i)]) = (__pyx_v_old_values[(__pyx_v_i2 + __pyx_v_i)]);
     }
 
-    /* "knowledge_linker/heap.pyx":203
+    /* "knowledge_linker/algorithms/heap.pyx":203
  *             for i in range(n):
  *                 values[i1+i] = old_values[i2+i]
  *             for i in range(n):             # <<<<<<<<<<<<<<
@@ -2255,7 +2255,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
     for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_i = __pyx_t_3;
 
-      /* "knowledge_linker/heap.pyx":204
+      /* "knowledge_linker/algorithms/heap.pyx":204
  *                 values[i1+i] = old_values[i2+i]
  *             for i in range(n):
  *                 references[i] = old_references[i]             # <<<<<<<<<<<<<<
@@ -2265,7 +2265,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
       (__pyx_v_references[__pyx_v_i]) = (__pyx_v_old_references[__pyx_v_i]);
     }
 
-    /* "knowledge_linker/heap.pyx":197
+    /* "knowledge_linker/algorithms/heap.pyx":197
  *         cdef VALUE_T *old_values = self._values
  *         cdef REFERENCE_T *old_references = self._references
  *         if self.count:             # <<<<<<<<<<<<<<
@@ -2274,7 +2274,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   }
 
-  /* "knowledge_linker/heap.pyx":207
+  /* "knowledge_linker/algorithms/heap.pyx":207
  * 
  *         # make current
  *         free(self._values)             # <<<<<<<<<<<<<<
@@ -2283,7 +2283,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   free(__pyx_v_self->_values);
 
-  /* "knowledge_linker/heap.pyx":208
+  /* "knowledge_linker/algorithms/heap.pyx":208
  *         # make current
  *         free(self._values)
  *         free(self._references)             # <<<<<<<<<<<<<<
@@ -2292,7 +2292,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   free(__pyx_v_self->_references);
 
-  /* "knowledge_linker/heap.pyx":209
+  /* "knowledge_linker/algorithms/heap.pyx":209
  *         free(self._values)
  *         free(self._references)
  *         self._values = values             # <<<<<<<<<<<<<<
@@ -2301,7 +2301,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   __pyx_v_self->_values = __pyx_v_values;
 
-  /* "knowledge_linker/heap.pyx":210
+  /* "knowledge_linker/algorithms/heap.pyx":210
  *         free(self._references)
  *         self._values = values
  *         self._references = references             # <<<<<<<<<<<<<<
@@ -2310,7 +2310,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   __pyx_v_self->_references = __pyx_v_references;
 
-  /* "knowledge_linker/heap.pyx":213
+  /* "knowledge_linker/algorithms/heap.pyx":213
  * 
  *         # we need a full update
  *         self.levels = new_levels             # <<<<<<<<<<<<<<
@@ -2319,16 +2319,16 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  */
   __pyx_v_self->levels = __pyx_v_new_levels;
 
-  /* "knowledge_linker/heap.pyx":214
+  /* "knowledge_linker/algorithms/heap.pyx":214
  *         # we need a full update
  *         self.levels = new_levels
  *         self._update()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update(__pyx_v_self);
+  ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update(__pyx_v_self);
 
-  /* "knowledge_linker/heap.pyx":174
+  /* "knowledge_linker/algorithms/heap.pyx":174
  *     ## C Maintanance methods
  * 
  *     cdef void _add_or_remove_level(self, int add_or_remove) nogil:             # <<<<<<<<<<<<<<
@@ -2339,7 +2339,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
   /* function exit code */
 }
 
-/* "knowledge_linker/heap.pyx":217
+/* "knowledge_linker/algorithms/heap.pyx":217
  * 
  * 
  *     cdef void _update(self) nogil:             # <<<<<<<<<<<<<<
@@ -2347,20 +2347,20 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level(s
  *         This should be done after resizing. """
  */
 
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   int __pyx_v_i0;
   int __pyx_v_i;
   int __pyx_v_ii;
   int __pyx_v_n;
   int __pyx_v_level;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_1;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
   int __pyx_t_4;
   int __pyx_t_5;
 
-  /* "knowledge_linker/heap.pyx":222
+  /* "knowledge_linker/algorithms/heap.pyx":222
  * 
  *         # shorter name for values
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -2370,7 +2370,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
   __pyx_t_1 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":228
+  /* "knowledge_linker/algorithms/heap.pyx":228
  * 
  *         # track tree
  *         for level in range(self.levels,1,-1):             # <<<<<<<<<<<<<<
@@ -2380,7 +2380,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
   for (__pyx_t_2 = __pyx_v_self->levels; __pyx_t_2 > 1; __pyx_t_2-=1) {
     __pyx_v_level = __pyx_t_2;
 
-    /* "knowledge_linker/heap.pyx":229
+    /* "knowledge_linker/algorithms/heap.pyx":229
  *         # track tree
  *         for level in range(self.levels,1,-1):
  *             i0 = (1 << level) - 1 #2**level-1 = LevelStart             # <<<<<<<<<<<<<<
@@ -2389,7 +2389,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
  */
     __pyx_v_i0 = ((1 << __pyx_v_level) - 1);
 
-    /* "knowledge_linker/heap.pyx":230
+    /* "knowledge_linker/algorithms/heap.pyx":230
  *         for level in range(self.levels,1,-1):
  *             i0 = (1 << level) - 1 #2**level-1 = LevelStart
  *             n = i0 + 1 #2**level             # <<<<<<<<<<<<<<
@@ -2398,7 +2398,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
  */
     __pyx_v_n = (__pyx_v_i0 + 1);
 
-    /* "knowledge_linker/heap.pyx":231
+    /* "knowledge_linker/algorithms/heap.pyx":231
  *             i0 = (1 << level) - 1 #2**level-1 = LevelStart
  *             n = i0 + 1 #2**level
  *             for i in range(i0,i0+n,2):             # <<<<<<<<<<<<<<
@@ -2409,7 +2409,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
     for (__pyx_t_4 = __pyx_v_i0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=2) {
       __pyx_v_i = __pyx_t_4;
 
-      /* "knowledge_linker/heap.pyx":232
+      /* "knowledge_linker/algorithms/heap.pyx":232
  *             n = i0 + 1 #2**level
  *             for i in range(i0,i0+n,2):
  *                 ii = (i-1)//2 # CalcPrevAbs             # <<<<<<<<<<<<<<
@@ -2418,7 +2418,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
  */
       __pyx_v_ii = __Pyx_div_long((__pyx_v_i - 1), 2);
 
-      /* "knowledge_linker/heap.pyx":233
+      /* "knowledge_linker/algorithms/heap.pyx":233
  *             for i in range(i0,i0+n,2):
  *                 ii = (i-1)//2 # CalcPrevAbs
  *                 if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -2428,7 +2428,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
       __pyx_t_5 = (((__pyx_v_values[__pyx_v_i]) < (__pyx_v_values[(__pyx_v_i + 1)])) != 0);
       if (__pyx_t_5) {
 
-        /* "knowledge_linker/heap.pyx":234
+        /* "knowledge_linker/algorithms/heap.pyx":234
  *                 ii = (i-1)//2 # CalcPrevAbs
  *                 if values[i] < values[i+1]:
  *                     values[ii] = values[i]             # <<<<<<<<<<<<<<
@@ -2437,7 +2437,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
  */
         (__pyx_v_values[__pyx_v_ii]) = (__pyx_v_values[__pyx_v_i]);
 
-        /* "knowledge_linker/heap.pyx":233
+        /* "knowledge_linker/algorithms/heap.pyx":233
  *             for i in range(i0,i0+n,2):
  *                 ii = (i-1)//2 # CalcPrevAbs
  *                 if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -2447,7 +2447,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
         goto __pyx_L7;
       }
 
-      /* "knowledge_linker/heap.pyx":236
+      /* "knowledge_linker/algorithms/heap.pyx":236
  *                     values[ii] = values[i]
  *                 else:
  *                     values[ii] = values[i+1]             # <<<<<<<<<<<<<<
@@ -2461,7 +2461,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
     }
   }
 
-  /* "knowledge_linker/heap.pyx":217
+  /* "knowledge_linker/algorithms/heap.pyx":217
  * 
  * 
  *     cdef void _update(self) nogil:             # <<<<<<<<<<<<<<
@@ -2472,7 +2472,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
   /* function exit code */
 }
 
-/* "knowledge_linker/heap.pyx":239
+/* "knowledge_linker/algorithms/heap.pyx":239
  * 
  * 
  *     cdef void _update_one(self, int i) nogil:             # <<<<<<<<<<<<<<
@@ -2480,15 +2480,15 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update(struct __pyx_o
  * 
  */
 
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i) {
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update_one(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i) {
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   int __pyx_v_ii;
   CYTHON_UNUSED int __pyx_v_level;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_1;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":243
+  /* "knowledge_linker/algorithms/heap.pyx":243
  * 
  *         # shorter name for values
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -2498,7 +2498,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
   __pyx_t_1 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":246
+  /* "knowledge_linker/algorithms/heap.pyx":246
  * 
  *         # make index uneven
  *         if i % 2==0:             # <<<<<<<<<<<<<<
@@ -2508,7 +2508,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
   __pyx_t_2 = ((__Pyx_mod_long(__pyx_v_i, 2) == 0) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":247
+    /* "knowledge_linker/algorithms/heap.pyx":247
  *         # make index uneven
  *         if i % 2==0:
  *             i = i-1             # <<<<<<<<<<<<<<
@@ -2517,7 +2517,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  */
     __pyx_v_i = (__pyx_v_i - 1);
 
-    /* "knowledge_linker/heap.pyx":246
+    /* "knowledge_linker/algorithms/heap.pyx":246
  * 
  *         # make index uneven
  *         if i % 2==0:             # <<<<<<<<<<<<<<
@@ -2526,7 +2526,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  */
   }
 
-  /* "knowledge_linker/heap.pyx":251
+  /* "knowledge_linker/algorithms/heap.pyx":251
  *         # track tree
  *         cdef int ii, level
  *         for level in range(self.levels,1,-1):             # <<<<<<<<<<<<<<
@@ -2536,7 +2536,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
   for (__pyx_t_3 = __pyx_v_self->levels; __pyx_t_3 > 1; __pyx_t_3-=1) {
     __pyx_v_level = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":252
+    /* "knowledge_linker/algorithms/heap.pyx":252
  *         cdef int ii, level
  *         for level in range(self.levels,1,-1):
  *             ii = (i-1)//2 # CalcPrevAbs             # <<<<<<<<<<<<<<
@@ -2545,7 +2545,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  */
     __pyx_v_ii = __Pyx_div_long((__pyx_v_i - 1), 2);
 
-    /* "knowledge_linker/heap.pyx":254
+    /* "knowledge_linker/algorithms/heap.pyx":254
  *             ii = (i-1)//2 # CalcPrevAbs
  *             # test
  *             if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -2555,7 +2555,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
     __pyx_t_2 = (((__pyx_v_values[__pyx_v_i]) < (__pyx_v_values[(__pyx_v_i + 1)])) != 0);
     if (__pyx_t_2) {
 
-      /* "knowledge_linker/heap.pyx":255
+      /* "knowledge_linker/algorithms/heap.pyx":255
  *             # test
  *             if values[i] < values[i+1]:
  *                 values[ii] = values[i]             # <<<<<<<<<<<<<<
@@ -2564,7 +2564,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  */
       (__pyx_v_values[__pyx_v_ii]) = (__pyx_v_values[__pyx_v_i]);
 
-      /* "knowledge_linker/heap.pyx":254
+      /* "knowledge_linker/algorithms/heap.pyx":254
  *             ii = (i-1)//2 # CalcPrevAbs
  *             # test
  *             if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -2574,7 +2574,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
       goto __pyx_L6;
     }
 
-    /* "knowledge_linker/heap.pyx":257
+    /* "knowledge_linker/algorithms/heap.pyx":257
  *                 values[ii] = values[i]
  *             else:
  *                 values[ii] = values[i+1]             # <<<<<<<<<<<<<<
@@ -2586,7 +2586,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
     }
     __pyx_L6:;
 
-    /* "knowledge_linker/heap.pyx":259
+    /* "knowledge_linker/algorithms/heap.pyx":259
  *                 values[ii] = values[i+1]
  *             # next
  *             if ii % 2:             # <<<<<<<<<<<<<<
@@ -2596,7 +2596,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
     __pyx_t_2 = (__Pyx_mod_long(__pyx_v_ii, 2) != 0);
     if (__pyx_t_2) {
 
-      /* "knowledge_linker/heap.pyx":260
+      /* "knowledge_linker/algorithms/heap.pyx":260
  *             # next
  *             if ii % 2:
  *                 i = ii             # <<<<<<<<<<<<<<
@@ -2605,7 +2605,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  */
       __pyx_v_i = __pyx_v_ii;
 
-      /* "knowledge_linker/heap.pyx":259
+      /* "knowledge_linker/algorithms/heap.pyx":259
  *                 values[ii] = values[i+1]
  *             # next
  *             if ii % 2:             # <<<<<<<<<<<<<<
@@ -2615,7 +2615,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
       goto __pyx_L7;
     }
 
-    /* "knowledge_linker/heap.pyx":262
+    /* "knowledge_linker/algorithms/heap.pyx":262
  *                 i = ii
  *             else:
  *                 i = ii-1             # <<<<<<<<<<<<<<
@@ -2628,7 +2628,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
     __pyx_L7:;
   }
 
-  /* "knowledge_linker/heap.pyx":239
+  /* "knowledge_linker/algorithms/heap.pyx":239
  * 
  * 
  *     cdef void _update_one(self, int i) nogil:             # <<<<<<<<<<<<<<
@@ -2639,7 +2639,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
   /* function exit code */
 }
 
-/* "knowledge_linker/heap.pyx":265
+/* "knowledge_linker/algorithms/heap.pyx":265
  * 
  * 
  *     cdef void _remove(self, int i1) nogil:             # <<<<<<<<<<<<<<
@@ -2647,21 +2647,21 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one(struct __p
  * 
  */
 
-static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i1) {
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__remove(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, int __pyx_v_i1) {
   int __pyx_v_levels;
   int __pyx_v_count;
   int __pyx_v_i0;
   int __pyx_v_i2;
   int __pyx_v_r1;
   int __pyx_v_r2;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_v_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_v_references;
   int __pyx_t_1;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_2;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_t_3;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_2;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_t_3;
   int __pyx_t_4;
 
-  /* "knowledge_linker/heap.pyx":268
+  /* "knowledge_linker/algorithms/heap.pyx":268
  *         """Remove a value from the heap. By index."""
  * 
  *         cdef int levels = self.levels             # <<<<<<<<<<<<<<
@@ -2671,7 +2671,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   __pyx_t_1 = __pyx_v_self->levels;
   __pyx_v_levels = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":269
+  /* "knowledge_linker/algorithms/heap.pyx":269
  * 
  *         cdef int levels = self.levels
  *         cdef int count = self.count             # <<<<<<<<<<<<<<
@@ -2681,7 +2681,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   __pyx_t_1 = __pyx_v_self->count;
   __pyx_v_count = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":271
+  /* "knowledge_linker/algorithms/heap.pyx":271
  *         cdef int count = self.count
  *         # get indices
  *         cdef int i0 = (1 << levels) - 1  #2**self.levels - 1 # LevelStart             # <<<<<<<<<<<<<<
@@ -2690,7 +2690,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_i0 = ((1 << __pyx_v_levels) - 1);
 
-  /* "knowledge_linker/heap.pyx":272
+  /* "knowledge_linker/algorithms/heap.pyx":272
  *         # get indices
  *         cdef int i0 = (1 << levels) - 1  #2**self.levels - 1 # LevelStart
  *         cdef int i2 = i0 + count - 1             # <<<<<<<<<<<<<<
@@ -2699,7 +2699,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_i2 = ((__pyx_v_i0 + __pyx_v_count) - 1);
 
-  /* "knowledge_linker/heap.pyx":275
+  /* "knowledge_linker/algorithms/heap.pyx":275
  * 
  *         # get relative indices
  *         cdef int r1 = i1 - i0             # <<<<<<<<<<<<<<
@@ -2708,7 +2708,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_r1 = (__pyx_v_i1 - __pyx_v_i0);
 
-  /* "knowledge_linker/heap.pyx":276
+  /* "knowledge_linker/algorithms/heap.pyx":276
  *         # get relative indices
  *         cdef int r1 = i1 - i0
  *         cdef int r2 = count - 1             # <<<<<<<<<<<<<<
@@ -2717,7 +2717,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_r2 = (__pyx_v_count - 1);
 
-  /* "knowledge_linker/heap.pyx":278
+  /* "knowledge_linker/algorithms/heap.pyx":278
  *         cdef int r2 = count - 1
  * 
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -2727,7 +2727,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   __pyx_t_2 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":279
+  /* "knowledge_linker/algorithms/heap.pyx":279
  * 
  *         cdef VALUE_T *values = self._values
  *         cdef REFERENCE_T *references = self._references             # <<<<<<<<<<<<<<
@@ -2737,7 +2737,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   __pyx_t_3 = __pyx_v_self->_references;
   __pyx_v_references = __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":282
+  /* "knowledge_linker/algorithms/heap.pyx":282
  * 
  *         # swap with last
  *         values[i1] = values[i2]             # <<<<<<<<<<<<<<
@@ -2746,7 +2746,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   (__pyx_v_values[__pyx_v_i1]) = (__pyx_v_values[__pyx_v_i2]);
 
-  /* "knowledge_linker/heap.pyx":283
+  /* "knowledge_linker/algorithms/heap.pyx":283
  *         # swap with last
  *         values[i1] = values[i2]
  *         references[r1] = references[r2]             # <<<<<<<<<<<<<<
@@ -2755,16 +2755,16 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   (__pyx_v_references[__pyx_v_r1]) = (__pyx_v_references[__pyx_v_r2]);
 
-  /* "knowledge_linker/heap.pyx":286
+  /* "knowledge_linker/algorithms/heap.pyx":286
  * 
  *         # make last Null
  *         values[i2] = inf             # <<<<<<<<<<<<<<
  * 
  *         # update
  */
-  (__pyx_v_values[__pyx_v_i2]) = __pyx_v_16knowledge_linker_4heap_inf;
+  (__pyx_v_values[__pyx_v_i2]) = __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
 
-  /* "knowledge_linker/heap.pyx":289
+  /* "knowledge_linker/algorithms/heap.pyx":289
  * 
  *         # update
  *         self.count -= 1             # <<<<<<<<<<<<<<
@@ -2773,7 +2773,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_self->count = (__pyx_v_self->count - 1);
 
-  /* "knowledge_linker/heap.pyx":290
+  /* "knowledge_linker/algorithms/heap.pyx":290
  *         # update
  *         self.count -= 1
  *         count -= 1             # <<<<<<<<<<<<<<
@@ -2782,7 +2782,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  */
   __pyx_v_count = (__pyx_v_count - 1);
 
-  /* "knowledge_linker/heap.pyx":291
+  /* "knowledge_linker/algorithms/heap.pyx":291
  *         self.count -= 1
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):             # <<<<<<<<<<<<<<
@@ -2792,16 +2792,16 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   __pyx_t_4 = (((__pyx_v_levels > __pyx_v_self->min_levels) & (__pyx_v_count < (1 << (__pyx_v_levels - 2)))) != 0);
   if (__pyx_t_4) {
 
-    /* "knowledge_linker/heap.pyx":292
+    /* "knowledge_linker/algorithms/heap.pyx":292
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):
  *             self._add_or_remove_level(-1)             # <<<<<<<<<<<<<<
  *         else:
  *             self._update_one(i1)
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_add_or_remove_level(__pyx_v_self, -1);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_add_or_remove_level(__pyx_v_self, -1);
 
-    /* "knowledge_linker/heap.pyx":291
+    /* "knowledge_linker/algorithms/heap.pyx":291
  *         self.count -= 1
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):             # <<<<<<<<<<<<<<
@@ -2811,7 +2811,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
     goto __pyx_L3;
   }
 
-  /* "knowledge_linker/heap.pyx":294
+  /* "knowledge_linker/algorithms/heap.pyx":294
  *             self._add_or_remove_level(-1)
  *         else:
  *             self._update_one(i1)             # <<<<<<<<<<<<<<
@@ -2819,20 +2819,20 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  * 
  */
   /*else*/ {
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i1);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i1);
 
-    /* "knowledge_linker/heap.pyx":295
+    /* "knowledge_linker/algorithms/heap.pyx":295
  *         else:
  *             self._update_one(i1)
  *             self._update_one(i2)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i2);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i2);
   }
   __pyx_L3:;
 
-  /* "knowledge_linker/heap.pyx":265
+  /* "knowledge_linker/algorithms/heap.pyx":265
  * 
  * 
  *     cdef void _remove(self, int i1) nogil:             # <<<<<<<<<<<<<<
@@ -2843,7 +2843,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
   /* function exit code */
 }
 
-/* "knowledge_linker/heap.pyx":300
+/* "knowledge_linker/algorithms/heap.pyx":300
  *     ## C Public methods
  * 
  *     cdef int push_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -2851,7 +2851,7 @@ static void __pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove(struct __pyx_o
  * 
  */
 
-static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   int __pyx_v_levels;
   int __pyx_v_count;
   int __pyx_v_i;
@@ -2859,7 +2859,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":305
+  /* "knowledge_linker/algorithms/heap.pyx":305
  *         Returns the index relative to the start of the last level in the heap."""
  *         # We need to resize if currently it just fits.
  *         cdef int levels = self.levels             # <<<<<<<<<<<<<<
@@ -2869,7 +2869,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   __pyx_t_1 = __pyx_v_self->levels;
   __pyx_v_levels = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":306
+  /* "knowledge_linker/algorithms/heap.pyx":306
  *         # We need to resize if currently it just fits.
  *         cdef int levels = self.levels
  *         cdef int count = self.count             # <<<<<<<<<<<<<<
@@ -2879,7 +2879,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   __pyx_t_1 = __pyx_v_self->count;
   __pyx_v_count = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":307
+  /* "knowledge_linker/algorithms/heap.pyx":307
  *         cdef int levels = self.levels
  *         cdef int count = self.count
  *         if count >= (1 << levels):#2**self.levels:             # <<<<<<<<<<<<<<
@@ -2889,16 +2889,16 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   __pyx_t_2 = ((__pyx_v_count >= (1 << __pyx_v_levels)) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":308
+    /* "knowledge_linker/algorithms/heap.pyx":308
  *         cdef int count = self.count
  *         if count >= (1 << levels):#2**self.levels:
  *             self._add_or_remove_level(+1)             # <<<<<<<<<<<<<<
  *             levels += 1
  * 
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_add_or_remove_level(__pyx_v_self, 1);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_add_or_remove_level(__pyx_v_self, 1);
 
-    /* "knowledge_linker/heap.pyx":309
+    /* "knowledge_linker/algorithms/heap.pyx":309
  *         if count >= (1 << levels):#2**self.levels:
  *             self._add_or_remove_level(+1)
  *             levels += 1             # <<<<<<<<<<<<<<
@@ -2907,7 +2907,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
     __pyx_v_levels = (__pyx_v_levels + 1);
 
-    /* "knowledge_linker/heap.pyx":307
+    /* "knowledge_linker/algorithms/heap.pyx":307
  *         cdef int levels = self.levels
  *         cdef int count = self.count
  *         if count >= (1 << levels):#2**self.levels:             # <<<<<<<<<<<<<<
@@ -2916,7 +2916,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
   }
 
-  /* "knowledge_linker/heap.pyx":312
+  /* "knowledge_linker/algorithms/heap.pyx":312
  * 
  *         # insert new value
  *         cdef int i = ((1 << levels) - 1) + count # LevelStart + n             # <<<<<<<<<<<<<<
@@ -2925,7 +2925,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
   __pyx_v_i = (((1 << __pyx_v_levels) - 1) + __pyx_v_count);
 
-  /* "knowledge_linker/heap.pyx":313
+  /* "knowledge_linker/algorithms/heap.pyx":313
  *         # insert new value
  *         cdef int i = ((1 << levels) - 1) + count # LevelStart + n
  *         self._values[i] = value             # <<<<<<<<<<<<<<
@@ -2934,7 +2934,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
   (__pyx_v_self->_values[__pyx_v_i]) = __pyx_v_value;
 
-  /* "knowledge_linker/heap.pyx":314
+  /* "knowledge_linker/algorithms/heap.pyx":314
  *         cdef int i = ((1 << levels) - 1) + count # LevelStart + n
  *         self._values[i] = value
  *         self._references[count] = reference             # <<<<<<<<<<<<<<
@@ -2943,7 +2943,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
   (__pyx_v_self->_references[__pyx_v_count]) = __pyx_v_reference;
 
-  /* "knowledge_linker/heap.pyx":317
+  /* "knowledge_linker/algorithms/heap.pyx":317
  * 
  *         # update
  *         self.count += 1             # <<<<<<<<<<<<<<
@@ -2952,16 +2952,16 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  */
   __pyx_v_self->count = (__pyx_v_self->count + 1);
 
-  /* "knowledge_linker/heap.pyx":318
+  /* "knowledge_linker/algorithms/heap.pyx":318
  *         # update
  *         self.count += 1
  *         self._update_one(i)             # <<<<<<<<<<<<<<
  * 
  *         # return
  */
-  ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i);
+  ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_update_one(__pyx_v_self, __pyx_v_i);
 
-  /* "knowledge_linker/heap.pyx":321
+  /* "knowledge_linker/algorithms/heap.pyx":321
  * 
  *         # return
  *         return count             # <<<<<<<<<<<<<<
@@ -2971,7 +2971,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   __pyx_r = __pyx_v_count;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":300
+  /* "knowledge_linker/algorithms/heap.pyx":300
  *     ## C Public methods
  * 
  *     cdef int push_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -2984,7 +2984,7 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":324
+/* "knowledge_linker/algorithms/heap.pyx":324
  * 
  * 
  *     cdef double pop_fast(self) nogil:             # <<<<<<<<<<<<<<
@@ -2992,20 +2992,20 @@ static int __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(struct __pyx_
  * 
  */
 
-static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+static double __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_pop_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   CYTHON_UNUSED int __pyx_v_level;
   int __pyx_v_i;
   int __pyx_v_levels;
   int __pyx_v_ir;
   double __pyx_v_value;
   double __pyx_r;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_1;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
   int __pyx_t_4;
 
-  /* "knowledge_linker/heap.pyx":330
+  /* "knowledge_linker/algorithms/heap.pyx":330
  * 
  *         # shorter name for values
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -3015,7 +3015,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   __pyx_t_1 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":334
+  /* "knowledge_linker/algorithms/heap.pyx":334
  *         # init index. start at 1 because we start in level 1
  *         cdef int level
  *         cdef int i = 1             # <<<<<<<<<<<<<<
@@ -3024,7 +3024,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
   __pyx_v_i = 1;
 
-  /* "knowledge_linker/heap.pyx":335
+  /* "knowledge_linker/algorithms/heap.pyx":335
  *         cdef int level
  *         cdef int i = 1
  *         cdef int levels = self.levels             # <<<<<<<<<<<<<<
@@ -3034,7 +3034,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   __pyx_t_2 = __pyx_v_self->levels;
   __pyx_v_levels = __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":337
+  /* "knowledge_linker/algorithms/heap.pyx":337
  *         cdef int levels = self.levels
  *         # search tree (using absolute indices)
  *         for level in range(1, levels):             # <<<<<<<<<<<<<<
@@ -3045,7 +3045,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   for (__pyx_t_3 = 1; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_level = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":338
+    /* "knowledge_linker/algorithms/heap.pyx":338
  *         # search tree (using absolute indices)
  *         for level in range(1, levels):
  *             if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -3055,7 +3055,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
     __pyx_t_4 = (((__pyx_v_values[__pyx_v_i]) < (__pyx_v_values[(__pyx_v_i + 1)])) != 0);
     if (__pyx_t_4) {
 
-      /* "knowledge_linker/heap.pyx":339
+      /* "knowledge_linker/algorithms/heap.pyx":339
  *         for level in range(1, levels):
  *             if values[i] < values[i+1]:
  *                 i = i*2+1 # CalcNextAbs             # <<<<<<<<<<<<<<
@@ -3064,7 +3064,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
       __pyx_v_i = ((__pyx_v_i * 2) + 1);
 
-      /* "knowledge_linker/heap.pyx":338
+      /* "knowledge_linker/algorithms/heap.pyx":338
  *         # search tree (using absolute indices)
  *         for level in range(1, levels):
  *             if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -3074,7 +3074,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
       goto __pyx_L5;
     }
 
-    /* "knowledge_linker/heap.pyx":341
+    /* "knowledge_linker/algorithms/heap.pyx":341
  *                 i = i*2+1 # CalcNextAbs
  *             else:
  *                 i = (i+1)*2+1 # CalcNextAbs             # <<<<<<<<<<<<<<
@@ -3087,7 +3087,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
     __pyx_L5:;
   }
 
-  /* "knowledge_linker/heap.pyx":344
+  /* "knowledge_linker/algorithms/heap.pyx":344
  * 
  *         # select best one in last level
  *         if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -3097,7 +3097,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   __pyx_t_4 = (((__pyx_v_values[__pyx_v_i]) < (__pyx_v_values[(__pyx_v_i + 1)])) != 0);
   if (__pyx_t_4) {
 
-    /* "knowledge_linker/heap.pyx":345
+    /* "knowledge_linker/algorithms/heap.pyx":345
  *         # select best one in last level
  *         if values[i] < values[i+1]:
  *             i = i             # <<<<<<<<<<<<<<
@@ -3106,7 +3106,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
 
 
-    /* "knowledge_linker/heap.pyx":344
+    /* "knowledge_linker/algorithms/heap.pyx":344
  * 
  *         # select best one in last level
  *         if values[i] < values[i+1]:             # <<<<<<<<<<<<<<
@@ -3116,7 +3116,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
     goto __pyx_L6;
   }
 
-  /* "knowledge_linker/heap.pyx":347
+  /* "knowledge_linker/algorithms/heap.pyx":347
  *             i = i
  *         else:
  *             i = i+1             # <<<<<<<<<<<<<<
@@ -3128,7 +3128,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   }
   __pyx_L6:;
 
-  /* "knowledge_linker/heap.pyx":350
+  /* "knowledge_linker/algorithms/heap.pyx":350
  * 
  *         # get values
  *         cdef int ir = i - ((1 << levels) - 1) #(2**self.levels-1) # LevelStart             # <<<<<<<<<<<<<<
@@ -3137,7 +3137,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
   __pyx_v_ir = (__pyx_v_i - ((1 << __pyx_v_levels) - 1));
 
-  /* "knowledge_linker/heap.pyx":351
+  /* "knowledge_linker/algorithms/heap.pyx":351
  *         # get values
  *         cdef int ir = i - ((1 << levels) - 1) #(2**self.levels-1) # LevelStart
  *         cdef double value =  values[i]             # <<<<<<<<<<<<<<
@@ -3146,7 +3146,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
   __pyx_v_value = (__pyx_v_values[__pyx_v_i]);
 
-  /* "knowledge_linker/heap.pyx":352
+  /* "knowledge_linker/algorithms/heap.pyx":352
  *         cdef int ir = i - ((1 << levels) - 1) #(2**self.levels-1) # LevelStart
  *         cdef double value =  values[i]
  *         self._popped_ref = self._references[ir]             # <<<<<<<<<<<<<<
@@ -3155,26 +3155,26 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
   __pyx_v_self->_popped_ref = (__pyx_v_self->_references[__pyx_v_ir]);
 
-  /* "knowledge_linker/heap.pyx":355
+  /* "knowledge_linker/algorithms/heap.pyx":355
  * 
  *         # remove it
  *         if value != inf:             # <<<<<<<<<<<<<<
  *             self._remove(i)
  * 
  */
-  __pyx_t_4 = ((__pyx_v_value != __pyx_v_16knowledge_linker_4heap_inf) != 0);
+  __pyx_t_4 = ((__pyx_v_value != __pyx_v_16knowledge_linker_10algorithms_4heap_inf) != 0);
   if (__pyx_t_4) {
 
-    /* "knowledge_linker/heap.pyx":356
+    /* "knowledge_linker/algorithms/heap.pyx":356
  *         # remove it
  *         if value != inf:
  *             self._remove(i)             # <<<<<<<<<<<<<<
  * 
  *         # return
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_remove(__pyx_v_self, __pyx_v_i);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->_remove(__pyx_v_self, __pyx_v_i);
 
-    /* "knowledge_linker/heap.pyx":355
+    /* "knowledge_linker/algorithms/heap.pyx":355
  * 
  *         # remove it
  *         if value != inf:             # <<<<<<<<<<<<<<
@@ -3183,7 +3183,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
   }
 
-  /* "knowledge_linker/heap.pyx":359
+  /* "knowledge_linker/algorithms/heap.pyx":359
  * 
  *         # return
  *         return value             # <<<<<<<<<<<<<<
@@ -3193,7 +3193,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   __pyx_r = __pyx_v_value;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":324
+  /* "knowledge_linker/algorithms/heap.pyx":324
  * 
  * 
  *     cdef double pop_fast(self) nogil:             # <<<<<<<<<<<<<<
@@ -3206,7 +3206,7 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":364
+/* "knowledge_linker/algorithms/heap.pyx":364
  *     ## Python Public methods (that do not need to be VERY fast)
  * 
  *     def push(self, double value, int reference=-1):             # <<<<<<<<<<<<<<
@@ -3215,9 +3215,9 @@ static double __pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast(struct __py
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_9push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_8push[] = "push(value, reference=-1)\n        \n        Append a value to the heap, with optional reference. ";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_9push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_9push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_8push[] = "push(value, reference=-1)\n        \n        Append a value to the heap, with optional reference. ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_9push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_value;
   int __pyx_v_reference;
   int __pyx_lineno = 0;
@@ -3271,32 +3271,32 @@ static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_9push(PyObject *
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("push", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 364; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_8push(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_8push(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_8push(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_8push(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("push", 0);
 
-  /* "knowledge_linker/heap.pyx":368
+  /* "knowledge_linker/algorithms/heap.pyx":368
  * 
  *         Append a value to the heap, with optional reference. """
  *         self.push_fast(value, reference)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->push_fast(__pyx_v_self, __pyx_v_value, __pyx_v_reference);
+  ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->push_fast(__pyx_v_self, __pyx_v_value, __pyx_v_reference);
 
-  /* "knowledge_linker/heap.pyx":364
+  /* "knowledge_linker/algorithms/heap.pyx":364
  *     ## Python Public methods (that do not need to be VERY fast)
  * 
  *     def push(self, double value, int reference=-1):             # <<<<<<<<<<<<<<
@@ -3311,7 +3311,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_8push(struct __p
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":371
+/* "knowledge_linker/algorithms/heap.pyx":371
  * 
  * 
  *     def min_val(self):             # <<<<<<<<<<<<<<
@@ -3320,24 +3320,24 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_8push(struct __p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_11min_val(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_10min_val[] = "Get the minimum value.\n       \n        Returns only the value, and does not remove it from the heap.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_11min_val(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_11min_val(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_val[] = "Get the minimum value.\n       \n        Returns only the value, and does not remove it from the heap.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_11min_val(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("min_val (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_val(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_val(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_1;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_1;
   int __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   int __pyx_lineno = 0;
@@ -3345,7 +3345,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("min_val", 0);
 
-  /* "knowledge_linker/heap.pyx":377
+  /* "knowledge_linker/algorithms/heap.pyx":377
  * 
  *         # shorter name for values
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -3355,7 +3355,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
   __pyx_t_1 = __pyx_v_self->_values;
   __pyx_v_values = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":380
+  /* "knowledge_linker/algorithms/heap.pyx":380
  * 
  *         # select best one in last level
  *         if values[1] < values[2]:             # <<<<<<<<<<<<<<
@@ -3365,7 +3365,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
   __pyx_t_2 = (((__pyx_v_values[1]) < (__pyx_v_values[2])) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":381
+    /* "knowledge_linker/algorithms/heap.pyx":381
  *         # select best one in last level
  *         if values[1] < values[2]:
  *             return values[1]             # <<<<<<<<<<<<<<
@@ -3379,7 +3379,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":380
+    /* "knowledge_linker/algorithms/heap.pyx":380
  * 
  *         # select best one in last level
  *         if values[1] < values[2]:             # <<<<<<<<<<<<<<
@@ -3388,7 +3388,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
  */
   }
 
-  /* "knowledge_linker/heap.pyx":383
+  /* "knowledge_linker/algorithms/heap.pyx":383
  *             return values[1]
  *         else:
  *             return values[2]             # <<<<<<<<<<<<<<
@@ -3404,7 +3404,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
     goto __pyx_L0;
   }
 
-  /* "knowledge_linker/heap.pyx":371
+  /* "knowledge_linker/algorithms/heap.pyx":371
  * 
  * 
  *     def min_val(self):             # <<<<<<<<<<<<<<
@@ -3415,7 +3415,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.min_val", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.min_val", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3423,7 +3423,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":386
+/* "knowledge_linker/algorithms/heap.pyx":386
  * 
  * 
  *     def values(self):             # <<<<<<<<<<<<<<
@@ -3432,20 +3432,20 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_val(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_13values(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_12values[] = "Get the values in the heap as a list.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_13values(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_13values(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_12values[] = "Get the values in the heap as a list.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_13values(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("values (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_12values(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_12values(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   PyObject *__pyx_v_out = NULL;
   int __pyx_v_i;
   int __pyx_v_i0;
@@ -3460,7 +3460,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("values", 0);
 
-  /* "knowledge_linker/heap.pyx":388
+  /* "knowledge_linker/algorithms/heap.pyx":388
  *     def values(self):
  *         """Get the values in the heap as a list."""
  *         out = []             # <<<<<<<<<<<<<<
@@ -3472,7 +3472,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   __pyx_v_out = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":390
+  /* "knowledge_linker/algorithms/heap.pyx":390
  *         out = []
  *         cdef int i, i0
  *         i0 = 2**self.levels-1  # LevelStart             # <<<<<<<<<<<<<<
@@ -3481,7 +3481,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
  */
   __pyx_v_i0 = (__Pyx_pow_long(2, ((long)__pyx_v_self->levels)) - 1);
 
-  /* "knowledge_linker/heap.pyx":391
+  /* "knowledge_linker/algorithms/heap.pyx":391
  *         cdef int i, i0
  *         i0 = 2**self.levels-1  # LevelStart
  *         for i in range(self.count):             # <<<<<<<<<<<<<<
@@ -3492,7 +3492,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":392
+    /* "knowledge_linker/algorithms/heap.pyx":392
  *         i0 = 2**self.levels-1  # LevelStart
  *         for i in range(self.count):
  *             out.append( self._values[i0+i] )             # <<<<<<<<<<<<<<
@@ -3505,7 +3505,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "knowledge_linker/heap.pyx":393
+  /* "knowledge_linker/algorithms/heap.pyx":393
  *         for i in range(self.count):
  *             out.append( self._values[i0+i] )
  *         return out             # <<<<<<<<<<<<<<
@@ -3517,7 +3517,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":386
+  /* "knowledge_linker/algorithms/heap.pyx":386
  * 
  * 
  *     def values(self):             # <<<<<<<<<<<<<<
@@ -3528,7 +3528,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.values", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.values", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_out);
@@ -3537,7 +3537,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":396
+/* "knowledge_linker/algorithms/heap.pyx":396
  * 
  * 
  *     def references(self):             # <<<<<<<<<<<<<<
@@ -3546,20 +3546,20 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_12values(struct 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_15references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_14references[] = "Get the references in the heap as a list.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_15references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_15references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_14references[] = "Get the references in the heap as a list.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_15references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("references (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_14references(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_14references(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   PyObject *__pyx_v_out = NULL;
   int __pyx_v_i;
   PyObject *__pyx_r = NULL;
@@ -3573,7 +3573,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("references", 0);
 
-  /* "knowledge_linker/heap.pyx":398
+  /* "knowledge_linker/algorithms/heap.pyx":398
  *     def references(self):
  *         """Get the references in the heap as a list."""
  *         out = []             # <<<<<<<<<<<<<<
@@ -3585,7 +3585,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   __pyx_v_out = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":400
+  /* "knowledge_linker/algorithms/heap.pyx":400
  *         out = []
  *         cdef int i
  *         for i in range(self.count):             # <<<<<<<<<<<<<<
@@ -3596,7 +3596,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":401
+    /* "knowledge_linker/algorithms/heap.pyx":401
  *         cdef int i
  *         for i in range(self.count):
  *             out.append( self._references[i] )             # <<<<<<<<<<<<<<
@@ -3609,7 +3609,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "knowledge_linker/heap.pyx":402
+  /* "knowledge_linker/algorithms/heap.pyx":402
  *         for i in range(self.count):
  *             out.append( self._references[i] )
  *         return out             # <<<<<<<<<<<<<<
@@ -3621,7 +3621,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":396
+  /* "knowledge_linker/algorithms/heap.pyx":396
  * 
  * 
  *     def references(self):             # <<<<<<<<<<<<<<
@@ -3632,7 +3632,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.references", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.references", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_out);
@@ -3641,7 +3641,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":405
+/* "knowledge_linker/algorithms/heap.pyx":405
  * 
  * 
  *     def pop(self):             # <<<<<<<<<<<<<<
@@ -3650,20 +3650,20 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_14references(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_17pop(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_16pop[] = "Get the minimum value and remove it from the list. \n        \n        Returns a tuple of (value, reference) \n        If the queue is empty, an IndexError is raised.\n        ";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_17pop(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_17pop(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_16pop[] = "Get the minimum value and remove it from the list. \n        \n        Returns a tuple of (value, reference) \n        If the queue is empty, an IndexError is raised.\n        ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_17pop(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("pop (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_16pop(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_16pop(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   double __pyx_v_value;
   int __pyx_v_ref;
   PyObject *__pyx_r = NULL;
@@ -3678,7 +3678,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("pop", 0);
 
-  /* "knowledge_linker/heap.pyx":411
+  /* "knowledge_linker/algorithms/heap.pyx":411
  *         If the queue is empty, an IndexError is raised.
  *         """
  *         if self.count == 0:             # <<<<<<<<<<<<<<
@@ -3688,7 +3688,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   __pyx_t_1 = ((__pyx_v_self->count == 0) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":412
+    /* "knowledge_linker/algorithms/heap.pyx":412
  *         """
  *         if self.count == 0:
  *           raise IndexError('pop from an empty heap')             # <<<<<<<<<<<<<<
@@ -3701,7 +3701,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 412; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/heap.pyx":411
+    /* "knowledge_linker/algorithms/heap.pyx":411
  *         If the queue is empty, an IndexError is raised.
  *         """
  *         if self.count == 0:             # <<<<<<<<<<<<<<
@@ -3710,16 +3710,16 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
  */
   }
 
-  /* "knowledge_linker/heap.pyx":413
+  /* "knowledge_linker/algorithms/heap.pyx":413
  *         if self.count == 0:
  *           raise IndexError('pop from an empty heap')
  *         value = self.pop_fast()             # <<<<<<<<<<<<<<
  *         ref = self._popped_ref
  *         return value, ref
  */
-  __pyx_v_value = ((struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->pop_fast(__pyx_v_self);
+  __pyx_v_value = ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self->__pyx_vtab)->pop_fast(__pyx_v_self);
 
-  /* "knowledge_linker/heap.pyx":414
+  /* "knowledge_linker/algorithms/heap.pyx":414
  *           raise IndexError('pop from an empty heap')
  *         value = self.pop_fast()
  *         ref = self._popped_ref             # <<<<<<<<<<<<<<
@@ -3729,7 +3729,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   __pyx_t_3 = __pyx_v_self->_popped_ref;
   __pyx_v_ref = __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":415
+  /* "knowledge_linker/algorithms/heap.pyx":415
  *         value = self.pop_fast()
  *         ref = self._popped_ref
  *         return value, ref             # <<<<<<<<<<<<<<
@@ -3753,7 +3753,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":405
+  /* "knowledge_linker/algorithms/heap.pyx":405
  * 
  * 
  *     def pop(self):             # <<<<<<<<<<<<<<
@@ -3766,7 +3766,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.pop", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.pop", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3774,7 +3774,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pxd":18
+/* "knowledge_linker/algorithms/heap.pxd":18
  * 
  * cdef class BinaryHeap:
  *     cdef readonly int count, levels, min_levels             # <<<<<<<<<<<<<<
@@ -3783,19 +3783,19 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_16pop(struct __p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5count_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5count_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_5count___get__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count___get__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_5count___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3813,7 +3813,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_5count___get__(s
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.count.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.count.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3822,19 +3822,19 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_5count___get__(s
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_6levels_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_6levels_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6levels___get__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels___get__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6levels___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3852,7 +3852,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6levels___get__(
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.levels.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.levels.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3861,19 +3861,19 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_6levels___get__(
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_10min_levels_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_10min_levels_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___get__(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels___get__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___get__(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3891,7 +3891,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___g
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.BinaryHeap.min_levels.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.BinaryHeap.min_levels.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3899,7 +3899,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___g
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":444
+/* "knowledge_linker/algorithms/heap.pyx":444
  * 
  *     """
  *     def __init__(self, int initial_capacity=128, int max_reference=-1):             # <<<<<<<<<<<<<<
@@ -3908,12 +3908,12 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_10BinaryHeap_10min_levels___g
  */
 
 /* Python wrapper */
-static int __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__[] = "__init__(initial_capacity=128, max_reference=None)\n        \n        Constructor: takes optional initial_capacity (but the heap size can \n        still grow dynamically) and max_reference (which is a max for the\n        lifetime of the heap, and sets a de-facto cap on the maximum heap\n        size.)";
+static int __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__[] = "__init__(initial_capacity=128, max_reference=None)\n        \n        Constructor: takes optional initial_capacity (but the heap size can \n        still grow dynamically) and max_reference (which is a max for the\n        lifetime of the heap, and sets a de-facto cap on the maximum heap\n        size.)";
 #if CYTHON_COMPILING_IN_CPYTHON
-struct wrapperbase __pyx_wrapperbase_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__;
+struct wrapperbase __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__;
 #endif
-static int __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_initial_capacity;
   int __pyx_v_max_reference;
   int __pyx_lineno = 0;
@@ -3973,18 +3973,18 @@ static int __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_1__init__(Py
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 444; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_initial_capacity, __pyx_v_max_reference);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_initial_capacity, __pyx_v_max_reference);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity, int __pyx_v_max_reference) {
+static int __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_initial_capacity, int __pyx_v_max_reference) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -3999,7 +3999,7 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "knowledge_linker/heap.pyx":451
+  /* "knowledge_linker/algorithms/heap.pyx":451
  *         lifetime of the heap, and sets a de-facto cap on the maximum heap
  *         size.)"""
  *         if max_reference < 0:             # <<<<<<<<<<<<<<
@@ -4009,7 +4009,7 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
   __pyx_t_1 = ((__pyx_v_max_reference < 0) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":452
+    /* "knowledge_linker/algorithms/heap.pyx":452
  *         size.)"""
  *         if max_reference < 0:
  *           max_reference = initial_capacity - 1             # <<<<<<<<<<<<<<
@@ -4018,7 +4018,7 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
  */
     __pyx_v_max_reference = (__pyx_v_initial_capacity - 1);
 
-    /* "knowledge_linker/heap.pyx":451
+    /* "knowledge_linker/algorithms/heap.pyx":451
  *         lifetime of the heap, and sets a de-facto cap on the maximum heap
  *         size.)"""
  *         if max_reference < 0:             # <<<<<<<<<<<<<<
@@ -4027,7 +4027,7 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
  */
   }
 
-  /* "knowledge_linker/heap.pyx":453
+  /* "knowledge_linker/algorithms/heap.pyx":453
  *         if max_reference < 0:
  *           max_reference = initial_capacity - 1
  *         self.max_reference = max_reference             # <<<<<<<<<<<<<<
@@ -4036,23 +4036,23 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
  */
   __pyx_v_self->max_reference = __pyx_v_max_reference;
 
-  /* "knowledge_linker/heap.pyx":454
+  /* "knowledge_linker/algorithms/heap.pyx":454
  *           max_reference = initial_capacity - 1
  *         self.max_reference = max_reference
  *         self._crossref = <REFERENCE_T *>malloc((max_reference+1) * sizeof(REFERENCE_T))             # <<<<<<<<<<<<<<
  *         # below will call self.reset
  *         BinaryHeap.__init__(self, initial_capacity)
  */
-  __pyx_v_self->_crossref = ((__pyx_t_16knowledge_linker_4heap_REFERENCE_T *)malloc(((__pyx_v_max_reference + 1) * (sizeof(__pyx_t_16knowledge_linker_4heap_REFERENCE_T)))));
+  __pyx_v_self->_crossref = ((__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *)malloc(((__pyx_v_max_reference + 1) * (sizeof(__pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T)))));
 
-  /* "knowledge_linker/heap.pyx":456
+  /* "knowledge_linker/algorithms/heap.pyx":456
  *         self._crossref = <REFERENCE_T *>malloc((max_reference+1) * sizeof(REFERENCE_T))
  *         # below will call self.reset
  *         BinaryHeap.__init__(self, initial_capacity)             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_16knowledge_linker_4heap_BinaryHeap), __pyx_n_s_init); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 456; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap), __pyx_n_s_init); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 456; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_initial_capacity); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 456; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
@@ -4085,7 +4085,7 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":444
+  /* "knowledge_linker/algorithms/heap.pyx":444
  * 
  *     """
  *     def __init__(self, int initial_capacity=128, int max_reference=-1):             # <<<<<<<<<<<<<<
@@ -4102,14 +4102,14 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":458
+/* "knowledge_linker/algorithms/heap.pyx":458
  *         BinaryHeap.__init__(self, initial_capacity)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -4118,22 +4118,22 @@ static int __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__(str
  */
 
 /* Python wrapper */
-static void __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_3__dealloc__(PyObject *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc__(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
+  __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_2__dealloc__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
+static void __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_2__dealloc__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "knowledge_linker/heap.pyx":459
+  /* "knowledge_linker/algorithms/heap.pyx":459
  * 
  *     def __dealloc__(self):
  *         if self._crossref is not NULL:             # <<<<<<<<<<<<<<
@@ -4143,7 +4143,7 @@ static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc_
   __pyx_t_1 = ((__pyx_v_self->_crossref != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":460
+    /* "knowledge_linker/algorithms/heap.pyx":460
  *     def __dealloc__(self):
  *         if self._crossref is not NULL:
  *             free(self._crossref)             # <<<<<<<<<<<<<<
@@ -4152,7 +4152,7 @@ static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc_
  */
     free(__pyx_v_self->_crossref);
 
-    /* "knowledge_linker/heap.pyx":459
+    /* "knowledge_linker/algorithms/heap.pyx":459
  * 
  *     def __dealloc__(self):
  *         if self._crossref is not NULL:             # <<<<<<<<<<<<<<
@@ -4161,7 +4161,7 @@ static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc_
  */
   }
 
-  /* "knowledge_linker/heap.pyx":458
+  /* "knowledge_linker/algorithms/heap.pyx":458
  *         BinaryHeap.__init__(self, initial_capacity)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -4173,7 +4173,7 @@ static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "knowledge_linker/heap.pyx":462
+/* "knowledge_linker/algorithms/heap.pyx":462
  *             free(self._crossref)
  * 
  *     def reset(self):             # <<<<<<<<<<<<<<
@@ -4182,20 +4182,20 @@ static void __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_2__dealloc_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_5reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset[] = "Reset the heap to default, empty state.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_5reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_5reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_4reset[] = "Reset the heap to default, empty state.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_5reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("reset (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_4reset(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_4reset(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
   int __pyx_v_i;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4210,14 +4210,14 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("reset", 0);
 
-  /* "knowledge_linker/heap.pyx":464
+  /* "knowledge_linker/algorithms/heap.pyx":464
  *     def reset(self):
  *         """Reset the heap to default, empty state."""
  *         BinaryHeap.reset(self)             # <<<<<<<<<<<<<<
  *         # set default values of crossrefs
  *         cdef int i
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_16knowledge_linker_4heap_BinaryHeap), __pyx_n_s_reset); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap), __pyx_n_s_reset); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 464; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4246,7 +4246,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":467
+  /* "knowledge_linker/algorithms/heap.pyx":467
  *         # set default values of crossrefs
  *         cdef int i
  *         for i in range(self.max_reference+1):             # <<<<<<<<<<<<<<
@@ -4257,7 +4257,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "knowledge_linker/heap.pyx":468
+    /* "knowledge_linker/algorithms/heap.pyx":468
  *         cdef int i
  *         for i in range(self.max_reference+1):
  *             self._crossref[i] = -1             # <<<<<<<<<<<<<<
@@ -4267,7 +4267,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
     (__pyx_v_self->_crossref[__pyx_v_i]) = -1;
   }
 
-  /* "knowledge_linker/heap.pyx":462
+  /* "knowledge_linker/algorithms/heap.pyx":462
  *             free(self._crossref)
  * 
  *     def reset(self):             # <<<<<<<<<<<<<<
@@ -4283,7 +4283,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.reset", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.reset", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4291,7 +4291,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":471
+/* "knowledge_linker/algorithms/heap.pyx":471
  * 
  * 
  *     cdef void _remove(self, int i1) nogil:             # <<<<<<<<<<<<<<
@@ -4299,22 +4299,22 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset
  *         cdef int levels = self.levels
  */
 
-static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_i1) {
+static void __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap__remove(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_i1) {
   int __pyx_v_levels;
   int __pyx_v_count;
   int __pyx_v_i0;
   int __pyx_v_i2;
   int __pyx_v_r1;
   int __pyx_v_r2;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_v_references;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_v_crossref;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_v_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_v_crossref;
   int __pyx_t_1;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_2;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *__pyx_t_3;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_2;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *__pyx_t_3;
   int __pyx_t_4;
 
-  /* "knowledge_linker/heap.pyx":473
+  /* "knowledge_linker/algorithms/heap.pyx":473
  *     cdef void _remove(self, int i1) nogil:
  *         """ Remove a value from the heap. By index. """
  *         cdef int levels = self.levels             # <<<<<<<<<<<<<<
@@ -4324,7 +4324,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_1 = __pyx_v_self->__pyx_base.levels;
   __pyx_v_levels = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":474
+  /* "knowledge_linker/algorithms/heap.pyx":474
  *         """ Remove a value from the heap. By index. """
  *         cdef int levels = self.levels
  *         cdef int count = self.count             # <<<<<<<<<<<<<<
@@ -4334,7 +4334,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_1 = __pyx_v_self->__pyx_base.count;
   __pyx_v_count = __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":477
+  /* "knowledge_linker/algorithms/heap.pyx":477
  * 
  *         # get indices
  *         cdef int i0 = (1 << levels) - 1  #2**self.levels - 1 # LevelStart             # <<<<<<<<<<<<<<
@@ -4343,7 +4343,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_i0 = ((1 << __pyx_v_levels) - 1);
 
-  /* "knowledge_linker/heap.pyx":478
+  /* "knowledge_linker/algorithms/heap.pyx":478
  *         # get indices
  *         cdef int i0 = (1 << levels) - 1  #2**self.levels - 1 # LevelStart
  *         cdef int i2 = i0 + count - 1             # <<<<<<<<<<<<<<
@@ -4352,7 +4352,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_i2 = ((__pyx_v_i0 + __pyx_v_count) - 1);
 
-  /* "knowledge_linker/heap.pyx":481
+  /* "knowledge_linker/algorithms/heap.pyx":481
  * 
  *         # get relative indices
  *         cdef int r1 = i1 - i0             # <<<<<<<<<<<<<<
@@ -4361,7 +4361,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_r1 = (__pyx_v_i1 - __pyx_v_i0);
 
-  /* "knowledge_linker/heap.pyx":482
+  /* "knowledge_linker/algorithms/heap.pyx":482
  *         # get relative indices
  *         cdef int r1 = i1 - i0
  *         cdef int r2 = count - 1             # <<<<<<<<<<<<<<
@@ -4370,7 +4370,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_r2 = (__pyx_v_count - 1);
 
-  /* "knowledge_linker/heap.pyx":484
+  /* "knowledge_linker/algorithms/heap.pyx":484
  *         cdef int r2 = count - 1
  * 
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -4380,7 +4380,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_2 = __pyx_v_self->__pyx_base._values;
   __pyx_v_values = __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":485
+  /* "knowledge_linker/algorithms/heap.pyx":485
  * 
  *         cdef VALUE_T *values = self._values
  *         cdef REFERENCE_T *references = self._references             # <<<<<<<<<<<<<<
@@ -4390,7 +4390,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_3 = __pyx_v_self->__pyx_base._references;
   __pyx_v_references = __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":486
+  /* "knowledge_linker/algorithms/heap.pyx":486
  *         cdef VALUE_T *values = self._values
  *         cdef REFERENCE_T *references = self._references
  *         cdef REFERENCE_T *crossref = self._crossref             # <<<<<<<<<<<<<<
@@ -4400,7 +4400,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_3 = __pyx_v_self->_crossref;
   __pyx_v_crossref = __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":489
+  /* "knowledge_linker/algorithms/heap.pyx":489
  * 
  *         # update cross reference
  *         crossref[references[r2]]=r1             # <<<<<<<<<<<<<<
@@ -4409,7 +4409,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   (__pyx_v_crossref[(__pyx_v_references[__pyx_v_r2])]) = __pyx_v_r1;
 
-  /* "knowledge_linker/heap.pyx":490
+  /* "knowledge_linker/algorithms/heap.pyx":490
  *         # update cross reference
  *         crossref[references[r2]]=r1
  *         crossref[references[r1]]=-1  # disable removed item             # <<<<<<<<<<<<<<
@@ -4418,7 +4418,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   (__pyx_v_crossref[(__pyx_v_references[__pyx_v_r1])]) = -1;
 
-  /* "knowledge_linker/heap.pyx":493
+  /* "knowledge_linker/algorithms/heap.pyx":493
  * 
  *         # swap with last
  *         values[i1] = values[i2]             # <<<<<<<<<<<<<<
@@ -4427,7 +4427,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   (__pyx_v_values[__pyx_v_i1]) = (__pyx_v_values[__pyx_v_i2]);
 
-  /* "knowledge_linker/heap.pyx":494
+  /* "knowledge_linker/algorithms/heap.pyx":494
  *         # swap with last
  *         values[i1] = values[i2]
  *         references[r1] = references[r2]             # <<<<<<<<<<<<<<
@@ -4436,16 +4436,16 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   (__pyx_v_references[__pyx_v_r1]) = (__pyx_v_references[__pyx_v_r2]);
 
-  /* "knowledge_linker/heap.pyx":497
+  /* "knowledge_linker/algorithms/heap.pyx":497
  * 
  *         # make last Null
  *         values[i2] = inf             # <<<<<<<<<<<<<<
  * 
  *         # update
  */
-  (__pyx_v_values[__pyx_v_i2]) = __pyx_v_16knowledge_linker_4heap_inf;
+  (__pyx_v_values[__pyx_v_i2]) = __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
 
-  /* "knowledge_linker/heap.pyx":500
+  /* "knowledge_linker/algorithms/heap.pyx":500
  * 
  *         # update
  *         self.count -= 1             # <<<<<<<<<<<<<<
@@ -4454,7 +4454,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_self->__pyx_base.count = (__pyx_v_self->__pyx_base.count - 1);
 
-  /* "knowledge_linker/heap.pyx":501
+  /* "knowledge_linker/algorithms/heap.pyx":501
  *         # update
  *         self.count -= 1
  *         count -= 1             # <<<<<<<<<<<<<<
@@ -4463,7 +4463,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  */
   __pyx_v_count = (__pyx_v_count - 1);
 
-  /* "knowledge_linker/heap.pyx":502
+  /* "knowledge_linker/algorithms/heap.pyx":502
  *         self.count -= 1
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):             # <<<<<<<<<<<<<<
@@ -4473,16 +4473,16 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   __pyx_t_4 = (((__pyx_v_levels > __pyx_v_self->__pyx_base.min_levels) & (__pyx_v_count < (1 << (__pyx_v_levels - 2)))) != 0);
   if (__pyx_t_4) {
 
-    /* "knowledge_linker/heap.pyx":503
+    /* "knowledge_linker/algorithms/heap.pyx":503
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):
  *             self._add_or_remove_level(-1)             # <<<<<<<<<<<<<<
  *         else:
  *             self._update_one(i1)
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._add_or_remove_level(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), -1);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._add_or_remove_level(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), -1);
 
-    /* "knowledge_linker/heap.pyx":502
+    /* "knowledge_linker/algorithms/heap.pyx":502
  *         self.count -= 1
  *         count -= 1
  *         if (levels>self.min_levels) & (count < (1 << (levels-2))):             # <<<<<<<<<<<<<<
@@ -4492,7 +4492,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
     goto __pyx_L3;
   }
 
-  /* "knowledge_linker/heap.pyx":505
+  /* "knowledge_linker/algorithms/heap.pyx":505
  *             self._add_or_remove_level(-1)
  *         else:
  *             self._update_one(i1)             # <<<<<<<<<<<<<<
@@ -4500,20 +4500,20 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  * 
  */
   /*else*/ {
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i1);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i1);
 
-    /* "knowledge_linker/heap.pyx":506
+    /* "knowledge_linker/algorithms/heap.pyx":506
  *         else:
  *             self._update_one(i1)
  *             self._update_one(i2)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i2);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i2);
   }
   __pyx_L3:;
 
-  /* "knowledge_linker/heap.pyx":471
+  /* "knowledge_linker/algorithms/heap.pyx":471
  * 
  * 
  *     cdef void _remove(self, int i1) nogil:             # <<<<<<<<<<<<<<
@@ -4524,7 +4524,7 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
   /* function exit code */
 }
 
-/* "knowledge_linker/heap.pyx":509
+/* "knowledge_linker/algorithms/heap.pyx":509
  * 
  * 
  *     cdef int push_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4532,14 +4532,14 @@ static void __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove(stru
  * 
  */
 
-static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   int __pyx_v_i;
   int __pyx_v_ir;
   int __pyx_r;
   int __pyx_t_1;
   int __pyx_t_2;
 
-  /* "knowledge_linker/heap.pyx":517
+  /* "knowledge_linker/algorithms/heap.pyx":517
  *         If -1 is returned, the provided reference was out-of-bounds and no
  *         value was pushed to the heap."""
  *         if not (0 <= reference <= self.max_reference):             # <<<<<<<<<<<<<<
@@ -4553,7 +4553,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
   __pyx_t_2 = ((!(__pyx_t_1 != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":518
+    /* "knowledge_linker/algorithms/heap.pyx":518
  *         value was pushed to the heap."""
  *         if not (0 <= reference <= self.max_reference):
  *           return -1             # <<<<<<<<<<<<<<
@@ -4563,7 +4563,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
     __pyx_r = -1;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":517
+    /* "knowledge_linker/algorithms/heap.pyx":517
  *         If -1 is returned, the provided reference was out-of-bounds and no
  *         value was pushed to the heap."""
  *         if not (0 <= reference <= self.max_reference):             # <<<<<<<<<<<<<<
@@ -4572,7 +4572,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
   }
 
-  /* "knowledge_linker/heap.pyx":525
+  /* "knowledge_linker/algorithms/heap.pyx":525
  *         # Reference is the index in the array where MCP is applied to.
  *         # Find the index-in-the-heap using the crossref array.
  *         cdef int ir = self._crossref[reference]             # <<<<<<<<<<<<<<
@@ -4581,7 +4581,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
   __pyx_v_ir = (__pyx_v_self->_crossref[__pyx_v_reference]);
 
-  /* "knowledge_linker/heap.pyx":527
+  /* "knowledge_linker/algorithms/heap.pyx":527
  *         cdef int ir = self._crossref[reference]
  * 
  *         if ir != -1:             # <<<<<<<<<<<<<<
@@ -4591,7 +4591,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
   __pyx_t_2 = ((__pyx_v_ir != -1L) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":529
+    /* "knowledge_linker/algorithms/heap.pyx":529
  *         if ir != -1:
  *             # update
  *             i = (1 << self.levels) - 1 + ir             # <<<<<<<<<<<<<<
@@ -4600,7 +4600,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
     __pyx_v_i = (((1 << __pyx_v_self->__pyx_base.levels) - 1) + __pyx_v_ir);
 
-    /* "knowledge_linker/heap.pyx":530
+    /* "knowledge_linker/algorithms/heap.pyx":530
  *             # update
  *             i = (1 << self.levels) - 1 + ir
  *             self._values[i] = value             # <<<<<<<<<<<<<<
@@ -4609,16 +4609,16 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
     (__pyx_v_self->__pyx_base._values[__pyx_v_i]) = __pyx_v_value;
 
-    /* "knowledge_linker/heap.pyx":531
+    /* "knowledge_linker/algorithms/heap.pyx":531
  *             i = (1 << self.levels) - 1 + ir
  *             self._values[i] = value
  *             self._update_one(i)             # <<<<<<<<<<<<<<
  *             return ir
  * 
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i);
 
-    /* "knowledge_linker/heap.pyx":532
+    /* "knowledge_linker/algorithms/heap.pyx":532
  *             self._values[i] = value
  *             self._update_one(i)
  *             return ir             # <<<<<<<<<<<<<<
@@ -4628,7 +4628,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
     __pyx_r = __pyx_v_ir;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":527
+    /* "knowledge_linker/algorithms/heap.pyx":527
  *         cdef int ir = self._crossref[reference]
  * 
  *         if ir != -1:             # <<<<<<<<<<<<<<
@@ -4637,16 +4637,16 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
   }
 
-  /* "knowledge_linker/heap.pyx":535
+  /* "knowledge_linker/algorithms/heap.pyx":535
  * 
  *         # if not updated: append normally and store reference
  *         ir = BinaryHeap.push_fast(self, value, reference)             # <<<<<<<<<<<<<<
  *         self._crossref[reference] = ir
  *         return ir
  */
-  __pyx_v_ir = __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
+  __pyx_v_ir = __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_push_fast(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
 
-  /* "knowledge_linker/heap.pyx":536
+  /* "knowledge_linker/algorithms/heap.pyx":536
  *         # if not updated: append normally and store reference
  *         ir = BinaryHeap.push_fast(self, value, reference)
  *         self._crossref[reference] = ir             # <<<<<<<<<<<<<<
@@ -4655,7 +4655,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  */
   (__pyx_v_self->_crossref[__pyx_v_reference]) = __pyx_v_ir;
 
-  /* "knowledge_linker/heap.pyx":537
+  /* "knowledge_linker/algorithms/heap.pyx":537
  *         ir = BinaryHeap.push_fast(self, value, reference)
  *         self._crossref[reference] = ir
  *         return ir             # <<<<<<<<<<<<<<
@@ -4665,7 +4665,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
   __pyx_r = __pyx_v_ir;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":509
+  /* "knowledge_linker/algorithms/heap.pyx":509
  * 
  * 
  *     cdef int push_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4678,7 +4678,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":539
+/* "knowledge_linker/algorithms/heap.pyx":539
  *         return ir
  * 
  *     cdef int push_if_lower_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4686,16 +4686,16 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast(str
  *         the new value is lower than the old one. If the reference is not
  */
 
-static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static int __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_if_lower_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   int __pyx_v_i;
   int __pyx_v_ir;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_v_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_v_values;
   int __pyx_r;
   int __pyx_t_1;
   int __pyx_t_2;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *__pyx_t_3;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *__pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":548
+  /* "knowledge_linker/algorithms/heap.pyx":548
  *         value was pushed to the heap.
  *         """
  *         if not (0 <= reference <= self.max_reference):             # <<<<<<<<<<<<<<
@@ -4709,7 +4709,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
   __pyx_t_2 = ((!(__pyx_t_1 != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":549
+    /* "knowledge_linker/algorithms/heap.pyx":549
  *         """
  *         if not (0 <= reference <= self.max_reference):
  *             return -1             # <<<<<<<<<<<<<<
@@ -4719,7 +4719,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
     __pyx_r = -1;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":548
+    /* "knowledge_linker/algorithms/heap.pyx":548
  *         value was pushed to the heap.
  *         """
  *         if not (0 <= reference <= self.max_reference):             # <<<<<<<<<<<<<<
@@ -4728,7 +4728,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
   }
 
-  /* "knowledge_linker/heap.pyx":556
+  /* "knowledge_linker/algorithms/heap.pyx":556
  *         # Reference is the index in the array where MCP is applied to.
  *         # Find the index-in-the-heap using the crossref array.
  *         cdef int ir = self._crossref[reference]             # <<<<<<<<<<<<<<
@@ -4737,7 +4737,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
   __pyx_v_ir = (__pyx_v_self->_crossref[__pyx_v_reference]);
 
-  /* "knowledge_linker/heap.pyx":557
+  /* "knowledge_linker/algorithms/heap.pyx":557
  *         # Find the index-in-the-heap using the crossref array.
  *         cdef int ir = self._crossref[reference]
  *         cdef VALUE_T *values = self._values             # <<<<<<<<<<<<<<
@@ -4747,7 +4747,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
   __pyx_t_3 = __pyx_v_self->__pyx_base._values;
   __pyx_v_values = __pyx_t_3;
 
-  /* "knowledge_linker/heap.pyx":558
+  /* "knowledge_linker/algorithms/heap.pyx":558
  *         cdef int ir = self._crossref[reference]
  *         cdef VALUE_T *values = self._values
  *         self._pushed = 1             # <<<<<<<<<<<<<<
@@ -4756,7 +4756,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
   __pyx_v_self->_pushed = 1;
 
-  /* "knowledge_linker/heap.pyx":559
+  /* "knowledge_linker/algorithms/heap.pyx":559
  *         cdef VALUE_T *values = self._values
  *         self._pushed = 1
  *         if ir != -1:             # <<<<<<<<<<<<<<
@@ -4766,7 +4766,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
   __pyx_t_2 = ((__pyx_v_ir != -1L) != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/heap.pyx":561
+    /* "knowledge_linker/algorithms/heap.pyx":561
  *         if ir != -1:
  *             # update
  *             i = (1 << self.levels) - 1 + ir             # <<<<<<<<<<<<<<
@@ -4775,7 +4775,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
     __pyx_v_i = (((1 << __pyx_v_self->__pyx_base.levels) - 1) + __pyx_v_ir);
 
-    /* "knowledge_linker/heap.pyx":562
+    /* "knowledge_linker/algorithms/heap.pyx":562
  *             # update
  *             i = (1 << self.levels) - 1 + ir
  *             if values[i] > value:             # <<<<<<<<<<<<<<
@@ -4785,7 +4785,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
     __pyx_t_2 = (((__pyx_v_values[__pyx_v_i]) > __pyx_v_value) != 0);
     if (__pyx_t_2) {
 
-      /* "knowledge_linker/heap.pyx":563
+      /* "knowledge_linker/algorithms/heap.pyx":563
  *             i = (1 << self.levels) - 1 + ir
  *             if values[i] > value:
  *                 values[i] = value             # <<<<<<<<<<<<<<
@@ -4794,16 +4794,16 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
       (__pyx_v_values[__pyx_v_i]) = __pyx_v_value;
 
-      /* "knowledge_linker/heap.pyx":564
+      /* "knowledge_linker/algorithms/heap.pyx":564
  *             if values[i] > value:
  *                 values[i] = value
  *                 self._update_one(i)             # <<<<<<<<<<<<<<
  *             else:
  *                 self._pushed = 0
  */
-      ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i);
+      ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base._update_one(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_i);
 
-      /* "knowledge_linker/heap.pyx":562
+      /* "knowledge_linker/algorithms/heap.pyx":562
  *             # update
  *             i = (1 << self.levels) - 1 + ir
  *             if values[i] > value:             # <<<<<<<<<<<<<<
@@ -4813,7 +4813,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
       goto __pyx_L5;
     }
 
-    /* "knowledge_linker/heap.pyx":566
+    /* "knowledge_linker/algorithms/heap.pyx":566
  *                 self._update_one(i)
  *             else:
  *                 self._pushed = 0             # <<<<<<<<<<<<<<
@@ -4825,7 +4825,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
     }
     __pyx_L5:;
 
-    /* "knowledge_linker/heap.pyx":567
+    /* "knowledge_linker/algorithms/heap.pyx":567
  *             else:
  *                 self._pushed = 0
  *             return ir             # <<<<<<<<<<<<<<
@@ -4835,7 +4835,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
     __pyx_r = __pyx_v_ir;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":559
+    /* "knowledge_linker/algorithms/heap.pyx":559
  *         cdef VALUE_T *values = self._values
  *         self._pushed = 1
  *         if ir != -1:             # <<<<<<<<<<<<<<
@@ -4844,16 +4844,16 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
   }
 
-  /* "knowledge_linker/heap.pyx":570
+  /* "knowledge_linker/algorithms/heap.pyx":570
  * 
  *         # if not updated: append normally and store reference
  *         ir = BinaryHeap.push_fast(self, value, reference)             # <<<<<<<<<<<<<<
  *         self._crossref[reference] = ir
  *         return ir
  */
-  __pyx_v_ir = __pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
+  __pyx_v_ir = __pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_push_fast(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
 
-  /* "knowledge_linker/heap.pyx":571
+  /* "knowledge_linker/algorithms/heap.pyx":571
  *         # if not updated: append normally and store reference
  *         ir = BinaryHeap.push_fast(self, value, reference)
  *         self._crossref[reference] = ir             # <<<<<<<<<<<<<<
@@ -4862,7 +4862,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  */
   (__pyx_v_self->_crossref[__pyx_v_reference]) = __pyx_v_ir;
 
-  /* "knowledge_linker/heap.pyx":572
+  /* "knowledge_linker/algorithms/heap.pyx":572
  *         ir = BinaryHeap.push_fast(self, value, reference)
  *         self._crossref[reference] = ir
  *         return ir             # <<<<<<<<<<<<<<
@@ -4872,7 +4872,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
   __pyx_r = __pyx_v_ir;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":539
+  /* "knowledge_linker/algorithms/heap.pyx":539
  *         return ir
  * 
  *     cdef int push_if_lower_fast(self, double value, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4885,7 +4885,7 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":575
+/* "knowledge_linker/algorithms/heap.pyx":575
  * 
  * 
  *     cdef double value_of_fast(self, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4893,13 +4893,13 @@ static int __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower
  *         is returned, the reference may be invalid: check the _invaild_ref
  */
 
-static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_fast(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference) {
+static double __pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_value_of_fast(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference) {
   int __pyx_v_i;
   int __pyx_v_ir;
   double __pyx_r;
   int __pyx_t_1;
 
-  /* "knowledge_linker/heap.pyx":584
+  /* "knowledge_linker/algorithms/heap.pyx":584
  *         # Reference is the index in the array where MCP is applied to.
  *         # Find the index-in-the-heap using the crossref array.
  *         cdef int ir = self._crossref[reference]             # <<<<<<<<<<<<<<
@@ -4908,7 +4908,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
   __pyx_v_ir = (__pyx_v_self->_crossref[__pyx_v_reference]);
 
-  /* "knowledge_linker/heap.pyx":585
+  /* "knowledge_linker/algorithms/heap.pyx":585
  *         # Find the index-in-the-heap using the crossref array.
  *         cdef int ir = self._crossref[reference]
  *         self._invalid_ref = 0             # <<<<<<<<<<<<<<
@@ -4917,7 +4917,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
   __pyx_v_self->_invalid_ref = 0;
 
-  /* "knowledge_linker/heap.pyx":586
+  /* "knowledge_linker/algorithms/heap.pyx":586
  *         cdef int ir = self._crossref[reference]
  *         self._invalid_ref = 0
  *         if ir == -1:             # <<<<<<<<<<<<<<
@@ -4927,7 +4927,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
   __pyx_t_1 = ((__pyx_v_ir == -1L) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":587
+    /* "knowledge_linker/algorithms/heap.pyx":587
  *         self._invalid_ref = 0
  *         if ir == -1:
  *             self._invalid_ref = 1             # <<<<<<<<<<<<<<
@@ -4936,17 +4936,17 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
     __pyx_v_self->_invalid_ref = 1;
 
-    /* "knowledge_linker/heap.pyx":588
+    /* "knowledge_linker/algorithms/heap.pyx":588
  *         if ir == -1:
  *             self._invalid_ref = 1
  *             return inf             # <<<<<<<<<<<<<<
  *         i = (1 << self.levels) - 1 + ir
  *         return self._values[i]
  */
-    __pyx_r = __pyx_v_16knowledge_linker_4heap_inf;
+    __pyx_r = __pyx_v_16knowledge_linker_10algorithms_4heap_inf;
     goto __pyx_L0;
 
-    /* "knowledge_linker/heap.pyx":586
+    /* "knowledge_linker/algorithms/heap.pyx":586
  *         cdef int ir = self._crossref[reference]
  *         self._invalid_ref = 0
  *         if ir == -1:             # <<<<<<<<<<<<<<
@@ -4955,7 +4955,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
   }
 
-  /* "knowledge_linker/heap.pyx":589
+  /* "knowledge_linker/algorithms/heap.pyx":589
  *             self._invalid_ref = 1
  *             return inf
  *         i = (1 << self.levels) - 1 + ir             # <<<<<<<<<<<<<<
@@ -4964,7 +4964,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
   __pyx_v_i = (((1 << __pyx_v_self->__pyx_base.levels) - 1) + __pyx_v_ir);
 
-  /* "knowledge_linker/heap.pyx":590
+  /* "knowledge_linker/algorithms/heap.pyx":590
  *             return inf
  *         i = (1 << self.levels) - 1 + ir
  *         return self._values[i]             # <<<<<<<<<<<<<<
@@ -4974,7 +4974,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
   __pyx_r = (__pyx_v_self->__pyx_base._values[__pyx_v_i]);
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":575
+  /* "knowledge_linker/algorithms/heap.pyx":575
  * 
  * 
  *     cdef double value_of_fast(self, int reference) nogil:             # <<<<<<<<<<<<<<
@@ -4987,7 +4987,7 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":593
+/* "knowledge_linker/algorithms/heap.pyx":593
  * 
  * 
  *     def push(self, double value, int reference):             # <<<<<<<<<<<<<<
@@ -4996,9 +4996,9 @@ static double __pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_7push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push[] = "push(value, reference)\n        \n        Append/update a value in the heap.\n        If the reference is already present, will update its value, otherwise\n        will append it.\n        ";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_7push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_7push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_6push[] = "push(value, reference)\n        \n        Append/update a value in the heap.\n        If the reference is already present, will update its value, otherwise\n        will append it.\n        ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_7push(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_value;
   int __pyx_v_reference;
   int __pyx_lineno = 0;
@@ -5046,18 +5046,18 @@ static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_7push(
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("push", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 593; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_6push(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_6push(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -5067,17 +5067,17 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("push", 0);
 
-  /* "knowledge_linker/heap.pyx":600
+  /* "knowledge_linker/algorithms/heap.pyx":600
  *         will append it.
  *         """
  *         if self.push_fast(value, reference) == -1:             # <<<<<<<<<<<<<<
  *           raise ValueError("reference outside of range [0, max_reference]")
  * 
  */
-  __pyx_t_1 = ((((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.push_fast(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference) == -1L) != 0);
+  __pyx_t_1 = ((((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.push_fast(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference) == -1L) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":601
+    /* "knowledge_linker/algorithms/heap.pyx":601
  *         """
  *         if self.push_fast(value, reference) == -1:
  *           raise ValueError("reference outside of range [0, max_reference]")             # <<<<<<<<<<<<<<
@@ -5090,7 +5090,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 601; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/heap.pyx":600
+    /* "knowledge_linker/algorithms/heap.pyx":600
  *         will append it.
  *         """
  *         if self.push_fast(value, reference) == -1:             # <<<<<<<<<<<<<<
@@ -5099,7 +5099,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
  */
   }
 
-  /* "knowledge_linker/heap.pyx":593
+  /* "knowledge_linker/algorithms/heap.pyx":593
  * 
  * 
  *     def push(self, double value, int reference):             # <<<<<<<<<<<<<<
@@ -5112,7 +5112,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.push", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5120,7 +5120,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":603
+/* "knowledge_linker/algorithms/heap.pyx":603
  *           raise ValueError("reference outside of range [0, max_reference]")
  * 
  *     def push_if_lower(self, double value, int reference):             # <<<<<<<<<<<<<<
@@ -5129,9 +5129,9 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push(
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_9push_if_lower(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_if_lower[] = "push_if_lower(value, reference)\n        \n        Append/update a value in the heap. If the reference is already in the \n        heap, update only of the new value is lower than the current one.\n        If the reference is not present, this will append it.\n        Returns True if an append/update occured, False if otherwise.\n        ";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_9push_if_lower(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_9push_if_lower(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_8push_if_lower[] = "push_if_lower(value, reference)\n        \n        Append/update a value in the heap. If the reference is already in the \n        heap, update only of the new value is lower than the current one.\n        If the reference is not present, this will append it.\n        Returns True if an append/update occured, False if otherwise.\n        ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_9push_if_lower(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_value;
   int __pyx_v_reference;
   int __pyx_lineno = 0;
@@ -5179,18 +5179,18 @@ static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_9push_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("push_if_lower", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 603; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.push_if_lower", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.push_if_lower", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_if_lower(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_8push_if_lower(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self), __pyx_v_value, __pyx_v_reference);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_if_lower(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_8push_if_lower(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, double __pyx_v_value, int __pyx_v_reference) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -5200,17 +5200,17 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("push_if_lower", 0);
 
-  /* "knowledge_linker/heap.pyx":611
+  /* "knowledge_linker/algorithms/heap.pyx":611
  *         Returns True if an append/update occured, False if otherwise.
  *         """
  *         if self.push_if_lower_fast(value, reference) == -1:             # <<<<<<<<<<<<<<
  *           raise ValueError("reference outside of range [0, max_reference]")
  *         return self._pushed == 1
  */
-  __pyx_t_1 = ((((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->push_if_lower_fast(__pyx_v_self, __pyx_v_value, __pyx_v_reference) == -1L) != 0);
+  __pyx_t_1 = ((((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->push_if_lower_fast(__pyx_v_self, __pyx_v_value, __pyx_v_reference) == -1L) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":612
+    /* "knowledge_linker/algorithms/heap.pyx":612
  *         """
  *         if self.push_if_lower_fast(value, reference) == -1:
  *           raise ValueError("reference outside of range [0, max_reference]")             # <<<<<<<<<<<<<<
@@ -5223,7 +5223,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 612; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/heap.pyx":611
+    /* "knowledge_linker/algorithms/heap.pyx":611
  *         Returns True if an append/update occured, False if otherwise.
  *         """
  *         if self.push_if_lower_fast(value, reference) == -1:             # <<<<<<<<<<<<<<
@@ -5232,7 +5232,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
  */
   }
 
-  /* "knowledge_linker/heap.pyx":613
+  /* "knowledge_linker/algorithms/heap.pyx":613
  *         if self.push_if_lower_fast(value, reference) == -1:
  *           raise ValueError("reference outside of range [0, max_reference]")
  *         return self._pushed == 1             # <<<<<<<<<<<<<<
@@ -5246,7 +5246,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":603
+  /* "knowledge_linker/algorithms/heap.pyx":603
  *           raise ValueError("reference outside of range [0, max_reference]")
  * 
  *     def push_if_lower(self, double value, int reference):             # <<<<<<<<<<<<<<
@@ -5257,7 +5257,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.push_if_lower", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.push_if_lower", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5265,7 +5265,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":615
+/* "knowledge_linker/algorithms/heap.pyx":615
  *         return self._pushed == 1
  * 
  *     def value_of(self, int reference):             # <<<<<<<<<<<<<<
@@ -5274,9 +5274,9 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_11value_of(PyObject *__pyx_v_self, PyObject *__pyx_arg_reference); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10value_of[] = "value_of(reference)\n      \n      Get the value corresponding to a given reference already pushed into \n      the heap.\n      ";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_11value_of(PyObject *__pyx_v_self, PyObject *__pyx_arg_reference) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_11value_of(PyObject *__pyx_v_self, PyObject *__pyx_arg_reference); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_10value_of[] = "value_of(reference)\n      \n      Get the value corresponding to a given reference already pushed into \n      the heap.\n      ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_11value_of(PyObject *__pyx_v_self, PyObject *__pyx_arg_reference) {
   int __pyx_v_reference;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -5289,18 +5289,18 @@ static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_11valu
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.value_of", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.value_of", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10value_of(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self), ((int)__pyx_v_reference));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_10value_of(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self), ((int)__pyx_v_reference));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10value_of(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_10value_of(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self, int __pyx_v_reference) {
   double __pyx_v_value;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5311,16 +5311,16 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("value_of", 0);
 
-  /* "knowledge_linker/heap.pyx":621
+  /* "knowledge_linker/algorithms/heap.pyx":621
  *       the heap.
  *       """
  *       value = self.value_of_fast(reference)             # <<<<<<<<<<<<<<
  *       if self._invalid_ref:
  *           raise ValueError('invalid reference')
  */
-  __pyx_v_value = ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->value_of_fast(__pyx_v_self, __pyx_v_reference);
+  __pyx_v_value = ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self->__pyx_base.__pyx_vtab)->value_of_fast(__pyx_v_self, __pyx_v_reference);
 
-  /* "knowledge_linker/heap.pyx":622
+  /* "knowledge_linker/algorithms/heap.pyx":622
  *       """
  *       value = self.value_of_fast(reference)
  *       if self._invalid_ref:             # <<<<<<<<<<<<<<
@@ -5330,7 +5330,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
   __pyx_t_1 = (__pyx_v_self->_invalid_ref != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/heap.pyx":623
+    /* "knowledge_linker/algorithms/heap.pyx":623
  *       value = self.value_of_fast(reference)
  *       if self._invalid_ref:
  *           raise ValueError('invalid reference')             # <<<<<<<<<<<<<<
@@ -5343,7 +5343,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 623; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/heap.pyx":622
+    /* "knowledge_linker/algorithms/heap.pyx":622
  *       """
  *       value = self.value_of_fast(reference)
  *       if self._invalid_ref:             # <<<<<<<<<<<<<<
@@ -5352,7 +5352,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
  */
   }
 
-  /* "knowledge_linker/heap.pyx":624
+  /* "knowledge_linker/algorithms/heap.pyx":624
  *       if self._invalid_ref:
  *           raise ValueError('invalid reference')
  *       return value             # <<<<<<<<<<<<<<
@@ -5366,7 +5366,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":615
+  /* "knowledge_linker/algorithms/heap.pyx":615
  *         return self._pushed == 1
  * 
  *     def value_of(self, int reference):             # <<<<<<<<<<<<<<
@@ -5377,7 +5377,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.value_of", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.value_of", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5385,7 +5385,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":626
+/* "knowledge_linker/algorithms/heap.pyx":626
  *       return value
  * 
  *     def cross_references(self):             # <<<<<<<<<<<<<<
@@ -5394,20 +5394,20 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10valu
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13cross_references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cross_references[] = "Get the cross references in the heap as a list.";
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13cross_references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13cross_references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_12cross_references[] = "Get the cross references in the heap as a list.";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13cross_references(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("cross_references (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cross_references(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_12cross_references(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cross_references(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_12cross_references(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
   PyObject *__pyx_v_out = NULL;
   int __pyx_v_i;
   PyObject *__pyx_r = NULL;
@@ -5421,7 +5421,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("cross_references", 0);
 
-  /* "knowledge_linker/heap.pyx":628
+  /* "knowledge_linker/algorithms/heap.pyx":628
  *     def cross_references(self):
  *         """Get the cross references in the heap as a list."""
  *         out = []             # <<<<<<<<<<<<<<
@@ -5433,7 +5433,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   __pyx_v_out = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":630
+  /* "knowledge_linker/algorithms/heap.pyx":630
  *         out = []
  *         cdef int i
  *         for i in range(self.max_reference+1):             # <<<<<<<<<<<<<<
@@ -5444,7 +5444,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "knowledge_linker/heap.pyx":631
+    /* "knowledge_linker/algorithms/heap.pyx":631
  *         cdef int i
  *         for i in range(self.max_reference+1):
  *             out.append( self._crossref[i] )             # <<<<<<<<<<<<<<
@@ -5457,7 +5457,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "knowledge_linker/heap.pyx":632
+  /* "knowledge_linker/algorithms/heap.pyx":632
  *         for i in range(self.max_reference+1):
  *             out.append( self._crossref[i] )
  *         return out             # <<<<<<<<<<<<<<
@@ -5469,7 +5469,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":626
+  /* "knowledge_linker/algorithms/heap.pyx":626
  *       return value
  * 
  *     def cross_references(self):             # <<<<<<<<<<<<<<
@@ -5480,7 +5480,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.cross_references", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.cross_references", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_out);
@@ -5489,7 +5489,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pxd":32
+/* "knowledge_linker/algorithms/heap.pxd":32
  * 
  * cdef class FastUpdateBinaryHeap(BinaryHeap):
  *     cdef readonly int max_reference             # <<<<<<<<<<<<<<
@@ -5498,19 +5498,19 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cros
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference___get__(((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference___get__(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference___get__(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference___get__(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5528,7 +5528,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker.heap.FastUpdateBinaryHeap.max_reference.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.FastUpdateBinaryHeap.max_reference.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5536,7 +5536,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_
   return __pyx_r;
 }
 
-/* "knowledge_linker/heap.pyx":637
+/* "knowledge_linker/algorithms/heap.pyx":637
  * ## TESTS
  * 
  * def test(int n, fast_update=False):             # <<<<<<<<<<<<<<
@@ -5545,10 +5545,10 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_4heap_1test(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_4heap_test[] = "Test the binary heap.";
-static PyMethodDef __pyx_mdef_16knowledge_linker_4heap_1test = {"test", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_1test, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_4heap_test};
-static PyObject *__pyx_pw_16knowledge_linker_4heap_1test(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_1test(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_4heap_test[] = "Test the binary heap.";
+static PyMethodDef __pyx_mdef_16knowledge_linker_10algorithms_4heap_1test = {"test", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_1test, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_4heap_test};
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_4heap_1test(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_n;
   PyObject *__pyx_v_fast_update = 0;
   int __pyx_lineno = 0;
@@ -5599,23 +5599,23 @@ static PyObject *__pyx_pw_16knowledge_linker_4heap_1test(PyObject *__pyx_self, P
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("test", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_4heap_test(__pyx_self, __pyx_v_n, __pyx_v_fast_update);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_4heap_test(__pyx_self, __pyx_v_n, __pyx_v_fast_update);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_n, PyObject *__pyx_v_fast_update) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_4heap_test(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_n, PyObject *__pyx_v_fast_update) {
   PyObject *__pyx_v_time = NULL;
   PyObject *__pyx_v_random = NULL;
   PyObject *__pyx_v_a = NULL;
   PyObject *__pyx_v_t0 = NULL;
-  struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *__pyx_v_h = NULL;
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_v_h = NULL;
   PyObject *__pyx_v_i = NULL;
   PyObject *__pyx_v_b = NULL;
   PyObject *__pyx_v_t1 = NULL;
@@ -5641,7 +5641,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("test", 0);
 
-  /* "knowledge_linker/heap.pyx":639
+  /* "knowledge_linker/algorithms/heap.pyx":639
  * def test(int n, fast_update=False):
  *     """Test the binary heap."""
  *     import time             # <<<<<<<<<<<<<<
@@ -5653,7 +5653,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_time = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":640
+  /* "knowledge_linker/algorithms/heap.pyx":640
  *     """Test the binary heap."""
  *     import time
  *     import random             # <<<<<<<<<<<<<<
@@ -5665,7 +5665,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_random = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":642
+  /* "knowledge_linker/algorithms/heap.pyx":642
  *     import random
  *     # generate random numbers with duplicates
  *     random.seed(0)             # <<<<<<<<<<<<<<
@@ -5679,7 +5679,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":643
+  /* "knowledge_linker/algorithms/heap.pyx":643
  *     # generate random numbers with duplicates
  *     random.seed(0)
  *     a = [random.uniform(1.0,100.0) for i in range(n//2)]             # <<<<<<<<<<<<<<
@@ -5752,7 +5752,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_a = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":644
+  /* "knowledge_linker/algorithms/heap.pyx":644
  *     random.seed(0)
  *     a = [random.uniform(1.0,100.0) for i in range(n//2)]
  *     a = a+a             # <<<<<<<<<<<<<<
@@ -5764,7 +5764,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __Pyx_DECREF_SET(__pyx_v_a, ((PyObject*)__pyx_t_2));
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":646
+  /* "knowledge_linker/algorithms/heap.pyx":646
  *     a = a+a
  * 
  *     t0 = time.clock()             # <<<<<<<<<<<<<<
@@ -5794,7 +5794,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_t0 = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":649
+  /* "knowledge_linker/algorithms/heap.pyx":649
  * 
  *     # insert in heap with random removals
  *     if fast_update:             # <<<<<<<<<<<<<<
@@ -5804,7 +5804,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_v_fast_update); if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 649; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_7) {
 
-    /* "knowledge_linker/heap.pyx":650
+    /* "knowledge_linker/algorithms/heap.pyx":650
  *     # insert in heap with random removals
  *     if fast_update:
  *         h = FastUpdateBinaryHeap(128, n)             # <<<<<<<<<<<<<<
@@ -5821,13 +5821,13 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 650; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_v_h = ((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_t_2);
+    __pyx_v_h = ((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "knowledge_linker/heap.pyx":649
+    /* "knowledge_linker/algorithms/heap.pyx":649
  * 
  *     # insert in heap with random removals
  *     if fast_update:             # <<<<<<<<<<<<<<
@@ -5837,7 +5837,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     goto __pyx_L5;
   }
 
-  /* "knowledge_linker/heap.pyx":652
+  /* "knowledge_linker/algorithms/heap.pyx":652
  *         h = FastUpdateBinaryHeap(128, n)
  *     else:
  *         h = BinaryHeap(128)             # <<<<<<<<<<<<<<
@@ -5845,14 +5845,14 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  *         h.push(a[i], i)
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_4heap_BinaryHeap), __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 652; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap), __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 652; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_v_h = ((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_t_2);
+    __pyx_v_h = ((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_t_2);
     __pyx_t_2 = 0;
   }
   __pyx_L5:;
 
-  /* "knowledge_linker/heap.pyx":653
+  /* "knowledge_linker/algorithms/heap.pyx":653
  *     else:
  *         h = BinaryHeap(128)
  *     for i in range(len(a)):             # <<<<<<<<<<<<<<
@@ -5913,7 +5913,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "knowledge_linker/heap.pyx":654
+    /* "knowledge_linker/algorithms/heap.pyx":654
  *         h = BinaryHeap(128)
  *     for i in range(len(a)):
  *         h.push(a[i], i)             # <<<<<<<<<<<<<<
@@ -5953,7 +5953,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "knowledge_linker/heap.pyx":655
+    /* "knowledge_linker/algorithms/heap.pyx":655
  *     for i in range(len(a)):
  *         h.push(a[i], i)
  *         if a[i] < 25:             # <<<<<<<<<<<<<<
@@ -5968,7 +5968,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     if (__pyx_t_7) {
 
-      /* "knowledge_linker/heap.pyx":657
+      /* "knowledge_linker/algorithms/heap.pyx":657
  *         if a[i] < 25:
  *           # double-push same ref sometimes to test fast update codepaths
  *           h.push(2*a[i], i)             # <<<<<<<<<<<<<<
@@ -6011,7 +6011,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "knowledge_linker/heap.pyx":655
+      /* "knowledge_linker/algorithms/heap.pyx":655
  *     for i in range(len(a)):
  *         h.push(a[i], i)
  *         if a[i] < 25:             # <<<<<<<<<<<<<<
@@ -6020,7 +6020,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
     }
 
-    /* "knowledge_linker/heap.pyx":658
+    /* "knowledge_linker/algorithms/heap.pyx":658
  *           # double-push same ref sometimes to test fast update codepaths
  *           h.push(2*a[i], i)
  *         if 25 < a[i] < 50:             # <<<<<<<<<<<<<<
@@ -6039,7 +6039,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_7) {
 
-      /* "knowledge_linker/heap.pyx":660
+      /* "knowledge_linker/algorithms/heap.pyx":660
  *         if 25 < a[i] < 50:
  *           # pop some to test random removal
  *           h.pop()             # <<<<<<<<<<<<<<
@@ -6050,7 +6050,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "knowledge_linker/heap.pyx":658
+      /* "knowledge_linker/algorithms/heap.pyx":658
  *           # double-push same ref sometimes to test fast update codepaths
  *           h.push(2*a[i], i)
  *         if 25 < a[i] < 50:             # <<<<<<<<<<<<<<
@@ -6059,7 +6059,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
     }
 
-    /* "knowledge_linker/heap.pyx":653
+    /* "knowledge_linker/algorithms/heap.pyx":653
  *     else:
  *         h = BinaryHeap(128)
  *     for i in range(len(a)):             # <<<<<<<<<<<<<<
@@ -6069,7 +6069,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "knowledge_linker/heap.pyx":663
+  /* "knowledge_linker/algorithms/heap.pyx":663
  * 
  *     # pop from heap
  *     b = []             # <<<<<<<<<<<<<<
@@ -6081,7 +6081,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_b = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/heap.pyx":664
+  /* "knowledge_linker/algorithms/heap.pyx":664
  *     # pop from heap
  *     b = []
  *     while True:             # <<<<<<<<<<<<<<
@@ -6090,7 +6090,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
   while (1) {
 
-    /* "knowledge_linker/heap.pyx":665
+    /* "knowledge_linker/algorithms/heap.pyx":665
  *     b = []
  *     while True:
  *         try:             # <<<<<<<<<<<<<<
@@ -6104,7 +6104,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
       __Pyx_XGOTREF(__pyx_t_13);
       /*try:*/ {
 
-        /* "knowledge_linker/heap.pyx":666
+        /* "knowledge_linker/algorithms/heap.pyx":666
  *     while True:
  *         try:
  *             b.append(h.pop()[0])             # <<<<<<<<<<<<<<
@@ -6119,7 +6119,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
         __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_b, __pyx_t_2); if (unlikely(__pyx_t_14 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 666; __pyx_clineno = __LINE__; goto __pyx_L12_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/heap.pyx":665
+        /* "knowledge_linker/algorithms/heap.pyx":665
  *     b = []
  *     while True:
  *         try:             # <<<<<<<<<<<<<<
@@ -6139,7 +6139,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "knowledge_linker/heap.pyx":667
+      /* "knowledge_linker/algorithms/heap.pyx":667
  *         try:
  *             b.append(h.pop()[0])
  *         except IndexError:             # <<<<<<<<<<<<<<
@@ -6148,13 +6148,13 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
       __pyx_t_15 = PyErr_ExceptionMatches(__pyx_builtin_IndexError);
       if (__pyx_t_15) {
-        __Pyx_AddTraceback("knowledge_linker.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
+        __Pyx_AddTraceback("knowledge_linker.algorithms.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
         if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_3, &__pyx_t_6) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 667; __pyx_clineno = __LINE__; goto __pyx_L14_except_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_GOTREF(__pyx_t_6);
 
-        /* "knowledge_linker/heap.pyx":668
+        /* "knowledge_linker/algorithms/heap.pyx":668
  *             b.append(h.pop()[0])
  *         except IndexError:
  *             break             # <<<<<<<<<<<<<<
@@ -6171,7 +6171,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
       goto __pyx_L14_except_error;
       __pyx_L14_except_error:;
 
-      /* "knowledge_linker/heap.pyx":665
+      /* "knowledge_linker/algorithms/heap.pyx":665
  *     b = []
  *     while True:
  *         try:             # <<<<<<<<<<<<<<
@@ -6194,7 +6194,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   }
   __pyx_L11_break:;
 
-  /* "knowledge_linker/heap.pyx":670
+  /* "knowledge_linker/algorithms/heap.pyx":670
  *             break
  * 
  *     t1 = time.clock()             # <<<<<<<<<<<<<<
@@ -6224,7 +6224,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_v_t1 = __pyx_t_6;
   __pyx_t_6 = 0;
 
-  /* "knowledge_linker/heap.pyx":673
+  /* "knowledge_linker/algorithms/heap.pyx":673
  * 
  *     # verify
  *     for i in range(1,len(b)):             # <<<<<<<<<<<<<<
@@ -6288,7 +6288,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "knowledge_linker/heap.pyx":674
+    /* "knowledge_linker/algorithms/heap.pyx":674
  *     # verify
  *     for i in range(1,len(b)):
  *         if b[i] < b[i-1]:             # <<<<<<<<<<<<<<
@@ -6309,7 +6309,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_7) {
 
-      /* "knowledge_linker/heap.pyx":675
+      /* "knowledge_linker/algorithms/heap.pyx":675
  *     for i in range(1,len(b)):
  *         if b[i] < b[i-1]:
  *             print 'error in order!'             # <<<<<<<<<<<<<<
@@ -6318,7 +6318,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
       if (__Pyx_PrintOne(0, __pyx_kp_s_error_in_order) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 675; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-      /* "knowledge_linker/heap.pyx":674
+      /* "knowledge_linker/algorithms/heap.pyx":674
  *     # verify
  *     for i in range(1,len(b)):
  *         if b[i] < b[i-1]:             # <<<<<<<<<<<<<<
@@ -6327,7 +6327,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
  */
     }
 
-    /* "knowledge_linker/heap.pyx":673
+    /* "knowledge_linker/algorithms/heap.pyx":673
  * 
  *     # verify
  *     for i in range(1,len(b)):             # <<<<<<<<<<<<<<
@@ -6337,7 +6337,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "knowledge_linker/heap.pyx":677
+  /* "knowledge_linker/algorithms/heap.pyx":677
  *             print 'error in order!'
  * 
  *     print 'elapsed time:', t1-t0             # <<<<<<<<<<<<<<
@@ -6357,7 +6357,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   if (__Pyx_Print(0, __pyx_t_2, 1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 677; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/heap.pyx":678
+  /* "knowledge_linker/algorithms/heap.pyx":678
  * 
  *     print 'elapsed time:', t1-t0
  *     return b             # <<<<<<<<<<<<<<
@@ -6368,7 +6368,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __pyx_r = __pyx_v_b;
   goto __pyx_L0;
 
-  /* "knowledge_linker/heap.pyx":637
+  /* "knowledge_linker/algorithms/heap.pyx":637
  * ## TESTS
  * 
  * def test(int n, fast_update=False):             # <<<<<<<<<<<<<<
@@ -6384,7 +6384,7 @@ static PyObject *__pyx_pf_16knowledge_linker_4heap_test(CYTHON_UNUSED PyObject *
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_AddTraceback("knowledge_linker.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms.heap.test", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_time);
@@ -8542,10 +8542,10 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap __pyx_vtable_16knowledge_linker_4heap_BinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap;
 
-static PyObject *__pyx_tp_new_16knowledge_linker_4heap_BinaryHeap(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
-  struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *p;
+static PyObject *__pyx_tp_new_16knowledge_linker_10algorithms_4heap_BinaryHeap(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *p;
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -8553,12 +8553,12 @@ static PyObject *__pyx_tp_new_16knowledge_linker_4heap_BinaryHeap(PyTypeObject *
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)o);
-  p->__pyx_vtab = __pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap;
+  p = ((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)o);
+  p->__pyx_vtab = __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap;
   return o;
 }
 
-static void __pyx_tp_dealloc_16knowledge_linker_4heap_BinaryHeap(PyObject *o) {
+static void __pyx_tp_dealloc_16knowledge_linker_10algorithms_4heap_BinaryHeap(PyObject *o) {
   #if PY_VERSION_HEX >= 0x030400a1
   if (unlikely(Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -8568,48 +8568,48 @@ static void __pyx_tp_dealloc_16knowledge_linker_4heap_BinaryHeap(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     ++Py_REFCNT(o);
-    __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5__dealloc__(o);
+    __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5__dealloc__(o);
     --Py_REFCNT(o);
     PyErr_Restore(etype, eval, etb);
   }
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyObject *__pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_count(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_5count_1__get__(o);
+static PyObject *__pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_count(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_5count_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_levels(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_6levels_1__get__(o);
+static PyObject *__pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_levels(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_6levels_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_min_levels(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_10min_levels_1__get__(o);
+static PyObject *__pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_min_levels(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_levels_1__get__(o);
 }
 
-static PyMethodDef __pyx_methods_16knowledge_linker_4heap_BinaryHeap[] = {
-  {"reset", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_3reset, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_2reset},
-  {"push", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_9push, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_8push},
-  {"min_val", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_11min_val, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_10min_val},
-  {"values", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_13values, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_12values},
-  {"references", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_15references, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_14references},
-  {"pop", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_10BinaryHeap_17pop, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_10BinaryHeap_16pop},
+static PyMethodDef __pyx_methods_16knowledge_linker_10algorithms_4heap_BinaryHeap[] = {
+  {"reset", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_3reset, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_2reset},
+  {"push", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_9push, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_8push},
+  {"min_val", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_11min_val, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_10min_val},
+  {"values", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_13values, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_12values},
+  {"references", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_15references, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_14references},
+  {"pop", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_17pop, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap_16pop},
   {0, 0, 0, 0}
 };
 
-static struct PyGetSetDef __pyx_getsets_16knowledge_linker_4heap_BinaryHeap[] = {
-  {(char *)"count", __pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_count, 0, 0, 0},
-  {(char *)"levels", __pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_levels, 0, 0, 0},
-  {(char *)"min_levels", __pyx_getprop_16knowledge_linker_4heap_10BinaryHeap_min_levels, 0, 0, 0},
+static struct PyGetSetDef __pyx_getsets_16knowledge_linker_10algorithms_4heap_BinaryHeap[] = {
+  {(char *)"count", __pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_count, 0, 0, 0},
+  {(char *)"levels", __pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_levels, 0, 0, 0},
+  {(char *)"min_levels", __pyx_getprop_16knowledge_linker_10algorithms_4heap_10BinaryHeap_min_levels, 0, 0, 0},
   {0, 0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_16knowledge_linker_4heap_BinaryHeap = {
+static PyTypeObject __pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker.heap.BinaryHeap", /*tp_name*/
-  sizeof(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap), /*tp_basicsize*/
+  "knowledge_linker.algorithms.heap.BinaryHeap", /*tp_name*/
+  sizeof(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_16knowledge_linker_4heap_BinaryHeap, /*tp_dealloc*/
+  __pyx_tp_dealloc_16knowledge_linker_10algorithms_4heap_BinaryHeap, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -8625,7 +8625,7 @@ static PyTypeObject __pyx_type_16knowledge_linker_4heap_BinaryHeap = {
   0, /*tp_as_mapping*/
   0, /*tp_hash*/
   0, /*tp_call*/
-  __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_7__str__, /*tp_str*/
+  __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_7__str__, /*tp_str*/
   0, /*tp_getattro*/
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
@@ -8637,17 +8637,17 @@ static PyTypeObject __pyx_type_16knowledge_linker_4heap_BinaryHeap = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_16knowledge_linker_4heap_BinaryHeap, /*tp_methods*/
+  __pyx_methods_16knowledge_linker_10algorithms_4heap_BinaryHeap, /*tp_methods*/
   0, /*tp_members*/
-  __pyx_getsets_16knowledge_linker_4heap_BinaryHeap, /*tp_getset*/
+  __pyx_getsets_16knowledge_linker_10algorithms_4heap_BinaryHeap, /*tp_getset*/
   0, /*tp_base*/
   0, /*tp_dict*/
   0, /*tp_descr_get*/
   0, /*tp_descr_set*/
   0, /*tp_dictoffset*/
-  __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_1__init__, /*tp_init*/
+  __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_1__init__, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_16knowledge_linker_4heap_BinaryHeap, /*tp_new*/
+  __pyx_tp_new_16knowledge_linker_10algorithms_4heap_BinaryHeap, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -8661,18 +8661,18 @@ static PyTypeObject __pyx_type_16knowledge_linker_4heap_BinaryHeap = {
   0, /*tp_finalize*/
   #endif
 };
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
 
-static PyObject *__pyx_tp_new_16knowledge_linker_4heap_FastUpdateBinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *p;
-  PyObject *o = __pyx_tp_new_16knowledge_linker_4heap_BinaryHeap(t, a, k);
+static PyObject *__pyx_tp_new_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *p;
+  PyObject *o = __pyx_tp_new_16knowledge_linker_10algorithms_4heap_BinaryHeap(t, a, k);
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)o);
-  p->__pyx_base.__pyx_vtab = (struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap*)__pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+  p = ((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)o);
+  p->__pyx_base.__pyx_vtab = (struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap*)__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
   return o;
 }
 
-static void __pyx_tp_dealloc_16knowledge_linker_4heap_FastUpdateBinaryHeap(PyObject *o) {
+static void __pyx_tp_dealloc_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap(PyObject *o) {
   #if PY_VERSION_HEX >= 0x030400a1
   if (unlikely(Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -8682,37 +8682,37 @@ static void __pyx_tp_dealloc_16knowledge_linker_4heap_FastUpdateBinaryHeap(PyObj
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     ++Py_REFCNT(o);
-    __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_3__dealloc__(o);
+    __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_3__dealloc__(o);
     --Py_REFCNT(o);
     PyErr_Restore(etype, eval, etb);
   }
-  __pyx_tp_dealloc_16knowledge_linker_4heap_BinaryHeap(o);
+  __pyx_tp_dealloc_16knowledge_linker_10algorithms_4heap_BinaryHeap(o);
 }
 
-static PyObject *__pyx_getprop_16knowledge_linker_4heap_20FastUpdateBinaryHeap_max_reference(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(o);
+static PyObject *__pyx_getprop_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_max_reference(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13max_reference_1__get__(o);
 }
 
-static PyMethodDef __pyx_methods_16knowledge_linker_4heap_FastUpdateBinaryHeap[] = {
-  {"reset", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_5reset, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_4reset},
-  {"push", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_7push, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_6push},
-  {"push_if_lower", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_9push_if_lower, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_8push_if_lower},
-  {"value_of", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_11value_of, METH_O, __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_10value_of},
-  {"cross_references", (PyCFunction)__pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_13cross_references, METH_NOARGS, __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap_12cross_references},
+static PyMethodDef __pyx_methods_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap[] = {
+  {"reset", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_5reset, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_4reset},
+  {"push", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_7push, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_6push},
+  {"push_if_lower", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_9push_if_lower, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_8push_if_lower},
+  {"value_of", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_11value_of, METH_O, __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_10value_of},
+  {"cross_references", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_13cross_references, METH_NOARGS, __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_12cross_references},
   {0, 0, 0, 0}
 };
 
-static struct PyGetSetDef __pyx_getsets_16knowledge_linker_4heap_FastUpdateBinaryHeap[] = {
-  {(char *)"max_reference", __pyx_getprop_16knowledge_linker_4heap_20FastUpdateBinaryHeap_max_reference, 0, 0, 0},
+static struct PyGetSetDef __pyx_getsets_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap[] = {
+  {(char *)"max_reference", __pyx_getprop_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_max_reference, 0, 0, 0},
   {0, 0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap = {
+static PyTypeObject __pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker.heap.FastUpdateBinaryHeap", /*tp_name*/
-  sizeof(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap), /*tp_basicsize*/
+  "knowledge_linker.algorithms.heap.FastUpdateBinaryHeap", /*tp_name*/
+  sizeof(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_16knowledge_linker_4heap_FastUpdateBinaryHeap, /*tp_dealloc*/
+  __pyx_tp_dealloc_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -8729,7 +8729,7 @@ static PyTypeObject __pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap = {
   0, /*tp_hash*/
   0, /*tp_call*/
   #if CYTHON_COMPILING_IN_PYPY
-  __pyx_pw_16knowledge_linker_4heap_10BinaryHeap_7__str__, /*tp_str*/
+  __pyx_pw_16knowledge_linker_10algorithms_4heap_10BinaryHeap_7__str__, /*tp_str*/
   #else
   0, /*tp_str*/
   #endif
@@ -8744,17 +8744,17 @@ static PyTypeObject __pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_16knowledge_linker_4heap_FastUpdateBinaryHeap, /*tp_methods*/
+  __pyx_methods_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap, /*tp_methods*/
   0, /*tp_members*/
-  __pyx_getsets_16knowledge_linker_4heap_FastUpdateBinaryHeap, /*tp_getset*/
+  __pyx_getsets_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap, /*tp_getset*/
   0, /*tp_base*/
   0, /*tp_dict*/
   0, /*tp_descr_get*/
   0, /*tp_descr_set*/
   0, /*tp_dictoffset*/
-  __pyx_pw_16knowledge_linker_4heap_20FastUpdateBinaryHeap_1__init__, /*tp_init*/
+  __pyx_pw_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_1__init__, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_16knowledge_linker_4heap_FastUpdateBinaryHeap, /*tp_new*/
+  __pyx_tp_new_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -8810,13 +8810,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_kp_s_g, __pyx_k_g, sizeof(__pyx_k_g), 0, 0, 1, 0},
   {&__pyx_n_s_h, __pyx_k_h, sizeof(__pyx_k_h), 0, 0, 1, 1},
-  {&__pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_k_home_giovanni_repos_truthy_meas, sizeof(__pyx_k_home_giovanni_repos_truthy_meas), 0, 0, 1, 0},
+  {&__pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_k_home_giovanni_repos_knowledge_l, sizeof(__pyx_k_home_giovanni_repos_knowledge_l), 0, 0, 1, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
   {&__pyx_n_s_initial_capacity, __pyx_k_initial_capacity, sizeof(__pyx_k_initial_capacity), 0, 0, 1, 1},
   {&__pyx_kp_s_invalid_reference, __pyx_k_invalid_reference, sizeof(__pyx_k_invalid_reference), 0, 0, 1, 0},
-  {&__pyx_n_s_knowledge_linker_heap, __pyx_k_knowledge_linker_heap, sizeof(__pyx_k_knowledge_linker_heap), 0, 0, 1, 1},
+  {&__pyx_n_s_knowledge_linker_algorithms_heap, __pyx_k_knowledge_linker_algorithms_heap, sizeof(__pyx_k_knowledge_linker_algorithms_heap), 0, 0, 1, 1},
   {&__pyx_kp_s_level_i, __pyx_k_level_i, sizeof(__pyx_k_level_i), 0, 0, 1, 0},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_reference, __pyx_k_max_reference, sizeof(__pyx_k_max_reference), 0, 0, 1, 1},
@@ -8858,7 +8858,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "knowledge_linker/heap.pyx":168
+  /* "knowledge_linker/algorithms/heap.pyx":168
  *             for i in range(i0,i0+2**level):
  *                 s += '%g, ' % self._values[i]
  *             s = s[:-1] + '\n'             # <<<<<<<<<<<<<<
@@ -8869,7 +8869,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice__2);
   __Pyx_GIVEREF(__pyx_slice__2);
 
-  /* "knowledge_linker/heap.pyx":412
+  /* "knowledge_linker/algorithms/heap.pyx":412
  *         """
  *         if self.count == 0:
  *           raise IndexError('pop from an empty heap')             # <<<<<<<<<<<<<<
@@ -8880,7 +8880,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "knowledge_linker/heap.pyx":601
+  /* "knowledge_linker/algorithms/heap.pyx":601
  *         """
  *         if self.push_fast(value, reference) == -1:
  *           raise ValueError("reference outside of range [0, max_reference]")             # <<<<<<<<<<<<<<
@@ -8891,7 +8891,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "knowledge_linker/heap.pyx":612
+  /* "knowledge_linker/algorithms/heap.pyx":612
  *         """
  *         if self.push_if_lower_fast(value, reference) == -1:
  *           raise ValueError("reference outside of range [0, max_reference]")             # <<<<<<<<<<<<<<
@@ -8902,7 +8902,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "knowledge_linker/heap.pyx":623
+  /* "knowledge_linker/algorithms/heap.pyx":623
  *       value = self.value_of_fast(reference)
  *       if self._invalid_ref:
  *           raise ValueError('invalid reference')             # <<<<<<<<<<<<<<
@@ -8913,7 +8913,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "knowledge_linker/heap.pyx":642
+  /* "knowledge_linker/algorithms/heap.pyx":642
  *     import random
  *     # generate random numbers with duplicates
  *     random.seed(0)             # <<<<<<<<<<<<<<
@@ -8924,7 +8924,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "knowledge_linker/heap.pyx":643
+  /* "knowledge_linker/algorithms/heap.pyx":643
  *     # generate random numbers with duplicates
  *     random.seed(0)
  *     a = [random.uniform(1.0,100.0) for i in range(n//2)]             # <<<<<<<<<<<<<<
@@ -8935,7 +8935,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "knowledge_linker/heap.pyx":652
+  /* "knowledge_linker/algorithms/heap.pyx":652
  *         h = FastUpdateBinaryHeap(128, n)
  *     else:
  *         h = BinaryHeap(128)             # <<<<<<<<<<<<<<
@@ -9012,7 +9012,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
 
-  /* "knowledge_linker/heap.pyx":637
+  /* "knowledge_linker/algorithms/heap.pyx":637
  * ## TESTS
  * 
  * def test(int n, fast_update=False):             # <<<<<<<<<<<<<<
@@ -9022,7 +9022,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__17 = PyTuple_Pack(10, __pyx_n_s_n, __pyx_n_s_fast_update, __pyx_n_s_time, __pyx_n_s_random, __pyx_n_s_a, __pyx_n_s_t0, __pyx_n_s_h, __pyx_n_s_i, __pyx_n_s_b, __pyx_n_s_t1); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 10, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_n_s_test, 637, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 10, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_n_s_test, 637, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9114,14 +9114,14 @@ PyMODINIT_FUNC PyInit_heap(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
-  if (__pyx_module_is_main_knowledge_linker__heap) {
+  if (__pyx_module_is_main_knowledge_linker__algorithms__heap) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (!PyDict_GetItemString(modules, "knowledge_linker.heap")) {
-      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker.heap", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!PyDict_GetItemString(modules, "knowledge_linker.algorithms.heap")) {
+      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker.algorithms.heap", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
   #endif
@@ -9133,50 +9133,50 @@ PyMODINIT_FUNC PyInit_heap(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  __pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap = &__pyx_vtable_16knowledge_linker_4heap_BinaryHeap;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap._add_or_remove_level = (void (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_4heap_10BinaryHeap__add_or_remove_level;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap._update = (void (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *))__pyx_f_16knowledge_linker_4heap_10BinaryHeap__update;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap._update_one = (void (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_4heap_10BinaryHeap__update_one;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap._remove = (void (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_4heap_10BinaryHeap__remove;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap.push_fast = (int (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, double, int))__pyx_f_16knowledge_linker_4heap_10BinaryHeap_push_fast;
-  __pyx_vtable_16knowledge_linker_4heap_BinaryHeap.pop_fast = (double (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *))__pyx_f_16knowledge_linker_4heap_10BinaryHeap_pop_fast;
-  if (PyType_Ready(&__pyx_type_16knowledge_linker_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_type_16knowledge_linker_4heap_BinaryHeap.tp_print = 0;
+  __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap = &__pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap._add_or_remove_level = (void (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__add_or_remove_level;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap._update = (void (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap._update_one = (void (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__update_one;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap._remove = (void (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap__remove;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap.push_fast = (int (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, double, int))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_push_fast;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_BinaryHeap.pop_fast = (double (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *))__pyx_f_16knowledge_linker_10algorithms_4heap_10BinaryHeap_pop_fast;
+  if (PyType_Ready(&__pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap.tp_print = 0;
   #if CYTHON_COMPILING_IN_CPYTHON
   {
-    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_16knowledge_linker_4heap_BinaryHeap, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
-      __pyx_wrapperbase_16knowledge_linker_4heap_10BinaryHeap___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
-      __pyx_wrapperbase_16knowledge_linker_4heap_10BinaryHeap___init__.doc = __pyx_doc_16knowledge_linker_4heap_10BinaryHeap___init__;
-      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_16knowledge_linker_4heap_10BinaryHeap___init__;
+      __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__.doc = __pyx_doc_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_10BinaryHeap___init__;
     }
   }
   #endif
-  if (__Pyx_SetVtable(__pyx_type_16knowledge_linker_4heap_BinaryHeap.tp_dict, __pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "BinaryHeap", (PyObject *)&__pyx_type_16knowledge_linker_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_16knowledge_linker_4heap_BinaryHeap = &__pyx_type_16knowledge_linker_4heap_BinaryHeap;
-  __pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap = &__pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap;
-  __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap.__pyx_base = *__pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap;
-  __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap.__pyx_base._remove = (void (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap__remove;
-  __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap.__pyx_base.push_fast = (int (*)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, double, int))__pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_fast;
-  __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap.value_of_fast = (double (*)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, int))__pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_value_of_fast;
-  __pyx_vtable_16knowledge_linker_4heap_FastUpdateBinaryHeap.push_if_lower_fast = (int (*)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, double, int))__pyx_f_16knowledge_linker_4heap_20FastUpdateBinaryHeap_push_if_lower_fast;
-  __pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap.tp_base = __pyx_ptype_16knowledge_linker_4heap_BinaryHeap;
-  if (PyType_Ready(&__pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap.tp_print = 0;
+  if (__Pyx_SetVtable(__pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap.tp_dict, __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "BinaryHeap", (PyObject *)&__pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap = &__pyx_type_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+  __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = &__pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.__pyx_base = *__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.__pyx_base._remove = (void (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int))__pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap__remove;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.__pyx_base.push_fast = (int (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, double, int))__pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_fast;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.value_of_fast = (double (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, int))__pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_value_of_fast;
+  __pyx_vtable_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.push_if_lower_fast = (int (*)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, double, int))__pyx_f_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap_push_if_lower_fast;
+  __pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.tp_base = __pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+  if (PyType_Ready(&__pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.tp_print = 0;
   #if CYTHON_COMPILING_IN_CPYTHON
   {
-    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
-      __pyx_wrapperbase_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
-      __pyx_wrapperbase_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__.doc = __pyx_doc_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__;
-      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_16knowledge_linker_4heap_20FastUpdateBinaryHeap___init__;
+      __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__.doc = __pyx_doc_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_16knowledge_linker_10algorithms_4heap_20FastUpdateBinaryHeap___init__;
     }
   }
   #endif
-  if (__Pyx_SetVtable(__pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap.tp_dict, __pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "FastUpdateBinaryHeap", (PyObject *)&__pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap = &__pyx_type_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+  if (__Pyx_SetVtable(__pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap.tp_dict, __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "FastUpdateBinaryHeap", (PyObject *)&__pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 419; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = &__pyx_type_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 
   #if CYTHON_COMPILING_IN_PYPY
@@ -9197,28 +9197,28 @@ PyMODINIT_FUNC PyInit_heap(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "knowledge_linker/heap.pyx":41
+  /* "knowledge_linker/algorithms/heap.pyx":41
  *   double Py_HUGE_VAL
  * 
  * cdef VALUE_T inf = Py_HUGE_VAL             # <<<<<<<<<<<<<<
  * 
  * # this is handy
  */
-  __pyx_v_16knowledge_linker_4heap_inf = Py_HUGE_VAL;
+  __pyx_v_16knowledge_linker_10algorithms_4heap_inf = Py_HUGE_VAL;
 
-  /* "knowledge_linker/heap.pyx":637
+  /* "knowledge_linker/algorithms/heap.pyx":637
  * ## TESTS
  * 
  * def test(int n, fast_update=False):             # <<<<<<<<<<<<<<
  *     """Test the binary heap."""
  *     import time
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_4heap_1test, NULL, __pyx_n_s_knowledge_linker_heap); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_10algorithms_4heap_1test, NULL, __pyx_n_s_knowledge_linker_algorithms_heap); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 637; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "knowledge_linker/heap.pyx":1
+  /* "knowledge_linker/algorithms/heap.pyx":1
  * """Cython implementation of a binary min heap.             # <<<<<<<<<<<<<<
  * 
  * Original author: Almar Klein
@@ -9243,11 +9243,11 @@ PyMODINIT_FUNC PyInit_heap(void)
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init knowledge_linker.heap", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init knowledge_linker.algorithms.heap", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init knowledge_linker.heap");
+    PyErr_SetString(PyExc_ImportError, "init knowledge_linker.algorithms.heap");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

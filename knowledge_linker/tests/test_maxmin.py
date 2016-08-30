@@ -6,9 +6,9 @@ from nose.tools import raises, nottest
 import warnings
 
 # local imports
-from knowledge_linker.maxmin import *
-from knowledge_linker.maxmin import _maxmin_naive, _maxmin_sparse
-from knowledge_linker._maxmin import *
+from knowledge_linker.algorithms.maxmin import *
+from knowledge_linker.algorithms.maxmin import _maxmin_naive, _maxmin_sparse
+from knowledge_linker.algorithms._maxmin import *
 
 def test_naive():
     '''

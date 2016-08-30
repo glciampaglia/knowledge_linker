@@ -7,6 +7,8 @@ from collections import OrderedDict
 import numpy as np
 
 
+__all__ = ['NodesIndex', 'itertriples', 'iterabbrv']
+
 class NodesIndex(object):
 
     """ URI to node mapping, URI abbreviation, etc.  """

@@ -6,9 +6,6 @@ from cStringIO import StringIO
 from itertools import izip, chain, repeat, groupby
 from contextlib import closing
 
-# these imports are needed
-from .dirtree import DirTree, fromdirtree
-
 # dtype for saving COO sparse matrices
 coo_dtype = np.dtype([
     ('row', np.int32),

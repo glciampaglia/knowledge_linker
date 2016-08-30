@@ -254,8 +254,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__knowledge_linker___maxmin
-#define __PYX_HAVE_API__knowledge_linker___maxmin
+#define __PYX_HAVE__knowledge_linker__algorithms___maxmin
+#define __PYX_HAVE_API__knowledge_linker__algorithms___maxmin
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -490,7 +490,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "knowledge_linker/_maxmin.pyx",
+  "knowledge_linker/algorithms/_maxmin.pyx",
   "__init__.pxd",
   "type.pxd",
 };
@@ -1170,13 +1170,13 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 
 /* Module declarations from 'cython' */
 
-/* Module declarations from 'knowledge_linker._maxmin' */
+/* Module declarations from 'knowledge_linker.algorithms._maxmin' */
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_double_t = { "double_t", NULL, sizeof(__pyx_t_5numpy_double_t), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, IS_UNSIGNED(int) ? 'U' : 'I', IS_UNSIGNED(int), 0 };
-#define __Pyx_MODULE_NAME "knowledge_linker._maxmin"
-int __pyx_module_is_main_knowledge_linker___maxmin = 0;
+#define __Pyx_MODULE_NAME "knowledge_linker.algorithms._maxmin"
+int __pyx_module_is_main_knowledge_linker__algorithms___maxmin = 0;
 
-/* Implementation of 'knowledge_linker._maxmin' */
+/* Implementation of 'knowledge_linker.algorithms._maxmin' */
 static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
@@ -1268,13 +1268,13 @@ static char __pyx_k_c_maxmin_naive[] = "c_maxmin_naive";
 static char __pyx_k_isspmatrix_csr[] = "isspmatrix_csr";
 static char __pyx_k_c_maxmin_sparse[] = "c_maxmin_sparse";
 static char __pyx_k_expecting_a_CSR_matrix[] = "expecting a CSR matrix";
-static char __pyx_k_knowledge_linker__maxmin[] = "knowledge_linker._maxmin";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static char __pyx_k_expecting_a_sparse_CSR_matrix[] = "expecting a sparse CSR matrix";
-static char __pyx_k_home_giovanni_repos_truthy_meas[] = "/home/giovanni/repos/truthy_measure/knowledge_linker/_maxmin.pyx";
+static char __pyx_k_home_giovanni_repos_knowledge_l[] = "/home/giovanni/repos/knowledge_linker/knowledge_linker/algorithms/_maxmin.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
+static char __pyx_k_knowledge_linker_algorithms__max[] = "knowledge_linker.algorithms._maxmin";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
 static PyObject *__pyx_n_s_A;
@@ -1320,7 +1320,7 @@ static PyObject *__pyx_n_s_data;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_kp_s_expecting_a_CSR_matrix;
 static PyObject *__pyx_kp_s_expecting_a_sparse_CSR_matrix;
-static PyObject *__pyx_kp_s_home_giovanni_repos_truthy_meas;
+static PyObject *__pyx_kp_s_home_giovanni_repos_knowledge_l;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_icol;
 static PyObject *__pyx_n_s_ih;
@@ -1341,7 +1341,7 @@ static PyObject *__pyx_n_s_jk;
 static PyObject *__pyx_n_s_k;
 static PyObject *__pyx_n_s_kj;
 static PyObject *__pyx_n_s_knnz;
-static PyObject *__pyx_n_s_knowledge_linker__maxmin;
+static PyObject *__pyx_n_s_knowledge_linker_algorithms__max;
 static PyObject *__pyx_n_s_kptr;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_ij;
@@ -1359,9 +1359,9 @@ static PyObject *__pyx_n_s_tocsc;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_xrange;
 static PyObject *__pyx_n_s_zeros;
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_B); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_c_maxmin_naive(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_2c_maxmin_sparse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_4c_maximum_csr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_B); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_int_0;
@@ -1380,7 +1380,7 @@ static PyObject *__pyx_codeobj__11;
 static PyObject *__pyx_codeobj__13;
 static PyObject *__pyx_codeobj__15;
 
-/* "knowledge_linker/_maxmin.pyx":14
+/* "knowledge_linker/algorithms/_maxmin.pyx":14
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_naive(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -1389,10 +1389,10 @@ static PyObject *__pyx_codeobj__15;
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_1c_maxmin_naive(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_7_maxmin_c_maxmin_naive[] = "\n    See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse\n    matrices (`scipy.sparse.csr_matrix`).\n    ";
-static PyMethodDef __pyx_mdef_16knowledge_linker_7_maxmin_1c_maxmin_naive = {"c_maxmin_naive", (PyCFunction)__pyx_pw_16knowledge_linker_7_maxmin_1c_maxmin_naive, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_7_maxmin_c_maxmin_naive};
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_1c_maxmin_naive(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_1c_maxmin_naive(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_c_maxmin_naive[] = "\n    See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse\n    matrices (`scipy.sparse.csr_matrix`).\n    ";
+static PyMethodDef __pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_1c_maxmin_naive = {"c_maxmin_naive", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_1c_maxmin_naive, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_c_maxmin_naive};
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_1c_maxmin_naive(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   PyObject *__pyx_v_a = 0;
   PyObject *__pyx_v_b = 0;
@@ -1453,18 +1453,18 @@ static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_1c_maxmin_naive(PyObject *
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("c_maxmin_naive", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maxmin_naive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maxmin_naive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(__pyx_self, __pyx_v_A, __pyx_v_a, __pyx_v_b);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_7_maxmin_c_maxmin_naive(__pyx_self, __pyx_v_A, __pyx_v_a, __pyx_v_b);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_c_maxmin_naive(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b) {
   int __pyx_v_N;
   PyArrayObject *__pyx_v__A = 0;
   PyArrayObject *__pyx_v_AP = 0;
@@ -1527,7 +1527,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_pybuffernd_AP.data = NULL;
   __pyx_pybuffernd_AP.rcbuffer = &__pyx_pybuffer_AP;
 
-  /* "knowledge_linker/_maxmin.pyx":21
+  /* "knowledge_linker/algorithms/_maxmin.pyx":21
  *     cdef:
  *         int N
  *         cnp.ndarray[cnp.double_t, ndim=2] _A = np.asarray(A)             # <<<<<<<<<<<<<<
@@ -1578,7 +1578,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_v__A = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":25
+  /* "knowledge_linker/algorithms/_maxmin.pyx":25
  *         int i,j,ih
  *         cnp.double_t max_ij, aik, akj, min_k
  *     N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -1594,7 +1594,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_6;
 
-  /* "knowledge_linker/_maxmin.pyx":26
+  /* "knowledge_linker/algorithms/_maxmin.pyx":26
  *         cnp.double_t max_ij, aik, akj, min_k
  *     N = A.shape[0]
  *     if a is None:             # <<<<<<<<<<<<<<
@@ -1605,7 +1605,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_t_8 = (__pyx_t_7 != 0);
   if (__pyx_t_8) {
 
-    /* "knowledge_linker/_maxmin.pyx":27
+    /* "knowledge_linker/algorithms/_maxmin.pyx":27
  *     N = A.shape[0]
  *     if a is None:
  *         a = 0             # <<<<<<<<<<<<<<
@@ -1615,7 +1615,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_DECREF_SET(__pyx_v_a, __pyx_int_0);
 
-    /* "knowledge_linker/_maxmin.pyx":26
+    /* "knowledge_linker/algorithms/_maxmin.pyx":26
  *         cnp.double_t max_ij, aik, akj, min_k
  *     N = A.shape[0]
  *     if a is None:             # <<<<<<<<<<<<<<
@@ -1624,7 +1624,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":28
+  /* "knowledge_linker/algorithms/_maxmin.pyx":28
  *     if a is None:
  *         a = 0
  *     if b is None:             # <<<<<<<<<<<<<<
@@ -1635,7 +1635,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_t_7 = (__pyx_t_8 != 0);
   if (__pyx_t_7) {
 
-    /* "knowledge_linker/_maxmin.pyx":29
+    /* "knowledge_linker/algorithms/_maxmin.pyx":29
  *         a = 0
  *     if b is None:
  *         b = N             # <<<<<<<<<<<<<<
@@ -1647,7 +1647,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     __Pyx_DECREF_SET(__pyx_v_b, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "knowledge_linker/_maxmin.pyx":28
+    /* "knowledge_linker/algorithms/_maxmin.pyx":28
  *     if a is None:
  *         a = 0
  *     if b is None:             # <<<<<<<<<<<<<<
@@ -1656,7 +1656,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":30
+  /* "knowledge_linker/algorithms/_maxmin.pyx":30
  *     if b is None:
  *         b = N
  *     Nout = <int>(b - a)             # <<<<<<<<<<<<<<
@@ -1669,7 +1669,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_Nout = ((int)__pyx_t_6);
 
-  /* "knowledge_linker/_maxmin.pyx":31
+  /* "knowledge_linker/algorithms/_maxmin.pyx":31
  *         b = N
  *     Nout = <int>(b - a)
  *     AP = np.zeros((Nout, N), A.dtype)             # <<<<<<<<<<<<<<
@@ -1744,7 +1744,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_v_AP = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":32
+  /* "knowledge_linker/algorithms/_maxmin.pyx":32
  *     Nout = <int>(b - a)
  *     AP = np.zeros((Nout, N), A.dtype)
  *     for i in xrange(Nout):             # <<<<<<<<<<<<<<
@@ -1755,7 +1755,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_6; __pyx_t_16+=1) {
     __pyx_v_i = __pyx_t_16;
 
-    /* "knowledge_linker/_maxmin.pyx":33
+    /* "knowledge_linker/algorithms/_maxmin.pyx":33
  *     AP = np.zeros((Nout, N), A.dtype)
  *     for i in xrange(Nout):
  *         ih = <int>a + i             # <<<<<<<<<<<<<<
@@ -1765,7 +1765,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     __pyx_t_17 = __Pyx_PyInt_As_int(__pyx_v_a); if (unlikely((__pyx_t_17 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_v_ih = (((int)__pyx_t_17) + __pyx_v_i);
 
-    /* "knowledge_linker/_maxmin.pyx":34
+    /* "knowledge_linker/algorithms/_maxmin.pyx":34
  *     for i in xrange(Nout):
  *         ih = <int>a + i
  *         for j in xrange(N):             # <<<<<<<<<<<<<<
@@ -1776,7 +1776,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
       __pyx_v_j = __pyx_t_18;
 
-      /* "knowledge_linker/_maxmin.pyx":35
+      /* "knowledge_linker/algorithms/_maxmin.pyx":35
  *         ih = <int>a + i
  *         for j in xrange(N):
  *             max_ij = 0.             # <<<<<<<<<<<<<<
@@ -1785,7 +1785,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
  */
       __pyx_v_max_ij = 0.;
 
-      /* "knowledge_linker/_maxmin.pyx":36
+      /* "knowledge_linker/algorithms/_maxmin.pyx":36
  *         for j in xrange(N):
  *             max_ij = 0.
  *             for k in xrange(N):             # <<<<<<<<<<<<<<
@@ -1796,7 +1796,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
       for (__pyx_t_20 = 0; __pyx_t_20 < __pyx_t_19; __pyx_t_20+=1) {
         __pyx_v_k = __pyx_t_20;
 
-        /* "knowledge_linker/_maxmin.pyx":37
+        /* "knowledge_linker/algorithms/_maxmin.pyx":37
  *             max_ij = 0.
  *             for k in xrange(N):
  *                 aik = _A[ih,k]             # <<<<<<<<<<<<<<
@@ -1807,7 +1807,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
         __pyx_t_22 = __pyx_v_k;
         __pyx_v_aik = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd__A.rcbuffer->pybuffer.buf, __pyx_t_21, __pyx_pybuffernd__A.diminfo[0].strides, __pyx_t_22, __pyx_pybuffernd__A.diminfo[1].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":38
+        /* "knowledge_linker/algorithms/_maxmin.pyx":38
  *             for k in xrange(N):
  *                 aik = _A[ih,k]
  *                 akj = _A[k,j]             # <<<<<<<<<<<<<<
@@ -1818,7 +1818,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
         __pyx_t_24 = __pyx_v_j;
         __pyx_v_akj = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd__A.rcbuffer->pybuffer.buf, __pyx_t_23, __pyx_pybuffernd__A.diminfo[0].strides, __pyx_t_24, __pyx_pybuffernd__A.diminfo[1].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":39
+        /* "knowledge_linker/algorithms/_maxmin.pyx":39
  *                 aik = _A[ih,k]
  *                 akj = _A[k,j]
  *                 min_k = min(aik, akj)             # <<<<<<<<<<<<<<
@@ -1834,7 +1834,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
         }
         __pyx_v_min_k = __pyx_t_27;
 
-        /* "knowledge_linker/_maxmin.pyx":40
+        /* "knowledge_linker/algorithms/_maxmin.pyx":40
  *                 akj = _A[k,j]
  *                 min_k = min(aik, akj)
  *                 if min_k > max_ij:             # <<<<<<<<<<<<<<
@@ -1844,7 +1844,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
         __pyx_t_7 = ((__pyx_v_min_k > __pyx_v_max_ij) != 0);
         if (__pyx_t_7) {
 
-          /* "knowledge_linker/_maxmin.pyx":41
+          /* "knowledge_linker/algorithms/_maxmin.pyx":41
  *                 min_k = min(aik, akj)
  *                 if min_k > max_ij:
  *                     max_ij = min_k             # <<<<<<<<<<<<<<
@@ -1853,7 +1853,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
  */
           __pyx_v_max_ij = __pyx_v_min_k;
 
-          /* "knowledge_linker/_maxmin.pyx":40
+          /* "knowledge_linker/algorithms/_maxmin.pyx":40
  *                 akj = _A[k,j]
  *                 min_k = min(aik, akj)
  *                 if min_k > max_ij:             # <<<<<<<<<<<<<<
@@ -1863,7 +1863,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
         }
       }
 
-      /* "knowledge_linker/_maxmin.pyx":42
+      /* "knowledge_linker/algorithms/_maxmin.pyx":42
  *                 if min_k > max_ij:
  *                     max_ij = min_k
  *             AP[i, j] = max_ij             # <<<<<<<<<<<<<<
@@ -1876,7 +1876,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     }
   }
 
-  /* "knowledge_linker/_maxmin.pyx":43
+  /* "knowledge_linker/algorithms/_maxmin.pyx":43
  *                     max_ij = min_k
  *             AP[i, j] = max_ij
  *     return AP             # <<<<<<<<<<<<<<
@@ -1888,7 +1888,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   __pyx_r = ((PyObject *)__pyx_v_AP);
   goto __pyx_L0;
 
-  /* "knowledge_linker/_maxmin.pyx":14
+  /* "knowledge_linker/algorithms/_maxmin.pyx":14
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_naive(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -1909,7 +1909,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_AP.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd__A.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maxmin_naive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maxmin_naive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -1925,7 +1925,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "knowledge_linker/_maxmin.pyx":47
+/* "knowledge_linker/algorithms/_maxmin.pyx":47
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_sparse(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -1934,10 +1934,10 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_c_maxmin_naive(CYTHON_UNUS
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_3c_maxmin_sparse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_7_maxmin_2c_maxmin_sparse[] = "\n    See `maxmin.maxmin_sparse`. Cythonized version. Requires as argument a\n    sparse CSR matrix (see `scipy.sparse.csr_matrix`).\n    ";
-static PyMethodDef __pyx_mdef_16knowledge_linker_7_maxmin_3c_maxmin_sparse = {"c_maxmin_sparse", (PyCFunction)__pyx_pw_16knowledge_linker_7_maxmin_3c_maxmin_sparse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_7_maxmin_2c_maxmin_sparse};
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_3c_maxmin_sparse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_3c_maxmin_sparse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_2c_maxmin_sparse[] = "\n    See `maxmin.maxmin_sparse`. Cythonized version. Requires as argument a\n    sparse CSR matrix (see `scipy.sparse.csr_matrix`).\n    ";
+static PyMethodDef __pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_3c_maxmin_sparse = {"c_maxmin_sparse", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_3c_maxmin_sparse, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_2c_maxmin_sparse};
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_3c_maxmin_sparse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   PyObject *__pyx_v_a = 0;
   PyObject *__pyx_v_b = 0;
@@ -1998,18 +1998,18 @@ static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_3c_maxmin_sparse(PyObject 
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("c_maxmin_sparse", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maxmin_sparse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maxmin_sparse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(__pyx_self, __pyx_v_A, __pyx_v_a, __pyx_v_b);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_7_maxmin_2c_maxmin_sparse(__pyx_self, __pyx_v_A, __pyx_v_a, __pyx_v_b);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_2c_maxmin_sparse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_a, PyObject *__pyx_v_b) {
   PyArrayObject *__pyx_v_A_indptr = 0;
   PyArrayObject *__pyx_v_A_indices = 0;
   PyArrayObject *__pyx_v_At_indptr = 0;
@@ -2110,7 +2110,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_pybuffernd_At_data.data = NULL;
   __pyx_pybuffernd_At_data.rcbuffer = &__pyx_pybuffer_At_data;
 
-  /* "knowledge_linker/_maxmin.pyx":59
+  /* "knowledge_linker/algorithms/_maxmin.pyx":59
  *         double max_ij, min_k
  * 
  *     if not sp.isspmatrix_csr(A):             # <<<<<<<<<<<<<<
@@ -2152,7 +2152,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_t_6 = ((!__pyx_t_5) != 0);
   if (__pyx_t_6) {
 
-    /* "knowledge_linker/_maxmin.pyx":60
+    /* "knowledge_linker/algorithms/_maxmin.pyx":60
  * 
  *     if not sp.isspmatrix_csr(A):
  *         raise ValueError('expecting a sparse CSR matrix')             # <<<<<<<<<<<<<<
@@ -2165,7 +2165,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/_maxmin.pyx":59
+    /* "knowledge_linker/algorithms/_maxmin.pyx":59
  *         double max_ij, min_k
  * 
  *     if not sp.isspmatrix_csr(A):             # <<<<<<<<<<<<<<
@@ -2174,7 +2174,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":62
+  /* "knowledge_linker/algorithms/_maxmin.pyx":62
  *         raise ValueError('expecting a sparse CSR matrix')
  * 
  *     N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -2190,7 +2190,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_7;
 
-  /* "knowledge_linker/_maxmin.pyx":63
+  /* "knowledge_linker/algorithms/_maxmin.pyx":63
  * 
  *     N = A.shape[0]
  *     if a is None:             # <<<<<<<<<<<<<<
@@ -2201,7 +2201,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_t_5 = (__pyx_t_6 != 0);
   if (__pyx_t_5) {
 
-    /* "knowledge_linker/_maxmin.pyx":64
+    /* "knowledge_linker/algorithms/_maxmin.pyx":64
  *     N = A.shape[0]
  *     if a is None:
  *         a = 0             # <<<<<<<<<<<<<<
@@ -2211,7 +2211,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_DECREF_SET(__pyx_v_a, __pyx_int_0);
 
-    /* "knowledge_linker/_maxmin.pyx":63
+    /* "knowledge_linker/algorithms/_maxmin.pyx":63
  * 
  *     N = A.shape[0]
  *     if a is None:             # <<<<<<<<<<<<<<
@@ -2220,7 +2220,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":65
+  /* "knowledge_linker/algorithms/_maxmin.pyx":65
  *     if a is None:
  *         a = 0
  *     if b is None:             # <<<<<<<<<<<<<<
@@ -2231,7 +2231,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_t_6 = (__pyx_t_5 != 0);
   if (__pyx_t_6) {
 
-    /* "knowledge_linker/_maxmin.pyx":66
+    /* "knowledge_linker/algorithms/_maxmin.pyx":66
  *         a = 0
  *     if b is None:
  *         b = N             # <<<<<<<<<<<<<<
@@ -2243,7 +2243,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __Pyx_DECREF_SET(__pyx_v_b, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "knowledge_linker/_maxmin.pyx":65
+    /* "knowledge_linker/algorithms/_maxmin.pyx":65
  *     if a is None:
  *         a = 0
  *     if b is None:             # <<<<<<<<<<<<<<
@@ -2252,7 +2252,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":67
+  /* "knowledge_linker/algorithms/_maxmin.pyx":67
  *     if b is None:
  *         b = N
  *     Nout = <int>(b - a)             # <<<<<<<<<<<<<<
@@ -2265,7 +2265,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_Nout = ((int)__pyx_t_7);
 
-  /* "knowledge_linker/_maxmin.pyx":71
+  /* "knowledge_linker/algorithms/_maxmin.pyx":71
  *     # build output matrix directly in compressed sparse row format. These are
  *     # the index pointers, indices, and data lists for the output matrix
  *     AP_indptr = [0]             # <<<<<<<<<<<<<<
@@ -2280,7 +2280,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_AP_indptr = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":72
+  /* "knowledge_linker/algorithms/_maxmin.pyx":72
  *     # the index pointers, indices, and data lists for the output matrix
  *     AP_indptr = [0]
  *     AP_indices = []             # <<<<<<<<<<<<<<
@@ -2292,7 +2292,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_AP_indices = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":73
+  /* "knowledge_linker/algorithms/_maxmin.pyx":73
  *     AP_indptr = [0]
  *     AP_indices = []
  *     AP_data = []             # <<<<<<<<<<<<<<
@@ -2304,7 +2304,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_AP_data = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":74
+  /* "knowledge_linker/algorithms/_maxmin.pyx":74
  *     AP_indices = []
  *     AP_data = []
  *     iptr = 0             # <<<<<<<<<<<<<<
@@ -2313,7 +2313,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
   __pyx_v_iptr = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":77
+  /* "knowledge_linker/algorithms/_maxmin.pyx":77
  * 
  *     # At is A in compressed sparse column format
  *     At = A.tocsc()             # <<<<<<<<<<<<<<
@@ -2343,7 +2343,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_At = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":78
+  /* "knowledge_linker/algorithms/_maxmin.pyx":78
  *     # At is A in compressed sparse column format
  *     At = A.tocsc()
  *     A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -2374,7 +2374,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_A_indptr = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":79
+  /* "knowledge_linker/algorithms/_maxmin.pyx":79
  *     At = A.tocsc()
  *     A_indptr = A.indptr
  *     A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -2405,7 +2405,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_A_indices = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":80
+  /* "knowledge_linker/algorithms/_maxmin.pyx":80
  *     A_indptr = A.indptr
  *     A_indices = A.indices
  *     A_data = A.data             # <<<<<<<<<<<<<<
@@ -2436,7 +2436,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_A_data = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":81
+  /* "knowledge_linker/algorithms/_maxmin.pyx":81
  *     A_indices = A.indices
  *     A_data = A.data
  *     At_indptr = At.indptr             # <<<<<<<<<<<<<<
@@ -2467,7 +2467,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_At_indptr = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":82
+  /* "knowledge_linker/algorithms/_maxmin.pyx":82
  *     A_data = A.data
  *     At_indptr = At.indptr
  *     At_indices = At.indices             # <<<<<<<<<<<<<<
@@ -2498,7 +2498,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_At_indices = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":83
+  /* "knowledge_linker/algorithms/_maxmin.pyx":83
  *     At_indptr = At.indptr
  *     At_indices = At.indices
  *     At_data = At.data             # <<<<<<<<<<<<<<
@@ -2529,7 +2529,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_v_At_data = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":85
+  /* "knowledge_linker/algorithms/_maxmin.pyx":85
  *     At_data = At.data
  * 
  *     for i in xrange(Nout):             # <<<<<<<<<<<<<<
@@ -2540,7 +2540,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_7; __pyx_t_13+=1) {
     __pyx_v_i = __pyx_t_13;
 
-    /* "knowledge_linker/_maxmin.pyx":89
+    /* "knowledge_linker/algorithms/_maxmin.pyx":89
  *         # innz keeps track of the number of non-zero elements on the i-th output row in
  *         # this iteration; ih is the index corresponding to i in the input matrix
  *         innz = 0             # <<<<<<<<<<<<<<
@@ -2549,7 +2549,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
     __pyx_v_innz = 0;
 
-    /* "knowledge_linker/_maxmin.pyx":90
+    /* "knowledge_linker/algorithms/_maxmin.pyx":90
  *         # this iteration; ih is the index corresponding to i in the input matrix
  *         innz = 0
  *         ih = <int>a + i             # <<<<<<<<<<<<<<
@@ -2559,7 +2559,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __pyx_t_14 = __Pyx_PyInt_As_int(__pyx_v_a); if (unlikely((__pyx_t_14 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_v_ih = (((int)__pyx_t_14) + __pyx_v_i);
 
-    /* "knowledge_linker/_maxmin.pyx":92
+    /* "knowledge_linker/algorithms/_maxmin.pyx":92
  *         ih = <int>a + i
  * 
  *         for j in xrange(N):             # <<<<<<<<<<<<<<
@@ -2570,7 +2570,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
       __pyx_v_j = __pyx_t_15;
 
-      /* "knowledge_linker/_maxmin.pyx":96
+      /* "knowledge_linker/algorithms/_maxmin.pyx":96
  *             # ii is the index of the first non-zero element value (in A.data)
  *             # and column index (in A.indices) of the the i-th row
  *             ii = A_indptr[ih]             # <<<<<<<<<<<<<<
@@ -2580,7 +2580,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       __pyx_t_16 = __pyx_v_ih;
       __pyx_v_ii = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indptr.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_A_indptr.diminfo[0].strides));
 
-      /* "knowledge_linker/_maxmin.pyx":97
+      /* "knowledge_linker/algorithms/_maxmin.pyx":97
  *             # and column index (in A.indices) of the the i-th row
  *             ii = A_indptr[ih]
  *             iimax = A_indptr[ih + 1]             # <<<<<<<<<<<<<<
@@ -2590,7 +2590,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       __pyx_t_17 = (__pyx_v_ih + 1);
       __pyx_v_iimax = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indptr.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_A_indptr.diminfo[0].strides));
 
-      /* "knowledge_linker/_maxmin.pyx":102
+      /* "knowledge_linker/algorithms/_maxmin.pyx":102
  *             # and column (that is, row) index (in A.indices) of the the j-th row
  *             # (that is, column).
  *             jj = At_indptr[j]             # <<<<<<<<<<<<<<
@@ -2600,7 +2600,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       __pyx_t_18 = __pyx_v_j;
       __pyx_v_jj = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_At_indptr.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_At_indptr.diminfo[0].strides));
 
-      /* "knowledge_linker/_maxmin.pyx":103
+      /* "knowledge_linker/algorithms/_maxmin.pyx":103
  *             # (that is, column).
  *             jj = At_indptr[j]
  *             jjmax = At_indptr[j + 1]             # <<<<<<<<<<<<<<
@@ -2610,7 +2610,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       __pyx_t_19 = (__pyx_v_j + 1);
       __pyx_v_jjmax = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_At_indptr.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_At_indptr.diminfo[0].strides));
 
-      /* "knowledge_linker/_maxmin.pyx":105
+      /* "knowledge_linker/algorithms/_maxmin.pyx":105
  *             jjmax = At_indptr[j + 1]
  * 
  *             max_ij = 0.             # <<<<<<<<<<<<<<
@@ -2619,7 +2619,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
       __pyx_v_max_ij = 0.;
 
-      /* "knowledge_linker/_maxmin.pyx":107
+      /* "knowledge_linker/algorithms/_maxmin.pyx":107
  *             max_ij = 0.
  * 
  *             while (ii < iimax) and (jj < jjmax):             # <<<<<<<<<<<<<<
@@ -2638,7 +2638,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_L12_bool_binop_done:;
         if (!__pyx_t_6) break;
 
-        /* "knowledge_linker/_maxmin.pyx":109
+        /* "knowledge_linker/algorithms/_maxmin.pyx":109
  *             while (ii < iimax) and (jj < jjmax):
  * 
  *                 ik = A_indices[ii]             # <<<<<<<<<<<<<<
@@ -2648,7 +2648,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_20 = __pyx_v_ii;
         __pyx_v_ik = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indices.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_A_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":110
+        /* "knowledge_linker/algorithms/_maxmin.pyx":110
  * 
  *                 ik = A_indices[ii]
  *                 kj = At_indices[jj]             # <<<<<<<<<<<<<<
@@ -2658,7 +2658,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_21 = __pyx_v_jj;
         __pyx_v_kj = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_At_indices.rcbuffer->pybuffer.buf, __pyx_t_21, __pyx_pybuffernd_At_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":112
+        /* "knowledge_linker/algorithms/_maxmin.pyx":112
  *                 kj = At_indices[jj]
  * 
  *                 if ik == kj:             # <<<<<<<<<<<<<<
@@ -2668,7 +2668,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_6 = ((__pyx_v_ik == __pyx_v_kj) != 0);
         if (__pyx_t_6) {
 
-          /* "knowledge_linker/_maxmin.pyx":114
+          /* "knowledge_linker/algorithms/_maxmin.pyx":114
  *                 if ik == kj:
  *                     # same element, apply min
  *                     min_k = min(A_data[ii], At_data[jj])             # <<<<<<<<<<<<<<
@@ -2686,7 +2686,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
           }
           __pyx_v_min_k = __pyx_t_26;
 
-          /* "knowledge_linker/_maxmin.pyx":116
+          /* "knowledge_linker/algorithms/_maxmin.pyx":116
  *                     min_k = min(A_data[ii], At_data[jj])
  *                     # update the maximum so far
  *                     if min_k > max_ij:             # <<<<<<<<<<<<<<
@@ -2696,7 +2696,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
           __pyx_t_6 = ((__pyx_v_min_k > __pyx_v_max_ij) != 0);
           if (__pyx_t_6) {
 
-            /* "knowledge_linker/_maxmin.pyx":117
+            /* "knowledge_linker/algorithms/_maxmin.pyx":117
  *                     # update the maximum so far
  *                     if min_k > max_ij:
  *                         max_ij = min_k             # <<<<<<<<<<<<<<
@@ -2705,7 +2705,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
             __pyx_v_max_ij = __pyx_v_min_k;
 
-            /* "knowledge_linker/_maxmin.pyx":116
+            /* "knowledge_linker/algorithms/_maxmin.pyx":116
  *                     min_k = min(A_data[ii], At_data[jj])
  *                     # update the maximum so far
  *                     if min_k > max_ij:             # <<<<<<<<<<<<<<
@@ -2714,7 +2714,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
           }
 
-          /* "knowledge_linker/_maxmin.pyx":118
+          /* "knowledge_linker/algorithms/_maxmin.pyx":118
  *                     if min_k > max_ij:
  *                         max_ij = min_k
  *                     ii += 1             # <<<<<<<<<<<<<<
@@ -2723,7 +2723,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
           __pyx_v_ii = (__pyx_v_ii + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":119
+          /* "knowledge_linker/algorithms/_maxmin.pyx":119
  *                         max_ij = min_k
  *                     ii += 1
  *                     jj += 1             # <<<<<<<<<<<<<<
@@ -2732,7 +2732,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
           __pyx_v_jj = (__pyx_v_jj + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":112
+          /* "knowledge_linker/algorithms/_maxmin.pyx":112
  *                 kj = At_indices[jj]
  * 
  *                 if ik == kj:             # <<<<<<<<<<<<<<
@@ -2742,7 +2742,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
           goto __pyx_L14;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":121
+        /* "knowledge_linker/algorithms/_maxmin.pyx":121
  *                     jj += 1
  * 
  *                 elif ik > kj:             # <<<<<<<<<<<<<<
@@ -2752,7 +2752,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_6 = ((__pyx_v_ik > __pyx_v_kj) != 0);
         if (__pyx_t_6) {
 
-          /* "knowledge_linker/_maxmin.pyx":124
+          /* "knowledge_linker/algorithms/_maxmin.pyx":124
  *                     # the row element (in A) corresponding to kj is zero,
  *                     # hence min_k is zero. Advance only jj.
  *                     jj += 1             # <<<<<<<<<<<<<<
@@ -2761,7 +2761,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
           __pyx_v_jj = (__pyx_v_jj + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":121
+          /* "knowledge_linker/algorithms/_maxmin.pyx":121
  *                     jj += 1
  * 
  *                 elif ik > kj:             # <<<<<<<<<<<<<<
@@ -2771,7 +2771,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
           goto __pyx_L14;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":129
+        /* "knowledge_linker/algorithms/_maxmin.pyx":129
  *                     # the column elment (in At) corresponding to ik is zero,
  *                     # hence min_k is zero. Advance only ii.
  *                     ii += 1             # <<<<<<<<<<<<<<
@@ -2784,7 +2784,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_L14:;
       }
 
-      /* "knowledge_linker/_maxmin.pyx":131
+      /* "knowledge_linker/algorithms/_maxmin.pyx":131
  *                     ii += 1
  * 
  *             if max_ij:             # <<<<<<<<<<<<<<
@@ -2794,7 +2794,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       __pyx_t_6 = (__pyx_v_max_ij != 0);
       if (__pyx_t_6) {
 
-        /* "knowledge_linker/_maxmin.pyx":134
+        /* "knowledge_linker/algorithms/_maxmin.pyx":134
  *                 # add value and column index to data/indices lists, increment
  *                 # number non-zero elements. Python list appends are fast!
  *                 AP_data.append(max_ij)             # <<<<<<<<<<<<<<
@@ -2806,7 +2806,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_27 = __Pyx_PyObject_Append(__pyx_v_AP_data, __pyx_t_3); if (unlikely(__pyx_t_27 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":135
+        /* "knowledge_linker/algorithms/_maxmin.pyx":135
  *                 # number non-zero elements. Python list appends are fast!
  *                 AP_data.append(max_ij)
  *                 AP_indices.append(j)             # <<<<<<<<<<<<<<
@@ -2818,7 +2818,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
         __pyx_t_27 = __Pyx_PyObject_Append(__pyx_v_AP_indices, __pyx_t_3); if (unlikely(__pyx_t_27 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":136
+        /* "knowledge_linker/algorithms/_maxmin.pyx":136
  *                 AP_data.append(max_ij)
  *                 AP_indices.append(j)
  *                 innz += 1             # <<<<<<<<<<<<<<
@@ -2827,7 +2827,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
         __pyx_v_innz = (__pyx_v_innz + 1);
 
-        /* "knowledge_linker/_maxmin.pyx":131
+        /* "knowledge_linker/algorithms/_maxmin.pyx":131
  *                     ii += 1
  * 
  *             if max_ij:             # <<<<<<<<<<<<<<
@@ -2837,7 +2837,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
       }
     }
 
-    /* "knowledge_linker/_maxmin.pyx":139
+    /* "knowledge_linker/algorithms/_maxmin.pyx":139
  * 
  *         # update indptr list
  *         iptr += innz             # <<<<<<<<<<<<<<
@@ -2846,7 +2846,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
     __pyx_v_iptr = (__pyx_v_iptr + __pyx_v_innz);
 
-    /* "knowledge_linker/_maxmin.pyx":140
+    /* "knowledge_linker/algorithms/_maxmin.pyx":140
  *         # update indptr list
  *         iptr += innz
  *         AP_indptr.append(iptr)             # <<<<<<<<<<<<<<
@@ -2859,7 +2859,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "knowledge_linker/_maxmin.pyx":143
+  /* "knowledge_linker/algorithms/_maxmin.pyx":143
  * 
  *     # return in CSR format
  *     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))             # <<<<<<<<<<<<<<
@@ -2956,7 +2956,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_maxmin.pyx":47
+  /* "knowledge_linker/algorithms/_maxmin.pyx":47
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_sparse(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -2981,7 +2981,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_At_indices.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_At_indptr.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maxmin_sparse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maxmin_sparse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3009,7 +3009,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
   return __pyx_r;
 }
 
-/* "knowledge_linker/_maxmin.pyx":145
+/* "knowledge_linker/algorithms/_maxmin.pyx":145
  *     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
  * 
  * def c_maximum_csr(object A, object B):             # <<<<<<<<<<<<<<
@@ -3018,10 +3018,10 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_2c_maxmin_sparse(CYTHON_UN
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_5c_maximum_csr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_7_maxmin_4c_maximum_csr[] = "\n    Equivalent of numpy.maximum for CSR matrices.\n    ";
-static PyMethodDef __pyx_mdef_16knowledge_linker_7_maxmin_5c_maximum_csr = {"c_maximum_csr", (PyCFunction)__pyx_pw_16knowledge_linker_7_maxmin_5c_maximum_csr, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_7_maxmin_4c_maximum_csr};
-static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_5c_maximum_csr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_5c_maximum_csr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_4c_maximum_csr[] = "\n    Equivalent of numpy.maximum for CSR matrices.\n    ";
+static PyMethodDef __pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_5c_maximum_csr = {"c_maximum_csr", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_5c_maximum_csr, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_7_maxmin_4c_maximum_csr};
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_7_maxmin_5c_maximum_csr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   PyObject *__pyx_v_B = 0;
   int __pyx_lineno = 0;
@@ -3069,18 +3069,18 @@ static PyObject *__pyx_pw_16knowledge_linker_7_maxmin_5c_maximum_csr(PyObject *_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("c_maximum_csr", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maximum_csr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maximum_csr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(__pyx_self, __pyx_v_A, __pyx_v_B);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_7_maxmin_4c_maximum_csr(__pyx_self, __pyx_v_A, __pyx_v_B);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_B) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_7_maxmin_4c_maximum_csr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, PyObject *__pyx_v_B) {
   PyArrayObject *__pyx_v_A_indptr = 0;
   PyArrayObject *__pyx_v_A_indices = 0;
   PyArrayObject *__pyx_v_B_indptr = 0;
@@ -3188,7 +3188,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_pybuffernd_B_data.data = NULL;
   __pyx_pybuffernd_B_data.rcbuffer = &__pyx_pybuffer_B_data;
 
-  /* "knowledge_linker/_maxmin.pyx":156
+  /* "knowledge_linker/algorithms/_maxmin.pyx":156
  * 
  *     # check input is CSR
  *     if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):             # <<<<<<<<<<<<<<
@@ -3270,7 +3270,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/_maxmin.pyx":157
+    /* "knowledge_linker/algorithms/_maxmin.pyx":157
  *     # check input is CSR
  *     if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):
  *         raise ValueError('expecting a CSR matrix')             # <<<<<<<<<<<<<<
@@ -3283,7 +3283,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/_maxmin.pyx":156
+    /* "knowledge_linker/algorithms/_maxmin.pyx":156
  * 
  *     # check input is CSR
  *     if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):             # <<<<<<<<<<<<<<
@@ -3292,7 +3292,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
   }
 
-  /* "knowledge_linker/_maxmin.pyx":159
+  /* "knowledge_linker/algorithms/_maxmin.pyx":159
  *         raise ValueError('expecting a CSR matrix')
  * 
  *     N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -3308,7 +3308,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_N = __pyx_t_8;
 
-  /* "knowledge_linker/_maxmin.pyx":160
+  /* "knowledge_linker/algorithms/_maxmin.pyx":160
  * 
  *     N = A.shape[0]
  *     M = A.shape[1]             # <<<<<<<<<<<<<<
@@ -3324,7 +3324,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_M = __pyx_t_8;
 
-  /* "knowledge_linker/_maxmin.pyx":161
+  /* "knowledge_linker/algorithms/_maxmin.pyx":161
  *     N = A.shape[0]
  *     M = A.shape[1]
  *     A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -3355,7 +3355,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_A_indptr = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":162
+  /* "knowledge_linker/algorithms/_maxmin.pyx":162
  *     M = A.shape[1]
  *     A_indptr = A.indptr
  *     A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -3386,7 +3386,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_A_indices = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":163
+  /* "knowledge_linker/algorithms/_maxmin.pyx":163
  *     A_indptr = A.indptr
  *     A_indices = A.indices
  *     A_data = A.data             # <<<<<<<<<<<<<<
@@ -3417,7 +3417,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_A_data = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":164
+  /* "knowledge_linker/algorithms/_maxmin.pyx":164
  *     A_indices = A.indices
  *     A_data = A.data
  *     B_indptr = B.indptr             # <<<<<<<<<<<<<<
@@ -3448,7 +3448,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_B_indptr = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":165
+  /* "knowledge_linker/algorithms/_maxmin.pyx":165
  *     A_data = A.data
  *     B_indptr = B.indptr
  *     B_indices= B.indices             # <<<<<<<<<<<<<<
@@ -3479,7 +3479,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_B_indices = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":166
+  /* "knowledge_linker/algorithms/_maxmin.pyx":166
  *     B_indptr = B.indptr
  *     B_indices= B.indices
  *     B_data = B.data             # <<<<<<<<<<<<<<
@@ -3510,7 +3510,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_B_data = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":167
+  /* "knowledge_linker/algorithms/_maxmin.pyx":167
  *     B_indices= B.indices
  *     B_data = B.data
  *     Out_indptr = [0]             # <<<<<<<<<<<<<<
@@ -3525,7 +3525,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_Out_indptr = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":168
+  /* "knowledge_linker/algorithms/_maxmin.pyx":168
  *     B_data = B.data
  *     Out_indptr = [0]
  *     Out_indices = []             # <<<<<<<<<<<<<<
@@ -3537,7 +3537,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_Out_indices = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":169
+  /* "knowledge_linker/algorithms/_maxmin.pyx":169
  *     Out_indptr = [0]
  *     Out_indices = []
  *     Out_data = []             # <<<<<<<<<<<<<<
@@ -3549,7 +3549,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_v_Out_data = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":170
+  /* "knowledge_linker/algorithms/_maxmin.pyx":170
  *     Out_indices = []
  *     Out_data = []
  *     kptr = 0             # <<<<<<<<<<<<<<
@@ -3558,7 +3558,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
   __pyx_v_kptr = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":172
+  /* "knowledge_linker/algorithms/_maxmin.pyx":172
  *     kptr = 0
  * 
  *     for k in xrange(N):             # <<<<<<<<<<<<<<
@@ -3569,7 +3569,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_8; __pyx_t_14+=1) {
     __pyx_v_k = __pyx_t_14;
 
-    /* "knowledge_linker/_maxmin.pyx":173
+    /* "knowledge_linker/algorithms/_maxmin.pyx":173
  * 
  *     for k in xrange(N):
  *         ii = A_indptr[k]             # <<<<<<<<<<<<<<
@@ -3588,7 +3588,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     }
     __pyx_v_ii = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indptr.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_A_indptr.diminfo[0].strides));
 
-    /* "knowledge_linker/_maxmin.pyx":174
+    /* "knowledge_linker/algorithms/_maxmin.pyx":174
  *     for k in xrange(N):
  *         ii = A_indptr[k]
  *         jj = B_indptr[k]             # <<<<<<<<<<<<<<
@@ -3607,7 +3607,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     }
     __pyx_v_jj = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_B_indptr.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_B_indptr.diminfo[0].strides));
 
-    /* "knowledge_linker/_maxmin.pyx":175
+    /* "knowledge_linker/algorithms/_maxmin.pyx":175
  *         ii = A_indptr[k]
  *         jj = B_indptr[k]
  *         iimax = A_indptr[k + 1]             # <<<<<<<<<<<<<<
@@ -3626,7 +3626,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     }
     __pyx_v_iimax = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indptr.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_A_indptr.diminfo[0].strides));
 
-    /* "knowledge_linker/_maxmin.pyx":176
+    /* "knowledge_linker/algorithms/_maxmin.pyx":176
  *         jj = B_indptr[k]
  *         iimax = A_indptr[k + 1]
  *         jjmax = B_indptr[k + 1]             # <<<<<<<<<<<<<<
@@ -3645,7 +3645,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     }
     __pyx_v_jjmax = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_B_indptr.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_B_indptr.diminfo[0].strides));
 
-    /* "knowledge_linker/_maxmin.pyx":177
+    /* "knowledge_linker/algorithms/_maxmin.pyx":177
  *         iimax = A_indptr[k + 1]
  *         jjmax = B_indptr[k + 1]
  *         knnz = 0             # <<<<<<<<<<<<<<
@@ -3654,7 +3654,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
     __pyx_v_knnz = 0;
 
-    /* "knowledge_linker/_maxmin.pyx":179
+    /* "knowledge_linker/algorithms/_maxmin.pyx":179
  *         knnz = 0
  * 
  *         if (ii == iimax) and (jj == jjmax):             # <<<<<<<<<<<<<<
@@ -3672,7 +3672,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     __pyx_L9_bool_binop_done:;
     if (__pyx_t_1) {
 
-      /* "knowledge_linker/_maxmin.pyx":181
+      /* "knowledge_linker/algorithms/_maxmin.pyx":181
  *         if (ii == iimax) and (jj == jjmax):
  *             # both rows in A and B are empty, skip this row
  *             Out_indptr.append(kptr)             # <<<<<<<<<<<<<<
@@ -3684,7 +3684,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indptr, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 181; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "knowledge_linker/_maxmin.pyx":182
+      /* "knowledge_linker/algorithms/_maxmin.pyx":182
  *             # both rows in A and B are empty, skip this row
  *             Out_indptr.append(kptr)
  *             continue             # <<<<<<<<<<<<<<
@@ -3693,7 +3693,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
       goto __pyx_L6_continue;
 
-      /* "knowledge_linker/_maxmin.pyx":179
+      /* "knowledge_linker/algorithms/_maxmin.pyx":179
  *         knnz = 0
  * 
  *         if (ii == iimax) and (jj == jjmax):             # <<<<<<<<<<<<<<
@@ -3702,7 +3702,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
     }
 
-    /* "knowledge_linker/_maxmin.pyx":184
+    /* "knowledge_linker/algorithms/_maxmin.pyx":184
  *             continue
  * 
  *         elif (ii == iimax) ^ (jj == jjmax):             # <<<<<<<<<<<<<<
@@ -3712,7 +3712,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     __pyx_t_1 = (((__pyx_v_ii == __pyx_v_iimax) ^ (__pyx_v_jj == __pyx_v_jjmax)) != 0);
     if (__pyx_t_1) {
 
-      /* "knowledge_linker/_maxmin.pyx":187
+      /* "knowledge_linker/algorithms/_maxmin.pyx":187
  *             # either one of A and B (but not both) has non-zero elements
  * 
  *             if (ii == iimax):             # <<<<<<<<<<<<<<
@@ -3722,7 +3722,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       __pyx_t_1 = ((__pyx_v_ii == __pyx_v_iimax) != 0);
       if (__pyx_t_1) {
 
-        /* "knowledge_linker/_maxmin.pyx":189
+        /* "knowledge_linker/algorithms/_maxmin.pyx":189
  *             if (ii == iimax):
  *                 # the k-th row in A is empty, add the elements of B
  *                 knnz = jjmax - jj             # <<<<<<<<<<<<<<
@@ -3731,7 +3731,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
         __pyx_v_knnz = (__pyx_v_jjmax - __pyx_v_jj);
 
-        /* "knowledge_linker/_maxmin.pyx":190
+        /* "knowledge_linker/algorithms/_maxmin.pyx":190
  *                 # the k-th row in A is empty, add the elements of B
  *                 knnz = jjmax - jj
  *                 for jk in xrange(knnz):             # <<<<<<<<<<<<<<
@@ -3742,7 +3742,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         for (__pyx_t_21 = 0; __pyx_t_21 < __pyx_t_16; __pyx_t_21+=1) {
           __pyx_v_jk = __pyx_t_21;
 
-          /* "knowledge_linker/_maxmin.pyx":191
+          /* "knowledge_linker/algorithms/_maxmin.pyx":191
  *                 knnz = jjmax - jj
  *                 for jk in xrange(knnz):
  *                     jcol = B_indices[jk + jj]             # <<<<<<<<<<<<<<
@@ -3761,7 +3761,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           }
           __pyx_v_jcol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_B_indices.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_B_indices.diminfo[0].strides));
 
-          /* "knowledge_linker/_maxmin.pyx":192
+          /* "knowledge_linker/algorithms/_maxmin.pyx":192
  *                 for jk in xrange(knnz):
  *                     jcol = B_indices[jk + jj]
  *                     Out_indices.append(jcol)             # <<<<<<<<<<<<<<
@@ -3773,7 +3773,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":193
+          /* "knowledge_linker/algorithms/_maxmin.pyx":193
  *                     jcol = B_indices[jk + jj]
  *                     Out_indices.append(jcol)
  *                     Out_data.append(B_data[jk + jj])             # <<<<<<<<<<<<<<
@@ -3796,7 +3796,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":194
+        /* "knowledge_linker/algorithms/_maxmin.pyx":194
  *                     Out_indices.append(jcol)
  *                     Out_data.append(B_data[jk + jj])
  *                 kptr += knnz             # <<<<<<<<<<<<<<
@@ -3805,7 +3805,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
         __pyx_v_kptr = (__pyx_v_kptr + __pyx_v_knnz);
 
-        /* "knowledge_linker/_maxmin.pyx":195
+        /* "knowledge_linker/algorithms/_maxmin.pyx":195
  *                     Out_data.append(B_data[jk + jj])
  *                 kptr += knnz
  *                 Out_indptr.append(kptr)             # <<<<<<<<<<<<<<
@@ -3817,7 +3817,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indptr, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":187
+        /* "knowledge_linker/algorithms/_maxmin.pyx":187
  *             # either one of A and B (but not both) has non-zero elements
  * 
  *             if (ii == iimax):             # <<<<<<<<<<<<<<
@@ -3827,7 +3827,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         goto __pyx_L11;
       }
 
-      /* "knowledge_linker/_maxmin.pyx":199
+      /* "knowledge_linker/algorithms/_maxmin.pyx":199
  *             else:
  *                 # the k-th row in B is empty, add the elements of A
  *                 knnz = iimax - ii             # <<<<<<<<<<<<<<
@@ -3837,7 +3837,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       /*else*/ {
         __pyx_v_knnz = (__pyx_v_iimax - __pyx_v_ii);
 
-        /* "knowledge_linker/_maxmin.pyx":200
+        /* "knowledge_linker/algorithms/_maxmin.pyx":200
  *                 # the k-th row in B is empty, add the elements of A
  *                 knnz = iimax - ii
  *                 for ik in xrange(knnz):             # <<<<<<<<<<<<<<
@@ -3848,7 +3848,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         for (__pyx_t_21 = 0; __pyx_t_21 < __pyx_t_16; __pyx_t_21+=1) {
           __pyx_v_ik = __pyx_t_21;
 
-          /* "knowledge_linker/_maxmin.pyx":201
+          /* "knowledge_linker/algorithms/_maxmin.pyx":201
  *                 knnz = iimax - ii
  *                 for ik in xrange(knnz):
  *                     icol = A_indices[ik + ii]             # <<<<<<<<<<<<<<
@@ -3867,7 +3867,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           }
           __pyx_v_icol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indices.rcbuffer->pybuffer.buf, __pyx_t_25, __pyx_pybuffernd_A_indices.diminfo[0].strides));
 
-          /* "knowledge_linker/_maxmin.pyx":202
+          /* "knowledge_linker/algorithms/_maxmin.pyx":202
  *                 for ik in xrange(knnz):
  *                     icol = A_indices[ik + ii]
  *                     Out_indices.append(icol)             # <<<<<<<<<<<<<<
@@ -3879,7 +3879,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 202; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":203
+          /* "knowledge_linker/algorithms/_maxmin.pyx":203
  *                     icol = A_indices[ik + ii]
  *                     Out_indices.append(icol)
  *                     Out_data.append(A_data[ik + ii])             # <<<<<<<<<<<<<<
@@ -3902,7 +3902,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":204
+        /* "knowledge_linker/algorithms/_maxmin.pyx":204
  *                     Out_indices.append(icol)
  *                     Out_data.append(A_data[ik + ii])
  *                 kptr += knnz             # <<<<<<<<<<<<<<
@@ -3911,7 +3911,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
         __pyx_v_kptr = (__pyx_v_kptr + __pyx_v_knnz);
 
-        /* "knowledge_linker/_maxmin.pyx":205
+        /* "knowledge_linker/algorithms/_maxmin.pyx":205
  *                     Out_data.append(A_data[ik + ii])
  *                 kptr += knnz
  *                 Out_indptr.append(kptr)             # <<<<<<<<<<<<<<
@@ -3925,7 +3925,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       }
       __pyx_L11:;
 
-      /* "knowledge_linker/_maxmin.pyx":184
+      /* "knowledge_linker/algorithms/_maxmin.pyx":184
  *             continue
  * 
  *         elif (ii == iimax) ^ (jj == jjmax):             # <<<<<<<<<<<<<<
@@ -3935,7 +3935,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       goto __pyx_L8;
     }
 
-    /* "knowledge_linker/_maxmin.pyx":212
+    /* "knowledge_linker/algorithms/_maxmin.pyx":212
  *             # First, scan both index pointers simultaneously. Will break as soon
  *             # as all non-zero elements on one row are exhausted
  *             while ii < iimax and jj < jjmax:             # <<<<<<<<<<<<<<
@@ -3955,7 +3955,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_L18_bool_binop_done:;
         if (!__pyx_t_1) break;
 
-        /* "knowledge_linker/_maxmin.pyx":214
+        /* "knowledge_linker/algorithms/_maxmin.pyx":214
  *             while ii < iimax and jj < jjmax:
  * 
  *                 icol = A_indices[ii]             # <<<<<<<<<<<<<<
@@ -3974,7 +3974,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         }
         __pyx_v_icol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indices.rcbuffer->pybuffer.buf, __pyx_t_27, __pyx_pybuffernd_A_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":215
+        /* "knowledge_linker/algorithms/_maxmin.pyx":215
  * 
  *                 icol = A_indices[ii]
  *                 jcol = B_indices[jj]             # <<<<<<<<<<<<<<
@@ -3993,7 +3993,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         }
         __pyx_v_jcol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_B_indices.rcbuffer->pybuffer.buf, __pyx_t_28, __pyx_pybuffernd_B_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":218
+        /* "knowledge_linker/algorithms/_maxmin.pyx":218
  * 
  *                 # both elements non-zero, add max
  *                 if icol == jcol:             # <<<<<<<<<<<<<<
@@ -4003,7 +4003,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_1 = ((__pyx_v_icol == __pyx_v_jcol) != 0);
         if (__pyx_t_1) {
 
-          /* "knowledge_linker/_maxmin.pyx":219
+          /* "knowledge_linker/algorithms/_maxmin.pyx":219
  *                 # both elements non-zero, add max
  *                 if icol == jcol:
  *                     Out_data.append(max(A_data[ii], B_data[jj]))             # <<<<<<<<<<<<<<
@@ -4042,7 +4042,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_data, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 219; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":220
+          /* "knowledge_linker/algorithms/_maxmin.pyx":220
  *                 if icol == jcol:
  *                     Out_data.append(max(A_data[ii], B_data[jj]))
  *                     Out_indices.append(icol)             # <<<<<<<<<<<<<<
@@ -4054,7 +4054,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 220; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":221
+          /* "knowledge_linker/algorithms/_maxmin.pyx":221
  *                     Out_data.append(max(A_data[ii], B_data[jj]))
  *                     Out_indices.append(icol)
  *                     ii += 1             # <<<<<<<<<<<<<<
@@ -4063,7 +4063,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
           __pyx_v_ii = (__pyx_v_ii + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":222
+          /* "knowledge_linker/algorithms/_maxmin.pyx":222
  *                     Out_indices.append(icol)
  *                     ii += 1
  *                     jj += 1             # <<<<<<<<<<<<<<
@@ -4072,7 +4072,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
           __pyx_v_jj = (__pyx_v_jj + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":218
+          /* "knowledge_linker/algorithms/_maxmin.pyx":218
  * 
  *                 # both elements non-zero, add max
  *                 if icol == jcol:             # <<<<<<<<<<<<<<
@@ -4082,7 +4082,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           goto __pyx_L20;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":225
+        /* "knowledge_linker/algorithms/_maxmin.pyx":225
  * 
  *                 # A-element is zero, add B-element
  *                 elif icol > jcol:             # <<<<<<<<<<<<<<
@@ -4092,7 +4092,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_1 = ((__pyx_v_icol > __pyx_v_jcol) != 0);
         if (__pyx_t_1) {
 
-          /* "knowledge_linker/_maxmin.pyx":226
+          /* "knowledge_linker/algorithms/_maxmin.pyx":226
  *                 # A-element is zero, add B-element
  *                 elif icol > jcol:
  *                     Out_data.append(B_data[jj])             # <<<<<<<<<<<<<<
@@ -4114,7 +4114,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_data, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":227
+          /* "knowledge_linker/algorithms/_maxmin.pyx":227
  *                 elif icol > jcol:
  *                     Out_data.append(B_data[jj])
  *                     Out_indices.append(jcol)             # <<<<<<<<<<<<<<
@@ -4126,7 +4126,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":228
+          /* "knowledge_linker/algorithms/_maxmin.pyx":228
  *                     Out_data.append(B_data[jj])
  *                     Out_indices.append(jcol)
  *                     jj += 1             # <<<<<<<<<<<<<<
@@ -4135,7 +4135,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
           __pyx_v_jj = (__pyx_v_jj + 1);
 
-          /* "knowledge_linker/_maxmin.pyx":225
+          /* "knowledge_linker/algorithms/_maxmin.pyx":225
  * 
  *                 # A-element is zero, add B-element
  *                 elif icol > jcol:             # <<<<<<<<<<<<<<
@@ -4145,7 +4145,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           goto __pyx_L20;
         }
 
-        /* "knowledge_linker/_maxmin.pyx":232
+        /* "knowledge_linker/algorithms/_maxmin.pyx":232
  *                 # B-element is zero, add A-element
  *                 else:
  *                     Out_data.append(A_data[ii])             # <<<<<<<<<<<<<<
@@ -4168,7 +4168,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_data, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 232; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":233
+          /* "knowledge_linker/algorithms/_maxmin.pyx":233
  *                 else:
  *                     Out_data.append(A_data[ii])
  *                     Out_indices.append(icol)             # <<<<<<<<<<<<<<
@@ -4180,7 +4180,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
           __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 233; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "knowledge_linker/_maxmin.pyx":234
+          /* "knowledge_linker/algorithms/_maxmin.pyx":234
  *                     Out_data.append(A_data[ii])
  *                     Out_indices.append(icol)
  *                     ii += 1             # <<<<<<<<<<<<<<
@@ -4191,7 +4191,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         }
         __pyx_L20:;
 
-        /* "knowledge_linker/_maxmin.pyx":236
+        /* "knowledge_linker/algorithms/_maxmin.pyx":236
  *                     ii += 1
  * 
  *                 knnz += 1             # <<<<<<<<<<<<<<
@@ -4201,7 +4201,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_v_knnz = (__pyx_v_knnz + 1);
       }
 
-      /* "knowledge_linker/_maxmin.pyx":241
+      /* "knowledge_linker/algorithms/_maxmin.pyx":241
  *             # any. By the previous loop condition, no more than one of these two
  *             # loops will execute.
  *             for ik in xrange(iimax - ii):             # <<<<<<<<<<<<<<
@@ -4212,7 +4212,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       for (__pyx_t_21 = 0; __pyx_t_21 < __pyx_t_16; __pyx_t_21+=1) {
         __pyx_v_ik = __pyx_t_21;
 
-        /* "knowledge_linker/_maxmin.pyx":242
+        /* "knowledge_linker/algorithms/_maxmin.pyx":242
  *             # loops will execute.
  *             for ik in xrange(iimax - ii):
  *                 icol = A_indices[ik + ii]             # <<<<<<<<<<<<<<
@@ -4231,7 +4231,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         }
         __pyx_v_icol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_A_indices.rcbuffer->pybuffer.buf, __pyx_t_36, __pyx_pybuffernd_A_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":243
+        /* "knowledge_linker/algorithms/_maxmin.pyx":243
  *             for ik in xrange(iimax - ii):
  *                 icol = A_indices[ik + ii]
  *                 Out_data.append(A_data[ik + ii])             # <<<<<<<<<<<<<<
@@ -4253,7 +4253,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_data, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":244
+        /* "knowledge_linker/algorithms/_maxmin.pyx":244
  *                 icol = A_indices[ik + ii]
  *                 Out_data.append(A_data[ik + ii])
  *                 Out_indices.append(icol)             # <<<<<<<<<<<<<<
@@ -4265,7 +4265,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 244; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":245
+        /* "knowledge_linker/algorithms/_maxmin.pyx":245
  *                 Out_data.append(A_data[ik + ii])
  *                 Out_indices.append(icol)
  *                 knnz += 1             # <<<<<<<<<<<<<<
@@ -4275,7 +4275,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_v_knnz = (__pyx_v_knnz + 1);
       }
 
-      /* "knowledge_linker/_maxmin.pyx":247
+      /* "knowledge_linker/algorithms/_maxmin.pyx":247
  *                 knnz += 1
  * 
  *             for jk in xrange(jjmax - jj):             # <<<<<<<<<<<<<<
@@ -4286,7 +4286,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
       for (__pyx_t_21 = 0; __pyx_t_21 < __pyx_t_16; __pyx_t_21+=1) {
         __pyx_v_jk = __pyx_t_21;
 
-        /* "knowledge_linker/_maxmin.pyx":248
+        /* "knowledge_linker/algorithms/_maxmin.pyx":248
  * 
  *             for jk in xrange(jjmax - jj):
  *                 jcol = B_indices[jk + jj]             # <<<<<<<<<<<<<<
@@ -4305,7 +4305,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         }
         __pyx_v_jcol = (*__Pyx_BufPtrStrided1d(int *, __pyx_pybuffernd_B_indices.rcbuffer->pybuffer.buf, __pyx_t_38, __pyx_pybuffernd_B_indices.diminfo[0].strides));
 
-        /* "knowledge_linker/_maxmin.pyx":249
+        /* "knowledge_linker/algorithms/_maxmin.pyx":249
  *             for jk in xrange(jjmax - jj):
  *                 jcol = B_indices[jk + jj]
  *                 Out_data.append(B_data[jk + jj])             # <<<<<<<<<<<<<<
@@ -4327,7 +4327,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_data, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 249; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":250
+        /* "knowledge_linker/algorithms/_maxmin.pyx":250
  *                 jcol = B_indices[jk + jj]
  *                 Out_data.append(B_data[jk + jj])
  *                 Out_indices.append(jcol)             # <<<<<<<<<<<<<<
@@ -4339,7 +4339,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_t_20 = __Pyx_PyObject_Append(__pyx_v_Out_indices, __pyx_t_2); if (unlikely(__pyx_t_20 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 250; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "knowledge_linker/_maxmin.pyx":251
+        /* "knowledge_linker/algorithms/_maxmin.pyx":251
  *                 Out_data.append(B_data[jk + jj])
  *                 Out_indices.append(jcol)
  *                 knnz += 1             # <<<<<<<<<<<<<<
@@ -4349,7 +4349,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
         __pyx_v_knnz = (__pyx_v_knnz + 1);
       }
 
-      /* "knowledge_linker/_maxmin.pyx":254
+      /* "knowledge_linker/algorithms/_maxmin.pyx":254
  * 
  *             # update the output index pointers array
  *             kptr += knnz             # <<<<<<<<<<<<<<
@@ -4358,7 +4358,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
  */
       __pyx_v_kptr = (__pyx_v_kptr + __pyx_v_knnz);
 
-      /* "knowledge_linker/_maxmin.pyx":255
+      /* "knowledge_linker/algorithms/_maxmin.pyx":255
  *             # update the output index pointers array
  *             kptr += knnz
  *             Out_indptr.append(kptr)             # <<<<<<<<<<<<<<
@@ -4374,7 +4374,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     __pyx_L6_continue:;
   }
 
-  /* "knowledge_linker/_maxmin.pyx":257
+  /* "knowledge_linker/algorithms/_maxmin.pyx":257
  *             Out_indptr.append(kptr)
  * 
  *     return sp.csr_matrix((np.asarray(Out_data), Out_indices, Out_indptr), (N, M))             # <<<<<<<<<<<<<<
@@ -4469,7 +4469,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_maxmin.pyx":145
+  /* "knowledge_linker/algorithms/_maxmin.pyx":145
  *     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
  * 
  * def c_maximum_csr(object A, object B):             # <<<<<<<<<<<<<<
@@ -4494,7 +4494,7 @@ static PyObject *__pyx_pf_16knowledge_linker_7_maxmin_4c_maximum_csr(CYTHON_UNUS
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_B_indices.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_B_indptr.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("knowledge_linker._maxmin.c_maximum_csr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._maxmin.c_maximum_csr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -6728,7 +6728,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_kp_s_expecting_a_CSR_matrix, __pyx_k_expecting_a_CSR_matrix, sizeof(__pyx_k_expecting_a_CSR_matrix), 0, 0, 1, 0},
   {&__pyx_kp_s_expecting_a_sparse_CSR_matrix, __pyx_k_expecting_a_sparse_CSR_matrix, sizeof(__pyx_k_expecting_a_sparse_CSR_matrix), 0, 0, 1, 0},
-  {&__pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_k_home_giovanni_repos_truthy_meas, sizeof(__pyx_k_home_giovanni_repos_truthy_meas), 0, 0, 1, 0},
+  {&__pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_k_home_giovanni_repos_knowledge_l, sizeof(__pyx_k_home_giovanni_repos_knowledge_l), 0, 0, 1, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_icol, __pyx_k_icol, sizeof(__pyx_k_icol), 0, 0, 1, 1},
   {&__pyx_n_s_ih, __pyx_k_ih, sizeof(__pyx_k_ih), 0, 0, 1, 1},
@@ -6749,7 +6749,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_k, __pyx_k_k, sizeof(__pyx_k_k), 0, 0, 1, 1},
   {&__pyx_n_s_kj, __pyx_k_kj, sizeof(__pyx_k_kj), 0, 0, 1, 1},
   {&__pyx_n_s_knnz, __pyx_k_knnz, sizeof(__pyx_k_knnz), 0, 0, 1, 1},
-  {&__pyx_n_s_knowledge_linker__maxmin, __pyx_k_knowledge_linker__maxmin, sizeof(__pyx_k_knowledge_linker__maxmin), 0, 0, 1, 1},
+  {&__pyx_n_s_knowledge_linker_algorithms__max, __pyx_k_knowledge_linker_algorithms__max, sizeof(__pyx_k_knowledge_linker_algorithms__max), 0, 0, 1, 1},
   {&__pyx_n_s_kptr, __pyx_k_kptr, sizeof(__pyx_k_kptr), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_ij, __pyx_k_max_ij, sizeof(__pyx_k_max_ij), 0, 0, 1, 1},
@@ -6787,7 +6787,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "knowledge_linker/_maxmin.pyx":60
+  /* "knowledge_linker/algorithms/_maxmin.pyx":60
  * 
  *     if not sp.isspmatrix_csr(A):
  *         raise ValueError('expecting a sparse CSR matrix')             # <<<<<<<<<<<<<<
@@ -6798,7 +6798,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "knowledge_linker/_maxmin.pyx":157
+  /* "knowledge_linker/algorithms/_maxmin.pyx":157
  *     # check input is CSR
  *     if not sp.isspmatrix_csr(A) or not sp.isspmatrix_csr(B):
  *         raise ValueError('expecting a CSR matrix')             # <<<<<<<<<<<<<<
@@ -6875,7 +6875,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "knowledge_linker/_maxmin.pyx":14
+  /* "knowledge_linker/algorithms/_maxmin.pyx":14
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_naive(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -6885,9 +6885,9 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__10 = PyTuple_Pack(15, __pyx_n_s_A, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_N, __pyx_n_s_A_2, __pyx_n_s_AP, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_ih, __pyx_n_s_max_ij, __pyx_n_s_aik, __pyx_n_s_akj, __pyx_n_s_min_k, __pyx_n_s_Nout, __pyx_n_s_k); if (unlikely(!__pyx_tuple__10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
-  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(3, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_n_s_c_maxmin_naive, 14, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(3, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_n_s_c_maxmin_naive, 14, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "knowledge_linker/_maxmin.pyx":47
+  /* "knowledge_linker/algorithms/_maxmin.pyx":47
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_sparse(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
@@ -6897,9 +6897,9 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__12 = PyTuple_Pack(28, __pyx_n_s_A, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_A_indptr, __pyx_n_s_A_indices, __pyx_n_s_At_indptr, __pyx_n_s_At_indices, __pyx_n_s_A_data, __pyx_n_s_At_data, __pyx_n_s_AP_data, __pyx_n_s_AP_indptr, __pyx_n_s_AP_indices, __pyx_n_s_N, __pyx_n_s_Nout, __pyx_n_s_i, __pyx_n_s_ih, __pyx_n_s_j, __pyx_n_s_ii, __pyx_n_s_jj, __pyx_n_s_ik, __pyx_n_s_kj, __pyx_n_s_iimax, __pyx_n_s_jjmax, __pyx_n_s_innz, __pyx_n_s_iptr, __pyx_n_s_max_ij, __pyx_n_s_min_k, __pyx_n_s_At); if (unlikely(!__pyx_tuple__12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
-  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(3, 0, 28, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_n_s_c_maxmin_sparse, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(3, 0, 28, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_n_s_c_maxmin_sparse, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "knowledge_linker/_maxmin.pyx":145
+  /* "knowledge_linker/algorithms/_maxmin.pyx":145
  *     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
  * 
  * def c_maximum_csr(object A, object B):             # <<<<<<<<<<<<<<
@@ -6909,7 +6909,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__14 = PyTuple_Pack(24, __pyx_n_s_A, __pyx_n_s_B, __pyx_n_s_A_indptr, __pyx_n_s_A_indices, __pyx_n_s_B_indptr, __pyx_n_s_B_indices, __pyx_n_s_A_data, __pyx_n_s_B_data, __pyx_n_s_Out_indptr, __pyx_n_s_Out_indices, __pyx_n_s_Out_data, __pyx_n_s_k, __pyx_n_s_kptr, __pyx_n_s_knnz, __pyx_n_s_ii, __pyx_n_s_jj, __pyx_n_s_iimax, __pyx_n_s_jjmax, __pyx_n_s_icol, __pyx_n_s_jcol, __pyx_n_s_N, __pyx_n_s_M, __pyx_n_s_ik, __pyx_n_s_jk); if (unlikely(!__pyx_tuple__14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
-  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(2, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_n_s_c_maximum_csr, 145, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(2, 0, 24, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_n_s_c_maximum_csr, 145, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -6993,14 +6993,14 @@ PyMODINIT_FUNC PyInit__maxmin(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
-  if (__pyx_module_is_main_knowledge_linker___maxmin) {
+  if (__pyx_module_is_main_knowledge_linker__algorithms___maxmin) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (!PyDict_GetItemString(modules, "knowledge_linker._maxmin")) {
-      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker._maxmin", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!PyDict_GetItemString(modules, "knowledge_linker.algorithms._maxmin")) {
+      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker.algorithms._maxmin", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
   #endif
@@ -7032,7 +7032,7 @@ PyMODINIT_FUNC PyInit__maxmin(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "knowledge_linker/_maxmin.pyx":3
+  /* "knowledge_linker/algorithms/_maxmin.pyx":3
  * # cython: profile=False
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -7044,7 +7044,7 @@ PyMODINIT_FUNC PyInit__maxmin(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":4
+  /* "knowledge_linker/algorithms/_maxmin.pyx":4
  * 
  * import numpy as np
  * import scipy.sparse as sp             # <<<<<<<<<<<<<<
@@ -7062,43 +7062,43 @@ PyMODINIT_FUNC PyInit__maxmin(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_sp, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":14
+  /* "knowledge_linker/algorithms/_maxmin.pyx":14
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_naive(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
  *     '''
  *     See `maxmin.maxmin_naive`. Cythonized version. Doesn't work on CSR sparse
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_7_maxmin_1c_maxmin_naive, NULL, __pyx_n_s_knowledge_linker__maxmin); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_1c_maxmin_naive, NULL, __pyx_n_s_knowledge_linker_algorithms__max); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_c_maxmin_naive, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":47
+  /* "knowledge_linker/algorithms/_maxmin.pyx":47
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def c_maxmin_sparse(object A, object a=None, object b=None):             # <<<<<<<<<<<<<<
  *     '''
  *     See `maxmin.maxmin_sparse`. Cythonized version. Requires as argument a
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_7_maxmin_3c_maxmin_sparse, NULL, __pyx_n_s_knowledge_linker__maxmin); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_3c_maxmin_sparse, NULL, __pyx_n_s_knowledge_linker_algorithms__max); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_c_maxmin_sparse, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":145
+  /* "knowledge_linker/algorithms/_maxmin.pyx":145
  *     return sp.csr_matrix((np.asarray(AP_data), AP_indices, AP_indptr), (Nout, N))
  * 
  * def c_maximum_csr(object A, object B):             # <<<<<<<<<<<<<<
  *     '''
  *     Equivalent of numpy.maximum for CSR matrices.
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_7_maxmin_5c_maximum_csr, NULL, __pyx_n_s_knowledge_linker__maxmin); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_10algorithms_7_maxmin_5c_maximum_csr, NULL, __pyx_n_s_knowledge_linker_algorithms__max); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_c_maximum_csr, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_maxmin.pyx":1
+  /* "knowledge_linker/algorithms/_maxmin.pyx":1
  * # cython: profile=False             # <<<<<<<<<<<<<<
  * 
  * import numpy as np
@@ -7124,11 +7124,11 @@ PyMODINIT_FUNC PyInit__maxmin(void)
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init knowledge_linker._maxmin", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init knowledge_linker.algorithms._maxmin", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init knowledge_linker._maxmin");
+    PyErr_SetString(PyExc_ImportError, "init knowledge_linker.algorithms._maxmin");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

@@ -11,9 +11,9 @@ from functools import partial
 import networkx as nx
 from itertools import combinations
 
-import knowledge_linker.closure as clo
-from knowledge_linker.utils import DirTree, coo_dtype, fromdirtree, disttosim
-from knowledge_linker.utils import weighted
+import knowledge_linker.algorithms.closure as clo
+from knowledge_linker.utils import coo_dtype, disttosim, weighted
+from knowledge_linker.io.dirtree import DirTree, fromdirtree
 
 # tests for normal closure
 

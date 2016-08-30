@@ -254,8 +254,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__knowledge_linker___closure
-#define __PYX_HAVE_API__knowledge_linker___closure
+#define __PYX_HAVE__knowledge_linker__algorithms___closure
+#define __PYX_HAVE_API__knowledge_linker__algorithms___closure
 #include "string.h"
 #include "stdlib.h"
 #include "math.h"
@@ -493,12 +493,12 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "knowledge_linker/_closure.pxd",
-  "knowledge_linker/_closure.pyx",
+  "knowledge_linker/algorithms/_closure.pxd",
+  "knowledge_linker/algorithms/_closure.pyx",
   "__init__.pxd",
   "stringsource",
   "type.pxd",
-  "knowledge_linker/heap.pxd",
+  "knowledge_linker/algorithms/heap.pxd",
 };
 #define IS_UNSIGNED(type) (((type) -1) > 0)
 struct __Pyx_StructField_;
@@ -789,7 +789,7 @@ typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
  * ctypedef int REFERENCE_T
  * 
  */
-typedef double __pyx_t_16knowledge_linker_4heap_VALUE_T;
+typedef double __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T;
 
 /* "heap.pxd":14
  * # determine datatypes for heap
@@ -798,7 +798,7 @@ typedef double __pyx_t_16knowledge_linker_4heap_VALUE_T;
  * 
  * 
  */
-typedef int __pyx_t_16knowledge_linker_4heap_REFERENCE_T;
+typedef int __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     typedef ::std::complex< float > __pyx_t_float_complex;
@@ -821,8 +821,8 @@ typedef int __pyx_t_16knowledge_linker_4heap_REFERENCE_T;
 
 
 /*--- Type declarations ---*/
-struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap;
-struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -863,108 +863,108 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_t_16knowledge_linker_8_closure_Path;
-typedef struct __pyx_t_16knowledge_linker_8_closure_Path __pyx_t_16knowledge_linker_8_closure_Path;
-struct __pyx_t_16knowledge_linker_8_closure_MetricPath;
-typedef struct __pyx_t_16knowledge_linker_8_closure_MetricPath __pyx_t_16knowledge_linker_8_closure_MetricPath;
-struct __pyx_t_16knowledge_linker_8_closure_Closure;
-typedef struct __pyx_t_16knowledge_linker_8_closure_Closure __pyx_t_16knowledge_linker_8_closure_Closure;
-struct __pyx_opt_args_16knowledge_linker_8_closure_cclosure;
-struct __pyx_opt_args_16knowledge_linker_8_closure_cclosuress;
-struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany;
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Path;
+typedef struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_t_16knowledge_linker_10algorithms_8_closure_Path;
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath;
+typedef struct __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath;
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Closure;
+typedef struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Closure __pyx_t_16knowledge_linker_10algorithms_8_closure_Closure;
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosure;
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosuress;
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_reachablesmany;
 
-/* "knowledge_linker/_closure.pxd":8
+/* "knowledge_linker/algorithms/_closure.pxd":8
  * ## Return types for closure functions and other structures
  * 
  * ctypedef struct Path:             # <<<<<<<<<<<<<<
  *     size_t length
  *     int * vertices
  */
-struct __pyx_t_16knowledge_linker_8_closure_Path {
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Path {
   size_t length;
   int *vertices;
   int found;
 };
 
-/* "knowledge_linker/_closure.pxd":13
+/* "knowledge_linker/algorithms/_closure.pxd":13
  *     int found
  * 
  * ctypedef Path * PathPtr             # <<<<<<<<<<<<<<
  * 
  * ctypedef struct MetricPath:
  */
-typedef __pyx_t_16knowledge_linker_8_closure_Path *__pyx_t_16knowledge_linker_8_closure_PathPtr;
+typedef __pyx_t_16knowledge_linker_10algorithms_8_closure_Path *__pyx_t_16knowledge_linker_10algorithms_8_closure_PathPtr;
 
-/* "knowledge_linker/_closure.pxd":15
+/* "knowledge_linker/algorithms/_closure.pxd":15
  * ctypedef Path * PathPtr
  * 
  * ctypedef struct MetricPath:             # <<<<<<<<<<<<<<
  *     size_t length
  *     int * vertices
  */
-struct __pyx_t_16knowledge_linker_8_closure_MetricPath {
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath {
   size_t length;
   int *vertices;
   int found;
   double proximity;
 };
 
-/* "knowledge_linker/_closure.pxd":21
+/* "knowledge_linker/algorithms/_closure.pxd":21
  *     double proximity
  * 
  * ctypedef MetricPath * MetricPathPtr             # <<<<<<<<<<<<<<
  * 
  * # used by _cclosuress
  */
-typedef __pyx_t_16knowledge_linker_8_closure_MetricPath *__pyx_t_16knowledge_linker_8_closure_MetricPathPtr;
+typedef __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath *__pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr;
 
-/* "knowledge_linker/_closure.pxd":25
+/* "knowledge_linker/algorithms/_closure.pxd":25
  * # used by _cclosuress
  * 
  * ctypedef struct Closure:             # <<<<<<<<<<<<<<
  *     double conjf(double, double) nogil
  *     double disjf(double, double) nogil
  */
-struct __pyx_t_16knowledge_linker_8_closure_Closure {
+struct __pyx_t_16knowledge_linker_10algorithms_8_closure_Closure {
   double (*conjf)(double, double);
   double (*disjf)(double, double);
 };
 
-/* "knowledge_linker/_closure.pyx":17
+/* "knowledge_linker/algorithms/_closure.pyx":17
  * 
  * 
  * cpdef object cclosure(object A, int source, int target, int retpath = 0,             # <<<<<<<<<<<<<<
  *                       kind='ultrametric'):
  *     '''
  */
-struct __pyx_opt_args_16knowledge_linker_8_closure_cclosure {
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosure {
   int __pyx_n;
   int retpath;
   PyObject *kind;
 };
 
-/* "knowledge_linker/_closure.pyx":31
+/* "knowledge_linker/algorithms/_closure.pyx":31
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef object cclosuress(             # <<<<<<<<<<<<<<
  *     object A,
  *     int source,
  */
-struct __pyx_opt_args_16knowledge_linker_8_closure_cclosuress {
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosuress {
   int __pyx_n;
   PyObject *f;
   int retpaths;
   PyObject *kind;
 };
 
-/* "knowledge_linker/_closure.pyx":243
+/* "knowledge_linker/algorithms/_closure.pyx":243
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef reachablesmany(object A, int [:] sources, int mmap = 0):             # <<<<<<<<<<<<<<
  *     A = sp.csr_matrix(A)
  *     cdef:
  */
-struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany {
+struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_reachablesmany {
   int __pyx_n;
   int mmap;
 };
@@ -976,14 +976,14 @@ struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany {
  *     cdef readonly int count, levels, min_levels
  *     cdef VALUE_T *_values
  */
-struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap {
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap {
   PyObject_HEAD
-  struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtab;
+  struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_vtab;
   int count;
   int levels;
   int min_levels;
-  __pyx_t_16knowledge_linker_4heap_VALUE_T *_values;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *_references;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_VALUE_T *_values;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *_references;
   int _popped_ref;
 };
 
@@ -995,10 +995,10 @@ struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap {
  *     cdef readonly int max_reference
  *     cdef REFERENCE_T *_crossref
  */
-struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap {
-  struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap __pyx_base;
+struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap {
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap __pyx_base;
   int max_reference;
-  __pyx_t_16knowledge_linker_4heap_REFERENCE_T *_crossref;
+  __pyx_t_16knowledge_linker_10algorithms_4heap_REFERENCE_T *_crossref;
   int _invalid_ref;
   int _pushed;
 };
@@ -1089,15 +1089,15 @@ struct __pyx_memoryviewslice_obj {
  *     cdef VALUE_T *_values
  */
 
-struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap {
-  void (*_add_or_remove_level)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  void (*_update)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *);
-  void (*_update_one)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  void (*_remove)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, int);
-  int (*push_fast)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *, double, int);
-  double (*pop_fast)(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *);
+struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap {
+  void (*_add_or_remove_level)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  void (*_update)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *);
+  void (*_update_one)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  void (*_remove)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, int);
+  int (*push_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *, double, int);
+  double (*pop_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *);
 };
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap *__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap;
 
 
 /* "heap.pxd":31
@@ -1108,12 +1108,12 @@ static struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap *__pyx_vtabpt
  *     cdef REFERENCE_T *_crossref
  */
 
-struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap {
-  struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap __pyx_base;
-  double (*value_of_fast)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, int);
-  int (*push_if_lower_fast)(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *, double, int);
+struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap {
+  struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap __pyx_base;
+  double (*value_of_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, int);
+  int (*push_if_lower_fast)(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *, double, int);
 };
-static struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap;
+static struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap;
 
 
 /* "View.MemoryView":304
@@ -1748,11 +1748,11 @@ static PyTypeObject *__pyx_ptype_5numpy_ndarray = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, char *, char *, int *); /*proto*/
 
-/* Module declarations from 'knowledge_linker.heap' */
-static PyTypeObject *__pyx_ptype_16knowledge_linker_4heap_BinaryHeap = 0;
-static PyTypeObject *__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap = 0;
+/* Module declarations from 'knowledge_linker.algorithms.heap' */
+static PyTypeObject *__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap = 0;
+static PyTypeObject *__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = 0;
 
-/* Module declarations from 'knowledge_linker._closure' */
+/* Module declarations from 'knowledge_linker.algorithms._closure' */
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -1762,16 +1762,16 @@ static PyObject *strided = 0;
 static PyObject *indirect = 0;
 static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
-static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(size_t, int); /*proto*/
-static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int, __Pyx_memviewslice, __Pyx_memviewslice, int **); /*proto*/
-static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double, double); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *, int, int, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_cclosure *__pyx_optional_args); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *, int, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_cclosuress *__pyx_optional_args); /*proto*/
-static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_linker_8_closure__cclosuress(__pyx_t_16knowledge_linker_8_closure_Closure, int, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, int, int); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *, int, int __pyx_skip_dispatch); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *, __Pyx_memviewslice, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany *__pyx_optional_args); /*proto*/
-static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject *, int, int, int __pyx_skip_dispatch); /*proto*/
-static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_closure__shortestpath(size_t, __Pyx_memviewslice, __Pyx_memviewslice, int, int, __Pyx_memviewslice, int); /*proto*/
+static CYTHON_INLINE int *__pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(size_t, int); /*proto*/
+static CYTHON_INLINE int __pyx_f_16knowledge_linker_10algorithms_8_closure__csr_neighbors(int, __Pyx_memviewslice, __Pyx_memviewslice, int **); /*proto*/
+static CYTHON_INLINE double __pyx_f_16knowledge_linker_10algorithms_8_closure__dombit1(double, double); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_cclosure(PyObject *, int, int, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosure *__pyx_optional_args); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_cclosuress(PyObject *, int, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosuress *__pyx_optional_args); /*proto*/
+static __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr __pyx_f_16knowledge_linker_10algorithms_8_closure__cclosuress(__pyx_t_16knowledge_linker_10algorithms_8_closure_Closure, int, __Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, int, int); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_reachables(PyObject *, int, int __pyx_skip_dispatch); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_reachablesmany(PyObject *, __Pyx_memviewslice, int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_reachablesmany *__pyx_optional_args); /*proto*/
+static PyArrayObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_shortestpath(PyObject *, int, int, int __pyx_skip_dispatch); /*proto*/
+static __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(size_t, __Pyx_memviewslice, __Pyx_memviewslice, int, int, __Pyx_memviewslice, int); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -1809,10 +1809,10 @@ static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_double_t = { "double_t", 
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, IS_UNSIGNED(int) ? 'U' : 'I', IS_UNSIGNED(int), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int32_t = { "int32_t", NULL, sizeof(__pyx_t_5numpy_int32_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int32_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int32_t), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
-#define __Pyx_MODULE_NAME "knowledge_linker._closure"
-int __pyx_module_is_main_knowledge_linker___closure = 0;
+#define __Pyx_MODULE_NAME "knowledge_linker.algorithms._closure"
+int __pyx_module_is_main_knowledge_linker__algorithms___closure = 0;
 
-/* Implementation of 'knowledge_linker._closure' */
+/* Implementation of 'knowledge_linker.algorithms._closure' */
 static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_zip;
@@ -1954,14 +1954,13 @@ static char __pyx_k_getbuffer_obj_view_flags[] = "getbuffer(obj, view, flags)";
 static char __pyx_k_sources_targets_mismatch[] = "sources/targets mismatch";
 static char __pyx_k_Dimension_d_is_not_direct[] = "Dimension %d is not direct";
 static char __pyx_k_Invalid_shape_in_axis_d_d[] = "Invalid shape in axis %d: %d.";
-static char __pyx_k_knowledge_linker__closure[] = "knowledge_linker._closure";
 static char __pyx_k_Index_out_of_bounds_axis_d[] = "Index out of bounds (axis %d)";
 static char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis %d)";
 static char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
 static char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
-static char __pyx_k_home_giovanni_repos_truthy_meas[] = "/home/giovanni/repos/truthy_measure/knowledge_linker/_closure.pyx";
+static char __pyx_k_home_giovanni_repos_knowledge_l[] = "/home/giovanni/repos/knowledge_linker/knowledge_linker/algorithms/_closure.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
 static char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
@@ -1975,6 +1974,7 @@ static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order 
 static char __pyx_k_Out_of_bounds_on_buffer_access_a[] = "Out of bounds on buffer access (axis %d)";
 static char __pyx_k_Unable_to_convert_item_to_object[] = "Unable to convert item to object";
 static char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension %d (got %d and %d)";
+static char __pyx_k_knowledge_linker_algorithms__clo[] = "knowledge_linker.algorithms._closure";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
@@ -2040,7 +2040,7 @@ static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_n_s_fortran;
 static PyObject *__pyx_n_u_fortran;
 static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
-static PyObject *__pyx_kp_s_home_giovanni_repos_truthy_meas;
+static PyObject *__pyx_kp_s_home_giovanni_repos_knowledge_l;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_ii;
@@ -2054,7 +2054,7 @@ static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
 static PyObject *__pyx_n_s_j;
 static PyObject *__pyx_n_s_join;
 static PyObject *__pyx_n_s_kind;
-static PyObject *__pyx_n_s_knowledge_linker__closure;
+static PyObject *__pyx_n_s_knowledge_linker_algorithms__clo;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_map;
 static PyObject *__pyx_n_s_memmap;
@@ -2113,12 +2113,12 @@ static PyObject *__pyx_n_s_write;
 static PyObject *__pyx_n_s_xrange;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zip;
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, int __pyx_v_retpath, PyObject *__pyx_v_kind); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, PyObject *__pyx_v_f, int __pyx_v_retpaths, PyObject *__pyx_v_kind); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, int __pyx_v_mmap); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, __Pyx_memviewslice __pyx_v_targets); /* proto */
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_cclosure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, int __pyx_v_retpath, PyObject *__pyx_v_kind); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_2cclosuress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, PyObject *__pyx_v_f, int __pyx_v_retpaths, PyObject *__pyx_v_kind); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_4reachables(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_6reachablesmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, int __pyx_v_mmap); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_8shortestpathmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, __Pyx_memviewslice __pyx_v_targets); /* proto */
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_10shortestpath(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2191,7 +2191,7 @@ static PyObject *__pyx_tuple__35;
 static PyObject *__pyx_tuple__36;
 static PyObject *__pyx_codeobj__31;
 
-/* "knowledge_linker/_closure.pyx":17
+/* "knowledge_linker/algorithms/_closure.pyx":17
  * 
  * 
  * cpdef object cclosure(object A, int source, int target, int retpath = 0,             # <<<<<<<<<<<<<<
@@ -2199,8 +2199,8 @@ static PyObject *__pyx_codeobj__31;
  *     '''
  */
 
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_cclosure *__pyx_optional_args) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_cclosure(PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosure *__pyx_optional_args) {
   int __pyx_v_retpath = ((int)0);
   PyObject *__pyx_v_kind = ((PyObject *)__pyx_n_s_ultrametric);
   PyObject *__pyx_v_path = NULL;
@@ -2228,7 +2228,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
     }
   }
 
-  /* "knowledge_linker/_closure.pyx":22
+  /* "knowledge_linker/algorithms/_closure.pyx":22
  *     Source-target closure. Uses cclosuress.
  *     '''
  *     path = None             # <<<<<<<<<<<<<<
@@ -2238,7 +2238,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __Pyx_INCREF(Py_None);
   __pyx_v_path = Py_None;
 
-  /* "knowledge_linker/_closure.pyx":23
+  /* "knowledge_linker/algorithms/_closure.pyx":23
  *     '''
  *     path = None
  *     caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)             # <<<<<<<<<<<<<<
@@ -2324,7 +2324,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __pyx_v_paths = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_closure.pyx":24
+  /* "knowledge_linker/algorithms/_closure.pyx":24
  *     path = None
  *     caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)
  *     if retpath:             # <<<<<<<<<<<<<<
@@ -2334,7 +2334,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __pyx_t_6 = (__pyx_v_retpath != 0);
   if (__pyx_t_6) {
 
-    /* "knowledge_linker/_closure.pyx":25
+    /* "knowledge_linker/algorithms/_closure.pyx":25
  *     caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)
  *     if retpath:
  *         path = paths[target]             # <<<<<<<<<<<<<<
@@ -2346,7 +2346,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
     __Pyx_DECREF_SET(__pyx_v_path, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "knowledge_linker/_closure.pyx":24
+    /* "knowledge_linker/algorithms/_closure.pyx":24
  *     path = None
  *     caps, paths = cclosuress(A, source, retpaths = retpath, kind=kind)
  *     if retpath:             # <<<<<<<<<<<<<<
@@ -2355,7 +2355,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
  */
   }
 
-  /* "knowledge_linker/_closure.pyx":26
+  /* "knowledge_linker/algorithms/_closure.pyx":26
  *     if retpath:
  *         path = paths[target]
  *     cap = caps[target]             # <<<<<<<<<<<<<<
@@ -2367,7 +2367,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __pyx_v_cap = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "knowledge_linker/_closure.pyx":27
+  /* "knowledge_linker/algorithms/_closure.pyx":27
  *         path = paths[target]
  *     cap = caps[target]
  *     return cap, path             # <<<<<<<<<<<<<<
@@ -2387,7 +2387,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":17
+  /* "knowledge_linker/algorithms/_closure.pyx":17
  * 
  * 
  * cpdef object cclosure(object A, int source, int target, int retpath = 0,             # <<<<<<<<<<<<<<
@@ -2401,7 +2401,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_path);
@@ -2414,9 +2414,9 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosure(PyObject *__pyx_v
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_8_closure_cclosure[] = "\n    Source-target closure. Uses cclosuress.\n    ";
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_8_closure_cclosure[] = "\n    Source-target closure. Uses cclosuress.\n    ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_1cclosure(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   int __pyx_v_source;
   int __pyx_v_target;
@@ -2498,22 +2498,22 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_1cclosure(PyObject *__pyx
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("cclosure", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_cclosure(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_target, __pyx_v_retpath, __pyx_v_kind);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_cclosure(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_target, __pyx_v_retpath, __pyx_v_kind);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, int __pyx_v_retpath, PyObject *__pyx_v_kind) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_cclosure(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, int __pyx_v_retpath, PyObject *__pyx_v_kind) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  struct __pyx_opt_args_16knowledge_linker_8_closure_cclosure __pyx_t_2;
+  struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosure __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2522,7 +2522,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED Py
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.retpath = __pyx_v_retpath;
   __pyx_t_2.kind = __pyx_v_kind;
-  __pyx_t_1 = __pyx_f_16knowledge_linker_8_closure_cclosure(__pyx_v_A, __pyx_v_source, __pyx_v_target, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_16knowledge_linker_10algorithms_8_closure_cclosure(__pyx_v_A, __pyx_v_source, __pyx_v_target, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2531,7 +2531,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED Py
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosure", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2539,7 +2539,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":31
+/* "knowledge_linker/algorithms/_closure.pyx":31
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef object cclosuress(             # <<<<<<<<<<<<<<
@@ -2547,10 +2547,10 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_cclosure(CYTHON_UNUSED Py
  *     int source,
  */
 
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx_v_A, int __pyx_v_source, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_cclosuress *__pyx_optional_args) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_cclosuress(PyObject *__pyx_v_A, int __pyx_v_source, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosuress *__pyx_optional_args) {
 
-  /* "knowledge_linker/_closure.pyx":34
+  /* "knowledge_linker/algorithms/_closure.pyx":34
  *     object A,
  *     int source,
  *     object f = None,             # <<<<<<<<<<<<<<
@@ -2568,9 +2568,9 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   int __pyx_v_i;
   int __pyx_v_flag;
   int __pyx_v_cnt;
-  __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_v_paths;
-  __pyx_t_16knowledge_linker_8_closure_MetricPath __pyx_v_path;
-  __pyx_t_16knowledge_linker_8_closure_Closure __pyx_v_closure;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr __pyx_v_paths;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath __pyx_v_path;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_Closure __pyx_v_closure;
   PyArrayObject *__pyx_v_proxs = 0;
   PyObject *__pyx_v_pathslist = 0;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_proxs;
@@ -2620,7 +2620,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_pybuffernd_proxs.data = NULL;
   __pyx_pybuffernd_proxs.rcbuffer = &__pyx_pybuffer_proxs;
 
-  /* "knowledge_linker/_closure.pyx":93
+  /* "knowledge_linker/algorithms/_closure.pyx":93
  *         optional; the associated path of nodes (excluding the source).
  *     '''
  *     A = sp.csr_matrix(A)             # <<<<<<<<<<<<<<
@@ -2660,7 +2660,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __Pyx_DECREF_SET(__pyx_v_A, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":95
+  /* "knowledge_linker/algorithms/_closure.pyx":95
  *     A = sp.csr_matrix(A)
  *     cdef:
  *         int [:] A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -2676,7 +2676,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_5.memview = NULL;
   __pyx_t_5.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":96
+  /* "knowledge_linker/algorithms/_closure.pyx":96
  *     cdef:
  *         int [:] A_indptr = A.indptr
  *         int [:] A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -2692,7 +2692,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_5.memview = NULL;
   __pyx_t_5.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":97
+  /* "knowledge_linker/algorithms/_closure.pyx":97
  *         int [:] A_indptr = A.indptr
  *         int [:] A_indices = A.indices
  *         double [:] A_data = A.data             # <<<<<<<<<<<<<<
@@ -2708,7 +2708,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":99
+  /* "knowledge_linker/algorithms/_closure.pyx":99
  *         double [:] A_data = A.data
  *         int [:] tmp
  *         int N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -2724,7 +2724,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_7;
 
-  /* "knowledge_linker/_closure.pyx":101
+  /* "knowledge_linker/algorithms/_closure.pyx":101
  *         int N = A.shape[0]
  *         int i
  *         int flag = 0             # <<<<<<<<<<<<<<
@@ -2733,7 +2733,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
   __pyx_v_flag = 0;
 
-  /* "knowledge_linker/_closure.pyx":102
+  /* "knowledge_linker/algorithms/_closure.pyx":102
  *         int i
  *         int flag = 0
  *         int cnt = 0             # <<<<<<<<<<<<<<
@@ -2742,7 +2742,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
   __pyx_v_cnt = 0;
 
-  /* "knowledge_linker/_closure.pyx":106
+  /* "knowledge_linker/algorithms/_closure.pyx":106
  *         MetricPath path
  *         Closure closure
  *         cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)             # <<<<<<<<<<<<<<
@@ -2789,7 +2789,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_v_proxs = ((PyArrayObject *)__pyx_t_8);
   __pyx_t_8 = 0;
 
-  /* "knowledge_linker/_closure.pyx":107
+  /* "knowledge_linker/algorithms/_closure.pyx":107
  *         Closure closure
  *         cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)
  *         object pathslist = []             # <<<<<<<<<<<<<<
@@ -2801,7 +2801,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_v_pathslist = __pyx_t_8;
   __pyx_t_8 = 0;
 
-  /* "knowledge_linker/_closure.pyx":108
+  /* "knowledge_linker/algorithms/_closure.pyx":108
  *         cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)
  *         object pathslist = []
  *     if f is not None:             # <<<<<<<<<<<<<<
@@ -2812,7 +2812,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_11 = (__pyx_t_10 != 0);
   if (__pyx_t_11) {
 
-    /* "knowledge_linker/_closure.pyx":109
+    /* "knowledge_linker/algorithms/_closure.pyx":109
  *         object pathslist = []
  *     if f is not None:
  *         flag = 1             # <<<<<<<<<<<<<<
@@ -2821,7 +2821,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
     __pyx_v_flag = 1;
 
-    /* "knowledge_linker/_closure.pyx":110
+    /* "knowledge_linker/algorithms/_closure.pyx":110
  *     if f is not None:
  *         flag = 1
  *         f.write(pack("ii", source, 0)) # provisional count             # <<<<<<<<<<<<<<
@@ -2892,7 +2892,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "knowledge_linker/_closure.pyx":108
+    /* "knowledge_linker/algorithms/_closure.pyx":108
  *         cnp.ndarray[cnp.double_t] proxs = np.empty(N, dtype=np.double)
  *         object pathslist = []
  *     if f is not None:             # <<<<<<<<<<<<<<
@@ -2901,7 +2901,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
   }
 
-  /* "knowledge_linker/_closure.pyx":111
+  /* "knowledge_linker/algorithms/_closure.pyx":111
  *         flag = 1
  *         f.write(pack("ii", source, 0)) # provisional count
  *     if kind == 'metric':             # <<<<<<<<<<<<<<
@@ -2911,7 +2911,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_v_kind, __pyx_n_s_metric, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 111; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_11) {
 
-    /* "knowledge_linker/_closure.pyx":112
+    /* "knowledge_linker/algorithms/_closure.pyx":112
  *         f.write(pack("ii", source, 0)) # provisional count
  *     if kind == 'metric':
  *         closure.disjf = fmax             # <<<<<<<<<<<<<<
@@ -2920,16 +2920,16 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
     __pyx_v_closure.disjf = fmax;
 
-    /* "knowledge_linker/_closure.pyx":113
+    /* "knowledge_linker/algorithms/_closure.pyx":113
  *     if kind == 'metric':
  *         closure.disjf = fmax
  *         closure.conjf = _dombit1             # <<<<<<<<<<<<<<
  *     elif kind == 'ultrametric':
  *         closure.disjf = fmax
  */
-    __pyx_v_closure.conjf = __pyx_f_16knowledge_linker_8_closure__dombit1;
+    __pyx_v_closure.conjf = __pyx_f_16knowledge_linker_10algorithms_8_closure__dombit1;
 
-    /* "knowledge_linker/_closure.pyx":111
+    /* "knowledge_linker/algorithms/_closure.pyx":111
  *         flag = 1
  *         f.write(pack("ii", source, 0)) # provisional count
  *     if kind == 'metric':             # <<<<<<<<<<<<<<
@@ -2939,7 +2939,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     goto __pyx_L4;
   }
 
-  /* "knowledge_linker/_closure.pyx":114
+  /* "knowledge_linker/algorithms/_closure.pyx":114
  *         closure.disjf = fmax
  *         closure.conjf = _dombit1
  *     elif kind == 'ultrametric':             # <<<<<<<<<<<<<<
@@ -2949,7 +2949,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_v_kind, __pyx_n_s_ultrametric, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_11) {
 
-    /* "knowledge_linker/_closure.pyx":115
+    /* "knowledge_linker/algorithms/_closure.pyx":115
  *         closure.conjf = _dombit1
  *     elif kind == 'ultrametric':
  *         closure.disjf = fmax             # <<<<<<<<<<<<<<
@@ -2958,7 +2958,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
     __pyx_v_closure.disjf = fmax;
 
-    /* "knowledge_linker/_closure.pyx":116
+    /* "knowledge_linker/algorithms/_closure.pyx":116
  *     elif kind == 'ultrametric':
  *         closure.disjf = fmax
  *         closure.conjf = fmin             # <<<<<<<<<<<<<<
@@ -2967,7 +2967,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
     __pyx_v_closure.conjf = fmin;
 
-    /* "knowledge_linker/_closure.pyx":114
+    /* "knowledge_linker/algorithms/_closure.pyx":114
  *         closure.disjf = fmax
  *         closure.conjf = _dombit1
  *     elif kind == 'ultrametric':             # <<<<<<<<<<<<<<
@@ -2977,7 +2977,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     goto __pyx_L4;
   }
 
-  /* "knowledge_linker/_closure.pyx":118
+  /* "knowledge_linker/algorithms/_closure.pyx":118
  *         closure.conjf = fmin
  *     else:
  *         raise ValueError('unknown metric kind: {}'.format(kind))             # <<<<<<<<<<<<<<
@@ -3026,16 +3026,16 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   }
   __pyx_L4:;
 
-  /* "knowledge_linker/_closure.pyx":119
+  /* "knowledge_linker/algorithms/_closure.pyx":119
  *     else:
  *         raise ValueError('unknown metric kind: {}'.format(kind))
  *     paths = _cclosuress(closure, N, A_indptr, A_indices, A_data, source, retpaths)             # <<<<<<<<<<<<<<
  *     for i in xrange(N):
  *         path = paths[i]
  */
-  __pyx_v_paths = __pyx_f_16knowledge_linker_8_closure__cclosuress(__pyx_v_closure, __pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_A_data, __pyx_v_source, __pyx_v_retpaths);
+  __pyx_v_paths = __pyx_f_16knowledge_linker_10algorithms_8_closure__cclosuress(__pyx_v_closure, __pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_A_data, __pyx_v_source, __pyx_v_retpaths);
 
-  /* "knowledge_linker/_closure.pyx":120
+  /* "knowledge_linker/algorithms/_closure.pyx":120
  *         raise ValueError('unknown metric kind: {}'.format(kind))
  *     paths = _cclosuress(closure, N, A_indptr, A_indices, A_data, source, retpaths)
  *     for i in xrange(N):             # <<<<<<<<<<<<<<
@@ -3046,7 +3046,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_7; __pyx_t_15+=1) {
     __pyx_v_i = __pyx_t_15;
 
-    /* "knowledge_linker/_closure.pyx":121
+    /* "knowledge_linker/algorithms/_closure.pyx":121
  *     paths = _cclosuress(closure, N, A_indptr, A_indices, A_data, source, retpaths)
  *     for i in xrange(N):
  *         path = paths[i]             # <<<<<<<<<<<<<<
@@ -3055,7 +3055,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
     __pyx_v_path = (__pyx_v_paths[__pyx_v_i]);
 
-    /* "knowledge_linker/_closure.pyx":122
+    /* "knowledge_linker/algorithms/_closure.pyx":122
  *     for i in xrange(N):
  *         path = paths[i]
  *         if path.found:             # <<<<<<<<<<<<<<
@@ -3065,7 +3065,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __pyx_t_11 = (__pyx_v_path.found != 0);
     if (__pyx_t_11) {
 
-      /* "knowledge_linker/_closure.pyx":123
+      /* "knowledge_linker/algorithms/_closure.pyx":123
  *         path = paths[i]
  *         if path.found:
  *             proxs[i] = path.proximity             # <<<<<<<<<<<<<<
@@ -3076,7 +3076,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       __pyx_t_17 = __pyx_v_i;
       *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_proxs.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_proxs.diminfo[0].strides) = __pyx_t_16;
 
-      /* "knowledge_linker/_closure.pyx":124
+      /* "knowledge_linker/algorithms/_closure.pyx":124
  *         if path.found:
  *             proxs[i] = path.proximity
  *             if flag:             # <<<<<<<<<<<<<<
@@ -3086,7 +3086,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       __pyx_t_11 = (__pyx_v_flag != 0);
       if (__pyx_t_11) {
 
-        /* "knowledge_linker/_closure.pyx":125
+        /* "knowledge_linker/algorithms/_closure.pyx":125
  *             proxs[i] = path.proximity
  *             if flag:
  *                 f.write(pack("id", i, path.proximity))             # <<<<<<<<<<<<<<
@@ -3159,7 +3159,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-        /* "knowledge_linker/_closure.pyx":126
+        /* "knowledge_linker/algorithms/_closure.pyx":126
  *             if flag:
  *                 f.write(pack("id", i, path.proximity))
  *                 cnt += 1             # <<<<<<<<<<<<<<
@@ -3168,7 +3168,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
         __pyx_v_cnt = (__pyx_v_cnt + 1);
 
-        /* "knowledge_linker/_closure.pyx":124
+        /* "knowledge_linker/algorithms/_closure.pyx":124
  *         if path.found:
  *             proxs[i] = path.proximity
  *             if flag:             # <<<<<<<<<<<<<<
@@ -3177,7 +3177,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
       }
 
-      /* "knowledge_linker/_closure.pyx":127
+      /* "knowledge_linker/algorithms/_closure.pyx":127
  *                 f.write(pack("id", i, path.proximity))
  *                 cnt += 1
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -3187,7 +3187,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       __pyx_t_11 = (__pyx_v_retpaths != 0);
       if (__pyx_t_11) {
 
-        /* "knowledge_linker/_closure.pyx":128
+        /* "knowledge_linker/algorithms/_closure.pyx":128
  *                 cnt += 1
  *             if retpaths:
  *                 tmp = <int [:path.length]>path.vertices             # <<<<<<<<<<<<<<
@@ -3217,7 +3217,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
         __pyx_t_5.memview = NULL;
         __pyx_t_5.data = NULL;
 
-        /* "knowledge_linker/_closure.pyx":129
+        /* "knowledge_linker/algorithms/_closure.pyx":129
  *             if retpaths:
  *                 tmp = <int [:path.length]>path.vertices
  *                 pathslist.append(np.array(tmp, copy=True))             # <<<<<<<<<<<<<<
@@ -3247,7 +3247,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
         __pyx_t_21 = __Pyx_PyObject_Append(__pyx_v_pathslist, __pyx_t_4); if (unlikely(__pyx_t_21 == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "knowledge_linker/_closure.pyx":130
+        /* "knowledge_linker/algorithms/_closure.pyx":130
  *                 tmp = <int [:path.length]>path.vertices
  *                 pathslist.append(np.array(tmp, copy=True))
  *                 free(<void *>path.vertices)             # <<<<<<<<<<<<<<
@@ -3256,7 +3256,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
         free(((void *)__pyx_v_path.vertices));
 
-        /* "knowledge_linker/_closure.pyx":127
+        /* "knowledge_linker/algorithms/_closure.pyx":127
  *                 f.write(pack("id", i, path.proximity))
  *                 cnt += 1
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -3265,7 +3265,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
       }
 
-      /* "knowledge_linker/_closure.pyx":122
+      /* "knowledge_linker/algorithms/_closure.pyx":122
  *     for i in xrange(N):
  *         path = paths[i]
  *         if path.found:             # <<<<<<<<<<<<<<
@@ -3275,7 +3275,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       goto __pyx_L7;
     }
 
-    /* "knowledge_linker/_closure.pyx":132
+    /* "knowledge_linker/algorithms/_closure.pyx":132
  *                 free(<void *>path.vertices)
  *         else:
  *             proxs[i] = 0.             # <<<<<<<<<<<<<<
@@ -3286,7 +3286,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       __pyx_t_22 = __pyx_v_i;
       *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_proxs.rcbuffer->pybuffer.buf, __pyx_t_22, __pyx_pybuffernd_proxs.diminfo[0].strides) = 0.;
 
-      /* "knowledge_linker/_closure.pyx":133
+      /* "knowledge_linker/algorithms/_closure.pyx":133
  *         else:
  *             proxs[i] = 0.
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -3296,7 +3296,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
       __pyx_t_11 = (__pyx_v_retpaths != 0);
       if (__pyx_t_11) {
 
-        /* "knowledge_linker/_closure.pyx":134
+        /* "knowledge_linker/algorithms/_closure.pyx":134
  *             proxs[i] = 0.
  *             if retpaths:
  *                 pathslist.append(np.empty(0, dtype=np.int))             # <<<<<<<<<<<<<<
@@ -3324,7 +3324,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
         __pyx_t_21 = __Pyx_PyObject_Append(__pyx_v_pathslist, __pyx_t_8); if (unlikely(__pyx_t_21 == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-        /* "knowledge_linker/_closure.pyx":133
+        /* "knowledge_linker/algorithms/_closure.pyx":133
  *         else:
  *             proxs[i] = 0.
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -3336,7 +3336,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __pyx_L7:;
   }
 
-  /* "knowledge_linker/_closure.pyx":135
+  /* "knowledge_linker/algorithms/_closure.pyx":135
  *             if retpaths:
  *                 pathslist.append(np.empty(0, dtype=np.int))
  *     if flag and cnt:             # <<<<<<<<<<<<<<
@@ -3354,7 +3354,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_L12_bool_binop_done:;
   if (__pyx_t_11) {
 
-    /* "knowledge_linker/_closure.pyx":136
+    /* "knowledge_linker/algorithms/_closure.pyx":136
  *                 pathslist.append(np.empty(0, dtype=np.int))
  *     if flag and cnt:
  *         f.seek(sizeof(int))             # <<<<<<<<<<<<<<
@@ -3393,7 +3393,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "knowledge_linker/_closure.pyx":137
+    /* "knowledge_linker/algorithms/_closure.pyx":137
  *     if flag and cnt:
  *         f.seek(sizeof(int))
  *         f.write(pack('i', cnt))             # <<<<<<<<<<<<<<
@@ -3461,7 +3461,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "knowledge_linker/_closure.pyx":135
+    /* "knowledge_linker/algorithms/_closure.pyx":135
  *             if retpaths:
  *                 pathslist.append(np.empty(0, dtype=np.int))
  *     if flag and cnt:             # <<<<<<<<<<<<<<
@@ -3470,7 +3470,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
   }
 
-  /* "knowledge_linker/_closure.pyx":138
+  /* "knowledge_linker/algorithms/_closure.pyx":138
  *         f.seek(sizeof(int))
  *         f.write(pack('i', cnt))
  *     free(<void *> paths)             # <<<<<<<<<<<<<<
@@ -3479,7 +3479,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
  */
   free(((void *)__pyx_v_paths));
 
-  /* "knowledge_linker/_closure.pyx":139
+  /* "knowledge_linker/algorithms/_closure.pyx":139
  *         f.write(pack('i', cnt))
  *     free(<void *> paths)
  *     return (proxs, pathslist)             # <<<<<<<<<<<<<<
@@ -3499,7 +3499,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
   __pyx_t_8 = 0;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":31
+  /* "knowledge_linker/algorithms/_closure.pyx":31
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef object cclosuress(             # <<<<<<<<<<<<<<
@@ -3524,7 +3524,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_proxs.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3543,9 +3543,9 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_cclosuress(PyObject *__pyx
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_8_closure_2cclosuress[] = "\n    Computes the transitive closure from `source` on the proximity graph\n    represented by adjacency matrix `A`, and optionally writes it to open file\n    `f`. Returns the proximity values and optionally the associated bottleneck\n    paths.\n\n    Two nodes are connected in the closure graph if there exists a path between\n    them in the original proximity graph. This function computes closures\n    according to two possible metrics in the proximity space: the ultra-metric\n    (or max-min), and the metric corresponding, in the the distance space, to\n    the (min, +) distance associated to the classic Dijkstra algorithm. In the\n    proximity space, this \"standard\" metric corresponds to the operators (max,\n    DT1), where DT1 is the Dombi t-conorm with lambda = 1. See Simas, Dravid\n    and Rocha (forthcoming) for more information on transitive closures on\n    proximity graphs.\n\n    Depending on the metric notion used, the returned paths are optimal in the\n    sense that they correspond the the \"shortest\" paths in the isomorphic\n    distance graph of the given proximity graph. For example, if the metric\n    chosen is the ultrametric (max,min), the returned path is the so-called\n    bottleneck paths, i.e, the path that maximizes the minimum edge (or node)\n    weight, where the weight, is a quantity between 0 and 1 and is understood\n    to represent a similarity of proximity value between the source and the\n    target.\n\n    Computes the \"single-source\" Dijkstra, i.e. for a given source returns the\n    closure to all possible target nodes.\n\n    Parameters\n    ----------\n    A : array_like\n        NxN weighted adjancency matrix, will be converted to compressed sparse\n        row format. Weights are double floats.\n\n    source : int\n        The source node.\n\n    f : open file\n\n    retpaths : int\n        optional; compute and return the paths to each connected node, or an\n        empty array for disconnected pairs. Default: do not"" compute nor return\n        paths.\n\n    kind : str\n        the kind of closure to compute: 'ultrametric' (default) or 'metric'.\n\n    Returns\n    -------\n    prox : (N,) double float ndarray\n        the proximities from source to all other nodes in the graph, or -1 if\n        the two nodes are disconnected.\n\n    paths : list of ndarrays\n        optional; the associated path of nodes (excluding the source).\n    ";
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_8_closure_2cclosuress[] = "\n    Computes the transitive closure from `source` on the proximity graph\n    represented by adjacency matrix `A`, and optionally writes it to open file\n    `f`. Returns the proximity values and optionally the associated bottleneck\n    paths.\n\n    Two nodes are connected in the closure graph if there exists a path between\n    them in the original proximity graph. This function computes closures\n    according to two possible metrics in the proximity space: the ultra-metric\n    (or max-min), and the metric corresponding, in the the distance space, to\n    the (min, +) distance associated to the classic Dijkstra algorithm. In the\n    proximity space, this \"standard\" metric corresponds to the operators (max,\n    DT1), where DT1 is the Dombi t-conorm with lambda = 1. See Simas, Dravid\n    and Rocha (forthcoming) for more information on transitive closures on\n    proximity graphs.\n\n    Depending on the metric notion used, the returned paths are optimal in the\n    sense that they correspond the the \"shortest\" paths in the isomorphic\n    distance graph of the given proximity graph. For example, if the metric\n    chosen is the ultrametric (max,min), the returned path is the so-called\n    bottleneck paths, i.e, the path that maximizes the minimum edge (or node)\n    weight, where the weight, is a quantity between 0 and 1 and is understood\n    to represent a similarity of proximity value between the source and the\n    target.\n\n    Computes the \"single-source\" Dijkstra, i.e. for a given source returns the\n    closure to all possible target nodes.\n\n    Parameters\n    ----------\n    A : array_like\n        NxN weighted adjancency matrix, will be converted to compressed sparse\n        row format. Weights are double floats.\n\n    source : int\n        The source node.\n\n    f : open file\n\n    retpaths : int\n        optional; compute and return the paths to each connected node, or an\n        empty array for disconnected pairs. Default: do not"" compute nor return\n        paths.\n\n    kind : str\n        the kind of closure to compute: 'ultrametric' (default) or 'metric'.\n\n    Returns\n    -------\n    prox : (N,) double float ndarray\n        the proximities from source to all other nodes in the graph, or -1 if\n        the two nodes are disconnected.\n\n    paths : list of ndarrays\n        optional; the associated path of nodes (excluding the source).\n    ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_3cclosuress(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   int __pyx_v_source;
   PyObject *__pyx_v_f = 0;
@@ -3561,7 +3561,7 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__p
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_A,&__pyx_n_s_source,&__pyx_n_s_f,&__pyx_n_s_retpaths,&__pyx_n_s_kind,0};
     PyObject* values[5] = {0,0,0,0,0};
 
-    /* "knowledge_linker/_closure.pyx":34
+    /* "knowledge_linker/algorithms/_closure.pyx":34
  *     object A,
  *     int source,
  *     object f = None,             # <<<<<<<<<<<<<<
@@ -3636,13 +3636,13 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__p
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("cclosuress", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_2cclosuress(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_f, __pyx_v_retpaths, __pyx_v_kind);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_2cclosuress(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_f, __pyx_v_retpaths, __pyx_v_kind);
 
-  /* "knowledge_linker/_closure.pyx":31
+  /* "knowledge_linker/algorithms/_closure.pyx":31
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef object cclosuress(             # <<<<<<<<<<<<<<
@@ -3655,11 +3655,11 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_3cclosuress(PyObject *__p
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, PyObject *__pyx_v_f, int __pyx_v_retpaths, PyObject *__pyx_v_kind) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_2cclosuress(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, PyObject *__pyx_v_f, int __pyx_v_retpaths, PyObject *__pyx_v_kind) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  struct __pyx_opt_args_16knowledge_linker_8_closure_cclosuress __pyx_t_2;
+  struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_cclosuress __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -3669,7 +3669,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED
   __pyx_t_2.f = __pyx_v_f;
   __pyx_t_2.retpaths = __pyx_v_retpaths;
   __pyx_t_2.kind = __pyx_v_kind;
-  __pyx_t_1 = __pyx_f_16knowledge_linker_8_closure_cclosuress(__pyx_v_A, __pyx_v_source, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_16knowledge_linker_10algorithms_8_closure_cclosuress(__pyx_v_A, __pyx_v_source, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3678,7 +3678,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3686,7 +3686,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":145
+/* "knowledge_linker/algorithms/_closure.pyx":145
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef MetricPathPtr _cclosuress(             # <<<<<<<<<<<<<<
@@ -3694,8 +3694,8 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_2cclosuress(CYTHON_UNUSED
  *         int N,
  */
 
-static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_linker_8_closure__cclosuress(__pyx_t_16knowledge_linker_8_closure_Closure __pyx_v_closure, int __pyx_v_N, __Pyx_memviewslice __pyx_v_indptr, __Pyx_memviewslice __pyx_v_indices, __Pyx_memviewslice __pyx_v_data, int __pyx_v_source, int __pyx_v_retpaths) {
-  struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *__pyx_v_Q = 0;
+static __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr __pyx_f_16knowledge_linker_10algorithms_8_closure__cclosuress(__pyx_t_16knowledge_linker_10algorithms_8_closure_Closure __pyx_v_closure, int __pyx_v_N, __Pyx_memviewslice __pyx_v_indptr, __Pyx_memviewslice __pyx_v_indices, __Pyx_memviewslice __pyx_v_data, int __pyx_v_source, int __pyx_v_retpaths) {
+  struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *__pyx_v_Q = 0;
   int *__pyx_v_P;
   int *__pyx_v_certain;
   int *__pyx_v_tmp;
@@ -3709,10 +3709,10 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   double __pyx_v_w;
   double __pyx_v_d;
   double __pyx_v_neigh_prox;
-  __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_v_paths;
-  __pyx_t_16knowledge_linker_8_closure_MetricPath __pyx_v_path;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr __pyx_v_paths;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath __pyx_v_path;
   int __pyx_v_neighbor;
-  __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_r;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -3729,7 +3729,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_cclosuress", 0);
 
-  /* "knowledge_linker/_closure.pyx":154
+  /* "knowledge_linker/algorithms/_closure.pyx":154
  *         int retpaths):
  *     cdef:
  *         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)  # min-heap             # <<<<<<<<<<<<<<
@@ -3748,40 +3748,40 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_Q = ((struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_t_2);
+  __pyx_v_Q = ((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_closure.pyx":155
+  /* "knowledge_linker/algorithms/_closure.pyx":155
  *     cdef:
  *         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)  # min-heap
  *         int * P = init_intarray(N, -1)             # <<<<<<<<<<<<<<
  *         int * certain = init_intarray(N, 0)
  *         int * tmp = init_intarray(N, -1) # stores paths in reverse order
  */
-  __pyx_v_P = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, -1);
+  __pyx_v_P = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, -1);
 
-  /* "knowledge_linker/_closure.pyx":156
+  /* "knowledge_linker/algorithms/_closure.pyx":156
  *         FastUpdateBinaryHeap Q = FastUpdateBinaryHeap(N, N)  # min-heap
  *         int * P = init_intarray(N, -1)
  *         int * certain = init_intarray(N, 0)             # <<<<<<<<<<<<<<
  *         int * tmp = init_intarray(N, -1) # stores paths in reverse order
  *         double * proxs = <double *> malloc(N * sizeof(double))
  */
-  __pyx_v_certain = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, 0);
+  __pyx_v_certain = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, 0);
 
-  /* "knowledge_linker/_closure.pyx":157
+  /* "knowledge_linker/algorithms/_closure.pyx":157
  *         int * P = init_intarray(N, -1)
  *         int * certain = init_intarray(N, 0)
  *         int * tmp = init_intarray(N, -1) # stores paths in reverse order             # <<<<<<<<<<<<<<
  *         double * proxs = <double *> malloc(N * sizeof(double))
  *         int * neighbors = NULL
  */
-  __pyx_v_tmp = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, -1);
+  __pyx_v_tmp = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, -1);
 
-  /* "knowledge_linker/_closure.pyx":158
+  /* "knowledge_linker/algorithms/_closure.pyx":158
  *         int * certain = init_intarray(N, 0)
  *         int * tmp = init_intarray(N, -1) # stores paths in reverse order
  *         double * proxs = <double *> malloc(N * sizeof(double))             # <<<<<<<<<<<<<<
@@ -3790,7 +3790,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   __pyx_v_proxs = ((double *)malloc((__pyx_v_N * (sizeof(double)))));
 
-  /* "knowledge_linker/_closure.pyx":159
+  /* "knowledge_linker/algorithms/_closure.pyx":159
  *         int * tmp = init_intarray(N, -1) # stores paths in reverse order
  *         double * proxs = <double *> malloc(N * sizeof(double))
  *         int * neighbors = NULL             # <<<<<<<<<<<<<<
@@ -3799,16 +3799,16 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   __pyx_v_neighbors = NULL;
 
-  /* "knowledge_linker/_closure.pyx":163
+  /* "knowledge_linker/algorithms/_closure.pyx":163
  *         int N_neigh
  *         double prox, w, d, neigh_prox
  *         MetricPathPtr paths = <MetricPathPtr> malloc(N * sizeof(MetricPath))             # <<<<<<<<<<<<<<
  *         MetricPath path
  *     # populate the queue
  */
-  __pyx_v_paths = ((__pyx_t_16knowledge_linker_8_closure_MetricPathPtr)malloc((__pyx_v_N * (sizeof(__pyx_t_16knowledge_linker_8_closure_MetricPath)))));
+  __pyx_v_paths = ((__pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPathPtr)malloc((__pyx_v_N * (sizeof(__pyx_t_16knowledge_linker_10algorithms_8_closure_MetricPath)))));
 
-  /* "knowledge_linker/_closure.pyx":166
+  /* "knowledge_linker/algorithms/_closure.pyx":166
  *         MetricPath path
  *     # populate the queue
  *     for node in xrange(N):             # <<<<<<<<<<<<<<
@@ -3819,7 +3819,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_node = __pyx_t_5;
 
-    /* "knowledge_linker/_closure.pyx":167
+    /* "knowledge_linker/algorithms/_closure.pyx":167
  *     # populate the queue
  *     for node in xrange(N):
  *         if node == source:             # <<<<<<<<<<<<<<
@@ -3829,7 +3829,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     __pyx_t_6 = ((__pyx_v_node == __pyx_v_source) != 0);
     if (__pyx_t_6) {
 
-      /* "knowledge_linker/_closure.pyx":168
+      /* "knowledge_linker/algorithms/_closure.pyx":168
  *     for node in xrange(N):
  *         if node == source:
  *             prox = 1.0             # <<<<<<<<<<<<<<
@@ -3838,7 +3838,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_prox = 1.0;
 
-      /* "knowledge_linker/_closure.pyx":169
+      /* "knowledge_linker/algorithms/_closure.pyx":169
  *         if node == source:
  *             prox = 1.0
  *             P[node] = node             # <<<<<<<<<<<<<<
@@ -3847,7 +3847,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       (__pyx_v_P[__pyx_v_node]) = __pyx_v_node;
 
-      /* "knowledge_linker/_closure.pyx":167
+      /* "knowledge_linker/algorithms/_closure.pyx":167
  *     # populate the queue
  *     for node in xrange(N):
  *         if node == source:             # <<<<<<<<<<<<<<
@@ -3857,7 +3857,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       goto __pyx_L5;
     }
 
-    /* "knowledge_linker/_closure.pyx":171
+    /* "knowledge_linker/algorithms/_closure.pyx":171
  *             P[node] = node
  *         else:
  *             prox = 0.0             # <<<<<<<<<<<<<<
@@ -3869,7 +3869,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     }
     __pyx_L5:;
 
-    /* "knowledge_linker/_closure.pyx":172
+    /* "knowledge_linker/algorithms/_closure.pyx":172
  *         else:
  *             prox = 0.0
  *         proxs[node] = prox             # <<<<<<<<<<<<<<
@@ -3878,17 +3878,17 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     (__pyx_v_proxs[__pyx_v_node]) = __pyx_v_prox;
 
-    /* "knowledge_linker/_closure.pyx":173
+    /* "knowledge_linker/algorithms/_closure.pyx":173
  *             prox = 0.0
  *         proxs[node] = prox
  *         Q.push_fast(- prox, node)             # <<<<<<<<<<<<<<
  *     # compute proximity and predecessor information
  *     while Q.count:
  */
-    ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->__pyx_base.push_fast(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_Q), (-__pyx_v_prox), __pyx_v_node);
+    ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->__pyx_base.push_fast(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_Q), (-__pyx_v_prox), __pyx_v_node);
   }
 
-  /* "knowledge_linker/_closure.pyx":175
+  /* "knowledge_linker/algorithms/_closure.pyx":175
  *         Q.push_fast(- prox, node)
  *     # compute proximity and predecessor information
  *     while Q.count:             # <<<<<<<<<<<<<<
@@ -3899,16 +3899,16 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     __pyx_t_6 = (__pyx_v_Q->__pyx_base.count != 0);
     if (!__pyx_t_6) break;
 
-    /* "knowledge_linker/_closure.pyx":176
+    /* "knowledge_linker/algorithms/_closure.pyx":176
  *     # compute proximity and predecessor information
  *     while Q.count:
  *         prox = - Q.pop_fast()             # <<<<<<<<<<<<<<
  *         node = Q._popped_ref
  *         certain[node] = True
  */
-    __pyx_v_prox = (-((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->__pyx_base.pop_fast(((struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap *)__pyx_v_Q)));
+    __pyx_v_prox = (-((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->__pyx_base.pop_fast(((struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap *)__pyx_v_Q)));
 
-    /* "knowledge_linker/_closure.pyx":177
+    /* "knowledge_linker/algorithms/_closure.pyx":177
  *     while Q.count:
  *         prox = - Q.pop_fast()
  *         node = Q._popped_ref             # <<<<<<<<<<<<<<
@@ -3918,7 +3918,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     __pyx_t_4 = __pyx_v_Q->__pyx_base._popped_ref;
     __pyx_v_node = __pyx_t_4;
 
-    /* "knowledge_linker/_closure.pyx":178
+    /* "knowledge_linker/algorithms/_closure.pyx":178
  *         prox = - Q.pop_fast()
  *         node = Q._popped_ref
  *         certain[node] = True             # <<<<<<<<<<<<<<
@@ -3927,7 +3927,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     (__pyx_v_certain[__pyx_v_node]) = 1;
 
-    /* "knowledge_linker/_closure.pyx":179
+    /* "knowledge_linker/algorithms/_closure.pyx":179
  *         node = Q._popped_ref
  *         certain[node] = True
  *         proxs[node] = prox             # <<<<<<<<<<<<<<
@@ -3936,16 +3936,16 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     (__pyx_v_proxs[__pyx_v_node]) = __pyx_v_prox;
 
-    /* "knowledge_linker/_closure.pyx":180
+    /* "knowledge_linker/algorithms/_closure.pyx":180
  *         certain[node] = True
  *         proxs[node] = prox
  *         N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)             # <<<<<<<<<<<<<<
  *         for i in xrange(N_neigh):
  *             w = data[indptr[node] + i] # i.e. A[node, neigh_node]
  */
-    __pyx_v_N_neigh = __pyx_f_16knowledge_linker_8_closure__csr_neighbors(__pyx_v_node, __pyx_v_indices, __pyx_v_indptr, (&__pyx_v_neighbors));
+    __pyx_v_N_neigh = __pyx_f_16knowledge_linker_10algorithms_8_closure__csr_neighbors(__pyx_v_node, __pyx_v_indices, __pyx_v_indptr, (&__pyx_v_neighbors));
 
-    /* "knowledge_linker/_closure.pyx":181
+    /* "knowledge_linker/algorithms/_closure.pyx":181
  *         proxs[node] = prox
  *         N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
  *         for i in xrange(N_neigh):             # <<<<<<<<<<<<<<
@@ -3956,7 +3956,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "knowledge_linker/_closure.pyx":182
+      /* "knowledge_linker/algorithms/_closure.pyx":182
  *         N_neigh = _csr_neighbors(node, indices, indptr, &neighbors)
  *         for i in xrange(N_neigh):
  *             w = data[indptr[node] + i] # i.e. A[node, neigh_node]             # <<<<<<<<<<<<<<
@@ -3967,7 +3967,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       __pyx_t_8 = ((*((int *) ( /* dim=0 */ (__pyx_v_indptr.data + __pyx_t_7 * __pyx_v_indptr.strides[0]) ))) + __pyx_v_i);
       __pyx_v_w = (*((double *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_8 * __pyx_v_data.strides[0]) )));
 
-      /* "knowledge_linker/_closure.pyx":183
+      /* "knowledge_linker/algorithms/_closure.pyx":183
  *         for i in xrange(N_neigh):
  *             w = data[indptr[node] + i] # i.e. A[node, neigh_node]
  *             if w == 0:             # <<<<<<<<<<<<<<
@@ -3977,7 +3977,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       __pyx_t_6 = ((__pyx_v_w == 0.0) != 0);
       if (__pyx_t_6) {
 
-        /* "knowledge_linker/_closure.pyx":186
+        /* "knowledge_linker/algorithms/_closure.pyx":186
  *                 # skip zeros regardless of sparsity structure (useful when
  *                 # doing link prediction on copy-on-write memmaps
  *                 continue             # <<<<<<<<<<<<<<
@@ -3986,7 +3986,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         goto __pyx_L8_continue;
 
-        /* "knowledge_linker/_closure.pyx":183
+        /* "knowledge_linker/algorithms/_closure.pyx":183
  *         for i in xrange(N_neigh):
  *             w = data[indptr[node] + i] # i.e. A[node, neigh_node]
  *             if w == 0:             # <<<<<<<<<<<<<<
@@ -3995,7 +3995,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       }
 
-      /* "knowledge_linker/_closure.pyx":187
+      /* "knowledge_linker/algorithms/_closure.pyx":187
  *                 # doing link prediction on copy-on-write memmaps
  *                 continue
  *             neighbor = neighbors[i]             # <<<<<<<<<<<<<<
@@ -4004,7 +4004,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_neighbor = (__pyx_v_neighbors[__pyx_v_i]);
 
-      /* "knowledge_linker/_closure.pyx":188
+      /* "knowledge_linker/algorithms/_closure.pyx":188
  *                 continue
  *             neighbor = neighbors[i]
  *             if not certain[neighbor]:             # <<<<<<<<<<<<<<
@@ -4014,16 +4014,16 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       __pyx_t_6 = ((!((__pyx_v_certain[__pyx_v_neighbor]) != 0)) != 0);
       if (__pyx_t_6) {
 
-        /* "knowledge_linker/_closure.pyx":189
+        /* "knowledge_linker/algorithms/_closure.pyx":189
  *             neighbor = neighbors[i]
  *             if not certain[neighbor]:
  *                 neigh_prox = - Q.value_of_fast(neighbor)             # <<<<<<<<<<<<<<
  *                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)
  *                 if d != neigh_prox:
  */
-        __pyx_v_neigh_prox = (-((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->value_of_fast(__pyx_v_Q, __pyx_v_neighbor));
+        __pyx_v_neigh_prox = (-((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->value_of_fast(__pyx_v_Q, __pyx_v_neighbor));
 
-        /* "knowledge_linker/_closure.pyx":190
+        /* "knowledge_linker/algorithms/_closure.pyx":190
  *             if not certain[neighbor]:
  *                 neigh_prox = - Q.value_of_fast(neighbor)
  *                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)             # <<<<<<<<<<<<<<
@@ -4032,7 +4032,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         __pyx_v_d = __pyx_v_closure.disjf(__pyx_v_closure.conjf(__pyx_v_w, __pyx_v_prox), __pyx_v_neigh_prox);
 
-        /* "knowledge_linker/_closure.pyx":191
+        /* "knowledge_linker/algorithms/_closure.pyx":191
  *                 neigh_prox = - Q.value_of_fast(neighbor)
  *                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)
  *                 if d != neigh_prox:             # <<<<<<<<<<<<<<
@@ -4042,16 +4042,16 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
         __pyx_t_6 = ((__pyx_v_d != __pyx_v_neigh_prox) != 0);
         if (__pyx_t_6) {
 
-          /* "knowledge_linker/_closure.pyx":192
+          /* "knowledge_linker/algorithms/_closure.pyx":192
  *                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)
  *                 if d != neigh_prox:
  *                     Q.push_if_lower_fast(- d, neighbor) # will only update             # <<<<<<<<<<<<<<
  *                     P[neighbor] = node
  *         free(<void *> neighbors)
  */
-          ((struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->push_if_lower_fast(__pyx_v_Q, (-__pyx_v_d), __pyx_v_neighbor);
+          ((struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap *)__pyx_v_Q->__pyx_base.__pyx_vtab)->push_if_lower_fast(__pyx_v_Q, (-__pyx_v_d), __pyx_v_neighbor);
 
-          /* "knowledge_linker/_closure.pyx":193
+          /* "knowledge_linker/algorithms/_closure.pyx":193
  *                 if d != neigh_prox:
  *                     Q.push_if_lower_fast(- d, neighbor) # will only update
  *                     P[neighbor] = node             # <<<<<<<<<<<<<<
@@ -4060,7 +4060,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
           (__pyx_v_P[__pyx_v_neighbor]) = __pyx_v_node;
 
-          /* "knowledge_linker/_closure.pyx":191
+          /* "knowledge_linker/algorithms/_closure.pyx":191
  *                 neigh_prox = - Q.value_of_fast(neighbor)
  *                 d = closure.disjf(closure.conjf(w, prox), neigh_prox)
  *                 if d != neigh_prox:             # <<<<<<<<<<<<<<
@@ -4069,7 +4069,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         }
 
-        /* "knowledge_linker/_closure.pyx":188
+        /* "knowledge_linker/algorithms/_closure.pyx":188
  *                 continue
  *             neighbor = neighbors[i]
  *             if not certain[neighbor]:             # <<<<<<<<<<<<<<
@@ -4080,7 +4080,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       __pyx_L8_continue:;
     }
 
-    /* "knowledge_linker/_closure.pyx":194
+    /* "knowledge_linker/algorithms/_closure.pyx":194
  *                     Q.push_if_lower_fast(- d, neighbor) # will only update
  *                     P[neighbor] = node
  *         free(<void *> neighbors)             # <<<<<<<<<<<<<<
@@ -4089,7 +4089,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     free(((void *)__pyx_v_neighbors));
 
-    /* "knowledge_linker/_closure.pyx":195
+    /* "knowledge_linker/algorithms/_closure.pyx":195
  *                     P[neighbor] = node
  *         free(<void *> neighbors)
  *         neighbors = NULL             # <<<<<<<<<<<<<<
@@ -4099,7 +4099,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     __pyx_v_neighbors = NULL;
   }
 
-  /* "knowledge_linker/_closure.pyx":197
+  /* "knowledge_linker/algorithms/_closure.pyx":197
  *         neighbors = NULL
  *     # generate paths
  *     for node in xrange(N):             # <<<<<<<<<<<<<<
@@ -4110,7 +4110,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_node = __pyx_t_5;
 
-    /* "knowledge_linker/_closure.pyx":198
+    /* "knowledge_linker/algorithms/_closure.pyx":198
  *     # generate paths
  *     for node in xrange(N):
  *         path = paths[node]             # <<<<<<<<<<<<<<
@@ -4119,7 +4119,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     __pyx_v_path = (__pyx_v_paths[__pyx_v_node]);
 
-    /* "knowledge_linker/_closure.pyx":199
+    /* "knowledge_linker/algorithms/_closure.pyx":199
  *     for node in xrange(N):
  *         path = paths[node]
  *         path.vertices = NULL             # <<<<<<<<<<<<<<
@@ -4128,7 +4128,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
     __pyx_v_path.vertices = NULL;
 
-    /* "knowledge_linker/_closure.pyx":200
+    /* "knowledge_linker/algorithms/_closure.pyx":200
  *         path = paths[node]
  *         path.vertices = NULL
  *         if P[node] == -1:             # <<<<<<<<<<<<<<
@@ -4138,7 +4138,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     __pyx_t_6 = (((__pyx_v_P[__pyx_v_node]) == -1L) != 0);
     if (__pyx_t_6) {
 
-      /* "knowledge_linker/_closure.pyx":201
+      /* "knowledge_linker/algorithms/_closure.pyx":201
  *         path.vertices = NULL
  *         if P[node] == -1:
  *             path.found = 0             # <<<<<<<<<<<<<<
@@ -4147,7 +4147,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_path.found = 0;
 
-      /* "knowledge_linker/_closure.pyx":202
+      /* "knowledge_linker/algorithms/_closure.pyx":202
  *         if P[node] == -1:
  *             path.found = 0
  *             path.proximity = 0.             # <<<<<<<<<<<<<<
@@ -4156,7 +4156,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_path.proximity = 0.;
 
-      /* "knowledge_linker/_closure.pyx":203
+      /* "knowledge_linker/algorithms/_closure.pyx":203
  *             path.found = 0
  *             path.proximity = 0.
  *             path.length = -1             # <<<<<<<<<<<<<<
@@ -4165,7 +4165,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_path.length = -1L;
 
-      /* "knowledge_linker/_closure.pyx":200
+      /* "knowledge_linker/algorithms/_closure.pyx":200
  *         path = paths[node]
  *         path.vertices = NULL
  *         if P[node] == -1:             # <<<<<<<<<<<<<<
@@ -4175,7 +4175,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       goto __pyx_L15;
     }
 
-    /* "knowledge_linker/_closure.pyx":205
+    /* "knowledge_linker/algorithms/_closure.pyx":205
  *             path.length = -1
  *         else:
  *             path.found = 1             # <<<<<<<<<<<<<<
@@ -4185,7 +4185,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     /*else*/ {
       __pyx_v_path.found = 1;
 
-      /* "knowledge_linker/_closure.pyx":206
+      /* "knowledge_linker/algorithms/_closure.pyx":206
  *         else:
  *             path.found = 1
  *             path.proximity = proxs[node]             # <<<<<<<<<<<<<<
@@ -4194,7 +4194,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
       __pyx_v_path.proximity = (__pyx_v_proxs[__pyx_v_node]);
 
-      /* "knowledge_linker/_closure.pyx":207
+      /* "knowledge_linker/algorithms/_closure.pyx":207
  *             path.found = 1
  *             path.proximity = proxs[node]
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -4204,7 +4204,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
       __pyx_t_6 = (__pyx_v_retpaths != 0);
       if (__pyx_t_6) {
 
-        /* "knowledge_linker/_closure.pyx":208
+        /* "knowledge_linker/algorithms/_closure.pyx":208
  *             path.proximity = proxs[node]
  *             if retpaths:
  *                 hopscnt = 0             # <<<<<<<<<<<<<<
@@ -4213,7 +4213,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         __pyx_v_hopscnt = 0;
 
-        /* "knowledge_linker/_closure.pyx":209
+        /* "knowledge_linker/algorithms/_closure.pyx":209
  *             if retpaths:
  *                 hopscnt = 0
  *                 i = node             # <<<<<<<<<<<<<<
@@ -4222,7 +4222,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         __pyx_v_i = __pyx_v_node;
 
-        /* "knowledge_linker/_closure.pyx":210
+        /* "knowledge_linker/algorithms/_closure.pyx":210
  *                 hopscnt = 0
  *                 i = node
  *                 while i != source:             # <<<<<<<<<<<<<<
@@ -4233,7 +4233,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
           __pyx_t_6 = ((__pyx_v_i != __pyx_v_source) != 0);
           if (!__pyx_t_6) break;
 
-          /* "knowledge_linker/_closure.pyx":211
+          /* "knowledge_linker/algorithms/_closure.pyx":211
  *                 i = node
  *                 while i != source:
  *                     tmp[hopscnt] = i             # <<<<<<<<<<<<<<
@@ -4242,7 +4242,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
           (__pyx_v_tmp[__pyx_v_hopscnt]) = __pyx_v_i;
 
-          /* "knowledge_linker/_closure.pyx":212
+          /* "knowledge_linker/algorithms/_closure.pyx":212
  *                 while i != source:
  *                     tmp[hopscnt] = i
  *                     hopscnt += 1             # <<<<<<<<<<<<<<
@@ -4251,7 +4251,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
           __pyx_v_hopscnt = (__pyx_v_hopscnt + 1);
 
-          /* "knowledge_linker/_closure.pyx":213
+          /* "knowledge_linker/algorithms/_closure.pyx":213
  *                     tmp[hopscnt] = i
  *                     hopscnt += 1
  *                     i = P[i]             # <<<<<<<<<<<<<<
@@ -4261,7 +4261,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
           __pyx_v_i = (__pyx_v_P[__pyx_v_i]);
         }
 
-        /* "knowledge_linker/_closure.pyx":214
+        /* "knowledge_linker/algorithms/_closure.pyx":214
  *                     hopscnt += 1
  *                     i = P[i]
  *                 path.length = hopscnt + 1             # <<<<<<<<<<<<<<
@@ -4270,7 +4270,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         __pyx_v_path.length = (__pyx_v_hopscnt + 1);
 
-        /* "knowledge_linker/_closure.pyx":215
+        /* "knowledge_linker/algorithms/_closure.pyx":215
  *                     i = P[i]
  *                 path.length = hopscnt + 1
  *                 path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))             # <<<<<<<<<<<<<<
@@ -4279,7 +4279,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         __pyx_v_path.vertices = ((int *)calloc((__pyx_v_hopscnt + 1), (sizeof(int))));
 
-        /* "knowledge_linker/_closure.pyx":216
+        /* "knowledge_linker/algorithms/_closure.pyx":216
  *                 path.length = hopscnt + 1
  *                 path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))
  *                 path.vertices[0] = source             # <<<<<<<<<<<<<<
@@ -4288,7 +4288,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
         (__pyx_v_path.vertices[0]) = __pyx_v_source;
 
-        /* "knowledge_linker/_closure.pyx":217
+        /* "knowledge_linker/algorithms/_closure.pyx":217
  *                 path.vertices = <int *>calloc(hopscnt + 1, sizeof(int))
  *                 path.vertices[0] = source
  *                 for i in xrange(hopscnt):             # <<<<<<<<<<<<<<
@@ -4299,7 +4299,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
         for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
           __pyx_v_i = __pyx_t_10;
 
-          /* "knowledge_linker/_closure.pyx":218
+          /* "knowledge_linker/algorithms/_closure.pyx":218
  *                 path.vertices[0] = source
  *                 for i in xrange(hopscnt):
  *                     path.vertices[hopscnt - i] = tmp[i]             # <<<<<<<<<<<<<<
@@ -4309,7 +4309,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
           (__pyx_v_path.vertices[(__pyx_v_hopscnt - __pyx_v_i)]) = (__pyx_v_tmp[__pyx_v_i]);
         }
 
-        /* "knowledge_linker/_closure.pyx":207
+        /* "knowledge_linker/algorithms/_closure.pyx":207
  *             path.found = 1
  *             path.proximity = proxs[node]
  *             if retpaths:             # <<<<<<<<<<<<<<
@@ -4320,7 +4320,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     }
     __pyx_L15:;
 
-    /* "knowledge_linker/_closure.pyx":219
+    /* "knowledge_linker/algorithms/_closure.pyx":219
  *                 for i in xrange(hopscnt):
  *                     path.vertices[hopscnt - i] = tmp[i]
  *         paths[node] = path             # <<<<<<<<<<<<<<
@@ -4330,7 +4330,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
     (__pyx_v_paths[__pyx_v_node]) = __pyx_v_path;
   }
 
-  /* "knowledge_linker/_closure.pyx":220
+  /* "knowledge_linker/algorithms/_closure.pyx":220
  *                     path.vertices[hopscnt - i] = tmp[i]
  *         paths[node] = path
  *     free(<void *>tmp)             # <<<<<<<<<<<<<<
@@ -4339,7 +4339,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   free(((void *)__pyx_v_tmp));
 
-  /* "knowledge_linker/_closure.pyx":221
+  /* "knowledge_linker/algorithms/_closure.pyx":221
  *         paths[node] = path
  *     free(<void *>tmp)
  *     free(<void *>P)             # <<<<<<<<<<<<<<
@@ -4348,7 +4348,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   free(((void *)__pyx_v_P));
 
-  /* "knowledge_linker/_closure.pyx":222
+  /* "knowledge_linker/algorithms/_closure.pyx":222
  *     free(<void *>tmp)
  *     free(<void *>P)
  *     free(<void *>certain)             # <<<<<<<<<<<<<<
@@ -4357,7 +4357,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   free(((void *)__pyx_v_certain));
 
-  /* "knowledge_linker/_closure.pyx":223
+  /* "knowledge_linker/algorithms/_closure.pyx":223
  *     free(<void *>P)
  *     free(<void *>certain)
  *     free(<void *>proxs)             # <<<<<<<<<<<<<<
@@ -4366,7 +4366,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  */
   free(((void *)__pyx_v_proxs));
 
-  /* "knowledge_linker/_closure.pyx":224
+  /* "knowledge_linker/algorithms/_closure.pyx":224
  *     free(<void *>certain)
  *     free(<void *>proxs)
  *     return paths             # <<<<<<<<<<<<<<
@@ -4376,7 +4376,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   __pyx_r = __pyx_v_paths;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":145
+  /* "knowledge_linker/algorithms/_closure.pyx":145
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef MetricPathPtr _cclosuress(             # <<<<<<<<<<<<<<
@@ -4389,7 +4389,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_WriteUnraisable("knowledge_linker._closure._cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("knowledge_linker.algorithms._closure._cclosuress", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_Q);
@@ -4397,7 +4397,7 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":228
+/* "knowledge_linker/algorithms/_closure.pyx":228
  * ## BFS for shortest path (by number of hops)
  * 
  * cpdef reachables(object A, int source):             # <<<<<<<<<<<<<<
@@ -4405,8 +4405,8 @@ static __pyx_t_16knowledge_linker_8_closure_MetricPathPtr __pyx_f_16knowledge_li
  *     cdef:
  */
 
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx_v_A, int __pyx_v_source, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_reachables(PyObject *__pyx_v_A, int __pyx_v_source, CYTHON_UNUSED int __pyx_skip_dispatch) {
   int __pyx_v_N;
   __Pyx_memviewslice __pyx_v_A_indices = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_A_indptr = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -4428,7 +4428,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __Pyx_RefNannySetupContext("reachables", 0);
   __Pyx_INCREF(__pyx_v_A);
 
-  /* "knowledge_linker/_closure.pyx":229
+  /* "knowledge_linker/algorithms/_closure.pyx":229
  * 
  * cpdef reachables(object A, int source):
  *     A = sp.csr_matrix(A)             # <<<<<<<<<<<<<<
@@ -4468,7 +4468,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __Pyx_DECREF_SET(__pyx_v_A, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":231
+  /* "knowledge_linker/algorithms/_closure.pyx":231
  *     A = sp.csr_matrix(A)
  *     cdef:
  *         int N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -4484,7 +4484,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_5;
 
-  /* "knowledge_linker/_closure.pyx":232
+  /* "knowledge_linker/algorithms/_closure.pyx":232
  *     cdef:
  *         int N = A.shape[0]
  *         int [:] A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -4500,7 +4500,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":233
+  /* "knowledge_linker/algorithms/_closure.pyx":233
  *         int N = A.shape[0]
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -4516,7 +4516,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":234
+  /* "knowledge_linker/algorithms/_closure.pyx":234
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr
  *         int [:] reachables = np.zeros((N,), dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -4561,16 +4561,16 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":237
+  /* "knowledge_linker/algorithms/_closure.pyx":237
  *         object items
  *         int i
  *     _shortestpath(N, A_indptr, A_indices, source, source, reachables, 0)             # <<<<<<<<<<<<<<
  *     items, = np.where(reachables)
  *     return items
  */
-  __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_source, __pyx_v_source, __pyx_v_reachables, 0);
+  __pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_source, __pyx_v_source, __pyx_v_reachables, 0);
 
-  /* "knowledge_linker/_closure.pyx":238
+  /* "knowledge_linker/algorithms/_closure.pyx":238
  *         int i
  *     _shortestpath(N, A_indptr, A_indices, source, source, reachables, 0)
  *     items, = np.where(reachables)             # <<<<<<<<<<<<<<
@@ -4656,7 +4656,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __pyx_v_items = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_closure.pyx":239
+  /* "knowledge_linker/algorithms/_closure.pyx":239
  *     _shortestpath(N, A_indptr, A_indices, source, source, reachables, 0)
  *     items, = np.where(reachables)
  *     return items             # <<<<<<<<<<<<<<
@@ -4668,7 +4668,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __pyx_r = __pyx_v_items;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":228
+  /* "knowledge_linker/algorithms/_closure.pyx":228
  * ## BFS for shortest path (by number of hops)
  * 
  * cpdef reachables(object A, int source):             # <<<<<<<<<<<<<<
@@ -4684,7 +4684,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
   __Pyx_XDECREF(__pyx_t_4);
   __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("knowledge_linker._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_A_indices, 1);
@@ -4698,8 +4698,8 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachables(PyObject *__pyx
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_5reachables(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   int __pyx_v_source;
   int __pyx_lineno = 0;
@@ -4747,18 +4747,18 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_5reachables(PyObject *__p
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("reachables", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_4reachables(__pyx_self, __pyx_v_A, __pyx_v_source);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_4reachables(__pyx_self, __pyx_v_A, __pyx_v_source);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_4reachables(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4767,7 +4767,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("reachables", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_16knowledge_linker_8_closure_reachables(__pyx_v_A, __pyx_v_source, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_16knowledge_linker_10algorithms_8_closure_reachables(__pyx_v_A, __pyx_v_source, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4776,7 +4776,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachables", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -4784,7 +4784,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":243
+/* "knowledge_linker/algorithms/_closure.pyx":243
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef reachablesmany(object A, int [:] sources, int mmap = 0):             # <<<<<<<<<<<<<<
@@ -4792,8 +4792,8 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_4reachables(CYTHON_UNUSED
  *     cdef:
  */
 
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany *__pyx_optional_args) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_reachablesmany(PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_reachablesmany *__pyx_optional_args) {
   int __pyx_v_mmap = ((int)0);
   int __pyx_v_N;
   int __pyx_v_M;
@@ -4838,7 +4838,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   }
   __Pyx_INCREF(__pyx_v_A);
 
-  /* "knowledge_linker/_closure.pyx":244
+  /* "knowledge_linker/algorithms/_closure.pyx":244
  * @cython.wraparound(False)
  * cpdef reachablesmany(object A, int [:] sources, int mmap = 0):
  *     A = sp.csr_matrix(A)             # <<<<<<<<<<<<<<
@@ -4878,7 +4878,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __Pyx_DECREF_SET(__pyx_v_A, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":246
+  /* "knowledge_linker/algorithms/_closure.pyx":246
  *     A = sp.csr_matrix(A)
  *     cdef:
  *         int N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -4894,7 +4894,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_5;
 
-  /* "knowledge_linker/_closure.pyx":247
+  /* "knowledge_linker/algorithms/_closure.pyx":247
  *     cdef:
  *         int N = A.shape[0]
  *         int M = sources.shape[0]             # <<<<<<<<<<<<<<
@@ -4903,7 +4903,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
  */
   __pyx_v_M = (__pyx_v_sources.shape[0]);
 
-  /* "knowledge_linker/_closure.pyx":248
+  /* "knowledge_linker/algorithms/_closure.pyx":248
  *         int N = A.shape[0]
  *         int M = sources.shape[0]
  *         int [:] A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -4919,7 +4919,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":249
+  /* "knowledge_linker/algorithms/_closure.pyx":249
  *         int M = sources.shape[0]
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -4935,7 +4935,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":253
+  /* "knowledge_linker/algorithms/_closure.pyx":253
  *         object items
  *         int i
  *     f = None             # <<<<<<<<<<<<<<
@@ -4945,7 +4945,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __Pyx_INCREF(Py_None);
   __pyx_v_f = Py_None;
 
-  /* "knowledge_linker/_closure.pyx":254
+  /* "knowledge_linker/algorithms/_closure.pyx":254
  *         int i
  *     f = None
  *     if mmap:             # <<<<<<<<<<<<<<
@@ -4955,7 +4955,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   __pyx_t_7 = (__pyx_v_mmap != 0);
   if (__pyx_t_7) {
 
-    /* "knowledge_linker/_closure.pyx":255
+    /* "knowledge_linker/algorithms/_closure.pyx":255
  *     f = None
  *     if mmap:
  *         f = NamedTemporaryFile()             # <<<<<<<<<<<<<<
@@ -4985,7 +4985,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
     __Pyx_DECREF_SET(__pyx_v_f, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "knowledge_linker/_closure.pyx":256
+    /* "knowledge_linker/algorithms/_closure.pyx":256
  *     if mmap:
  *         f = NamedTemporaryFile()
  *         reachables = np.memmap(f, shape=(M, N), dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -5037,7 +5037,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
     __pyx_t_10.memview = NULL;
     __pyx_t_10.data = NULL;
 
-    /* "knowledge_linker/_closure.pyx":254
+    /* "knowledge_linker/algorithms/_closure.pyx":254
  *         int i
  *     f = None
  *     if mmap:             # <<<<<<<<<<<<<<
@@ -5047,7 +5047,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
     goto __pyx_L3;
   }
 
-  /* "knowledge_linker/_closure.pyx":258
+  /* "knowledge_linker/algorithms/_closure.pyx":258
  *         reachables = np.memmap(f, shape=(M, N), dtype=np.int32)
  *     else:
  *         reachables = np.zeros((M, N), dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -5100,7 +5100,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
   }
   __pyx_L3:;
 
-  /* "knowledge_linker/_closure.pyx":259
+  /* "knowledge_linker/algorithms/_closure.pyx":259
  *     else:
  *         reachables = np.zeros((M, N), dtype=np.int32)
  *     try:             # <<<<<<<<<<<<<<
@@ -5109,7 +5109,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
  */
   /*try:*/ {
 
-    /* "knowledge_linker/_closure.pyx":260
+    /* "knowledge_linker/algorithms/_closure.pyx":260
  *         reachables = np.zeros((M, N), dtype=np.int32)
  *     try:
  *         with nogil, parallel():             # <<<<<<<<<<<<<<
@@ -5134,7 +5134,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
                   #define unlikely(x) (x)
               #endif
               #ifdef _OPENMP
-              #pragma omp parallel  private(__pyx_t_5, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_11) firstprivate(__pyx_t_6) private(__pyx_filename, __pyx_lineno, __pyx_clineno) shared(__pyx_parallel_why, __pyx_parallel_exc_type, __pyx_parallel_exc_value, __pyx_parallel_exc_tb)
+              #pragma omp parallel  private(__pyx_t_12, __pyx_t_13, __pyx_t_5, __pyx_t_14, __pyx_t_11) firstprivate(__pyx_t_6) private(__pyx_filename, __pyx_lineno, __pyx_clineno) shared(__pyx_parallel_why, __pyx_parallel_exc_type, __pyx_parallel_exc_value, __pyx_parallel_exc_tb)
               #endif /* _OPENMP */
               {
                   #ifdef _OPENMP
@@ -5144,7 +5144,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
                   Py_BEGIN_ALLOW_THREADS
                   #endif /* _OPENMP */
 
-                  /* "knowledge_linker/_closure.pyx":261
+                  /* "knowledge_linker/algorithms/_closure.pyx":261
  *     try:
  *         with nogil, parallel():
  *             for i in prange(M, schedule='guided'):             # <<<<<<<<<<<<<<
@@ -5170,7 +5170,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
                               {
                                   __pyx_v_i = 0 + 1 * __pyx_t_11;
 
-                                  /* "knowledge_linker/_closure.pyx":262
+                                  /* "knowledge_linker/algorithms/_closure.pyx":262
  *         with nogil, parallel():
  *             for i in prange(M, schedule='guided'):
  *                 _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],             # <<<<<<<<<<<<<<
@@ -5180,7 +5180,7 @@ static PyObject *__pyx_f_16knowledge_linker_8_closure_reachablesmany(PyObject *_
                                   __pyx_t_13 = __pyx_v_i;
                                   __pyx_t_14 = __pyx_v_i;
 
-                                  /* "knowledge_linker/_closure.pyx":263
+                                  /* "knowledge_linker/algorithms/_closure.pyx":263
  *             for i in prange(M, schedule='guided'):
  *                 _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
  *                         reachables[i], 0)             # <<<<<<<<<<<<<<
@@ -5213,9 +5213,9 @@ __pyx_t_6.shape[0] = __pyx_v_reachables.shape[1];
 __pyx_t_6.strides[0] = __pyx_v_reachables.strides[1];
     __pyx_t_6.suboffsets[0] = -1;
 
-__pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_13 * __pyx_v_sources.strides[0]) ))), (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_14 * __pyx_v_sources.strides[0]) ))), __pyx_t_6, 0);
+__pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_13 * __pyx_v_sources.strides[0]) ))), (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_14 * __pyx_v_sources.strides[0]) ))), __pyx_t_6, 0);
 
-                                  /* "knowledge_linker/_closure.pyx":262
+                                  /* "knowledge_linker/algorithms/_closure.pyx":262
  *         with nogil, parallel():
  *             for i in prange(M, schedule='guided'):
  *                 _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],             # <<<<<<<<<<<<<<
@@ -5353,7 +5353,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
           #endif
         }
 
-        /* "knowledge_linker/_closure.pyx":260
+        /* "knowledge_linker/algorithms/_closure.pyx":260
  *         reachables = np.zeros((M, N), dtype=np.int32)
  *     try:
  *         with nogil, parallel():             # <<<<<<<<<<<<<<
@@ -5383,7 +5383,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
         }
     }
 
-    /* "knowledge_linker/_closure.pyx":264
+    /* "knowledge_linker/algorithms/_closure.pyx":264
  *                 _shortestpath(N, A_indptr, A_indices, sources[i], sources[i],
  *                         reachables[i], 0)
  *         items, = zip(*map(np.where, reachables))             # <<<<<<<<<<<<<<
@@ -5460,7 +5460,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
     __pyx_v_items = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "knowledge_linker/_closure.pyx":265
+    /* "knowledge_linker/algorithms/_closure.pyx":265
  *                         reachables[i], 0)
  *         items, = zip(*map(np.where, reachables))
  *         return items             # <<<<<<<<<<<<<<
@@ -5473,7 +5473,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
     goto __pyx_L4_return;
   }
 
-  /* "knowledge_linker/_closure.pyx":267
+  /* "knowledge_linker/algorithms/_closure.pyx":267
  *         return items
  *     finally:
  *         if f:             # <<<<<<<<<<<<<<
@@ -5484,14 +5484,14 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
     /*exception exit:*/{
       __pyx_L5_error:;
       __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_10, 1);
+      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __PYX_XDEC_MEMVIEW(&__pyx_t_10, 1);
-      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
       if (PY_MAJOR_VERSION >= 3) __Pyx_ExceptionSwap(&__pyx_t_20, &__pyx_t_21, &__pyx_t_22);
       if ((PY_MAJOR_VERSION < 3) || unlikely(__Pyx_GetException(&__pyx_t_17, &__pyx_t_18, &__pyx_t_19) < 0)) __Pyx_ErrFetch(&__pyx_t_17, &__pyx_t_18, &__pyx_t_19);
       __Pyx_XGOTREF(__pyx_t_17);
@@ -5505,7 +5505,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
         __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_v_f); if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L25_error;}
         if (__pyx_t_7) {
 
-          /* "knowledge_linker/_closure.pyx":268
+          /* "knowledge_linker/algorithms/_closure.pyx":268
  *     finally:
  *         if f:
  *             f.close() # delete temporary file             # <<<<<<<<<<<<<<
@@ -5534,7 +5534,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-          /* "knowledge_linker/_closure.pyx":267
+          /* "knowledge_linker/algorithms/_closure.pyx":267
  *         return items
  *     finally:
  *         if f:             # <<<<<<<<<<<<<<
@@ -5575,7 +5575,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
       __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_v_f); if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       if (__pyx_t_7) {
 
-        /* "knowledge_linker/_closure.pyx":268
+        /* "knowledge_linker/algorithms/_closure.pyx":268
  *     finally:
  *         if f:
  *             f.close() # delete temporary file             # <<<<<<<<<<<<<<
@@ -5604,7 +5604,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-        /* "knowledge_linker/_closure.pyx":267
+        /* "knowledge_linker/algorithms/_closure.pyx":267
  *         return items
  *     finally:
  *         if f:             # <<<<<<<<<<<<<<
@@ -5618,7 +5618,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
     }
   }
 
-  /* "knowledge_linker/_closure.pyx":243
+  /* "knowledge_linker/algorithms/_closure.pyx":243
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef reachablesmany(object A, int [:] sources, int mmap = 0):             # <<<<<<<<<<<<<<
@@ -5636,7 +5636,7 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
   __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(__pyx_t_9);
   __PYX_XDEC_MEMVIEW(&__pyx_t_10, 1);
-  __Pyx_AddTraceback("knowledge_linker._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_A_indices, 1);
@@ -5651,8 +5651,8 @@ __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, 
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_7reachablesmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   __Pyx_memviewslice __pyx_v_sources = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_v_mmap;
@@ -5715,22 +5715,22 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_7reachablesmany(PyObject 
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("reachablesmany", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_6reachablesmany(__pyx_self, __pyx_v_A, __pyx_v_sources, __pyx_v_mmap);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_6reachablesmany(__pyx_self, __pyx_v_A, __pyx_v_sources, __pyx_v_mmap);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, int __pyx_v_mmap) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_6reachablesmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, int __pyx_v_mmap) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  struct __pyx_opt_args_16knowledge_linker_8_closure_reachablesmany __pyx_t_2;
+  struct __pyx_opt_args_16knowledge_linker_10algorithms_8_closure_reachablesmany __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -5739,7 +5739,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UN
   if (unlikely(!__pyx_v_sources.memview)) { __Pyx_RaiseUnboundLocalError("sources"); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 243; __pyx_clineno = __LINE__; goto __pyx_L1_error;} }
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.mmap = __pyx_v_mmap;
-  __pyx_t_1 = __pyx_f_16knowledge_linker_8_closure_reachablesmany(__pyx_v_A, __pyx_v_sources, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_16knowledge_linker_10algorithms_8_closure_reachablesmany(__pyx_v_A, __pyx_v_sources, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5748,7 +5748,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UN
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.reachablesmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_sources, 1);
@@ -5757,7 +5757,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UN
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":272
+/* "knowledge_linker/algorithms/_closure.pyx":272
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def shortestpathmany(object A, int [:] sources, int [:] targets):             # <<<<<<<<<<<<<<
@@ -5766,9 +5766,9 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_6reachablesmany(CYTHON_UN
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_9shortestpathmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_16knowledge_linker_8_closure_9shortestpathmany = {"shortestpathmany", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_9shortestpathmany, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_9shortestpathmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_9shortestpathmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_16knowledge_linker_10algorithms_8_closure_9shortestpathmany = {"shortestpathmany", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_9shortestpathmany, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_9shortestpathmany(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   __Pyx_memviewslice __pyx_v_sources = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_targets = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -5825,22 +5825,22 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_9shortestpathmany(PyObjec
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("shortestpathmany", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.shortestpathmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.shortestpathmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(__pyx_self, __pyx_v_A, __pyx_v_sources, __pyx_v_targets);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_8shortestpathmany(__pyx_self, __pyx_v_A, __pyx_v_sources, __pyx_v_targets);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, __Pyx_memviewslice __pyx_v_targets) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_8shortestpathmany(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, __Pyx_memviewslice __pyx_v_sources, __Pyx_memviewslice __pyx_v_targets) {
   size_t __pyx_v_N;
   size_t __pyx_v_M;
-  __pyx_t_16knowledge_linker_8_closure_PathPtr __pyx_v_paths;
-  __pyx_t_16knowledge_linker_8_closure_Path __pyx_v_path;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_PathPtr __pyx_v_paths;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_v_path;
   PyObject *__pyx_v_pathlist = 0;
   __Pyx_memviewslice __pyx_v_A_indices = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_A_indptr = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -5874,7 +5874,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __Pyx_RefNannySetupContext("shortestpathmany", 0);
   __Pyx_INCREF(__pyx_v_A);
 
-  /* "knowledge_linker/_closure.pyx":273
+  /* "knowledge_linker/algorithms/_closure.pyx":273
  * @cython.wraparound(False)
  * def shortestpathmany(object A, int [:] sources, int [:] targets):
  *     A = sp.csr_matrix(A)             # <<<<<<<<<<<<<<
@@ -5914,7 +5914,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __Pyx_DECREF_SET(__pyx_v_A, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":274
+  /* "knowledge_linker/algorithms/_closure.pyx":274
  * def shortestpathmany(object A, int [:] sources, int [:] targets):
  *     A = sp.csr_matrix(A)
  *     if sources.shape[0] != targets.shape[0]:             # <<<<<<<<<<<<<<
@@ -5924,7 +5924,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_t_5 = (((__pyx_v_sources.shape[0]) != (__pyx_v_targets.shape[0])) != 0);
   if (__pyx_t_5) {
 
-    /* "knowledge_linker/_closure.pyx":275
+    /* "knowledge_linker/algorithms/_closure.pyx":275
  *     A = sp.csr_matrix(A)
  *     if sources.shape[0] != targets.shape[0]:
  *         raise ValueError("sources/targets mismatch")             # <<<<<<<<<<<<<<
@@ -5937,7 +5937,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     {__pyx_filename = __pyx_f[1]; __pyx_lineno = 275; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "knowledge_linker/_closure.pyx":274
+    /* "knowledge_linker/algorithms/_closure.pyx":274
  * def shortestpathmany(object A, int [:] sources, int [:] targets):
  *     A = sp.csr_matrix(A)
  *     if sources.shape[0] != targets.shape[0]:             # <<<<<<<<<<<<<<
@@ -5946,7 +5946,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
   }
 
-  /* "knowledge_linker/_closure.pyx":277
+  /* "knowledge_linker/algorithms/_closure.pyx":277
  *         raise ValueError("sources/targets mismatch")
  *     cdef:
  *         size_t N = A.shape[0], M = sources.shape[0]             # <<<<<<<<<<<<<<
@@ -5963,7 +5963,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_v_N = __pyx_t_6;
   __pyx_v_M = (__pyx_v_sources.shape[0]);
 
-  /* "knowledge_linker/_closure.pyx":280
+  /* "knowledge_linker/algorithms/_closure.pyx":280
  *         PathPtr paths
  *         Path path
  *         object pathlist = []             # <<<<<<<<<<<<<<
@@ -5975,7 +5975,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_v_pathlist = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "knowledge_linker/_closure.pyx":281
+  /* "knowledge_linker/algorithms/_closure.pyx":281
  *         Path path
  *         object pathlist = []
  *         int [:] A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -5991,7 +5991,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":282
+  /* "knowledge_linker/algorithms/_closure.pyx":282
  *         object pathlist = []
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -6007,7 +6007,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":284
+  /* "knowledge_linker/algorithms/_closure.pyx":284
  *         int [:] A_indptr = A.indptr
  *         int i, j
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -6052,16 +6052,16 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":286
+  /* "knowledge_linker/algorithms/_closure.pyx":286
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)
  *         int [:] tmp
  *     paths = <PathPtr> malloc(M * sizeof(Path))             # <<<<<<<<<<<<<<
  *     # parallel part
  *     with nogil, parallel():
  */
-  __pyx_v_paths = ((__pyx_t_16knowledge_linker_8_closure_PathPtr)malloc((__pyx_v_M * (sizeof(__pyx_t_16knowledge_linker_8_closure_Path)))));
+  __pyx_v_paths = ((__pyx_t_16knowledge_linker_10algorithms_8_closure_PathPtr)malloc((__pyx_v_M * (sizeof(__pyx_t_16knowledge_linker_10algorithms_8_closure_Path)))));
 
-  /* "knowledge_linker/_closure.pyx":288
+  /* "knowledge_linker/algorithms/_closure.pyx":288
  *     paths = <PathPtr> malloc(M * sizeof(Path))
  *     # parallel part
  *     with nogil, parallel():             # <<<<<<<<<<<<<<
@@ -6082,11 +6082,11 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
                 #define unlikely(x) (x)
             #endif
             #ifdef _OPENMP
-            #pragma omp parallel  private(__pyx_t_15, __pyx_t_10, __pyx_t_6, __pyx_t_12, __pyx_t_9, __pyx_t_13, __pyx_t_14, __pyx_t_11)
+            #pragma omp parallel  private(__pyx_t_6, __pyx_t_11, __pyx_t_12, __pyx_t_9, __pyx_t_13, __pyx_t_10, __pyx_t_15, __pyx_t_14)
             #endif /* _OPENMP */
             {
 
-                /* "knowledge_linker/_closure.pyx":289
+                /* "knowledge_linker/algorithms/_closure.pyx":289
  *     # parallel part
  *     with nogil, parallel():
  *         for i in prange(M, schedule='guided'):             # <<<<<<<<<<<<<<
@@ -6108,7 +6108,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
                                 /* Initialize private variables to invalid values */
                                 __pyx_v_j = ((int)0xbad0bad0);
 
-                                /* "knowledge_linker/_closure.pyx":290
+                                /* "knowledge_linker/algorithms/_closure.pyx":290
  *     with nogil, parallel():
  *         for i in prange(M, schedule='guided'):
  *             for j in xrange(N):             # <<<<<<<<<<<<<<
@@ -6119,7 +6119,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
                                 for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
                                   __pyx_v_j = __pyx_t_12;
 
-                                  /* "knowledge_linker/_closure.pyx":291
+                                  /* "knowledge_linker/algorithms/_closure.pyx":291
  *         for i in prange(M, schedule='guided'):
  *             for j in xrange(N):
  *                 reachable[j] = 0             # <<<<<<<<<<<<<<
@@ -6130,7 +6130,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
                                   *((int *) ( /* dim=0 */ (__pyx_v_reachable.data + __pyx_t_13 * __pyx_v_reachable.strides[0]) )) = 0;
                                 }
 
-                                /* "knowledge_linker/_closure.pyx":292
+                                /* "knowledge_linker/algorithms/_closure.pyx":292
  *             for j in xrange(N):
  *                 reachable[j] = 0
  *             paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i],             # <<<<<<<<<<<<<<
@@ -6139,7 +6139,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
                                 __pyx_t_14 = __pyx_v_i;
 
-                                /* "knowledge_linker/_closure.pyx":293
+                                /* "knowledge_linker/algorithms/_closure.pyx":293
  *                 reachable[j] = 0
  *             paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i],
  *                     targets[i], reachable, 1)             # <<<<<<<<<<<<<<
@@ -6148,14 +6148,14 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
                                 __pyx_t_15 = __pyx_v_i;
 
-                                /* "knowledge_linker/_closure.pyx":292
+                                /* "knowledge_linker/algorithms/_closure.pyx":292
  *             for j in xrange(N):
  *                 reachable[j] = 0
  *             paths[i] = _shortestpath(N, A_indptr, A_indices, sources[i],             # <<<<<<<<<<<<<<
  *                     targets[i], reachable, 1)
  *     # pack results in a Python list
  */
-                                (__pyx_v_paths[__pyx_v_i]) = __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_14 * __pyx_v_sources.strides[0]) ))), (*((int *) ( /* dim=0 */ (__pyx_v_targets.data + __pyx_t_15 * __pyx_v_targets.strides[0]) ))), __pyx_v_reachable, 1);
+                                (__pyx_v_paths[__pyx_v_i]) = __pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, (*((int *) ( /* dim=0 */ (__pyx_v_sources.data + __pyx_t_14 * __pyx_v_sources.strides[0]) ))), (*((int *) ( /* dim=0 */ (__pyx_v_targets.data + __pyx_t_15 * __pyx_v_targets.strides[0]) ))), __pyx_v_reachable, 1);
                             }
                         }
                     }
@@ -6170,7 +6170,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
         #endif
       }
 
-      /* "knowledge_linker/_closure.pyx":288
+      /* "knowledge_linker/algorithms/_closure.pyx":288
  *     paths = <PathPtr> malloc(M * sizeof(Path))
  *     # parallel part
  *     with nogil, parallel():             # <<<<<<<<<<<<<<
@@ -6188,7 +6188,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
       }
   }
 
-  /* "knowledge_linker/_closure.pyx":295
+  /* "knowledge_linker/algorithms/_closure.pyx":295
  *                     targets[i], reachable, 1)
  *     # pack results in a Python list
  *     for i in xrange(M):             # <<<<<<<<<<<<<<
@@ -6199,7 +6199,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_10; __pyx_t_12+=1) {
     __pyx_v_i = __pyx_t_12;
 
-    /* "knowledge_linker/_closure.pyx":296
+    /* "knowledge_linker/algorithms/_closure.pyx":296
  *     # pack results in a Python list
  *     for i in xrange(M):
  *         path = paths[i]             # <<<<<<<<<<<<<<
@@ -6208,7 +6208,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
     __pyx_v_path = (__pyx_v_paths[__pyx_v_i]);
 
-    /* "knowledge_linker/_closure.pyx":297
+    /* "knowledge_linker/algorithms/_closure.pyx":297
  *     for i in xrange(M):
  *         path = paths[i]
  *         if path.found:             # <<<<<<<<<<<<<<
@@ -6218,7 +6218,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
     __pyx_t_5 = (__pyx_v_path.found != 0);
     if (__pyx_t_5) {
 
-      /* "knowledge_linker/_closure.pyx":298
+      /* "knowledge_linker/algorithms/_closure.pyx":298
  *         path = paths[i]
  *         if path.found:
  *             tmp = <int [:path.length + 1]> path.vertices             # <<<<<<<<<<<<<<
@@ -6248,7 +6248,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
       __pyx_t_7.memview = NULL;
       __pyx_t_7.data = NULL;
 
-      /* "knowledge_linker/_closure.pyx":299
+      /* "knowledge_linker/algorithms/_closure.pyx":299
  *         if path.found:
  *             tmp = <int [:path.length + 1]> path.vertices
  *             pathlist.append(np.array(tmp, copy=True))             # <<<<<<<<<<<<<<
@@ -6278,7 +6278,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
       __pyx_t_18 = __Pyx_PyObject_Append(__pyx_v_pathlist, __pyx_t_1); if (unlikely(__pyx_t_18 == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 299; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "knowledge_linker/_closure.pyx":300
+      /* "knowledge_linker/algorithms/_closure.pyx":300
  *             tmp = <int [:path.length + 1]> path.vertices
  *             pathlist.append(np.array(tmp, copy=True))
  *             free(<void *>paths.vertices)             # <<<<<<<<<<<<<<
@@ -6287,7 +6287,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
       free(((void *)__pyx_v_paths->vertices));
 
-      /* "knowledge_linker/_closure.pyx":297
+      /* "knowledge_linker/algorithms/_closure.pyx":297
  *     for i in xrange(M):
  *         path = paths[i]
  *         if path.found:             # <<<<<<<<<<<<<<
@@ -6297,7 +6297,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
       goto __pyx_L23;
     }
 
-    /* "knowledge_linker/_closure.pyx":303
+    /* "knowledge_linker/algorithms/_closure.pyx":303
  *         else:
  *             # create an empty array for disconnected vertices
  *             pathlist.append(np.empty(0, dtype=np.int32))             # <<<<<<<<<<<<<<
@@ -6329,7 +6329,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
     __pyx_L23:;
   }
 
-  /* "knowledge_linker/_closure.pyx":304
+  /* "knowledge_linker/algorithms/_closure.pyx":304
  *             # create an empty array for disconnected vertices
  *             pathlist.append(np.empty(0, dtype=np.int32))
  *     free(<void *> paths)             # <<<<<<<<<<<<<<
@@ -6338,7 +6338,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  */
   free(((void *)__pyx_v_paths));
 
-  /* "knowledge_linker/_closure.pyx":305
+  /* "knowledge_linker/algorithms/_closure.pyx":305
  *             pathlist.append(np.empty(0, dtype=np.int32))
  *     free(<void *> paths)
  *     return pathlist             # <<<<<<<<<<<<<<
@@ -6350,7 +6350,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __pyx_r = __pyx_v_pathlist;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":272
+  /* "knowledge_linker/algorithms/_closure.pyx":272
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def shortestpathmany(object A, int [:] sources, int [:] targets):             # <<<<<<<<<<<<<<
@@ -6367,7 +6367,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   __PYX_XDEC_MEMVIEW(&__pyx_t_7, 1);
   __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(((PyObject *)__pyx_t_17));
-  __Pyx_AddTraceback("knowledge_linker._closure.shortestpathmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.shortestpathmany", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_pathlist);
@@ -6383,7 +6383,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":309
+/* "knowledge_linker/algorithms/_closure.pyx":309
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef cnp.ndarray shortestpath(object A, int source, int target):             # <<<<<<<<<<<<<<
@@ -6391,10 +6391,10 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_8shortestpathmany(CYTHON_
  *     Return the shortest path from source to target. A is converted to CSR
  */
 
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyArrayObject *__pyx_f_16knowledge_linker_10algorithms_8_closure_shortestpath(PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target, CYTHON_UNUSED int __pyx_skip_dispatch) {
   size_t __pyx_v_N;
-  __pyx_t_16knowledge_linker_8_closure_Path __pyx_v_path;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_v_path;
   PyArrayObject *__pyx_v_retpath = 0;
   __Pyx_memviewslice __pyx_v_A_indices = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_A_indptr = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -6428,7 +6428,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_pybuffernd_retpath.data = NULL;
   __pyx_pybuffernd_retpath.rcbuffer = &__pyx_pybuffer_retpath;
 
-  /* "knowledge_linker/_closure.pyx":335
+  /* "knowledge_linker/algorithms/_closure.pyx":335
  *     searches the whole graph.
  *     '''
  *     A = sp.csr_matrix(A)             # <<<<<<<<<<<<<<
@@ -6468,7 +6468,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __Pyx_DECREF_SET(__pyx_v_A, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":337
+  /* "knowledge_linker/algorithms/_closure.pyx":337
  *     A = sp.csr_matrix(A)
  *     cdef:
  *         size_t N = A.shape[0]             # <<<<<<<<<<<<<<
@@ -6484,7 +6484,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_N = __pyx_t_5;
 
-  /* "knowledge_linker/_closure.pyx":340
+  /* "knowledge_linker/algorithms/_closure.pyx":340
  *         Path path
  *         cnp.ndarray[cnp.int32_t] retpath
  *         int [:] A_indices = A.indices             # <<<<<<<<<<<<<<
@@ -6500,7 +6500,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":341
+  /* "knowledge_linker/algorithms/_closure.pyx":341
  *         cnp.ndarray[cnp.int32_t] retpath
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr             # <<<<<<<<<<<<<<
@@ -6516,7 +6516,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":342
+  /* "knowledge_linker/algorithms/_closure.pyx":342
  *         int [:] A_indices = A.indices
  *         int [:] A_indptr = A.indptr
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -6561,16 +6561,16 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
 
-  /* "knowledge_linker/_closure.pyx":343
+  /* "knowledge_linker/algorithms/_closure.pyx":343
  *         int [:] A_indptr = A.indptr
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)
  *     path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)             # <<<<<<<<<<<<<<
  *     if path.found:
  *         retpath = np.array(<int [:path.length + 1]> path.vertices, copy=True)
  */
-  __pyx_v_path = __pyx_f_16knowledge_linker_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_source, __pyx_v_target, __pyx_v_reachable, 1);
+  __pyx_v_path = __pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(__pyx_v_N, __pyx_v_A_indptr, __pyx_v_A_indices, __pyx_v_source, __pyx_v_target, __pyx_v_reachable, 1);
 
-  /* "knowledge_linker/_closure.pyx":344
+  /* "knowledge_linker/algorithms/_closure.pyx":344
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)
  *     path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)
  *     if path.found:             # <<<<<<<<<<<<<<
@@ -6580,7 +6580,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_t_8 = (__pyx_v_path.found != 0);
   if (__pyx_t_8) {
 
-    /* "knowledge_linker/_closure.pyx":345
+    /* "knowledge_linker/algorithms/_closure.pyx":345
  *     path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)
  *     if path.found:
  *         retpath = np.array(<int [:path.length + 1]> path.vertices, copy=True)             # <<<<<<<<<<<<<<
@@ -6642,7 +6642,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
     __pyx_v_retpath = ((PyArrayObject *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "knowledge_linker/_closure.pyx":346
+    /* "knowledge_linker/algorithms/_closure.pyx":346
  *     if path.found:
  *         retpath = np.array(<int [:path.length + 1]> path.vertices, copy=True)
  *         free(<void *>path.vertices)             # <<<<<<<<<<<<<<
@@ -6651,7 +6651,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
  */
     free(((void *)__pyx_v_path.vertices));
 
-    /* "knowledge_linker/_closure.pyx":344
+    /* "knowledge_linker/algorithms/_closure.pyx":344
  *         int [:] reachable = np.zeros((N,), dtype=np.int32)
  *     path = _shortestpath(N, A_indptr, A_indices, source, target, reachable, 1)
  *     if path.found:             # <<<<<<<<<<<<<<
@@ -6661,7 +6661,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
     goto __pyx_L3;
   }
 
-  /* "knowledge_linker/_closure.pyx":348
+  /* "knowledge_linker/algorithms/_closure.pyx":348
  *         free(<void *>path.vertices)
  *     else:
  *         retpath = np.empty(0, dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -6711,7 +6711,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   }
   __pyx_L3:;
 
-  /* "knowledge_linker/_closure.pyx":349
+  /* "knowledge_linker/algorithms/_closure.pyx":349
  *     else:
  *         retpath = np.empty(0, dtype=np.int32)
  *     return retpath             # <<<<<<<<<<<<<<
@@ -6723,7 +6723,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
   __pyx_r = ((PyArrayObject *)__pyx_v_retpath);
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":309
+  /* "knowledge_linker/algorithms/_closure.pyx":309
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cpdef cnp.ndarray shortestpath(object A, int source, int target):             # <<<<<<<<<<<<<<
@@ -6744,7 +6744,7 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_retpath.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("knowledge_linker._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -6761,9 +6761,9 @@ static PyArrayObject *__pyx_f_16knowledge_linker_8_closure_shortestpath(PyObject
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_16knowledge_linker_8_closure_10shortestpath[] = "\n    Return the shortest path from source to target. A is converted to CSR\n    format.\n\n    Parameters\n    ----------\n    A : N x N array_like\n        The adjacency matrix of the graph; will be converted to compressed\n        sparse row format.\n    source : int\n        The source node.\n    target : int\n        The target node.\n\n    Returns\n    -------\n    path : array_like\n        an array of length dist with the path between source and target, else an\n        empty array.\n\n    Notes\n    -----\n    Executes a BFS from source and stops as soon as target is found. Worst case:\n    searches the whole graph.\n    ";
-static PyObject *__pyx_pw_16knowledge_linker_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_16knowledge_linker_10algorithms_8_closure_10shortestpath[] = "\n    Return the shortest path from source to target. A is converted to CSR\n    format.\n\n    Parameters\n    ----------\n    A : N x N array_like\n        The adjacency matrix of the graph; will be converted to compressed\n        sparse row format.\n    source : int\n        The source node.\n    target : int\n        The target node.\n\n    Returns\n    -------\n    path : array_like\n        an array of length dist with the path between source and target, else an\n        empty array.\n\n    Notes\n    -----\n    Executes a BFS from source and stops as soon as target is found. Worst case:\n    searches the whole graph.\n    ";
+static PyObject *__pyx_pw_16knowledge_linker_10algorithms_8_closure_11shortestpath(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_A = 0;
   int __pyx_v_source;
   int __pyx_v_target;
@@ -6820,18 +6820,18 @@ static PyObject *__pyx_pw_16knowledge_linker_8_closure_11shortestpath(PyObject *
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("shortestpath", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 309; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("knowledge_linker._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_16knowledge_linker_8_closure_10shortestpath(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_target);
+  __pyx_r = __pyx_pf_16knowledge_linker_10algorithms_8_closure_10shortestpath(__pyx_self, __pyx_v_A, __pyx_v_source, __pyx_v_target);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target) {
+static PyObject *__pyx_pf_16knowledge_linker_10algorithms_8_closure_10shortestpath(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_A, int __pyx_v_source, int __pyx_v_target) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6840,7 +6840,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNU
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("shortestpath", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_16knowledge_linker_8_closure_shortestpath(__pyx_v_A, __pyx_v_source, __pyx_v_target, 0)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 309; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = ((PyObject *)__pyx_f_16knowledge_linker_10algorithms_8_closure_shortestpath(__pyx_v_A, __pyx_v_source, __pyx_v_target, 0)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 309; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6849,7 +6849,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNU
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("knowledge_linker._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("knowledge_linker.algorithms._closure.shortestpath", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -6857,7 +6857,7 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pyx":354
+/* "knowledge_linker/algorithms/_closure.pyx":354
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef Path _shortestpath(             # <<<<<<<<<<<<<<
@@ -6865,12 +6865,12 @@ static PyObject *__pyx_pf_16knowledge_linker_8_closure_10shortestpath(CYTHON_UNU
  *         int [:] A_indptr,
  */
 
-static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_closure__shortestpath(size_t __pyx_v_N, __Pyx_memviewslice __pyx_v_A_indptr, __Pyx_memviewslice __pyx_v_A_indices, int __pyx_v_source, int __pyx_v_target, __Pyx_memviewslice __pyx_v_reached, int __pyx_v_stoponfound) {
+static __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_f_16knowledge_linker_10algorithms_8_closure__shortestpath(size_t __pyx_v_N, __Pyx_memviewslice __pyx_v_A_indptr, __Pyx_memviewslice __pyx_v_A_indices, int __pyx_v_source, int __pyx_v_target, __Pyx_memviewslice __pyx_v_reached, int __pyx_v_stoponfound) {
   int *__pyx_v_P;
   int *__pyx_v_D;
   int *__pyx_v_Q;
   int *__pyx_v_neigh;
-  __pyx_t_16knowledge_linker_8_closure_Path __pyx_v_path;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_v_path;
   size_t __pyx_v_N_neigh;
   size_t __pyx_v_Nd;
   int __pyx_v_i;
@@ -6882,7 +6882,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   int __pyx_v_neighi;
   int __pyx_v_found;
   int __pyx_v_breakflag;
-  __pyx_t_16knowledge_linker_8_closure_Path __pyx_r;
+  __pyx_t_16knowledge_linker_10algorithms_8_closure_Path __pyx_r;
   int __pyx_t_1;
   int __pyx_t_2;
   size_t __pyx_t_3;
@@ -6892,7 +6892,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   Py_ssize_t __pyx_t_7;
   Py_ssize_t __pyx_t_8;
 
-  /* "knowledge_linker/_closure.pyx":392
+  /* "knowledge_linker/algorithms/_closure.pyx":392
  *     cdef:
  *         int * P, * D, * Q, * visited  # predecessors, distance vectors, fifo queue
  *         int * neigh = NULL # neighbors             # <<<<<<<<<<<<<<
@@ -6901,7 +6901,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   __pyx_v_neigh = NULL;
 
-  /* "knowledge_linker/_closure.pyx":395
+  /* "knowledge_linker/algorithms/_closure.pyx":395
  *         Path path # return struct
  *         size_t N_neigh, Nd
  *         int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi, found             # <<<<<<<<<<<<<<
@@ -6912,7 +6912,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   __pyx_v_writei = 1;
   __pyx_v_d = 0;
 
-  /* "knowledge_linker/_closure.pyx":396
+  /* "knowledge_linker/algorithms/_closure.pyx":396
  *         size_t N_neigh, Nd
  *         int i, ii, readi = 0, writei = 1, d = 0, nodei, neighi, found
  *         int breakflag = 0             # <<<<<<<<<<<<<<
@@ -6921,34 +6921,34 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   __pyx_v_breakflag = 0;
 
-  /* "knowledge_linker/_closure.pyx":398
+  /* "knowledge_linker/algorithms/_closure.pyx":398
  *         int breakflag = 0
  *     # initialize P, D and Q
  *     P = init_intarray(N, -1)             # <<<<<<<<<<<<<<
  *     D = init_intarray(N, -1)
  *     Q = init_intarray(N, -1)
  */
-  __pyx_v_P = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, -1);
+  __pyx_v_P = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, -1);
 
-  /* "knowledge_linker/_closure.pyx":399
+  /* "knowledge_linker/algorithms/_closure.pyx":399
  *     # initialize P, D and Q
  *     P = init_intarray(N, -1)
  *     D = init_intarray(N, -1)             # <<<<<<<<<<<<<<
  *     Q = init_intarray(N, -1)
  *     found = 0
  */
-  __pyx_v_D = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, -1);
+  __pyx_v_D = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, -1);
 
-  /* "knowledge_linker/_closure.pyx":400
+  /* "knowledge_linker/algorithms/_closure.pyx":400
  *     P = init_intarray(N, -1)
  *     D = init_intarray(N, -1)
  *     Q = init_intarray(N, -1)             # <<<<<<<<<<<<<<
  *     found = 0
  *     D[source] = 0
  */
-  __pyx_v_Q = __pyx_f_16knowledge_linker_8_closure_init_intarray(__pyx_v_N, -1);
+  __pyx_v_Q = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(__pyx_v_N, -1);
 
-  /* "knowledge_linker/_closure.pyx":401
+  /* "knowledge_linker/algorithms/_closure.pyx":401
  *     D = init_intarray(N, -1)
  *     Q = init_intarray(N, -1)
  *     found = 0             # <<<<<<<<<<<<<<
@@ -6957,7 +6957,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   __pyx_v_found = 0;
 
-  /* "knowledge_linker/_closure.pyx":402
+  /* "knowledge_linker/algorithms/_closure.pyx":402
  *     Q = init_intarray(N, -1)
  *     found = 0
  *     D[source] = 0             # <<<<<<<<<<<<<<
@@ -6966,7 +6966,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   (__pyx_v_D[__pyx_v_source]) = 0;
 
-  /* "knowledge_linker/_closure.pyx":403
+  /* "knowledge_linker/algorithms/_closure.pyx":403
  *     found = 0
  *     D[source] = 0
  *     Q[readi] = source             # <<<<<<<<<<<<<<
@@ -6975,7 +6975,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   (__pyx_v_Q[__pyx_v_readi]) = __pyx_v_source;
 
-  /* "knowledge_linker/_closure.pyx":404
+  /* "knowledge_linker/algorithms/_closure.pyx":404
  *     D[source] = 0
  *     Q[readi] = source
  *     while writei < N and readi < writei and not found:             # <<<<<<<<<<<<<<
@@ -7000,7 +7000,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     __pyx_L5_bool_binop_done:;
     if (!__pyx_t_1) break;
 
-    /* "knowledge_linker/_closure.pyx":405
+    /* "knowledge_linker/algorithms/_closure.pyx":405
  *     Q[readi] = source
  *     while writei < N and readi < writei and not found:
  *         d += 1             # <<<<<<<<<<<<<<
@@ -7009,7 +7009,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_d = (__pyx_v_d + 1);
 
-    /* "knowledge_linker/_closure.pyx":406
+    /* "knowledge_linker/algorithms/_closure.pyx":406
  *     while writei < N and readi < writei and not found:
  *         d += 1
  *         Nd = writei - readi # number of elements at distance d from source             # <<<<<<<<<<<<<<
@@ -7018,7 +7018,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_Nd = (__pyx_v_writei - __pyx_v_readi);
 
-    /* "knowledge_linker/_closure.pyx":407
+    /* "knowledge_linker/algorithms/_closure.pyx":407
  *         d += 1
  *         Nd = writei - readi # number of elements at distance d from source
  *         for i in xrange(Nd):             # <<<<<<<<<<<<<<
@@ -7029,7 +7029,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
       __pyx_v_i = __pyx_t_4;
 
-      /* "knowledge_linker/_closure.pyx":408
+      /* "knowledge_linker/algorithms/_closure.pyx":408
  *         Nd = writei - readi # number of elements at distance d from source
  *         for i in xrange(Nd):
  *             nodei = Q[i + readi]             # <<<<<<<<<<<<<<
@@ -7038,16 +7038,16 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
       __pyx_v_nodei = (__pyx_v_Q[(__pyx_v_i + __pyx_v_readi)]);
 
-      /* "knowledge_linker/_closure.pyx":409
+      /* "knowledge_linker/algorithms/_closure.pyx":409
  *         for i in xrange(Nd):
  *             nodei = Q[i + readi]
  *             N_neigh = _csr_neighbors(nodei, A_indices, A_indptr, &neigh)             # <<<<<<<<<<<<<<
  *             for ii in xrange(N_neigh):
  *                 neighi = neigh[ii]
  */
-      __pyx_v_N_neigh = __pyx_f_16knowledge_linker_8_closure__csr_neighbors(__pyx_v_nodei, __pyx_v_A_indices, __pyx_v_A_indptr, (&__pyx_v_neigh));
+      __pyx_v_N_neigh = __pyx_f_16knowledge_linker_10algorithms_8_closure__csr_neighbors(__pyx_v_nodei, __pyx_v_A_indices, __pyx_v_A_indptr, (&__pyx_v_neigh));
 
-      /* "knowledge_linker/_closure.pyx":410
+      /* "knowledge_linker/algorithms/_closure.pyx":410
  *             nodei = Q[i + readi]
  *             N_neigh = _csr_neighbors(nodei, A_indices, A_indptr, &neigh)
  *             for ii in xrange(N_neigh):             # <<<<<<<<<<<<<<
@@ -7058,7 +7058,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
       for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
         __pyx_v_ii = __pyx_t_6;
 
-        /* "knowledge_linker/_closure.pyx":411
+        /* "knowledge_linker/algorithms/_closure.pyx":411
  *             N_neigh = _csr_neighbors(nodei, A_indices, A_indptr, &neigh)
  *             for ii in xrange(N_neigh):
  *                 neighi = neigh[ii]             # <<<<<<<<<<<<<<
@@ -7067,7 +7067,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
         __pyx_v_neighi = (__pyx_v_neigh[__pyx_v_ii]);
 
-        /* "knowledge_linker/_closure.pyx":412
+        /* "knowledge_linker/algorithms/_closure.pyx":412
  *             for ii in xrange(N_neigh):
  *                 neighi = neigh[ii]
  *                 if not reached[neighi]: # Found new node             # <<<<<<<<<<<<<<
@@ -7078,7 +7078,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
         __pyx_t_1 = ((!((*((int *) ( /* dim=0 */ (__pyx_v_reached.data + __pyx_t_7 * __pyx_v_reached.strides[0]) ))) != 0)) != 0);
         if (__pyx_t_1) {
 
-          /* "knowledge_linker/_closure.pyx":413
+          /* "knowledge_linker/algorithms/_closure.pyx":413
  *                 neighi = neigh[ii]
  *                 if not reached[neighi]: # Found new node
  *                     reached[neighi] = 1             # <<<<<<<<<<<<<<
@@ -7088,7 +7088,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
           __pyx_t_8 = __pyx_v_neighi;
           *((int *) ( /* dim=0 */ (__pyx_v_reached.data + __pyx_t_8 * __pyx_v_reached.strides[0]) )) = 1;
 
-          /* "knowledge_linker/_closure.pyx":414
+          /* "knowledge_linker/algorithms/_closure.pyx":414
  *                 if not reached[neighi]: # Found new node
  *                     reached[neighi] = 1
  *                     D[neighi] = d             # <<<<<<<<<<<<<<
@@ -7097,7 +7097,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           (__pyx_v_D[__pyx_v_neighi]) = __pyx_v_d;
 
-          /* "knowledge_linker/_closure.pyx":415
+          /* "knowledge_linker/algorithms/_closure.pyx":415
  *                     reached[neighi] = 1
  *                     D[neighi] = d
  *                     P[neighi] = nodei             # <<<<<<<<<<<<<<
@@ -7106,7 +7106,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           (__pyx_v_P[__pyx_v_neighi]) = __pyx_v_nodei;
 
-          /* "knowledge_linker/_closure.pyx":416
+          /* "knowledge_linker/algorithms/_closure.pyx":416
  *                     D[neighi] = d
  *                     P[neighi] = nodei
  *                     Q[writei] = neighi             # <<<<<<<<<<<<<<
@@ -7115,7 +7115,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           (__pyx_v_Q[__pyx_v_writei]) = __pyx_v_neighi;
 
-          /* "knowledge_linker/_closure.pyx":417
+          /* "knowledge_linker/algorithms/_closure.pyx":417
  *                     P[neighi] = nodei
  *                     Q[writei] = neighi
  *                     writei += 1             # <<<<<<<<<<<<<<
@@ -7124,7 +7124,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           __pyx_v_writei = (__pyx_v_writei + 1);
 
-          /* "knowledge_linker/_closure.pyx":412
+          /* "knowledge_linker/algorithms/_closure.pyx":412
  *             for ii in xrange(N_neigh):
  *                 neighi = neigh[ii]
  *                 if not reached[neighi]: # Found new node             # <<<<<<<<<<<<<<
@@ -7133,7 +7133,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
         }
 
-        /* "knowledge_linker/_closure.pyx":418
+        /* "knowledge_linker/algorithms/_closure.pyx":418
  *                     Q[writei] = neighi
  *                     writei += 1
  *                 if neighi == target:             # <<<<<<<<<<<<<<
@@ -7143,7 +7143,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
         __pyx_t_1 = ((__pyx_v_neighi == __pyx_v_target) != 0);
         if (__pyx_t_1) {
 
-          /* "knowledge_linker/_closure.pyx":419
+          /* "knowledge_linker/algorithms/_closure.pyx":419
  *                     writei += 1
  *                 if neighi == target:
  *                     found = 1             # <<<<<<<<<<<<<<
@@ -7152,7 +7152,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           __pyx_v_found = 1;
 
-          /* "knowledge_linker/_closure.pyx":420
+          /* "knowledge_linker/algorithms/_closure.pyx":420
  *                 if neighi == target:
  *                     found = 1
  *                     if stoponfound:             # <<<<<<<<<<<<<<
@@ -7162,7 +7162,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
           __pyx_t_1 = (__pyx_v_stoponfound != 0);
           if (__pyx_t_1) {
 
-            /* "knowledge_linker/_closure.pyx":421
+            /* "knowledge_linker/algorithms/_closure.pyx":421
  *                     found = 1
  *                     if stoponfound:
  *                         breakflag = 1             # <<<<<<<<<<<<<<
@@ -7171,7 +7171,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
             __pyx_v_breakflag = 1;
 
-            /* "knowledge_linker/_closure.pyx":422
+            /* "knowledge_linker/algorithms/_closure.pyx":422
  *                     if stoponfound:
  *                         breakflag = 1
  *                         break             # <<<<<<<<<<<<<<
@@ -7180,7 +7180,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
             goto __pyx_L11_break;
 
-            /* "knowledge_linker/_closure.pyx":420
+            /* "knowledge_linker/algorithms/_closure.pyx":420
  *                 if neighi == target:
  *                     found = 1
  *                     if stoponfound:             # <<<<<<<<<<<<<<
@@ -7189,7 +7189,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
           }
 
-          /* "knowledge_linker/_closure.pyx":418
+          /* "knowledge_linker/algorithms/_closure.pyx":418
  *                     Q[writei] = neighi
  *                     writei += 1
  *                 if neighi == target:             # <<<<<<<<<<<<<<
@@ -7200,7 +7200,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
       }
       __pyx_L11_break:;
 
-      /* "knowledge_linker/_closure.pyx":423
+      /* "knowledge_linker/algorithms/_closure.pyx":423
  *                         breakflag = 1
  *                         break
  *             free(<void *>neigh)             # <<<<<<<<<<<<<<
@@ -7209,7 +7209,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
       free(((void *)__pyx_v_neigh));
 
-      /* "knowledge_linker/_closure.pyx":424
+      /* "knowledge_linker/algorithms/_closure.pyx":424
  *                         break
  *             free(<void *>neigh)
  *             neigh = NULL             # <<<<<<<<<<<<<<
@@ -7218,7 +7218,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
       __pyx_v_neigh = NULL;
 
-      /* "knowledge_linker/_closure.pyx":425
+      /* "knowledge_linker/algorithms/_closure.pyx":425
  *             free(<void *>neigh)
  *             neigh = NULL
  *             if breakflag:             # <<<<<<<<<<<<<<
@@ -7228,7 +7228,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
       __pyx_t_1 = (__pyx_v_breakflag != 0);
       if (__pyx_t_1) {
 
-        /* "knowledge_linker/_closure.pyx":426
+        /* "knowledge_linker/algorithms/_closure.pyx":426
  *             neigh = NULL
  *             if breakflag:
  *                 break             # <<<<<<<<<<<<<<
@@ -7237,7 +7237,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
         goto __pyx_L9_break;
 
-        /* "knowledge_linker/_closure.pyx":425
+        /* "knowledge_linker/algorithms/_closure.pyx":425
  *             free(<void *>neigh)
  *             neigh = NULL
  *             if breakflag:             # <<<<<<<<<<<<<<
@@ -7248,7 +7248,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     }
     __pyx_L9_break:;
 
-    /* "knowledge_linker/_closure.pyx":427
+    /* "knowledge_linker/algorithms/_closure.pyx":427
  *             if breakflag:
  *                 break
  *         readi += Nd             # <<<<<<<<<<<<<<
@@ -7258,7 +7258,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     __pyx_v_readi = (__pyx_v_readi + __pyx_v_Nd);
   }
 
-  /* "knowledge_linker/_closure.pyx":428
+  /* "knowledge_linker/algorithms/_closure.pyx":428
  *                 break
  *         readi += Nd
  *     if found:             # <<<<<<<<<<<<<<
@@ -7268,7 +7268,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   __pyx_t_1 = (__pyx_v_found != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/_closure.pyx":429
+    /* "knowledge_linker/algorithms/_closure.pyx":429
  *         readi += Nd
  *     if found:
  *         path.length = d             # <<<<<<<<<<<<<<
@@ -7277,7 +7277,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_path.length = __pyx_v_d;
 
-    /* "knowledge_linker/_closure.pyx":430
+    /* "knowledge_linker/algorithms/_closure.pyx":430
  *     if found:
  *         path.length = d
  *         path.found = 1             # <<<<<<<<<<<<<<
@@ -7286,16 +7286,16 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_path.found = 1;
 
-    /* "knowledge_linker/_closure.pyx":431
+    /* "knowledge_linker/algorithms/_closure.pyx":431
  *         path.length = d
  *         path.found = 1
  *         path.vertices = init_intarray(d + 1, -1)             # <<<<<<<<<<<<<<
  *         path.vertices[d] = target
  *         nodei = target
  */
-    __pyx_v_path.vertices = __pyx_f_16knowledge_linker_8_closure_init_intarray((__pyx_v_d + 1), -1);
+    __pyx_v_path.vertices = __pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray((__pyx_v_d + 1), -1);
 
-    /* "knowledge_linker/_closure.pyx":432
+    /* "knowledge_linker/algorithms/_closure.pyx":432
  *         path.found = 1
  *         path.vertices = init_intarray(d + 1, -1)
  *         path.vertices[d] = target             # <<<<<<<<<<<<<<
@@ -7304,7 +7304,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     (__pyx_v_path.vertices[__pyx_v_d]) = __pyx_v_target;
 
-    /* "knowledge_linker/_closure.pyx":433
+    /* "knowledge_linker/algorithms/_closure.pyx":433
  *         path.vertices = init_intarray(d + 1, -1)
  *         path.vertices[d] = target
  *         nodei = target             # <<<<<<<<<<<<<<
@@ -7313,7 +7313,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_nodei = __pyx_v_target;
 
-    /* "knowledge_linker/_closure.pyx":434
+    /* "knowledge_linker/algorithms/_closure.pyx":434
  *         path.vertices[d] = target
  *         nodei = target
  *         for i in xrange(d):             # <<<<<<<<<<<<<<
@@ -7324,7 +7324,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_4; __pyx_t_6+=1) {
       __pyx_v_i = __pyx_t_6;
 
-      /* "knowledge_linker/_closure.pyx":435
+      /* "knowledge_linker/algorithms/_closure.pyx":435
  *         nodei = target
  *         for i in xrange(d):
  *             path.vertices[d - i - 1] = P[nodei]             # <<<<<<<<<<<<<<
@@ -7333,7 +7333,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
       (__pyx_v_path.vertices[((__pyx_v_d - __pyx_v_i) - 1)]) = (__pyx_v_P[__pyx_v_nodei]);
 
-      /* "knowledge_linker/_closure.pyx":436
+      /* "knowledge_linker/algorithms/_closure.pyx":436
  *         for i in xrange(d):
  *             path.vertices[d - i - 1] = P[nodei]
  *             nodei = P[nodei]             # <<<<<<<<<<<<<<
@@ -7343,7 +7343,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
       __pyx_v_nodei = (__pyx_v_P[__pyx_v_nodei]);
     }
 
-    /* "knowledge_linker/_closure.pyx":428
+    /* "knowledge_linker/algorithms/_closure.pyx":428
  *                 break
  *         readi += Nd
  *     if found:             # <<<<<<<<<<<<<<
@@ -7353,7 +7353,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
     goto __pyx_L16;
   }
 
-  /* "knowledge_linker/_closure.pyx":438
+  /* "knowledge_linker/algorithms/_closure.pyx":438
  *             nodei = P[nodei]
  *     else:
  *         path.length = 0             # <<<<<<<<<<<<<<
@@ -7363,7 +7363,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   /*else*/ {
     __pyx_v_path.length = 0;
 
-    /* "knowledge_linker/_closure.pyx":439
+    /* "knowledge_linker/algorithms/_closure.pyx":439
  *     else:
  *         path.length = 0
  *         path.found = 0             # <<<<<<<<<<<<<<
@@ -7372,7 +7372,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
     __pyx_v_path.found = 0;
 
-    /* "knowledge_linker/_closure.pyx":440
+    /* "knowledge_linker/algorithms/_closure.pyx":440
  *         path.length = 0
  *         path.found = 0
  *         path.vertices = NULL             # <<<<<<<<<<<<<<
@@ -7383,7 +7383,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   }
   __pyx_L16:;
 
-  /* "knowledge_linker/_closure.pyx":441
+  /* "knowledge_linker/algorithms/_closure.pyx":441
  *         path.found = 0
  *         path.vertices = NULL
  *     free(<void *> P)             # <<<<<<<<<<<<<<
@@ -7392,7 +7392,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   free(((void *)__pyx_v_P));
 
-  /* "knowledge_linker/_closure.pyx":442
+  /* "knowledge_linker/algorithms/_closure.pyx":442
  *         path.vertices = NULL
  *     free(<void *> P)
  *     free(<void *> D)             # <<<<<<<<<<<<<<
@@ -7401,7 +7401,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   free(((void *)__pyx_v_D));
 
-  /* "knowledge_linker/_closure.pyx":443
+  /* "knowledge_linker/algorithms/_closure.pyx":443
  *     free(<void *> P)
  *     free(<void *> D)
  *     free(<void *> Q)             # <<<<<<<<<<<<<<
@@ -7410,7 +7410,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  */
   free(((void *)__pyx_v_Q));
 
-  /* "knowledge_linker/_closure.pyx":444
+  /* "knowledge_linker/algorithms/_closure.pyx":444
  *     free(<void *> D)
  *     free(<void *> Q)
  *     return path             # <<<<<<<<<<<<<<
@@ -7419,7 +7419,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   __pyx_r = __pyx_v_path;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pyx":354
+  /* "knowledge_linker/algorithms/_closure.pyx":354
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef Path _shortestpath(             # <<<<<<<<<<<<<<
@@ -7432,7 +7432,7 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pxd":34
+/* "knowledge_linker/algorithms/_closure.pxd":34
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef inline int * init_intarray(size_t n, int val) nogil:             # <<<<<<<<<<<<<<
@@ -7440,13 +7440,13 @@ static __pyx_t_16knowledge_linker_8_closure_Path __pyx_f_16knowledge_linker_8_cl
  *     Allocates memory for holding n int values, and initialize them to val.
  */
 
-static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(size_t __pyx_v_n, int __pyx_v_val) {
+static CYTHON_INLINE int *__pyx_f_16knowledge_linker_10algorithms_8_closure_init_intarray(size_t __pyx_v_n, int __pyx_v_val) {
   void *__pyx_v_buf;
   int *__pyx_v_ret;
   int *__pyx_r;
   int __pyx_t_1;
 
-  /* "knowledge_linker/_closure.pxd":42
+  /* "knowledge_linker/algorithms/_closure.pxd":42
  *         void * buf
  *         int * ret
  *     buf = malloc(n * sizeof(int))             # <<<<<<<<<<<<<<
@@ -7455,7 +7455,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  */
   __pyx_v_buf = malloc((__pyx_v_n * (sizeof(int))));
 
-  /* "knowledge_linker/_closure.pxd":43
+  /* "knowledge_linker/algorithms/_closure.pxd":43
  *         int * ret
  *     buf = malloc(n * sizeof(int))
  *     if buf == NULL:             # <<<<<<<<<<<<<<
@@ -7465,7 +7465,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
   __pyx_t_1 = ((__pyx_v_buf == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "knowledge_linker/_closure.pxd":44
+    /* "knowledge_linker/algorithms/_closure.pxd":44
  *     buf = malloc(n * sizeof(int))
  *     if buf == NULL:
  *         abort()             # <<<<<<<<<<<<<<
@@ -7474,7 +7474,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  */
     abort();
 
-    /* "knowledge_linker/_closure.pxd":43
+    /* "knowledge_linker/algorithms/_closure.pxd":43
  *         int * ret
  *     buf = malloc(n * sizeof(int))
  *     if buf == NULL:             # <<<<<<<<<<<<<<
@@ -7483,7 +7483,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  */
   }
 
-  /* "knowledge_linker/_closure.pxd":45
+  /* "knowledge_linker/algorithms/_closure.pxd":45
  *     if buf == NULL:
  *         abort()
  *     memset(buf, val, n * sizeof(int))             # <<<<<<<<<<<<<<
@@ -7492,7 +7492,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  */
   memset(__pyx_v_buf, __pyx_v_val, (__pyx_v_n * (sizeof(int))));
 
-  /* "knowledge_linker/_closure.pxd":46
+  /* "knowledge_linker/algorithms/_closure.pxd":46
  *         abort()
  *     memset(buf, val, n * sizeof(int))
  *     ret = <int *> buf             # <<<<<<<<<<<<<<
@@ -7501,7 +7501,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  */
   __pyx_v_ret = ((int *)__pyx_v_buf);
 
-  /* "knowledge_linker/_closure.pxd":47
+  /* "knowledge_linker/algorithms/_closure.pxd":47
  *     memset(buf, val, n * sizeof(int))
  *     ret = <int *> buf
  *     return ret             # <<<<<<<<<<<<<<
@@ -7511,7 +7511,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
   __pyx_r = __pyx_v_ret;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pxd":34
+  /* "knowledge_linker/algorithms/_closure.pxd":34
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef inline int * init_intarray(size_t n, int val) nogil:             # <<<<<<<<<<<<<<
@@ -7524,7 +7524,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pxd":52
+/* "knowledge_linker/algorithms/_closure.pxd":52
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef inline int _csr_neighbors(int node, int [:] indices, int [:] indptr, int ** ptr) nogil:             # <<<<<<<<<<<<<<
@@ -7532,7 +7532,7 @@ static CYTHON_INLINE int *__pyx_f_16knowledge_linker_8_closure_init_intarray(siz
  *     Extracts the neighbors of given node from the CSR indices and indptr
  */
 
-static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int __pyx_v_node, __Pyx_memviewslice __pyx_v_indices, __Pyx_memviewslice __pyx_v_indptr, int **__pyx_v_ptr) {
+static CYTHON_INLINE int __pyx_f_16knowledge_linker_10algorithms_8_closure__csr_neighbors(int __pyx_v_node, __Pyx_memviewslice __pyx_v_indices, __Pyx_memviewslice __pyx_v_indptr, int **__pyx_v_ptr) {
   int __pyx_v_n;
   int __pyx_v_i;
   int __pyx_v_I;
@@ -7551,7 +7551,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-  /* "knowledge_linker/_closure.pxd":63
+  /* "knowledge_linker/algorithms/_closure.pxd":63
  *     cdef void * buf
  *     cdef int * res
  *     I = indptr[node]             # <<<<<<<<<<<<<<
@@ -7570,7 +7570,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
   }
   __pyx_v_I = (*((int *) ( /* dim=0 */ (__pyx_v_indptr.data + __pyx_t_1 * __pyx_v_indptr.strides[0]) )));
 
-  /* "knowledge_linker/_closure.pxd":64
+  /* "knowledge_linker/algorithms/_closure.pxd":64
  *     cdef int * res
  *     I = indptr[node]
  *     II = indptr[node + 1]             # <<<<<<<<<<<<<<
@@ -7589,7 +7589,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
   }
   __pyx_v_II = (*((int *) ( /* dim=0 */ (__pyx_v_indptr.data + __pyx_t_3 * __pyx_v_indptr.strides[0]) )));
 
-  /* "knowledge_linker/_closure.pxd":65
+  /* "knowledge_linker/algorithms/_closure.pxd":65
  *     I = indptr[node]
  *     II = indptr[node + 1]
  *     n = II - I             # <<<<<<<<<<<<<<
@@ -7598,7 +7598,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
   __pyx_v_n = (__pyx_v_II - __pyx_v_I);
 
-  /* "knowledge_linker/_closure.pxd":66
+  /* "knowledge_linker/algorithms/_closure.pxd":66
  *     II = indptr[node + 1]
  *     n = II - I
  *     if n > 0:             # <<<<<<<<<<<<<<
@@ -7608,7 +7608,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
   __pyx_t_4 = ((__pyx_v_n > 0) != 0);
   if (__pyx_t_4) {
 
-    /* "knowledge_linker/_closure.pxd":67
+    /* "knowledge_linker/algorithms/_closure.pxd":67
  *     n = II - I
  *     if n > 0:
  *         buf = malloc(n * sizeof(int))             # <<<<<<<<<<<<<<
@@ -7617,7 +7617,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
     __pyx_v_buf = malloc((__pyx_v_n * (sizeof(int))));
 
-    /* "knowledge_linker/_closure.pxd":68
+    /* "knowledge_linker/algorithms/_closure.pxd":68
  *     if n > 0:
  *         buf = malloc(n * sizeof(int))
  *         if buf == NULL:             # <<<<<<<<<<<<<<
@@ -7627,7 +7627,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
     __pyx_t_4 = ((__pyx_v_buf == NULL) != 0);
     if (__pyx_t_4) {
 
-      /* "knowledge_linker/_closure.pxd":69
+      /* "knowledge_linker/algorithms/_closure.pxd":69
  *         buf = malloc(n * sizeof(int))
  *         if buf == NULL:
  *             abort()             # <<<<<<<<<<<<<<
@@ -7636,7 +7636,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
       abort();
 
-      /* "knowledge_linker/_closure.pxd":68
+      /* "knowledge_linker/algorithms/_closure.pxd":68
  *     if n > 0:
  *         buf = malloc(n * sizeof(int))
  *         if buf == NULL:             # <<<<<<<<<<<<<<
@@ -7645,7 +7645,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
     }
 
-    /* "knowledge_linker/_closure.pxd":70
+    /* "knowledge_linker/algorithms/_closure.pxd":70
  *         if buf == NULL:
  *             abort()
  *         res = <int *> buf             # <<<<<<<<<<<<<<
@@ -7654,7 +7654,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
     __pyx_v_res = ((int *)__pyx_v_buf);
 
-    /* "knowledge_linker/_closure.pxd":71
+    /* "knowledge_linker/algorithms/_closure.pxd":71
  *             abort()
  *         res = <int *> buf
  *         for i in xrange(n):             # <<<<<<<<<<<<<<
@@ -7665,7 +7665,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_2; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "knowledge_linker/_closure.pxd":72
+      /* "knowledge_linker/algorithms/_closure.pxd":72
  *         res = <int *> buf
  *         for i in xrange(n):
  *             res[i] = indices[I + i]             # <<<<<<<<<<<<<<
@@ -7685,7 +7685,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
       (__pyx_v_res[__pyx_v_i]) = (*((int *) ( /* dim=0 */ (__pyx_v_indices.data + __pyx_t_6 * __pyx_v_indices.strides[0]) )));
     }
 
-    /* "knowledge_linker/_closure.pxd":73
+    /* "knowledge_linker/algorithms/_closure.pxd":73
  *         for i in xrange(n):
  *             res[i] = indices[I + i]
  *         ptr[0] = res             # <<<<<<<<<<<<<<
@@ -7694,7 +7694,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
     (__pyx_v_ptr[0]) = __pyx_v_res;
 
-    /* "knowledge_linker/_closure.pxd":66
+    /* "knowledge_linker/algorithms/_closure.pxd":66
  *     II = indptr[node + 1]
  *     n = II - I
  *     if n > 0:             # <<<<<<<<<<<<<<
@@ -7703,7 +7703,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  */
   }
 
-  /* "knowledge_linker/_closure.pxd":74
+  /* "knowledge_linker/algorithms/_closure.pxd":74
  *             res[i] = indices[I + i]
  *         ptr[0] = res
  *     return n             # <<<<<<<<<<<<<<
@@ -7713,7 +7713,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
   __pyx_r = __pyx_v_n;
   goto __pyx_L0;
 
-  /* "knowledge_linker/_closure.pxd":52
+  /* "knowledge_linker/algorithms/_closure.pxd":52
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef inline int _csr_neighbors(int node, int [:] indices, int [:] indptr, int ** ptr) nogil:             # <<<<<<<<<<<<<<
@@ -7723,13 +7723,13 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_WriteUnraisable("knowledge_linker._closure._csr_neighbors", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 1);
+  __Pyx_WriteUnraisable("knowledge_linker.algorithms._closure._csr_neighbors", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 1);
   __pyx_r = 0;
   __pyx_L0:;
   return __pyx_r;
 }
 
-/* "knowledge_linker/_closure.pxd":77
+/* "knowledge_linker/algorithms/_closure.pxd":77
  * 
  * 
  * cdef inline double _dombit1(double a, double b) nogil:             # <<<<<<<<<<<<<<
@@ -7737,7 +7737,7 @@ static CYTHON_INLINE int __pyx_f_16knowledge_linker_8_closure__csr_neighbors(int
  * 
  */
 
-static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double __pyx_v_a, double __pyx_v_b) {
+static CYTHON_INLINE double __pyx_f_16knowledge_linker_10algorithms_8_closure__dombit1(double __pyx_v_a, double __pyx_v_b) {
   double __pyx_r;
   int __pyx_t_1;
   int __pyx_t_2;
@@ -7747,7 +7747,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-  /* "knowledge_linker/_closure.pxd":90
+  /* "knowledge_linker/algorithms/_closure.pxd":90
  * 
  *     """
  *     if a == b == 0:             # <<<<<<<<<<<<<<
@@ -7761,7 +7761,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "knowledge_linker/_closure.pxd":91
+    /* "knowledge_linker/algorithms/_closure.pxd":91
  *     """
  *     if a == b == 0:
  *         return 0.0             # <<<<<<<<<<<<<<
@@ -7771,7 +7771,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
     __pyx_r = 0.0;
     goto __pyx_L0;
 
-    /* "knowledge_linker/_closure.pxd":90
+    /* "knowledge_linker/algorithms/_closure.pxd":90
  * 
  *     """
  *     if a == b == 0:             # <<<<<<<<<<<<<<
@@ -7780,7 +7780,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
  */
   }
 
-  /* "knowledge_linker/_closure.pxd":93
+  /* "knowledge_linker/algorithms/_closure.pxd":93
  *         return 0.0
  *     else:
  *         return (a * b) / (a + b - a * b)             # <<<<<<<<<<<<<<
@@ -7802,7 +7802,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
     goto __pyx_L0;
   }
 
-  /* "knowledge_linker/_closure.pxd":77
+  /* "knowledge_linker/algorithms/_closure.pxd":77
  * 
  * 
  * cdef inline double _dombit1(double a, double b) nogil:             # <<<<<<<<<<<<<<
@@ -7812,7 +7812,7 @@ static CYTHON_INLINE double __pyx_f_16knowledge_linker_8_closure__dombit1(double
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_WriteUnraisable("knowledge_linker._closure._dombit1", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 1);
+  __Pyx_WriteUnraisable("knowledge_linker.algorithms._closure._dombit1", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 1);
   __pyx_r = 0;
   __pyx_L0:;
   return __pyx_r;
@@ -21951,7 +21951,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker._closure.array", /*tp_name*/
+  "knowledge_linker.algorithms._closure.array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -22057,7 +22057,7 @@ static PyMethodDef __pyx_methods_Enum[] = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker._closure.Enum", /*tp_name*/
+  "knowledge_linker.algorithms._closure.Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -22304,7 +22304,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker._closure.memoryview", /*tp_name*/
+  "knowledge_linker.algorithms._closure.memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -22429,7 +22429,7 @@ static struct PyGetSetDef __pyx_getsets__memoryviewslice[] = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "knowledge_linker._closure._memoryviewslice", /*tp_name*/
+  "knowledge_linker.algorithms._closure._memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -22494,11 +22494,11 @@ static PyTypeObject __pyx_type___pyx_memoryviewslice = {
 };
 
 static PyMethodDef __pyx_methods[] = {
-  {"cclosure", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_1cclosure, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_8_closure_cclosure},
-  {"cclosuress", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_3cclosuress, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_8_closure_2cclosuress},
-  {"reachables", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_5reachables, METH_VARARGS|METH_KEYWORDS, 0},
-  {"reachablesmany", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_7reachablesmany, METH_VARARGS|METH_KEYWORDS, 0},
-  {"shortestpath", (PyCFunction)__pyx_pw_16knowledge_linker_8_closure_11shortestpath, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_8_closure_10shortestpath},
+  {"cclosure", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_1cclosure, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_8_closure_cclosure},
+  {"cclosuress", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_3cclosuress, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_8_closure_2cclosuress},
+  {"reachables", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_5reachables, METH_VARARGS|METH_KEYWORDS, 0},
+  {"reachablesmany", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_7reachablesmany, METH_VARARGS|METH_KEYWORDS, 0},
+  {"shortestpath", (PyCFunction)__pyx_pw_16knowledge_linker_10algorithms_8_closure_11shortestpath, METH_VARARGS|METH_KEYWORDS, __pyx_doc_16knowledge_linker_10algorithms_8_closure_10shortestpath},
   {0, 0, 0, 0}
 };
 
@@ -22583,7 +22583,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 0, 1, 1},
   {&__pyx_n_u_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 1, 0, 1},
   {&__pyx_kp_s_got_differing_extents_in_dimensi, __pyx_k_got_differing_extents_in_dimensi, sizeof(__pyx_k_got_differing_extents_in_dimensi), 0, 0, 1, 0},
-  {&__pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_k_home_giovanni_repos_truthy_meas, sizeof(__pyx_k_home_giovanni_repos_truthy_meas), 0, 0, 1, 0},
+  {&__pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_k_home_giovanni_repos_knowledge_l, sizeof(__pyx_k_home_giovanni_repos_knowledge_l), 0, 0, 1, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_ii, __pyx_k_ii, sizeof(__pyx_k_ii), 0, 0, 1, 1},
@@ -22597,7 +22597,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_j, __pyx_k_j, sizeof(__pyx_k_j), 0, 0, 1, 1},
   {&__pyx_n_s_join, __pyx_k_join, sizeof(__pyx_k_join), 0, 0, 1, 1},
   {&__pyx_n_s_kind, __pyx_k_kind, sizeof(__pyx_k_kind), 0, 0, 1, 1},
-  {&__pyx_n_s_knowledge_linker__closure, __pyx_k_knowledge_linker__closure, sizeof(__pyx_k_knowledge_linker__closure), 0, 0, 1, 1},
+  {&__pyx_n_s_knowledge_linker_algorithms__clo, __pyx_k_knowledge_linker_algorithms__clo, sizeof(__pyx_k_knowledge_linker_algorithms__clo), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_map, __pyx_k_map, sizeof(__pyx_k_map), 0, 0, 1, 1},
   {&__pyx_n_s_memmap, __pyx_k_memmap, sizeof(__pyx_k_memmap), 0, 0, 1, 1},
@@ -22684,7 +22684,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "knowledge_linker/_closure.pyx":134
+  /* "knowledge_linker/algorithms/_closure.pyx":134
  *             proxs[i] = 0.
  *             if retpaths:
  *                 pathslist.append(np.empty(0, dtype=np.int))             # <<<<<<<<<<<<<<
@@ -22695,7 +22695,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "knowledge_linker/_closure.pyx":275
+  /* "knowledge_linker/algorithms/_closure.pyx":275
  *     A = sp.csr_matrix(A)
  *     if sources.shape[0] != targets.shape[0]:
  *         raise ValueError("sources/targets mismatch")             # <<<<<<<<<<<<<<
@@ -22706,7 +22706,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "knowledge_linker/_closure.pyx":303
+  /* "knowledge_linker/algorithms/_closure.pyx":303
  *         else:
  *             # create an empty array for disconnected vertices
  *             pathlist.append(np.empty(0, dtype=np.int32))             # <<<<<<<<<<<<<<
@@ -22717,7 +22717,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "knowledge_linker/_closure.pyx":348
+  /* "knowledge_linker/algorithms/_closure.pyx":348
  *         free(<void *>path.vertices)
  *     else:
  *         retpath = np.empty(0, dtype=np.int32)             # <<<<<<<<<<<<<<
@@ -22940,7 +22940,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__23);
   __Pyx_GIVEREF(__pyx_tuple__23);
 
-  /* "knowledge_linker/_closure.pyx":272
+  /* "knowledge_linker/algorithms/_closure.pyx":272
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def shortestpathmany(object A, int [:] sources, int [:] targets):             # <<<<<<<<<<<<<<
@@ -22950,7 +22950,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__30 = PyTuple_Pack(14, __pyx_n_s_A, __pyx_n_s_sources, __pyx_n_s_targets, __pyx_n_s_N, __pyx_n_s_M, __pyx_n_s_paths, __pyx_n_s_path, __pyx_n_s_pathlist, __pyx_n_s_A_indices, __pyx_n_s_A_indptr, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_reachable, __pyx_n_s_tmp); if (unlikely(!__pyx_tuple__30)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__30);
   __Pyx_GIVEREF(__pyx_tuple__30);
-  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(3, 0, 14, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_truthy_meas, __pyx_n_s_shortestpathmany, 272, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(3, 0, 14, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_giovanni_repos_knowledge_l, __pyx_n_s_shortestpathmany, 272, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "View.MemoryView":278
  *         return self.name
@@ -23098,14 +23098,14 @@ PyMODINIT_FUNC PyInit__closure(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
-  if (__pyx_module_is_main_knowledge_linker___closure) {
+  if (__pyx_module_is_main_knowledge_linker__algorithms___closure) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (!PyDict_GetItemString(modules, "knowledge_linker._closure")) {
-      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker._closure", __pyx_m) < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!PyDict_GetItemString(modules, "knowledge_linker.algorithms._closure")) {
+      if (unlikely(PyDict_SetItemString(modules, "knowledge_linker.algorithms._closure", __pyx_m) < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
   #endif
@@ -23162,10 +23162,10 @@ PyMODINIT_FUNC PyInit__closure(void)
   __pyx_ptype_5numpy_broadcast = __Pyx_ImportType("numpy", "broadcast", sizeof(PyArrayMultiIterObject), 0); if (unlikely(!__pyx_ptype_5numpy_broadcast)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_5numpy_ndarray = __Pyx_ImportType("numpy", "ndarray", sizeof(PyArrayObject), 0); if (unlikely(!__pyx_ptype_5numpy_ndarray)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 181; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_5numpy_ufunc = __Pyx_ImportType("numpy", "ufunc", sizeof(PyUFuncObject), 0); if (unlikely(!__pyx_ptype_5numpy_ufunc)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 861; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_16knowledge_linker_4heap_BinaryHeap = __Pyx_ImportType("knowledge_linker.heap", "BinaryHeap", sizeof(struct __pyx_obj_16knowledge_linker_4heap_BinaryHeap), 1); if (unlikely(!__pyx_ptype_16knowledge_linker_4heap_BinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap = (struct __pyx_vtabstruct_16knowledge_linker_4heap_BinaryHeap*)__Pyx_GetVtable(__pyx_ptype_16knowledge_linker_4heap_BinaryHeap->tp_dict); if (unlikely(!__pyx_vtabptr_16knowledge_linker_4heap_BinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap = __Pyx_ImportType("knowledge_linker.heap", "FastUpdateBinaryHeap", sizeof(struct __pyx_obj_16knowledge_linker_4heap_FastUpdateBinaryHeap), 1); if (unlikely(!__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap = (struct __pyx_vtabstruct_16knowledge_linker_4heap_FastUpdateBinaryHeap*)__Pyx_GetVtable(__pyx_ptype_16knowledge_linker_4heap_FastUpdateBinaryHeap->tp_dict); if (unlikely(!__pyx_vtabptr_16knowledge_linker_4heap_FastUpdateBinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap = __Pyx_ImportType("knowledge_linker.algorithms.heap", "BinaryHeap", sizeof(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_BinaryHeap), 1); if (unlikely(!__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap = (struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_BinaryHeap*)__Pyx_GetVtable(__pyx_ptype_16knowledge_linker_10algorithms_4heap_BinaryHeap->tp_dict); if (unlikely(!__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_BinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = __Pyx_ImportType("knowledge_linker.algorithms.heap", "FastUpdateBinaryHeap", sizeof(struct __pyx_obj_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap), 1); if (unlikely(!__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap = (struct __pyx_vtabstruct_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap*)__Pyx_GetVtable(__pyx_ptype_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap->tp_dict); if (unlikely(!__pyx_vtabptr_16knowledge_linker_10algorithms_4heap_FastUpdateBinaryHeap)) {__pyx_filename = __pyx_f[5]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   /*--- Variable import code ---*/
   /*--- Function import code ---*/
   /*--- Execution code ---*/
@@ -23173,7 +23173,7 @@ PyMODINIT_FUNC PyInit__closure(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "knowledge_linker/_closure.pyx":3
+  /* "knowledge_linker/algorithms/_closure.pyx":3
  * # cython: profile=False
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -23185,7 +23185,7 @@ PyMODINIT_FUNC PyInit__closure(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":4
+  /* "knowledge_linker/algorithms/_closure.pyx":4
  * 
  * import numpy as np
  * import scipy.sparse as sp             # <<<<<<<<<<<<<<
@@ -23203,7 +23203,7 @@ PyMODINIT_FUNC PyInit__closure(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_sp, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_closure.pyx":6
+  /* "knowledge_linker/algorithms/_closure.pyx":6
  * import scipy.sparse as sp
  * from cython.parallel import parallel, prange
  * from tempfile import NamedTemporaryFile             # <<<<<<<<<<<<<<
@@ -23224,7 +23224,7 @@ PyMODINIT_FUNC PyInit__closure(void)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "knowledge_linker/_closure.pyx":7
+  /* "knowledge_linker/algorithms/_closure.pyx":7
  * from cython.parallel import parallel, prange
  * from tempfile import NamedTemporaryFile
  * from struct import pack             # <<<<<<<<<<<<<<
@@ -23245,19 +23245,19 @@ PyMODINIT_FUNC PyInit__closure(void)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_closure.pyx":272
+  /* "knowledge_linker/algorithms/_closure.pyx":272
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * def shortestpathmany(object A, int [:] sources, int [:] targets):             # <<<<<<<<<<<<<<
  *     A = sp.csr_matrix(A)
  *     if sources.shape[0] != targets.shape[0]:
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_8_closure_9shortestpathmany, NULL, __pyx_n_s_knowledge_linker__closure); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_16knowledge_linker_10algorithms_8_closure_9shortestpathmany, NULL, __pyx_n_s_knowledge_linker_algorithms__clo); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_shortestpathmany, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 272; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "knowledge_linker/_closure.pyx":1
+  /* "knowledge_linker/algorithms/_closure.pyx":1
  * # cython: profile=False             # <<<<<<<<<<<<<<
  * 
  * import numpy as np
@@ -23392,11 +23392,11 @@ PyMODINIT_FUNC PyInit__closure(void)
   __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init knowledge_linker._closure", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init knowledge_linker.algorithms._closure", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init knowledge_linker._closure");
+    PyErr_SetString(PyExc_ImportError, "init knowledge_linker.algorithms._closure");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

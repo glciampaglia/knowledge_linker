@@ -40,6 +40,17 @@ now = datetime.now
 # package imports
 from ._closure import cclosuress, cclosure
 
+__all__ = [
+    'dombit1',
+    'closure',
+    'closuress',
+    'closureap',
+    'cclosuress',
+    'cclosure',
+    'epclosure',
+    'epclosuress',
+    'backbone',
+]
 
 def dombit1(a, b):
     """ Dombi T-conorm with lambda = 1.
