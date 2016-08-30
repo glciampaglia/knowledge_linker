@@ -35,12 +35,13 @@ kwargs = dict(
     install_requires=[
         'numpy',
         'scipy',
-        'matplotlib',
         'networkx',
         'nose >= 1.3.7',
-        'scikit-learn',
-        'scikit-tensor'
-    ]
+    ],
+    extra_require={
+        'plotting': ['matplotlib'],
+        'tensor': ['scikit-tensor','scikit-learn']
+    }
 #    scripts=[
 #        'scripts/closure.py',
 #        'scripts/ontoparse.py',

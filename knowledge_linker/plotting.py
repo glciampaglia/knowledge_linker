@@ -1,4 +1,4 @@
-""" Plotting tools. """
+""" Plotting tools. Requires optional dependency Matplotlib. """
 
 import numpy as np
 import matplotlib.pyplot as plt
