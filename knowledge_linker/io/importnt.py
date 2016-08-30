@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 ''' Converts data from N-triple format to binary format. See docstrings in the
 module. '''
 
@@ -17,8 +15,8 @@ from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
-from knowledge_linker.ntriples import *
-from knowledge_linker.utils import coo_dtype
+from .ntriples import *
+from ..utils import coo_dtype
 
 namespaces = {}
 
@@ -99,7 +97,8 @@ def _second_pass(path, vertexmap, num_triples, properties,
     np.save(adjpath, np.asarray(data, dtype=coo_dtype))
     print >> sys.stderr, 'info: adj written to {}'.format(adjpath)
 
-if __name__ == '__main__':
+
+def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('ns_file', metavar='namespaces', help='tab-separated list of namespace codes')
     parser.add_argument('nt_file', metavar='ntriples', help='N-Triples file')
@@ -138,4 +137,3 @@ if __name__ == '__main__':
         if e.errno == errno.EPIPE: # broken pipe
             sys.exit(0)
         raise
-

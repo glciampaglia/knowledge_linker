@@ -33,6 +33,7 @@ kwargs = dict(
     tests_require='nose',
     include_package_data=True,
     install_requires=[
+        'lxml',
         'numpy',
         'scipy',
         'networkx',
@@ -41,12 +42,13 @@ kwargs = dict(
     extras_require={
         'plotting': ['matplotlib'],
         'tensor': ['scikit-tensor','scikit-learn']
+    },
+    entry_points={
+        'console_scripts': [
+            'importnt = knowledge_linker.io.importnt:main',
+            'ontoparse = knowledge_linker.io.ontoparse:main'
+        ]
     }
-#    scripts=[
-#        'scripts/closure.py',
-#        'scripts/ontoparse.py',
-#        'scripts/prep.py',
-#    ]
 )
 
 parser = argparse.ArgumentParser(description=__file__,
