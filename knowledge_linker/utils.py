@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import scipy.sparse as sp
-from csr_tensor import csr_tensor
 
 from cStringIO import StringIO
 from itertools import izip, chain, repeat, groupby
@@ -208,47 +207,6 @@ WEIGHT_FUNCTIONS = {
     'degree': indegree,
     'logdegree': logindegree
 }
-
-def weighted_tensor(T, weight='degree', undirected=False):
-    """
-    Creates a weighted tensor based on the input adjacency tensor.
-
-    Parameters:
-    -----------
-    T: `csr_tensor`
-        A third order tensor represented by a list of frontal CSR matrices.
-
-    weight: str
-        The weight scheme to be used to construct weights for edges.
-        Options include 'degree' and 'logdegree'.
-
-    undirected: str
-        Whether a symmetric (undirected) version of weighted tensor is desired.
-
-    Returns:
-    --------
-    Tw: csr_tensor
-        A new weighted tensor.
-    """
-    if weight not in WEIGHT_FUNCTIONS:
-        raise ValueError('Unspecified weight function.')
-    weightfunc = WEIGHT_FUNCTIONS[weight]
-    Tw = csr_tensor() # new tensor
-    Tw.set_shape(T.shape)
-    for i in xrange(T.get_shape()[2]):
-        # ensure input is in COO format
-        m = T.getslice(i).copy().tocoo()
-        if undirected:
-            # transform to symmetric
-            m = make_symmetric(m).tocoo()
-        # compute in-degrees
-        dist = weightfunc(m)
-        # transform to similarity scores
-        sim = disttosim(dist)
-        # create CSR matrix and add to the new tensor
-        Tw.setslice(i, sp.coo_matrix((sim[m.col], (m.row, m.col)), shape=m.shape).tocsr())
-    return Tw
-
 
 def make_weighted(path, N, weight='degree', undirected=False):
     '''
