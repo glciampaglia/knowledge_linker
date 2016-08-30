@@ -17,8 +17,8 @@ from time import time
 from datetime import timedelta
 from codecs import EncodedFile
 
-from truthy_measure.ntriples import *
-from truthy_measure.utils import coo_dtype
+from knowledge_linker.ntriples import *
+from knowledge_linker.utils import coo_dtype
 
 namespaces = {}
 

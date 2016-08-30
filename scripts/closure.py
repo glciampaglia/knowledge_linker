@@ -6,8 +6,8 @@ from argparse import ArgumentParser
 from datetime import datetime
 from itertools import izip
 
-from truthy_measure.maxmin import mmclosure_matmul
-from truthy_measure.utils import make_weighted
+from knowledge_linker.maxmin import mmclosure_matmul
+from knowledge_linker.utils import make_weighted
 
 _now = datetime.now
 
@@ -17,9 +17,9 @@ if __name__ == '__main__':
     parser.add_argument('data_path', metavar='data', help='Graph data')
     parser.add_argument('nodes', type=int, help='number of nodes')
     parser.add_argument('output', help='output file')
-    parser.add_argument('-p', '--procs', type=int, metavar='NUM', 
+    parser.add_argument('-p', '--procs', type=int, metavar='NUM',
             help='use %(metavar)s process for computing the transitive closure')
-    parser.add_argument('-i', '--intermediate', action='store_true', 
+    parser.add_argument('-i', '--intermediate', action='store_true',
             help='save intermediate matrix to file')
     args = parser.parse_args()
 
@@ -34,11 +34,11 @@ if __name__ == '__main__':
         adjt = mmclosure_matmul(adj, parallel=True, splits=args.procs,
                 nprocs=args.procs, dumpiter=args.intermediate)
     else:
-        adjt = mmclosure_matmul(adj, dumpiter=args.intermediate) 
+        adjt = mmclosure_matmul(adj, dumpiter=args.intermediate)
     print "{}: closure algorithm completed.".format(_now())
 
     # save to file as records array
     adjt = adjt.tocoo()
     np.save(args.output, np.fromiter(izip(adjt.row, adjt.col, adjt.data),
-        coo_dtype, len(adjt.row))) 
+        coo_dtype, len(adjt.row)))
     print "{}: closure graph saved to {}.".format(_now(), args.output)
