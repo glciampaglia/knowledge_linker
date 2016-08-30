@@ -2,7 +2,6 @@ include LICENSE.txt
 include README
 include README.md
 include CONTRIBUTORS.md
-include requirements.txt
 include setup.cfg
 
 # code
