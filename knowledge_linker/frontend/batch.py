@@ -1,10 +1,7 @@
-#!/usr/bin/env python
-# vim: set sts=4 sw=4 expandtab:
+""" Batch processing script. """
 
-""" Epistemic closure batch processing script. """
 import os
 import sys
-from argparse import ArgumentParser
 from contextlib import closing
 import numpy as np
 import scipy.sparse as sp
@@ -13,36 +10,36 @@ from datetime import datetime
 from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 
-from knowledge_linker.ntriples import NodesIndex
-from knowledge_linker.utils import make_weighted, WEIGHT_FUNCTIONS
-from knowledge_linker.closure import _init_worker as _clo_init_worker, \
+from ..io.ntriples import NodesIndex
+from ..utils import make_weighted, WEIGHT_FUNCTIONS
+from ..algorithms.closure import _init_worker as _clo_init_worker, \
     epclosuress
 
 now = datetime.now
 
 
-parser = ArgumentParser(description=__doc__)
-parser.add_argument('nspath', metavar='ns', help='namespace abbreviations')
-parser.add_argument('nodespath', metavar='uris', help='node uris')
-parser.add_argument('adjpath', metavar='graph', help='adjacency matrix')
-parser.add_argument('sourcespath', metavar='sources', help='input sources')
-parser.add_argument('targetspath', metavar='targets', help='input targets')
-parser.add_argument('-S', '--skip', type=int, default=0, metavar='LINES')
-parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
-parser.add_argument('-u', '--undirected', action='store_true',
-                    help='use the undirected network')
-parser.add_argument('-k', '--kind', default='ultrametric',
-                    choices=['ultrametric', 'metric'],
-                    help='the kind of proximity metric')
-parser.add_argument('-N', '--no-closure', action='store_true',
-                    help='Do not compute a closure, use the base graph')
-parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
-                    default='degree',
-                    help='Weight type (default: %(default)s)')
-parser.add_argument('-s', '--sep', default=',',
-                    help='field separator (default: ,)')
-parser.add_argument('-H', '--header', nargs='+', help='Column names',
-                    dest='names')
+def populate_parser(parser):
+    parser.add_argument('nspath', metavar='ns', help='namespace abbreviations')
+    parser.add_argument('nodespath', metavar='uris', help='node uris')
+    parser.add_argument('adjpath', metavar='graph', help='adjacency matrix')
+    parser.add_argument('sourcespath', metavar='sources', help='input sources')
+    parser.add_argument('targetspath', metavar='targets', help='input targets')
+    parser.add_argument('-S', '--skip', type=int, default=0, metavar='LINES')
+    parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
+    parser.add_argument('-u', '--undirected', action='store_true',
+                        help='use the undirected network')
+    parser.add_argument('-k', '--kind', default='ultrametric',
+                        choices=['ultrametric', 'metric'],
+                        help='the kind of proximity metric')
+    parser.add_argument('-N', '--no-closure', action='store_true',
+                        help='Do not compute a closure, use the base graph')
+    parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
+                        default='degree',
+                        help='Weight type (default: %(default)s)')
+    parser.add_argument('-s', '--sep', default=',',
+                        help='field separator (default: ,)')
+    parser.add_argument('-H', '--header', nargs='+', help='Column names',
+                        dest='names')
 
 _B = None
 
@@ -218,7 +215,7 @@ def main(ns):
     ## read sources
     print >> sys.stderr, '{}: reading sources..'.format(now())
     sf = pd.read_csv(os.path.expanduser(ns.sourcespath), sep=ns.sep,
-                     names=args.names)
+                     names=ns.names)
     if 'node_id' not in sf:
         sf['node_id'] = list(ni.tonodemany(sf['node_title']))
     if sf['node_id'].isnull().any():
@@ -229,7 +226,7 @@ def main(ns):
 
     ## read targets
     tf = pd.read_csv(os.path.expanduser(ns.targetspath), sep=' ',
-                     names=args.names)
+                     names=ns.names)
     if 'node_id' not in tf:
         tf['node_id'] = list(ni.tonodemany(tf['node_title']))
     if tf['node_id'].isnull().any():
@@ -253,8 +250,3 @@ def main(ns):
     colnames = tf['node_title'].map(lambda k: k.split('/')[-1])
     outf = pd.concat([sf, pd.DataFrame(B, columns=colnames)], axis=1)
     outf.to_csv(sys.stdout, encoding='utf-8')
-
-if __name__ == '__main__':
-
-    args = parser.parse_args()
-    main(args)

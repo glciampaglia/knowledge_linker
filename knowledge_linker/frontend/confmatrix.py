@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-
 """ Compute confusion matrices using edge removal. """
 
 import sys
-from argparse import ArgumentParser
 from contextlib import closing
 import numpy as np
 import pandas as pd
@@ -12,8 +9,8 @@ from datetime import datetime
 import traceback
 from multiprocessing import Pool, cpu_count
 
-from knowledge_linker.utils import make_weighted, WEIGHT_FUNCTIONS
-from knowledge_linker.closure import epclosure, epclosuress
+from ..utils import make_weighted, WEIGHT_FUNCTIONS
+from ..algorithms.closure import epclosure, epclosuress
 
 from scipy.sparse import SparseEfficiencyWarning
 from warnings import filterwarnings
@@ -24,21 +21,23 @@ now = datetime.now
 WORKER_DATA = {}
 max_tasks_per_worker = 500
 
-parser = ArgumentParser(description=__doc__)
-parser.add_argument('nodespath', metavar='uris', help='node uris')
-parser.add_argument('adjpath', metavar='graph', help='adjacency matrix')
-parser.add_argument('sourcespath', metavar='source', help='sources input file')
-parser.add_argument('targetspath', metavar='target', help='targets input file')
-parser.add_argument('outputpath', metavar='output', help='output file')
-parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
-parser.add_argument('-u', '--undirected', action='store_true',
-                    help='use the undirected network')
-parser.add_argument('-k', '--kind', default='ultrametric',
-                    choices=['ultrametric', 'metric'],
-                    help='the kind of proximity metric')
-parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
-                    default='degree',
-                    help='Weight type (default: %(default)s)')
+
+def populate_parser(parser):
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('nodespath', metavar='uris', help='node uris')
+    parser.add_argument('adjpath', metavar='graph', help='adjacency matrix')
+    parser.add_argument('sourcespath', metavar='source', help='sources input file')
+    parser.add_argument('targetspath', metavar='target', help='targets input file')
+    parser.add_argument('outputpath', metavar='output', help='output file')
+    parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
+    parser.add_argument('-u', '--undirected', action='store_true',
+                        help='use the undirected network')
+    parser.add_argument('-k', '--kind', default='ultrametric',
+                        choices=['ultrametric', 'metric'],
+                        help='the kind of proximity metric')
+    parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
+                        default='degree',
+                        help='Weight type (default: %(default)s)')
 
 
 def _init_worker(A, kind, targets):
@@ -182,8 +181,3 @@ def main(ns):
     colnames = tf['node_title'].map(lambda k: k.split('/')[-1])
     outf = pd.concat([sf, pd.DataFrame(B, columns=colnames)], axis=1)
     outf.to_csv(ns.outputpath, encoding='utf-8')
-
-if __name__ == '__main__':
-
-    args = parser.parse_args()
-    main(args)

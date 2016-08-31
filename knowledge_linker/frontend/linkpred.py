@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-
 """ Epistemic closure batch processing script. """
 
 import re
 import os
 import sys
-from argparse import ArgumentParser
 from contextlib import closing
 import numpy as np
 import pandas as pd
@@ -13,8 +10,8 @@ import scipy.sparse as sp
 from datetime import datetime
 from multiprocessing import Pool, cpu_count
 
-from knowledge_linker.utils import make_weighted, WEIGHT_FUNCTIONS, load_csmatrix
-from knowledge_linker.closure import epclosure
+from ..utils import make_weighted, WEIGHT_FUNCTIONS, load_csmatrix
+from ..algorithms.closure import epclosure
 
 from scipy.sparse import SparseEfficiencyWarning
 from warnings import filterwarnings
@@ -25,25 +22,27 @@ now = datetime.now
 WORKER_DATA = {}
 max_tasks_per_worker = 500
 
-parser = ArgumentParser(description=__doc__)
-parser.add_argument('nodespath', metavar='uris', help='node uris '
-                    '(or path to HDF5 store)')
-parser.add_argument('adjpath', metavar='graph', help='adjacency matrix '
-                    '(or path to CSR/CSC data)')
-parser.add_argument('inputpath', metavar='input', help='input file')
-parser.add_argument('outputpath', metavar='output', help='output file')
-parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
-parser.add_argument('-u', '--undirected', action='store_true',
-                    help='use the undirected network')
-parser.add_argument('-k', '--kind', default='ultrametric',
-                    choices=['ultrametric', 'metric'],
-                    help='the kind of proximity metric')
-parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
-                    default='degree',
-                    help='Weight type (default: %(default)s)')
-parser.add_argument('-N', '--no-closure', action='store_true',
-                    help='Do not compute closure, '
-                    'return weight on direct edge')
+
+def populate_parser(parser):
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('nodespath', metavar='uris', help='node uris '
+                        '(or path to HDF5 store)')
+    parser.add_argument('adjpath', metavar='graph', help='adjacency matrix '
+                        '(or path to CSR/CSC data)')
+    parser.add_argument('inputpath', metavar='input', help='input file')
+    parser.add_argument('outputpath', metavar='output', help='output file')
+    parser.add_argument('-n', '--nprocs', type=int, help='number of processes')
+    parser.add_argument('-u', '--undirected', action='store_true',
+                        help='use the undirected network')
+    parser.add_argument('-k', '--kind', default='ultrametric',
+                        choices=['ultrametric', 'metric'],
+                        help='the kind of proximity metric')
+    parser.add_argument('-w', '--weight', choices=WEIGHT_FUNCTIONS,
+                        default='degree',
+                        help='Weight type (default: %(default)s)')
+    parser.add_argument('-N', '--no-closure', action='store_true',
+                        help='Do not compute closure, '
+                        'return weight on direct edge')
 
 
 def _init_worker(A, B, kind):
@@ -210,8 +209,3 @@ def main(ns):
     else:
         df['paths'] = [[nodes[i] for i in p] for p in paths]
     df.to_json(ns.outputpath)
-
-if __name__ == '__main__':
-
-    args = parser.parse_args()
-    main(args)
