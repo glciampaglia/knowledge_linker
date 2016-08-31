@@ -9,14 +9,15 @@ from . import confmatrix
 
 _sub = {}
 for mod in [backbone, linkpred, batch, confmatrix]:
-    _sub[mod.__name__] = (mod.populate_parser, mod.main)
+    k = mod.__name__.split('.')[-1]
+    _sub[k] = (mod.populate_parser, mod.main)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    subparsers = parser.add_subparsers('cmd')
+    subparsers = parser.add_subparsers()
     for k, (populate_parser, main) in _sub.items():
-        subp = subparsers.add_subparsers(k)
+        subp = subparsers.add_parser(k)
         populate_parser(subp)
         subp.set_defaults(func=main)
     args = parser.parse_args()

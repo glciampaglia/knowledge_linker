@@ -24,7 +24,6 @@ max_tasks_per_worker = 500
 
 
 def populate_parser(parser):
-    parser = ArgumentParser(description=__doc__)
     parser.add_argument('nodespath', metavar='uris', help='node uris '
                         '(or path to HDF5 store)')
     parser.add_argument('adjpath', metavar='graph', help='adjacency matrix '
