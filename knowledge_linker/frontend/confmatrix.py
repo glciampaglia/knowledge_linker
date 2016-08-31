@@ -1,4 +1,4 @@
-""" Compute confusion matrices using edge removal. """
+""" Question-answering via confusion matrix """
 
 import sys
 from contextlib import closing

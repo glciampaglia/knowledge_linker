@@ -1,4 +1,4 @@
-""" Epistemic closure batch processing script. """
+""" Link prediction """
 
 import re
 import os

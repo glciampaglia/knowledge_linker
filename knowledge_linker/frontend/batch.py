@@ -1,4 +1,4 @@
-""" Batch processing script. """
+""" Batch processing script """
 
 import os
 import sys

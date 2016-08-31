@@ -1,4 +1,4 @@
-""" Knowledge Linker Setup Script """
+""" Setuptools script """
 
 import os
 import argparse
