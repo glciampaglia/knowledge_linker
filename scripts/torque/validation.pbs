@@ -1,0 +1,90 @@
+#!/bin/bash
+#PBS -l walltime=18:00:00,nodes=10:ppn=32
+#PBS -q cpu
+#PBS -V
+#PBS -j oe
+#PBS -N confmatrix
+#PBS -d /N/u/gciampag/BigRed2/truthy_measure/experiments/2013-09-12-statements
+
+# walltime for 50 lines: 2h for directed, 12h for undirected
+
+SCRIPT=klinker confmatrix
+DATAROOT=${HOME}/data/dbpedia
+ADJ=${DATAROOT}/filtered/adjacency.npy
+NODES=${DATAROOT}/filtered/nodes_uris.txt
+
+declare -a sources targets names
+
+# NBA teams vs cities
+names[0]=NBA
+sources[0]=~/data/dbpedia/validation/NBA/nba_teams_ids.txt
+targets[0]=~/data/dbpedia/validation/NBA/nba_cities_ids.txt
+
+# AFC teams vs cities
+names[1]=AFC
+sources[1]=~/data/dbpedia/validation/NFL/afc_teams_ids.txt
+targets[1]=~/data/dbpedia/validation/NFL/afc_cities_ids.txt
+
+# NFC teams vs cities
+names[2]=NFC
+sources[2]=~/data/dbpedia/validation/NFL/nfc_teams_ids.txt
+targets[2]=~/data/dbpedia/validation/NFL/nfc_cities_ids.txt
+
+# US state capitals vs US states
+names[3]=capitals
+sources[3]=~/data/dbpedia/validation/US_Capitals/usa_capitals_ids.txt
+targets[3]=~/data/dbpedia/validation/US_Capitals/usa_states_ids.txt
+
+# US presidents vs US first ladies
+names[4]=couples
+sources[4]=~/data/dbpedia/validation/US_president_couples/presidents_ids.txt
+targets[4]=~/data/dbpedia/validation/US_president_couples/president_wives_ids.txt
+
+# World countries capitals vs World countries (split)
+names[5]=countries00
+sources[5]=~/data/dbpedia/validation/World_countries_capitals/capitals_ids00
+targets[5]=~/data/dbpedia/validation/World_countries_capitals/countries.txt
+
+names[6]=countries01
+sources[6]=~/data/dbpedia/validation/World_countries_capitals/capitals_ids01
+targets[6]=~/data/dbpedia/validation/World_countries_capitals/countries.txt
+
+names[7]=countries02
+sources[7]=~/data/dbpedia/validation/World_countries_capitals/capitals_ids02
+targets[7]=~/data/dbpedia/validation/World_countries_capitals/countries.txt
+
+names[8]=countries03
+sources[8]=~/data/dbpedia/validation/World_countries_capitals/capitals_ids03
+targets[8]=~/data/dbpedia/validation/World_countries_capitals/countries.txt
+
+# Directors vs movies (Oscars best movie awarded)
+names[9]=oscars
+sources[9]=~/data/dbpedia/validation/Oscars/directors_ids.txt
+targets[9]=~/data/dbpedia/validation/Oscars/movies_ids.txt
+
+
+metric=metric
+dir=-u
+weight=logdegree
+
+echo "`date`: Job ${PBS_JOBID:=TEST} started on ${PBS_SERVER:=`hostname`}."
+
+for index in `seq 0 $((${#names[@]}-1))` ; do
+    name=${names[${index}]}
+    src=${sources[${index}]}
+    tgt=${targets[${index}]}
+    output=${name}-${metric}${dir}_${PBS_JOBID}.out
+    error=${name}-${metric}${dir}_${PBS_JOBID}.err
+    # must be on one line
+    set -x
+    aprun -n 1 -N 1 ${SCRIPT} -n 32 ${dir} -k ${metric} -w ${weight} ${NODES} ${ADJ} ${src} ${tgt} ${output} 2>${error} &
+    set +x
+done
+
+# wait termination of all background jobs
+wait
+echo All tasks terminated.
+
+echo "`date`: Job ${PBS_JOBID} terminated on ${PBS_SERVER}."
+
+# vim: sts=4 sw=4 expandtab nowrap:
