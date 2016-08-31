@@ -13,3 +13,6 @@ dist/
 
 # IPython Notebook checkpoint files
 .ipynb_checkpoints
+
+# Rope
+.ropeproject/
