@@ -1,0 +1,13 @@
+include LICENSE.txt
+include README
+include README.md
+include CONTRIBUTORS.md
+include setup.cfg
+
+# code
+recursive-include knowledge_linker *.pyx *.pxd
+recursive-include scripts *
+
+# goodies
+recursive-include misc *
+prune misc/presentations

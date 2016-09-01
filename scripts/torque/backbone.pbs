@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -l walltime=36:00:00,nodes=1:ppn=8
+#PBS -N backbone
+#PBS -V
+#PBS -m bae
+#PBS -d /N/u/gciampag/BigRed2/truthy_measure/experiments/2013-12-05-metric-backbone
+#PBS -t 0-24
+OFFSET=128000
+KIND=metric
+# empty means directed
+DIR=
+SCRIPT=klinker backbone
+DATAROOT=${HOME}/data/dbpedia
+NS=${DATAROOT}/allns.tsv
+ADJ=${DATAROOT}/filtered/adjacency.npy
+N=3141896
+OUTPUT=${DATAROOT}/backbone/backbone_${KIND}-${WEIGHT}${DIR}-${PBS_ARRAYID:=0}.mtx
+START=$((${PBS_ARRAYID} * ${OFFSET}))
+${SCRIPT} ${DIR} -n 8 -k ${KIND} -s ${START} -o ${OFFSET} ${NS} ${ADJ} ${OUTPUT} ${N}
