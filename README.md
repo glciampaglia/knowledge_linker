@@ -54,8 +54,12 @@ __Method 1__: with the plain setuptools:
 __Method 2:__ with pip:
 
 ```bash
-    pip  install -e requirements.txt .
+    pip  install .
 ```
+
+## Documentation
+
+API reference and tutorial are TODO.
 
 ## Contributing
 
