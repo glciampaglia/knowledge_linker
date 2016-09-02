@@ -16,3 +16,6 @@ dist/
 
 # Rope
 .ropeproject/
+
+# Avoid committing anything under experiments in the release branch
+experiments/
