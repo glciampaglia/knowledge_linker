@@ -27,6 +27,8 @@ kwargs = dict(
     version='0.1rc0',
     author='Giovanni Luca Ciampaglia and others (see CONTRIBUTORS.md)',
     author_email='gciampag@indiana.edu',
+    license='Apache-2.0',
+    url='https://github.com/glciampaglia/knowledge_linker',
     packages=['knowledge_linker'],
     ext_modules=[
         Extension("knowledge_linker.algorithms.heap",
