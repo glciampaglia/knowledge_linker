@@ -1,0 +1,26 @@
+Author: Mihai Avram - mihai.v.avram@gmail.com
+
+PREP WORK:
+1) Place the two .csv files to be compared in the input folder
+2) In the tool/AlgCompTool.py change the alg1 and alg2 locations to the correct names
+	of the input files placed in step 1
+
+ENSURE DATA IS CLEANED STEPS BELOW:
+
+1) Ensure the input files have non-null values in titled columns 'sid','score','sub','class','oid','obj'
+2) Ensure the input files have (subject)*(object) rows/samples
+3) Ensure all values in the 'sub' column for both files have the exact same named entries
+	(i.e. dbr:A_Beautiful_Mind_(film) in alg1 should be exactly the same name
+	and not dbresource/:A_Beautiful_Mind_(film) or A_Beautiful_Mind)
+4) Ensure the output/ folder is empty as files may get created there and should not
+	be over-written
+
+HOW TO RUN TOOL:
+The tool will run in Python 3, and can be executed the following way from the command line:
+
+python AlgCompTool.py
+	-This prints the results to the terminal (not advised if the file is large)
+
+python AlgCompTool.py -f or python AlgCompTool.py --file
+	-This prints the comparison to files in the output/ folder, one file for the comparison of the two algorithms, another for the Algorithm1 confusion calculations in .csv format, and another for Algorithm2 confusion calculations in .csv format.
+
