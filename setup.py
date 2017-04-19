@@ -61,8 +61,8 @@ kwargs = dict(
     },
     entry_points={
         'console_scripts': [
-            'importnt = knowledge_linker.io.importnt:main',
-            'ontoparse = knowledge_linker.io.ontoparse:main',
+            'importnt = knowledge_linker.inout.importnt:main',
+            'ontoparse = knowledge_linker.inout.ontoparse:main',
             'klinker = knowledge_linker.frontend.cmdline:main'
         ]
     }
