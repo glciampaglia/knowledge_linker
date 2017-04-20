@@ -27,7 +27,7 @@ from itertools import combinations
 
 import knowledge_linker.algorithms.closure as clo
 from knowledge_linker.utils import coo_dtype, disttosim, weighted
-from knowledge_linker.io.dirtree import DirTree, fromdirtree
+from knowledge_linker.inout.dirtree import DirTree, fromdirtree
 
 # tests for normal closure
 

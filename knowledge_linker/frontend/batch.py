@@ -24,7 +24,7 @@ from datetime import datetime
 from multiprocessing import Pool, Array, cpu_count
 from ctypes import c_int, c_double
 
-from ..io.ntriples import NodesIndex
+from ..inout.ntriples import NodesIndex
 from ..utils import make_weighted, WEIGHT_FUNCTIONS
 from ..algorithms.closure import _init_worker as _clo_init_worker, \
     epclosuress

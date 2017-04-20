@@ -124,7 +124,8 @@ def main():
     print 'WARNING: the n-triples file must be already sorted by source,'\
             ' destination!'
     print
-    namespaces = readns(args.ns_file)
+    global namespaces
+    namespaces = NodesIndex.readns(args.ns_file)
     sys.stdout = EncodedFile(sys.stdout, 'utf-8')
     # expand destination path, check it is not an existing file, create it in
     # case it does not exist

@@ -28,12 +28,12 @@
 
 # Package API
 from . import utils
-from . import io
+from . import inout
 from . import algorithms
 from .algorithms.closure import *
 from .algorithms.maxmin import *
-from .io.dirtree import *
-from .io.ntriples import *
+from .inout.dirtree import *
+from .inout.ntriples import *
 
 
 def _initialize():
