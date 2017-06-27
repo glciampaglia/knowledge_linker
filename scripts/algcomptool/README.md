@@ -1,13 +1,13 @@
 Author: Mihai Avram - mihai.v.avram@gmail.com
-Date: 3/15/2017
+Date: 6/27/2017
 
 # DESCRIPTION:
-This tool is used to compare the results of two algorithms that have subject to object relations, a score for the given relation, and the class (ground truth) of such relation. The tool compares scores for the two algorithms for the same relations and lists descriptive information about the algorithms, such as which algorithm performed better for which relations and conversely, which algorithm performed worse for which relations. The tool also prints out .csv formatted confusion information (i.e. True Positive, True Negative, False Positive, False Negative) for each algorithm specifically.
+This tool is used to compare the results of two algorithms (via 2 input files) that have subject to object relations, a score for the given relation, and the class (ground truth) of such relation. The tool compares scores for the two algorithms for the same relations and lists descriptive information about the algorithms, such as which algorithm performed better for which relations and conversely, which algorithm performed worse for which relations. The tool also prints out .csv formatted confusion information (i.e. True Positive, True Negative, False Positive, False Negative) for each algorithm specifically.
 
 # STEPS TO CLEAN DATA:
 
 Note: Look for input/presidentcouplesNODES.csv and input/presidentcouplesRSIM.csv for examples
-	of what cleaned, proper input files should look like for the -a1 and -a2 parameters
+	of what cleaned, proper input files should look like for the input file parameters
 
 1) Ensure the input files have non-null values in titled columns 'sid','score','sub','class','oid','obj'
 2) Ensure the input files have (subject)*(object) rows/samples
@@ -27,11 +27,11 @@ The following prints the usage of the tool:
 
 Tool run with required parameters (printing results to the terminal):
 
-`python AlgCompTool.py -a1 [ALGORITHM1INPUTFILELOCATION] -a2 [ALGORITHM2INPUTFILELOCATION]`
+`python AlgCompTool.py [INPUTFILE1LOCATION] [INPUTFILE2LOCATION]`
 
-Optional parameters -oc, -oa1, and -oa2 which are used to place output in output files:
+Optional parameters -oc, -o1, and -o2 which are used to place output in output files:
 
-`python AlgCompTool.py -a1 [ALGORITHM1INPUTFILELOCATION] -a2 [ALGORITHM2INPUTFILELOCATION] -oc [COMPARISONOUTPUTFILELOC] -oa1 [ALG1CONFUSIONOUTPUT] -oa2 [ALG2CONFUSIONOUTPUT]`
+`python AlgCompTool.py [INPUTFILE1LOCATION] [INPUTFILE2LOCATION] -oc [COMPARISONOUTPUTFILELOC] -o1 [OUTPUTFILE1LOCATION] -o2 [OUTPUTFILE2LOCATION]`
 
 # TODO-IMPROVMENETS: 
 A possible extension to this script would be to add comparison for multiple algorithms,

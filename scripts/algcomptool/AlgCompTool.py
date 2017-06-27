@@ -1,5 +1,5 @@
 #Author: Mihai Avram - mihai.v.avram@gmail.com
-#Date: 3/15/2017
+#Date: 06/27/2017
 
 import sys
 import argparse
@@ -9,22 +9,22 @@ import string
 
 def main():
 	parser = argparse.ArgumentParser()
-	#Required parameters -a1 and -a2 which denote the paths to the two input algorithm files to be compared (print output to the console)
-	parser.add_argument("-a1", "--alg1file", type=str, help="the relative or absolute location and name of the input file of the first algorithm", required=True)
-	parser.add_argument("-a2", "--alg2file", type=str, help="the relative or absolute location and name of the input file of the second algorithm", required=True)
-	#Optional parameters -oc, -oa1, -oa2 which denote output paths for the comparisons (print output to these files)
-	parser.add_argument("-oc", "--outputcomparison", type=str, help="the relative or absolute location and name of the alg1/alg2 comparison output file (.txt extension recommended)", default="CompOutputDefault.txt")
-	parser.add_argument("-oa1", "--alg1confusion", type=str, help="the relative or absolute location and name of the alg1 confusion result output file (.csv extension recommended)", default="Alg1OutConfDefault.csv")
-	parser.add_argument("-oa2", "--alg2confusion", type=str, help="the relative or absolute location and name of the alg2 confusion result output file (.csv extension recommended)", default="Alg2OutConfDefault.csv")
+	#Required parameters inputFile1 and inputFile2 which denote the paths to the two input algorithm files to be compared (print output to the console)
+	parser.add_argument("inputFile1", type=str, help="the relative or absolute location and name of the first input file")
+	parser.add_argument("inputFile2", type=str, help="the relative or absolute location and name of the second input file")
+	#Optional parameters -oc, -o1, -o2 which denote output paths for the comparisons (print output to these files)
+	parser.add_argument("-oc", "--outputcomparison", type=str, help="the relative or absolute location and name of the file 1 vs. file 2 comparison output file (.txt extension recommended)", required=False, default="CompOutputDefault.txt")
+	parser.add_argument("-o1", "--file1Confusion", type=str, help="the relative or absolute location and name of the first confusion result output file (.csv extension recommended)", required=False, default="File1OutConfDefault.csv")
+	parser.add_argument("-o2", "--file2Confusion", type=str, help="the relative or absolute location and name of the second confusion result output file (.csv extension recommended)", required=False, default="File2OutConfDefault.csv")
 	args = parser.parse_args()
 	
-	computeAndPrint(args.alg1file, args.alg2file, args.outputcomparison, args.alg1confusion, args.alg2confusion)
+	computeAndPrint(args.inputFile1, args.inputFile2, args.outputcomparison, args.file1Confusion, args.file2Confusion)
 	
-def computeAndPrint(alg1file, alg2file, outputcomparison, alg1confusion, alg2confusion):
+def computeAndPrint(inputFile1, inputFile2, outputcomparison, file1Confusion, file2Confusion):
     #Importing algorithms to be compared	
 	try:
-		alg1 = pd.read_csv(alg1file)
-		alg2 = pd.read_csv(alg2file)
+		alg1 = pd.read_csv(inputFile1)
+		alg2 = pd.read_csv(inputFile2)
 	except:
 		print("Error reading the alg1 and alg2 input files, please ensure file path and file format is correct.", file=sys.stderr)
 		sys.exit(1)
@@ -81,7 +81,7 @@ def computeAndPrint(alg1file, alg2file, outputcomparison, alg1confusion, alg2con
 
 
 	#if the 3 output files were not specified, print results to console, if only one was specified, use that one and default locations for the others
-	if outputcomparison == "CompOutputDefault.txt" and alg1confusion == "Alg1OutConfDefault.csv" and alg2confusion == "Alg2OutConfDefault.csv":
+	if outputcomparison == "CompOutputDefault.txt" and file1Confusion == "File1OutConfDefault.csv" and file2Confusion == "File2OutConfDefault.csv":
 		#Printing Results (comparisonPrint function used for this)
 		def comparisonPrint(algorithm):
 			for subject, score in algorithm.items():
@@ -285,50 +285,36 @@ def computeAndPrint(alg1file, alg2file, outputcomparison, alg1confusion, alg2con
 					fileComp.write("Alg1 > Alg2 for relation: " + " ID: " + str(idSubjectMapping[subject]) + " - Subject: " + str(subject.replace("dbr:","")) + "\n")
 		fileComp.close
 
-		try:
-			fileConfAlg1 = open(alg1confusion,"w")
-		except:
-			print("Error writing to the specified alg1confusion file, please check -oa1 argument", file=sys.stderr)
-			sys.exit(1)
-		
-		fileConfAlg1.write("sid,sub,oid,obj,conf\n")
-
-		for sample in range(0, alg1.shape[0]):
-			if sample % alg1DistinctObjNum == 0:
-				if alg1.iloc[sample, classColLocation] == 1:
-					fileConfAlg1.write(str(alg1.iloc[sample, idColLocation]) + "," + str(alg1.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg1.iloc[sample, objectIDColLocation]) + "," + str(alg1.iloc[sample, objectColLocation].replace("dbr:","")) + ",TP" + "\n")
-				else:
-					fileConfAlg1.write(str(alg1.iloc[sample, idColLocation]) + "," + str(alg1.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg1.iloc[sample, objectIDColLocation]) + "," + str(alg1.iloc[sample, objectColLocation].replace("dbr:","")) + ",FP" + "\n")
-			else:
-				if alg1.iloc[sample, classColLocation] == 1:
-					fileConfAlg1.write(str(alg1.iloc[sample, idColLocation]) + "," + str(alg1.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg1.iloc[sample, objectIDColLocation]) + "," + str(alg1.iloc[sample, objectColLocation].replace("dbr:","")) + ",FN" + "\n")
-				else:
-					fileConfAlg1.write(str(alg1.iloc[sample, idColLocation]) + "," + str(alg1.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg1.iloc[sample, objectIDColLocation]) + "," + str(alg1.iloc[sample, objectColLocation].replace("dbr:","")) + ",TN" + "\n")
-
-		fileConfAlg1.close
-
-		
-		try:
-			fileConfAlg2 = open(alg2confusion,"w")
-		except:
-			print("Error writing to the specified alg2confusion file, please check -oa2 argument", file=sys.stderr)
-			sys.exit(1)
+		#Function to print confusion result files
+		def confusionFileWrite(writeFileLoc, algorithm):
+			try:
+				fileConfAlg = open(writeFileLoc,"w")
+			except:
+				print("Error writing to the specified output file, please check -o1 argument", file=sys.stderr)
+				sys.exit(1)
 			
-		fileConfAlg2.write("sid,sub,oid,obj,conf\n")
+			fileConfAlg.write("sid,sub,oid,obj,conf\n")
 
-		for sample in range(0, alg2.shape[0]):
-			if sample % alg2DistinctObjNum == 0:
-				if alg2.iloc[sample, classColLocation] == 1:
-					fileConfAlg2.write(str(alg2.iloc[sample, idColLocation]) + "," + str(alg2.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg2.iloc[sample, objectIDColLocation]) + "," + str(alg2.iloc[sample, objectColLocation].replace("dbr:","")) + ",TP" + "\n")
+			algorithmDistinctObjNum = len(algorithm.oid.unique())
+			
+			for sample in range(0, algorithm.shape[0]):
+				if sample % algorithmDistinctObjNum == 0:
+					if algorithm.iloc[sample, classColLocation] == 1:
+						fileConfAlg.write(str(algorithm.iloc[sample, idColLocation]) + "," + str(algorithm.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(algorithm.iloc[sample, objectIDColLocation]) + "," + str(algorithm.iloc[sample, objectColLocation].replace("dbr:","")) + ",TP" + "\n")
+					else:
+						fileConfAlg.write(str(algorithm.iloc[sample, idColLocation]) + "," + str(algorithm.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(algorithm.iloc[sample, objectIDColLocation]) + "," + str(algorithm.iloc[sample, objectColLocation].replace("dbr:","")) + ",FP" + "\n")
 				else:
-					fileConfAlg2.write(str(alg2.iloc[sample, idColLocation]) + "," + str(alg2.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg2.iloc[sample, objectIDColLocation]) + "," + str(alg2.iloc[sample, objectColLocation].replace("dbr:","")) + ",FP" + "\n")
-			else:
-				if alg2.iloc[sample, classColLocation] == 1:
-					fileConfAlg2.write(str(alg2.iloc[sample, idColLocation]) + "," + str(alg2.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg2.iloc[sample, objectIDColLocation]) + "," + str(alg2.iloc[sample, objectColLocation].replace("dbr:","")) + ",FN" + "\n")
-				else:
-					fileConfAlg2.write(str(alg2.iloc[sample, idColLocation]) + "," + str(alg2.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(alg2.iloc[sample, objectIDColLocation]) + "," + str(alg2.iloc[sample, objectColLocation].replace("dbr:","")) + ",TN" + "\n")
+					if algorithm.iloc[sample, classColLocation] == 1:
+						fileConfAlg.write(str(algorithm.iloc[sample, idColLocation]) + "," + str(algorithm.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(algorithm.iloc[sample, objectIDColLocation]) + "," + str(algorithm.iloc[sample, objectColLocation].replace("dbr:","")) + ",FN" + "\n")
+					else:
+						fileConfAlg.write(str(algorithm.iloc[sample, idColLocation]) + "," + str(algorithm.iloc[sample, subjectColLocation].replace("dbr:","")) + "," + str(algorithm.iloc[sample, objectIDColLocation]) + "," + str(algorithm.iloc[sample, objectColLocation].replace("dbr:","")) + ",TN" + "\n")
 
-		fileConfAlg2.close
+			fileConfAlg.close
+			
+		#Writing confusion result files
+		confusionFileWrite(file1Confusion, alg1)
+		confusionFileWrite(file2Confusion, alg2)
+
 		print("Done, please check output files.")
 
 if __name__ == "__main__":
