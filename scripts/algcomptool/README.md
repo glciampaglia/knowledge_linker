@@ -34,6 +34,6 @@ Optional parameters -oc, -o1, and -o2 which are used to place output in output f
 
 `python AlgCompTool.py [INPUTFILE1LOCATION] [INPUTFILE2LOCATION] -oc [COMPARISONOUTPUTFILELOC] -o1 [OUTPUTFILE1LOCATION] -o2 [OUTPUTFILE2LOCATION]`
 
-# TODO-IMPROVEMENTS: 
+## TODO-IMPROVEMENTS: 
 A possible extension to this script would be to add comparison for multiple algorithms,
 not just two. Another possible extension is to parallelize code for bigger data.
