@@ -1,10 +1,11 @@
 Author: Mihai Avram - mihai.v.avram@gmail.com
+</br>
 Date: 6/27/2017
 
-# DESCRIPTION:
+## DESCRIPTION:
 This tool is used to compare the results of two algorithms (via 2 input files) that have subject to object relations, a score for the given relation, and the class (ground truth) of such relation. The tool compares scores for the two algorithms for the same relations and lists descriptive information about the algorithms, such as which algorithm performed better for which relations and conversely, which algorithm performed worse for which relations. The tool also prints out .csv formatted confusion information (i.e. True Positive, True Negative, False Positive, False Negative) for each algorithm specifically.
 
-# STEPS TO CLEAN DATA:
+## STEPS TO CLEAN DATA:
 
 Note: Look for input/presidentcouplesNODES.csv and input/presidentcouplesRSIM.csv for examples
 	of what cleaned, proper input files should look like for the input file parameters
@@ -18,7 +19,7 @@ Note: Look for input/presidentcouplesNODES.csv and input/presidentcouplesRSIM.cs
 	be over-written, if the same three specified output files are listed in multiple iterations of
 	the tool running, they will be overwritten.
 
-# HOW TO RUN TOOL:
+## HOW TO RUN TOOL:
 The tool will run in Python 3, and can be executed the following way from the command line:
 
 The following prints the usage of the tool:
@@ -33,6 +34,6 @@ Optional parameters -oc, -o1, and -o2 which are used to place output in output f
 
 `python AlgCompTool.py [INPUTFILE1LOCATION] [INPUTFILE2LOCATION] -oc [COMPARISONOUTPUTFILELOC] -o1 [OUTPUTFILE1LOCATION] -o2 [OUTPUTFILE2LOCATION]`
 
-# TODO-IMPROVMENETS: 
+# TODO-IMPROVEMENTS: 
 A possible extension to this script would be to add comparison for multiple algorithms,
 not just two. Another possible extension is to parallelize code for bigger data.
