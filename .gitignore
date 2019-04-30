@@ -19,3 +19,7 @@ dist/
 
 # Avoid committing anything under experiments in the release branch
 experiments/
+
+# Misc
+.cache/
+.eggs/
