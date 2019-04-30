@@ -52,7 +52,7 @@ kwargs = dict(
         'lxml',
         'numpy',
         'scipy',
-        'networkx',
+        'networkx==1.10',
         'nose >= 1.3.7',
     ],
     extras_require={
