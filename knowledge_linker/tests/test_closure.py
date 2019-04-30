@@ -74,7 +74,7 @@ def test_closure_small():
     for p1, p2 in zip(paths, paths2):
         assert np.all(p1 == p2)
 
-
+@nosetests.
 def test_closure_rand():
     """ closure on E-R random graph. """
     np.random.seed(21)
@@ -91,6 +91,7 @@ def test_closure_rand():
     proxs2 = np.asarray(proxs2)
     paths2 = reduce(list.__add__, paths2)
     assert np.allclose(proxs1, proxs2)
+    # XXX known issue, see https://github.com/glciampaglia/knowledge_linker/issues/1
     for p1, p2 in zip(paths1, paths2):
         assert np.all(p1 == p2)
     # metric
