@@ -142,7 +142,7 @@ def closuress(A, source, kind='ultrametric', target=None):
     ...     [0., 0., 0.]])
     >>> c, _ = closuress(A, 0)
     >>> c
-    [1.0, 0.10000000000000001, 0.10000000000000001]
+    [1.0, 0.1, 0.1]
 
     """
     keyf = itemgetter(0)
