@@ -16,7 +16,7 @@
 
 import os
 import argparse
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 from numpy import get_include
 
 _incl = [get_include()]
@@ -29,7 +29,7 @@ kwargs = dict(
     author_email='gciampag@indiana.edu',
     license='Apache-2.0',
     url='https://github.com/glciampaglia/knowledge_linker',
-    packages=['knowledge_linker'],
+    packages=find_packages(),
     ext_modules=[
         Extension("knowledge_linker.algorithms.heap",
                   ["knowledge_linker/algorithms/heap.c"],
