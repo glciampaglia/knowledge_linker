@@ -167,7 +167,7 @@ def recstosparse(coords, shape=None, fmt='csr'):
         w = coords['weight']
     else:
         # plain ndarray
-        if coords.ndims != 2:
+        if coords.ndim != 2:
             raise ValueError('expecting a 2-d array or a recarray')
         if coords.shape[1] != 3:
             raise ValueError('expecting three columns (row, col, weights)')
