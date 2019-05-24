@@ -52,12 +52,13 @@ kwargs = dict(
         'lxml',
         'numpy',
         'scipy',
+        'pandas',
         'networkx==1.10',
         'nose >= 1.3.7',
     ],
     extras_require={
         'plotting': ['matplotlib'],
-        'tensor': ['scikit-tensor','scikit-learn']
+        'tensor': ['scikit-tensor', 'scikit-learn']
     },
     entry_points={
         'console_scripts': [
@@ -89,6 +90,7 @@ def replaceext(s, a='c', b='pyx'):
         return fn + sep + b
     else:
         return s
+
 
 if __name__ == '__main__':
     args, rest = parser.parse_known_args()
