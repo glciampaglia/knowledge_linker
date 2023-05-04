@@ -74,7 +74,7 @@ def test_closure_small():
     for p1, p2 in zip(paths, paths2):
         assert np.all(p1 == p2)
 
-@nosetests.
+@nottest
 def test_closure_rand():
     """ closure on E-R random graph. """
     np.random.seed(21)
