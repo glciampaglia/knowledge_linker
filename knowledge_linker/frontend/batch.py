@@ -61,13 +61,13 @@ _B = None
 def _init_worker(kind, indptr, indices, data, shape):
     global _B
     _clo_init_worker(kind, indptr, indices, data, shape)
-    from knowledge_linker.closure import _A
+    from knowledge_linker.algorithms.closure import _A
     _B = _A.tocsc()
 
 
 def _worker(source):
     global _B
-    from knowledge_linker.closure import _A, _kind  # global
+    from knowledge_linker.algorithms.closure import _A, _kind  # global
     D, _ = epclosuress(_A, source, B=_B, kind=_kind)
     return D
 
@@ -239,7 +239,7 @@ def main(ns):
     sources = sf['node_id'].values
 
     ## read targets
-    tf = pd.read_csv(os.path.expanduser(ns.targetspath), sep=' ',
+    tf = pd.read_csv(os.path.expanduser(ns.targetspath), sep=ns.sep,
                      names=ns.names)
     if 'node_id' not in tf:
         tf['node_id'] = list(ni.tonodemany(tf['node_title']))
